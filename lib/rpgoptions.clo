@@ -1,0 +1,82 @@
+\ExplSyntaxOn
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Class / Package options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage {l3keys2e} %key/value parsing
+
+
+
+% These booleans are not set directly by an option (i.e. instead set by .code)
+\bool_new:N \l__rpg_show_background_bool
+\bool_new:N \l__rpg_show_footer_scroll_bool
+\bool_new:N \l__rpg_justified_bool
+\bool_new:N \l__rpg_multitoc_bool
+\bool_new:N \l__rpg_layout_bool
+\bool_new:N \l__rpg_no_deprecated_code_bool
+
+\bool_set_true:N \l__rpg_multitoc_bool
+\bool_set_eq:NN \l__rpg_layout_bool \c__rpg_isclass_bool
+
+
+% Note that there is no 'unknown value' handling -- rpgtex passes *all* keys to the parent class first.
+% Standard latex classes fail silently if they don't recognise an option, so I reason it's fine for me to do that too.
+\keys_define:nn { rpg / options }
+{
+    % Large-scale styling choice
+    bg .choice:,
+    bg / full .code:n =
+      {
+        \bool_set_true:N \l__rpg_show_background_bool
+        \bool_set_true:N \l__rpg_show_footer_scroll_bool
+      },
+    bg / print .code:n =
+      {
+        \bool_set_false:N \l__rpg_show_background_bool
+        \bool_set_true:N \l__rpg_show_footer_scroll_bool
+      },
+    bg / none .code:n =
+      {
+        \bool_set_false:N \l__rpg_show_background_bool
+        \bool_set_false:N \l__rpg_show_footer_scroll_bool
+      },
+    bg .initial:n = full,
+
+    % Justified text
+    justified .code:n =
+      {
+        \bool_set_true:N \l__rpg_justified_bool
+      },
+    justified .value_forbidden:n = true,
+
+
+    % Avoid multi-column toc
+    nomultitoc .code:n =
+      {
+        \bool_set_false:N \l__rpg_multitoc_bool
+      },
+    nomultitoc .value_forbidden:n = true,
+
+    % Apply layout formatting
+    layout .bool_set:N = \l__rpg_layout_bool,
+    layout .value_required:n = true,
+
+
+    % Theme selection key
+    theme .choice:,
+    theme / dnd .code:n =
+      {
+        \tl_set:Nn \l__rpg_theme_tl { dnd }
+        \input {themes/dnd.cfg}
+      },
+    theme / scifi .code:n =
+      {
+        \tl_set:Nn \l__rpg_theme_tl { scifi }
+        \input {themes/scifi.cfg}
+      },
+    theme .initial:n = dnd, % Default to D&D theme
+  }
+
+\ProcessKeysOptions { rpg / options }
+

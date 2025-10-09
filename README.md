@@ -1,9 +1,18 @@
-# DnD 5e LaTeX Template
+# RPG LaTeX Template
 
-[![Latest release](https://img.shields.io/github/release/rpgtex/DND-5e-LaTeX-Template/all.svg)](https://github.com/rpgtex/DND-5e-LaTeX-Template/releases/latest)
-[![Build Status](https://img.shields.io/circleci/project/github/rpgtex/DND-5e-LaTeX-Template/master.svg?style=flat)](https://circleci.com/gh/rpgtex/DND-5e-LaTeX-Template)
+<!-- [![Latest release](https://img.shields.io/github/release/rpgtex/DND-5e-LaTeX-Template/all.svg)](https://github.com/rpgtex/DND-5e-LaTeX-Template/releases/latest)
+[![Build Status](https://img.shields.io/circleci/project/github/rpgtex/DND-5e-LaTeX-Template/master.svg?style=flat)](https://circleci.com/gh/rpgtex/DND-5e-LaTeX-Template) -->
 
-This is a LaTeX template for typesetting documents in the style of the fifth edition of the "world's greatest roleplaying game".
+This is a LaTeX template for typesetting documents for Roleplaying Games of all types, using a variety of different styles and customised commands, as well as a number of inbuilt styles.
+
+## Inheritance & Credit
+
+This project is forked from [rpglatex's D&D 5e template](https://github.com/rpgtex/DND-5e-LaTeX-Template). Much of the technical aspect of this library is credited solely to them.
+
+The modifications made here serve to update the D&D aspects of the library to a more modern format (D&D24), and decouple some of the core engines to allow more flexibility in style; thus allowing the scifi library to exist alongside.
+
+For simplicity and streamlining (and because I find latex3e confusing at the best of times), I have also removed much of the localisation code - this was written for my own personal use, and I only need it to work in English. A future project may reintegrate other languages.
+
 
 ## Features
 
