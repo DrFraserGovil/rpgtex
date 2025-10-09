@@ -1,0 +1,21 @@
+%% The basic RPG package defines the many of the commands used, but does not declare a documentstyle
+%% This allows it to be used flexibly
+
+\RequirePackage{expl3}
+\ProvidesExplPackage{rpg}{2025/10/09} {0.0.0} { Template for RPG material }
+
+
+%Am I loaded by a class?
+\cs_if_exist:NTF \c__rpg_isclass_bool 
+    {
+    % The variable already (loaded from a class, or a user being annoying)
+    }
+    {
+    % Doesn't exist -- loaded by a barebones class, or as a standalone package
+    \bool_new:N \c__rpg_isclass_bool
+    \bool_set_false:N \c__rpg_isclass_bool
+    }
+
+
+\input {lib/rpgoptions.clo}
+% \input {rpgcore.def}
