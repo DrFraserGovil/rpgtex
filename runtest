@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e #exit early if error found!
 
+cd example
+
 echo "#####################################"
 echo "Running compilation tests for rpgtex"
 
@@ -14,6 +16,7 @@ compile_test() {
     jfglatex "${theme}-${format}.tex" -o "${theme}-${format}.pdf" -q
 }
 
+echo $(pwd)
 # Run the core template tests
 compile_test book dnd
 compile_test handout dnd
