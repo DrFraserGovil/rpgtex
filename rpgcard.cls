@@ -10,7 +10,7 @@
 \tl_new:N \g__rpg_base_class_tl
 \tl_set:Nn \g__rpg_base_class_tl { article }
 
-\input {lib/rpgoptions.clo}
+\input {core/rpgoptions.clo}
 \LoadClass { \g__rpg_base_class_tl }
 
 \LoadClass {article}

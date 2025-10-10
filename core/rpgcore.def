@@ -69,7 +69,7 @@
 % % % Load other modules of this package after all dependencies to avoid load order
 % % % conflicts (e.g., package options).
 % % % Low-level modules first.
-% % \RequirePackage {lib/rpgutility}    % utility functions
+\RequirePackage {core/rpgutility}    % utility functions
 % % \RequirePackage {lib/rpgcolors}     % color definitions
 % % \RequirePackage {lib/rpgfonts}      % font definitions
 % % \RequirePackage {lib/rpgstrings}    % Load document strings
