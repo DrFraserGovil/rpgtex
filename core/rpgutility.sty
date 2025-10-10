@@ -19,7 +19,7 @@
 
 
 
-\NewDocumentCommand{ \RpgDiceFormat} {m m m m}
+\DeclareDocumentCommand{ \RpgDiceFormat} {m m m m}
 {
 	  % #1: Dice Number, #2: Dice Sides, #3: Modifier, #4: Mean result
 
@@ -35,7 +35,7 @@
 
 }
 
-\NewDocumentCommand { \RpgDice } { m }
+\DeclareDocumentCommand { \RpgDice } { m }
   {
     \group_begin:
       \regex_extract_once:NnNTF { \c__valid_dice_regex } { #1 } \l__dice_args_seq
