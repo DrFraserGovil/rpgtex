@@ -7,7 +7,6 @@
 \RequirePackage {l3keys2e} %key/value parsing
 
 
-
 % These booleans are not set directly by an option (i.e. instead set by .code)
 \bool_new:N \l__rpg_show_background_bool
 \bool_new:N \l__rpg_show_footer_scroll_bool
@@ -15,6 +14,8 @@
 \bool_new:N \l__rpg_multitoc_bool
 \bool_new:N \l__rpg_layout_bool
 \bool_new:N \l__rpg_no_deprecated_code_bool
+\tl_new:N \l__rpg_font_size_tl
+\tl_new:N \l__rpg_cols_tl
 
 \bool_set_true:N \l__rpg_multitoc_bool
 \bool_set_eq:NN \l__rpg_layout_bool \c__rpg_isclass_bool
@@ -50,18 +51,12 @@
       },
     justified .value_forbidden:n = true,
 
-
     % Avoid multi-column toc
     nomultitoc .code:n =
       {
         \bool_set_false:N \l__rpg_multitoc_bool
       },
     nomultitoc .value_forbidden:n = true,
-
-    % Apply layout formatting
-    layout .bool_set:N = \l__rpg_layout_bool,
-    layout .value_required:n = true,
-
 
     % Theme selection key
     theme .choice:,
@@ -76,7 +71,38 @@
         \input {themes/scifi.cfg}
       },
     theme .initial:n = dnd, % Default to D&D theme
+
+
+	%% Standard document options (used for classes without pass-through)
+
+	% Font size
+	size .code:n = {
+        \tl_set:Nn \l__rpg_font_size_tl { #1 }
+    },
+    size .default:n = { 8pt },
+
+	% Columns
+	columns .choice:,
+	columns / 1 .code:n = { \tl_set:Nn \l__rpg_cols_tl { onecolumn } },
+	columns / 2 .code:n = { \tl_set:Nn \l__rpg_cols_tl { twocolumn } },
+	columns .initial:n = 2,
   }
 
+
+
+
+
 \ProcessKeysOptions { rpg / options }
+
+\bool_if:NT \c__rpg_isclass_bool
+{
+	% \DeclareOption*
+	% {
+	% 	\PassOptionsToClass{\CurrentOption}{ \g__rpg_base_class_tl}
+	% }
+	% \ProcessOptions\relax
+
+	\PassOptionsToClass{ \tl_use:N \l__rpg_font_size_tl }{\g__rpg_base_class_tl }
+    \PassOptionsToClass{ \tl_use:N \l__rpg_cols_tl }{ \g__rpg_base_class_tl }
+}
 

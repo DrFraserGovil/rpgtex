@@ -5,17 +5,13 @@ echo "#####################################"
 echo "Running compilation tests for rpgtex"
 
 
-# Place repo onto tex-path
-cd example
-dir=$(pwd)"/../::"
-export TEXINPUTS=$dir
 
 # nice test wrapper
 compile_test() {
     local format="$1"
     local theme="$2"
     echo "--- Compiling: ${theme}-${format}.tex ---"
-    jfglatex "${theme}-${format}.tex" -o "${theme}-${format}.pdf" -q 
+    jfglatex "${theme}-${format}.tex" -o "${theme}-${format}.pdf" -q
 }
 
 # Run the core template tests

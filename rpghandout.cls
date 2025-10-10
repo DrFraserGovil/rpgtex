@@ -4,19 +4,13 @@
 \RequirePackage {expl3}
 \ProvidesExplClass{rpghandout}{2025/10/09} {0.0.0} { Template for RPG material }
 
-
 \bool_new:N \c__rpg_isclass_bool
 \bool_set_true:N \c__rpg_isclass_bool
+\tl_new:N \g__rpg_base_class_tl
+\tl_set:Nn \g__rpg_base_class_tl { article }
 
-% Pass unknown options to the handour class (e.g., twocolumn, 10pt)
-\DeclareOption*
-{
-    \PassOptionsToClass{\CurrentOption}{article}
-}
-\ProcessOptions\relax
-\LoadClass {article}
-
-\RequirePackage{rpg}
+\input {lib/rpgoptions.clo}
+\LoadClass { \g__rpg_base_class_tl }
 
 %%overload title stuff here? Otherwise fairly basic
 \pagestyle{empty}

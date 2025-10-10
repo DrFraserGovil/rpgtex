@@ -1,4 +1,4 @@
-\ExplSyntaxOn
+% \ExplSyntaxOn
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Package Dependencies
@@ -25,7 +25,9 @@
     \RequirePackage {luacolor}
   }
 
-\bool_if:NT \l__dnd_layout_bool
+
+  %% force layout changes -- but only if layout option triggered by class
+\bool_if:NT \l__rpg_layout_bool
   {
     \RequirePackage {geometry}
     \RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
@@ -33,17 +35,17 @@
     \RequirePackage [titles] {tocloft} % multi-column toc
     \RequirePackage [newparttoc] {titlesec}  % Used to adjust (sub)section, part, and table of contents formatting
 
-    \bool_if:NT \l__dnd_multitoc_bool
+    \bool_if:NT \l__rpg_multitoc_bool
       { \RequirePackage [toc] {multitoc} }
 
     % Set page geometry.
     \geometry
       {
-        hmargin   = .75in, % Left and right margins
-        top       = .46in, % Top of text area to top of page
-        bottom    = .8in,  % Bottom of text area to bottom of page
-        footskip  = .32in, % Bottom of text area to bottom of footer text
-        columnsep = .33in, % Space between columns
+        hmargin   = .65in, % Left and right margins
+        top       = .4in, % Top of text area to top of page
+        bottom    = .75in,  % Bottom of text area to bottom of page
+        footskip  = .3in, % Bottom of text area to bottom of footer text
+        columnsep = .25in, % Space between columns
       }
 
     % Set paragraph and line spacing
@@ -58,7 +60,7 @@
     \hbadness         = 10000
 
     % Set left justification if not justified
-    \bool_if:NF \l__dnd_justified_bool
+    \bool_if:NF \l__rpg_justified_bool
       { \RaggedRight }
 
     % Customize itemize environment.
@@ -66,25 +68,25 @@
     \setitemize{noitemsep,topsep=0.5ex,label=\footnotesize{\textbullet}}
   }
 
-% Load other modules of this package after all dependencies to avoid load order
-% conflicts (e.g., package options).
-% Low-level modules first.
-\RequirePackage {lib/compat}        % compatibility definitions
-\RequirePackage {lib/dndutility}    % utility functions
-\RequirePackage {lib/dndcolors}     % color definitions
-\RequirePackage {lib/dndfonts}      % font definitions
-\RequirePackage {lib/dndstrings}    % Load document strings
+% % % Load other modules of this package after all dependencies to avoid load order
+% % % conflicts (e.g., package options).
+% % % Low-level modules first.
+% % \RequirePackage {lib/compat}        % compatibility definitions
+% % \RequirePackage {lib/rpgutility}    % utility functions
+% % \RequirePackage {lib/rpgcolors}     % color definitions
+% % \RequirePackage {lib/rpgfonts}      % font definitions
+% % \RequirePackage {lib/rpgstrings}    % Load document strings
 
-% Conditionally load deprecated code for backwards compatibility
-\bool_if:NF \l__dnd_no_deprecated_code_bool
-  { \RequirePackage {lib/dnddeprecated} }
+% % % Conditionally load deprecated code for backwards compatibility
+% % \bool_if:NF \l__rpg_no_deprecated_code_bool
+% %   { \RequirePackage {lib/rpgdeprecated} }
 
-% Main modules in alphabetical order
-\RequirePackage {lib/dndcomment}    % inline comment boxes
-\RequirePackage {lib/dndheader}     % fancy headers and footers
-\RequirePackage {lib/dndmonster}    % stat blocks
-\RequirePackage {lib/dndreadaloud}  % read-aloud text
-\RequirePackage {lib/dndsections}   % section styling and special section headers
-\RequirePackage {lib/dndsidebar}    % sidebars
-\RequirePackage {lib/dndtable}      % tables
-\RequirePackage {lib/dndtoc}        % table of contents styling
+% % % Main modules in alphabetical order
+% % \RequirePackage {lib/rpgcomment}    % inline comment boxes
+% % \RequirePackage {lib/rpgheader}     % fancy headers and footers
+% % \RequirePackage {lib/rpgmonster}    % stat blocks
+% % \RequirePackage {lib/rpgreadaloud}  % read-aloud text
+% % \RequirePackage {lib/rpgsections}   % section styling and special section headers
+% % \RequirePackage {lib/rpgsidebar}    % sidebars
+% % \RequirePackage {lib/rpgtable}      % tables
+% % \RequirePackage {lib/rpgtoc}        % table of contents styling
