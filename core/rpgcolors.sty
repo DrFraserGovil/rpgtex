@@ -1,0 +1,37 @@
+\ExplSyntaxOn
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colo(u)rs of the standard elements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 'themecolor' is a general colour which many elements inherit from.
+% It can be set (using \colorlet{themecolor}{X}) in a theme .cfg file
+
+% Detect if colorlet not assigned by theme, set to default
+\makeatletter
+  \@ifundefined{\string\color@themecolor}{\colorlet{themecolor}{white!60!black}}{}
+\makeatother
+
+
+% Element colors that do not respond to \DndSetThemeColor
+\definecolor {narrationcolor} {HTML}{F7F2E5} %Narration background
+\definecolor {statblockribbon} {HTML} {E69A28} % stat block top/bottom borders (gold)
+\definecolor {statblockbg}     {HTML} {FDF1DC} % stat block background (tan)
+
+
+% These elements are assumed to co-vary in general, so if the theme color is changed, they all change too
+
+\colorlet {commentcolor} {themecolor} % Comment background
+\colorlet {sidebarcolor} {themecolor} % Sidebar background
+\colorlet {tablecolor}   {themecolor} % Table even row background
+
+% Assign a new value to all the co-varying elements
+\NewDocumentCommand {\RpgSetThemeColor} { O {themecolor} }
+  {
+    \colorlet {themecolor}   {#1}
+    \colorlet {commentcolor} {#1}
+    \colorlet {sidebarcolor} {#1}
+    \colorlet {tablecolor}   {#1}
+  }
+
+  %%If you don't want to co-vary all elements at once, manually use colorlet on the elements to change color
