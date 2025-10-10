@@ -62,16 +62,9 @@
     nomultitoc .value_forbidden:n = true,
 
     % Theme selection key
-    theme .choice:,
-    theme / dnd .code:n =
+    theme .code:n =
       {
-        \tl_set:Nn \l__rpg_theme_tl { dnd }
-        \input {themes/dnd.cfg}
-      },
-    theme / scifi .code:n =
-      {
-        \tl_set:Nn \l__rpg_theme_tl { scifi }
-        \input {themes/scifi.cfg}
+        \tl_set:Nn \l__rpg_theme_tl { #1 }
       },
     theme .initial:n = dnd, % Default to D&D theme
 

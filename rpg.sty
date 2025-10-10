@@ -4,7 +4,7 @@
 \RequirePackage{expl3}
 \ProvidesExplPackage{rpg}{2025/10/09} {0.0.0} { Template for RPG material }
 
-
+\ExplSyntaxOn
 %Am I loaded by a class?
 \cs_if_exist:NTF \c__rpg_isclass_bool
     {
@@ -20,11 +20,30 @@
 
 
 
+%%Load the theme definitions
+\tl_new:N \l__rpg_required_options_tl
+\tl_set:Nn \l__rpg_required_options_tl {themes/\tl_use:N \l__rpg_theme_tl/\tl_use:N \l__rpg_theme_tl.cfg}
+\file_if_exist:nTF \l__rpg_required_options_tl
+	{
+		\input{\tl_use:N \l__rpg_required_options_tl}
+	}
+	{
+		  \msg_error:nnx { rpg } { file-not-found } { \tl_use:N \l__rpg_file_path_tl. Themes must define a config file. }
+	}
+
+%%Load the core definitions (which may reference the theme definitions)
 \input {core/rpgcore.def}
 
-%%Execute the theme overrides loaded during the options
-%%uses a nice wrapper function to do so gracefully
-\input{core/rpgoverloads.def}
+%%Optionally input the theme overloads, which define new functions and take priority over the default functions
+\tl_new:N \l__rpg_theme_overloads_tl
+\tl_set:Nn \l__rpg_theme_overloads_tl {themes/\tl_use:N \l__rpg_theme_tl/main.def}
+\file_if_exist:nTF \l__rpg_theme_overloads_tl
+	{
+		\input{\tl_use:N \l__rpg_theme_overloads_tl}
+	}
+	{
+		  \iow_log:x { RPG: Theme overload file not found: \tl_use:N \l__rpg_theme_overloads_tl }
+	}
 
 
 \ExplSyntaxOff
