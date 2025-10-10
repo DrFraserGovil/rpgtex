@@ -70,7 +70,7 @@
 % % % conflicts (e.g., package options).
 % % % Low-level modules first.
 \RequirePackage {core/rpgutility}    % utility functions
-% % \RequirePackage {lib/rpgcolors}     % color definitions
+\RequirePackage {core/dndcolors}     % color definitions
 % % \RequirePackage {lib/rpgfonts}      % font definitions
 % % \RequirePackage {lib/rpgstrings}    % Load document strings
 
