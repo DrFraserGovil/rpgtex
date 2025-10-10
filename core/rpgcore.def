@@ -72,7 +72,6 @@
 \RequirePackage {core/rpgutility}   % utility functions
 \RequirePackage {core/rpgcolors}	% color definitions
 \RequirePackage {core/rpgfonts}	    % font definitions
-% % \RequirePackage {lib/rpgstrings}    % Load document strings
 
 % % % Conditionally load deprecated code for backwards compatibility
 % % \bool_if:NF \l__rpg_no_deprecated_code_bool
