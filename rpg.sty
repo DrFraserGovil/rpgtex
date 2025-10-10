@@ -6,7 +6,7 @@
 
 
 %Am I loaded by a class?
-\cs_if_exist:NTF \c__rpg_isclass_bool 
+\cs_if_exist:NTF \c__rpg_isclass_bool
     {
     % The variable already (loaded from a class, or a user being annoying)
     }
@@ -14,8 +14,10 @@
     % Doesn't exist -- loaded by a barebones class, or as a standalone package
     \bool_new:N \c__rpg_isclass_bool
     \bool_set_false:N \c__rpg_isclass_bool
+
+	\input {lib/rpgoptions.clo}
     }
 
 
-\input {lib/rpgoptions.clo}
-% \input {rpgcore.def}
+
+\input {lib/rpgcore.def}
