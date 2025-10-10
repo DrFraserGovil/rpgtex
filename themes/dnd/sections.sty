@@ -1,0 +1,57 @@
+
+  \titleformat {\subsection}
+    { \RpgFontSubsection } % format
+    { \thesubsection } % label
+    { 1em } % sep
+    { \nopagebreak } % before-code
+    [ \vspace{-.3ex} \titleline{ \color{titlegold} \titlerule[1pt] } ] % after-code
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Special command for magic items, traps, and the like.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand {\DndFeatHeader} { m o }
+  {
+    \subsection {#1}
+    \IfValueT{#2}
+      {
+        \textit {#2}
+        \par \vspace{3pt} \noindent \ignorespaces
+      }
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Special command for magic items, traps, and the like.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand {\DndItemHeader} { m m }
+  {
+    \subsubsection {#1}
+    \textit {#2}
+    \par \vspace{3pt} \noindent \ignorespaces
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Special command for spells.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% #1 - Name
+% #2 - Level and school
+% #3 - Casting time
+% #4 - Range
+% #5 - Components
+% #6 - Duration
+\NewDocumentCommand {\DndSpellHeader} { m m m m m m }
+  {
+    \DndItemHeader {#1} {#2}
+
+    \begin{description}
+      [
+        nosep,
+        labelsep = \l__dnd_space_dim,
+        after    = { \vspace{4pt plus 1pt minus 1pt} },
+      ]
+      \item [ \spellcastingtimename : ] #3
+      \item [ \spellrangename       : ] #4
+      \item [ \spellcomponentsname  : ] #5
+      \item [ \spelldurationname    : ] #6
+    \end{description}
+  }

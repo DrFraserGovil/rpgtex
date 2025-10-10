@@ -205,6 +205,10 @@
     drop-cap-family .value_required:n = true,
     drop-cap-style .tl_set:N         = \l__rpg_drop_cap_style_tl,
     drop-cap-style .value_required:n = true,
+	drop-cap-internal-style .tl_set:N = \l__rpg_drop_cap_internal_tl,
+    drop-cap-internal-style .initial:n        = \scshape,
+    drop-cap-internal-style .value_required:n = true,
+
   }
 
 \NewDocumentCommand { \RpgSetFont } { o }
@@ -295,6 +299,9 @@
 \NewDocumentCommand{\RpgFontDropCap}{}
   { \l__rpg_drop_cap_family_tl \l__rpg_drop_cap_style_tl }
 
+  \NewDocumentCommand{\RpgFontDropCapInternal}{}
+  { \l__rpg_drop_cap_internal_tl }
+
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % % Drop Caps
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -315,7 +322,7 @@
         #1
       ]
       {#2}
-      {#3}
+      {\RpgFontDropCapInternal #3}
   }
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
