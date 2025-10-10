@@ -18,9 +18,9 @@ compile_test() {
 
 # Run the core template tests
 compile_test book dnd
-# compile_test handout dnd
+compile_test handout dnd
 compile_test book scifi
-# compile_test handout scifi
+compile_test handout scifi
 
 echo "Tests PASSED."
 echo "#####################################"
