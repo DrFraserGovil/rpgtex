@@ -1,0 +1,94 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Map Areas and their References
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\tl_new:N \l__rpg_area_num_depth_tl
+
+% Options
+\keys_define:nn { rpg / areas }
+  {
+    area-label .tl_set:N          = \l__rpg_area_label_tl,
+    area-label .initial:n         = area,
+    area-label .value_required:n  = true,
+    sub-area-label .tl_set:N          = \l__rpg_sub_area_label_tl,
+    sub-area-label .initial:n         = subarea,
+    sub-area-label .value_required:n  = true,
+    region .tl_set:N          = \l__rpg_region_tl,
+    region .value_required:n  = true,
+    area-num-depth .choice:,
+    area-num-depth .choices:nn =
+      { 1, 2, 3, 4 }
+      { \tl_set:Nn \l__rpg_area_num_depth_tl {\l_keys_choice_tl} },
+    area-num-depth .initial:n  = 2, % subsection
+  }
+
+\NewDocumentCommand {\RpgSetAreaOptions} {o}
+  {
+    \keys_set:nn { rpg / areas } { #1 }
+  }
+
+% Counters
+\newcounter {RpgAreaCounter}
+
+\NewDocumentCommand {\RpgResetAreas} {}
+  {
+    \setcounter {RpgAreaCounter} {0}
+  }
+
+\newcounter {RpgSubAreaCounter} [RpgAreaCounter]
+
+% sub area references should be '5a', '5b', not '51', '52'
+\renewcommand \p@RpgSubAreaCounter { \arabic {RpgAreaCounter} }
+\renewcommand \theRpgSubAreaCounter { \alph {RpgSubAreaCounter} }
+
+% Functions to create an area including text and label
+\NewDocumentCommand {\RpgArea} {m}
+  {
+    \refstepcounter {RpgAreaCounter}
+    \label { \l__rpg_region_tl \l__rpg_area_label_tl :#1 }
+
+    \tl_set:Nn \l_tmpa_tl { \l__rpg_region_tl \arabic {RpgAreaCounter} . ~ #1 }
+
+    \str_case_e:nn {\l__rpg_area_num_depth_tl}
+      {
+        {1} { \section       {\l_tmpa_tl} }
+        {2} { \subsection    {\l_tmpa_tl} }
+        {3} { \subsubsection {\l_tmpa_tl} }
+        {4} { \paragraph     {\l_tmpa_tl} }
+      }
+  }
+
+\NewDocumentCommand {\RpgSubArea} {m}
+  {
+    \refstepcounter {RpgSubAreaCounter}
+    \label { \l__rpg_region_tl \l__rpg_sub_area_label_tl : #1 }
+
+    \tl_set:Nn \l_tmpa_tl { \l__rpg_region_tl \arabic {RpgAreaCounter} \alph {RpgSubAreaCounter} . ~ #1 }
+
+    \str_case_e:nn {\l__rpg_area_num_depth_tl}
+      {
+        {1} { \subsection    {\l_tmpa_tl} }
+        {2} { \subsubsection {\l_tmpa_tl} }
+        {3} { \paragraph     {\l_tmpa_tl} }
+        {4} { \subparagraph  {\l_tmpa_tl} }
+      }
+
+  }
+
+% Functions to reference a label
+\NewDocumentCommand {\RpgAreaRef} { o m }
+  {
+    \group_begin:
+      \keys_set:nn { rpg / areas } {#1} % Temp set keys to reference other regions
+      #2 ~ ( pg\ \pageref { \l__rpg_region_tl \l__rpg_area_label_tl : #2 } )
+    \group_end:
+  }
+
+\NewDocumentCommand {\RpgSubAreaRef} { o m }
+  {
+    \group_begin:
+      \keys_set:nn { rpg / areas } { #1 } % Temp set keys to reference other regions
+      #2 ~ ( pg\ \pageref { \l__rpg_region_tl \l__rpg_sub_area_label_tl : #2 } )
+    \group_end:
+  }
