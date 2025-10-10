@@ -1,0 +1,74 @@
+%%Set the D&D specific fonts
+
+\sys_if_engine_xetex:F
+{
+  % Spit out a warning if XeLaTeX is detected for the PDFLaTeX-based D&D theme
+  \msg_new:nnn { rpg } { scifi-xelatex-error }{#1}
+%   { #1 }
+  \msg_error:nnx { rpg } { scifi-xelatex-error }
+    {
+      The~scifi~theme~requires~compilation~with~xelatex
+    }
+}
+
+\newfontfamily{\starTrek}{GalaxyEdge} % <--- Use Family + Style
+[]
+
+\newfontfamily{\scifi}{Orbitron}
+[
+  UprightFont = *-Bold,
+  BoldFont= *-ExtraBold,
+  ItalicFont=*-Bold,
+]
+
+\setmainfont{Jura}
+[
+  UprightFont = *-Regular,
+  BoldFont= *-Bold,
+  ItalicFont=EurostileBQ,
+]
+
+\newcommand\titlemode{\scifi}
+
+\RpgSetFont[
+	%Sections
+	part-style			= {\starTrek\Huge\scshape},
+	chapter-style		= {\titlemode \Huge},
+	section-style		= {\titlemode \huge},,
+	subsection-style	= {\titlemode \Large},,
+	subsubsection-style	= {\titlemode \large},,
+	paragraph-style		= {\bfseries \slshape},
+	subparagraph-style	= {\bfseries \slshape},
+	%Tables
+	table-title-family	= {\scifi},
+	table-title-style	= {\bfseries\large},
+	table-header-family	= {\scifi},
+	table-body-family	= {\normalfont},
+	%comment boxes
+	comment-title-family= {\scifi},
+	comment-title-style	= {\bfseries\scshape},
+	comment-body-family	= {\normalfont},
+	comment-body-style	= {\small},
+	%sidebars
+	sidebar-title-family= {\scifi},
+	sidebar-title-style	= {\bfseries\scifi},
+	sidebar-body-family	= {\normalfont},
+	sidebar-body-style	= {\small},
+	%narration
+	narration-family	= {\normalfont},
+	narration-style		= {\small},
+	% TOC
+	toc-part-style		= {\Large \scifi},
+	toc-chapter-style	= {\large \scifi},
+	toc-section-style	= {\normalsize},
+	%stat block
+	stat-block-title-style= {\bfseries\scifi \LARGE},
+	stat-block-body-family={\normalfont},
+	stat-block-body-style={\small},
+	stat-block-section-family={\scifi},
+	stat-block-section-style={\scifi \large},
+	%%misc
+	footer-style		= {\scifi\scriptsize\textcolor{SlateGray}},
+	page-number-style	= {\scifi\small\textcolor{SlateGray}},
+	drop-cap-family		= {\starTrek},
+]{}

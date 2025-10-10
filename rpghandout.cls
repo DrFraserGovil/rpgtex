@@ -14,3 +14,5 @@
 
 %%overload title stuff here? Otherwise fairly basic
 \pagestyle{empty}
+
+\RequirePackage{rpg}
