@@ -1,0 +1,91 @@
+\ExplSyntaxOn
+
+% Useful regex strings
+\regex_const:Nn \c__pos_int_regex { \d+ }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Dice macro
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Matches { # | #d# | #d# + # | #d# - # } while ignoring spaces
+\regex_const:Nn \c__valid_dice_regex { \A\s*(\d+)(?:[dD](\d+)\s*(?:([+\-])\s*(\d+))?)?\s*\Z }
+
+\seq_new:N \l__dice_args_seq
+\tl_new:N \l__dice_number_tl
+\tl_new:N \l__dice_sides_tl
+\tl_new:N \l__dice_mod_sign_tl
+\tl_new:N \l__dice_mod_tl
+
+\msg_new:nnn { rpg } { dice / invalid_argument } { Invalid~argument~``#1''~passed~to~\noexpand\RpgDice. }
+
+
+
+\NewDocumentCommand{ \RpgDiceFormat} {m m m m}
+{
+	  % #1: Dice Number, #2: Dice Sides, #3: Modifier, #4: Mean result
+
+	 \str_if_empty:nTF { #2 }
+      {
+        % CASE: Not a roll (just a number like "12")
+        #1
+      }
+      {
+        % CASE: Is a dice roll (e.g., "2d6+5")
+		#1 d #2 #3
+      }
+
+}
+
+\NewDocumentCommand { \RpgDice } { m }
+  {
+    \group_begin:
+      \regex_extract_once:NnNTF { \c__valid_dice_regex } { #1 } \l__dice_args_seq
+        {
+          \seq_pop_left:NN \l__dice_args_seq \l_tmpa_str % Don't need the full match
+          \seq_pop_left:NN \l__dice_args_seq \l__dice_number_tl % # of dice
+          \seq_pop_left:NN \l__dice_args_seq \l__dice_sides_tl % # of sides
+          \seq_pop_left:NN \l__dice_args_seq \l__dice_mod_sign_tl % +/- for add/sub
+          \seq_pop_left:NN \l__dice_args_seq \l__dice_mod_tl % modifier
+
+		% --- Calculate the FINAL numerical result (Handles number-only and rolls) ---
+          % If \l__dice_sides_tl is empty, the calculation logic still works
+          % because the regex ensured one of the groups is always populated.
+          \tl_set:Nn \l_tmpa_tl { \l__dice_mod_sign_tl \l__dice_mod_tl } % Full modifier
+          \tl_set:Nn \l_tmpb_tl { \fp_eval:n {
+              floor ( \l__dice_number_tl * ( \l__dice_sides_tl + 1 ) / \tl_if_empty:NTF \l__dice_sides_tl { 1 } { 2 } ) \l_tmpa_tl
+          }}
+
+          % --- Pass everything to the formatter ---
+          \RpgDiceFormat
+            { \tl_use:N \l__dice_number_tl }     % #1: Number/Dice Count
+            { \tl_use:N \l__dice_sides_tl }      % #2: Sides (empty if not a roll)
+            { \tl_use:N \l_tmpa_tl }             % #3: Full Modifier (+X or -X or empty)
+            { \tl_use:N \l_tmpb_tl }             % #4: Calculated Result
+        }
+        { \msg_error:nnn { rpg } { dice / invalid_argument } { #1 }}
+    \group_end:
+  }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Gets the width of a space
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\box_new:N \l__rpg_space_box
+\hbox_set:Nn \l__rpg_space_box {~}
+\dim_new:N \l__rpg_space_dim
+\dim_set:Nn \l__rpg_space_dim { \box_wd:N \l__rpg_space_box }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some keys are required for proper execution of macros.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\msg_new:nnn { rpg } { key_required } { #1~requires~key~``#2''~to~be~set. }
+
+% #1 - key value
+% #2 - macro name
+% #3 - key name
+\cs_new_protected:Npn \__rpg_check_for_key:Nnn #1#2#3
+  {
+    \group_begin:
+      \str_set:Nx \l_tmpa_str { #1 }
+
+      \str_if_empty:NT { \l_tmpa_str }
+        { \msg_error:nnnn { rpg } { key_required } { #2 } { #3 } }
+    \group_end:
+  }

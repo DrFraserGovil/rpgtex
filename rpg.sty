@@ -15,9 +15,16 @@
     \bool_new:N \c__rpg_isclass_bool
     \bool_set_false:N \c__rpg_isclass_bool
 
-	\input {lib/rpgoptions.clo}
+	\input {core/rpgoptions.clo}
     }
 
 
 
-\input {lib/rpgcore.def}
+\input {core/rpgcore.def}
+
+%%Execute the theme overrides loaded during the options
+%%uses a nice wrapper function to do so gracefully
+\input{core/rpgoverloads.def}
+
+
+\ExplSyntaxOff
