@@ -11,9 +11,7 @@
 \RequirePackage {colortbl}
 \RequirePackage {enumitem}
 \RequirePackage {etoolbox}
-\RequirePackage {textcomp,gensymb} % degree symbol for italian ordinals
 \RequirePackage {hang} % hanging paragraphs
-\RequirePackage [autolanguage] {numprint} % localization of thousands separator
 \RequirePackage {tabularx} % variable-width table columns
 \RequirePackage [breakable,skins,xparse]{tcolorbox} % styled text boxes
 \RequirePackage {tikz} % drawing ornaments and lines
@@ -26,7 +24,7 @@
   }
 
 
-  %% force layout changes -- but only if layout option triggered by class
+%% force layout changes -- but only if layout option triggered by class
 \bool_if:NT \l__rpg_layout_bool
   {
     \RequirePackage {geometry}
