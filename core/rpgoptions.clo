@@ -19,7 +19,9 @@
 \bool_new:N \l__rpg_no_deprecated_code_bool
 \tl_new:N \l__rpg_font_size_tl
 \tl_new:N \l__rpg_cols_tl
+\bool_new:N \l__rpg_openany_tl
 
+\bool_set_true:N \l__rpg_openany_tl
 \bool_set_true:N \l__rpg_multitoc_bool
 \bool_set_eq:NN \l__rpg_layout_bool \c__rpg_isclass_bool
 
@@ -82,6 +84,13 @@
 	columns / 1 .code:n = { \tl_set:Nn \l__rpg_cols_tl { onecolumn } },
 	columns / 2 .code:n = { \tl_set:Nn \l__rpg_cols_tl { twocolumn } },
 	columns .initial:n = 2,
+
+	% Use openany
+    openright .code:n =
+      {
+        \bool_set_false:N \l__rpg_multitoc_bool
+      },
+    openright .value_forbidden:n = true,
   }
 
 
@@ -100,5 +109,13 @@
 
 	\PassOptionsToClass{ \tl_use:N \l__rpg_font_size_tl }{\g__rpg_base_class_tl }
     \PassOptionsToClass{ \tl_use:N \l__rpg_cols_tl }{ \g__rpg_base_class_tl }
+
+	\bool_if:NTF \l__rpg_multitoc_bool
+	{
+		\PassOptionsToClass{ openany }{\g__rpg_base_class_tl }
+	}
+	{
+		\PassOptionsToClass{ openright }{\g__rpg_base_class_tl }
+	}
 }
 
