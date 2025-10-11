@@ -7,3 +7,5 @@
 *.pdf
 *.synctex.gz
 *.toc
+
+*.build*
