@@ -92,22 +92,22 @@
     table-body-style .initial:n        = \small,
     table-body-style .value_required:n = true,
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Comment boxes
+    % Tip boxes
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Comment title
-    comment-title-family .tl_set:N         = \l__rpg_comment_title_family_tl,
-    comment-title-family .initial:n        = \sffamily,
-    comment-title-family .value_required:n = true,
-    comment-title-style .tl_set:N         = \l__rpg_comment_title_style_tl,
-    comment-title-style .initial:n        = \bfseries,
-    comment-title-style .value_required:n = true,
-    % Comment body
-    comment-body-family .tl_set:N         = \l__rpg_comment_body_family_tl,
-    comment-body-family .initial:n        = \normalfont,
-    comment-body-family .value_required:n = true,
-    comment-body-style .tl_set:N         = \l__rpg_comment_body_style_tl,
-    comment-body-style .initial:n        = \small,
-    comment-body-style .value_required:n = true,
+    % Tip title
+    tip-title-family .tl_set:N         = \l__rpg_tip_title_family_tl,
+    tip-title-family .initial:n        = \sffamily,
+    tip-title-family .value_required:n = true,
+    tip-title-style .tl_set:N         = \l__rpg_tip_title_style_tl,
+    tip-title-style .initial:n        = \bfseries,
+    tip-title-style .value_required:n = true,
+    % Tip body
+    tip-body-family .tl_set:N         = \l__rpg_tip_body_family_tl,
+    tip-body-family .initial:n        = \normalfont,
+    tip-body-family .value_required:n = true,
+    tip-body-style .tl_set:N         = \l__rpg_tip_body_style_tl,
+    tip-body-style .initial:n        = \small,
+    tip-body-style .value_required:n = true,
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Sidebars
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -251,12 +251,12 @@
 \NewDocumentCommand{\RpgFontTableBody}{}
   { \l__rpg_table_body_family_tl \l__rpg_table_body_style_tl }
 
-% Comment boxes
-\NewDocumentCommand{\RpgFontCommentTitle}{}
-  { \l__rpg_comment_title_family_tl \l__rpg_comment_title_style_tl }
+% Tip boxes
+\NewDocumentCommand{\RpgFontTipTitle}{}
+  { \l__rpg_tip_title_family_tl \l__rpg_tip_title_style_tl }
 
-\NewDocumentCommand{\RpgFontCommentBody}{}
-  { \l__rpg_comment_body_family_tl \l__rpg_comment_body_style_tl }
+\NewDocumentCommand{\RpgFontTipBody}{}
+  { \l__rpg_tip_body_family_tl \l__rpg_tip_body_style_tl }
 
 % Sidebars
 \NewDocumentCommand{\RpgFontSidebarTitle}{}

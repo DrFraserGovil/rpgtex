@@ -21,7 +21,7 @@
 
 % These elements are assumed to co-vary in general, so if the theme color is changed, they all change too
 
-\colorlet {commentcolor} {themecolor} % Comment background
+\colorlet {tipcolor} {themecolor} % Comment background
 \colorlet {sidebarcolor} {themecolor} % Sidebar background
 \colorlet {tablecolor}   {themecolor} % Table even row background
 
@@ -29,7 +29,7 @@
 \NewDocumentCommand {\RpgSetThemeColor} { O {themecolor} }
   {
     \colorlet {themecolor}   {#1}
-    \colorlet {commentcolor} {#1}
+    \colorlet {tipcolor} {#1}
     \colorlet {sidebarcolor} {#1}
     \colorlet {tablecolor}   {#1}
   }

@@ -13,7 +13,10 @@
 
 	\RpgDropCap{H}{ello and welcome!} This package is designed to aid you in writing beautifully typeset documents for a variety of RPG documents. It is derived from \href{https://github.com/rpgtex/DND-5e-LaTeX-Template}{a D\&D-specific package}, but whilst we have retained much of the internal engine, we have adapted it to work with a variety of themes, thus making it a system-agnostic \verb|rpgtex|.
 
+	This document -- along with a few others -- serves as a showcase of the different themes and classes available. We begin with the basic framework for the book class, and then move on to demonstrate the theme-specific options.
+
 	\chapter{Sections}
+		Sections follow the standard \LaTeX formatting; with the chapter formatting shown above.
 		\section{Section}
 			Sections break up chapters into large groups of associated text.
 
@@ -28,4 +31,70 @@
 
 					\subparagraph{Subparagraph}
 					The subparagraph format with the paragraph indent is likely going to be more familiar to the reader.
+			\subsection{Parts}
 
+				The rpgbook class also defines a \verb|part| (seen in the prior pages).
+
+				Parts are often allowed to define a full-page image
+
+				{\color{red} Write this bit!}
+		\section{Map Regions}
+			The map region functions \verb|\RpgArea| and \verb|\RpgSubArea| provide automatic numbering of areas.
+
+
+			\RpgSetAreaOptions[area-label=village,area-num-depth=3]{}
+			\RpgArea{Village of Hommlet}
+			This is the village of hommlet.
+			\RpgSetAreaOptions[area-label=villages,area-num-depth=3]{}
+			\RpgSubArea{Inn of the Welcome Wench}
+			Inside the village is the inn of the Welcome Wench.
+
+			\RpgSubArea{Blacksmith's Forge}
+			There's a blacksmith in town, too.
+
+			\RpgArea{Foo's Castle}
+			This is foo's home, a hovel of mud and sticks.
+
+			\RpgSubArea{Moat}
+			This ditch has a board spanning it.
+
+			\RpgSubArea{Entrance}
+			A five-foot hole reveals the dirt floor illuminated by a hole in the roof.
+
+
+
+
+			\subsection{Resetting Counters}
+
+				The counters can be reset
+			\RpgSetAreaOptions[area-label=space]{}
+			\RpgResetAreas{}
+			\RpgArea{Nyxia Subsector}
+				A dangerous region of space, accessed only by calling \verb|\RpgReset{}|
+				\RpgSubArea{Crescent Station}
+					A lawless hub of trade and crime
+				\RpgSubArea{Raxxla Penal Colony}
+					An ice planet populated with criminals
+
+			\RpgArea{Great Expanse}
+				A void of nothingness
+
+			\subsection{Referencing Map Regions}
+
+				Map regions are referenceable; so \verb|\RpgAreaRef[area-label=village]{Village of Hommlet}| is ``\RpgAreaRef[area-label=village]{Village of Hommlet}''
+
+				When using reset-counters or otherwise ambiguous names, it is necessary to use \verb|\RpgSetAreaOptions[area-label={},sub-area-label={}]{}| to define prefixes to disambiguate.
+
+			\subsection{Area Depths}
+
+				Map headers can be set to different `levels', using either section/subsection (etc.) for display purposes. The default value is \verb|\RpgSetAreaOptions[area-num-depth=2]{}| (subsection). For display purposes here, we used \verb|area-num-depth=3|
+
+	\section{Text Boxes}
+
+	The module has three environments for setting text apart so that it is drawn to the reader's attention. |DndReadAloud| is used for text that a game master would read aloud.
+	\section{Tips \& Tricks}
+	The other two environments are the |DndComment| and the |DndSidebar|. The |DndComment| is breakable and can safely be used inline in the text.
+
+	\begin{RpgTip}{This Is a Tip Box!}
+	A |RpgTip| is a box for minimal highlighting of text. It lacks the ornamentation of |DndSidebar|, but it can handle being broken over a column.
+	\end{RpgTip}
