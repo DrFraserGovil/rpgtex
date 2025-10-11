@@ -78,10 +78,11 @@
 % %   { \RequirePackage {lib/rpgdeprecated} }
 
 % % % Main modules in alphabetical order
-% % \RequirePackage {lib/rpgcomment}    % inline comment boxes
+\RequirePackage {core/rpgtip}    % inline tip boxes
 % % \RequirePackage {lib/rpgheader}     % fancy headers and footers
 % % \RequirePackage {lib/rpgmonster}    % stat blocks
 % % \RequirePackage {lib/rpgreadaloud}  % read-aloud text
+\RequirePackage {core/rpgmap}   % section styling and special section headers
 \RequirePackage {core/rpgsections}   % section styling and special section headers
 % % \RequirePackage {lib/rpgsidebar}    % sidebars
 % % \RequirePackage {lib/rpgtable}      % tables

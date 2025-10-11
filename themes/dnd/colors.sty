@@ -16,8 +16,6 @@
 \definecolor {rulered}     {HTML} {9C2B1B} % triangular rule in statsblock
 \definecolor {contourgray} {HTML} {CACCBE} % outline color in part & chapter font
 
-% Type aliases
-\colorlet {contourgrey} {contourgray}
 
 % Trim
 \definecolor {BrGreen}       {HTML} {E8E6DC} % Basic Rules
@@ -30,7 +28,10 @@
 \definecolor {DmgSlateGray}  {HTML} {DBE4E4} % DMG Part 3
 \definecolor {DmgLilac}      {HTML} {D7D4D6} % DMG appendix
 
-% Trim aliases
+% aliases
+\colorlet {contourgrey} {contourgray}
 \colorlet {DmgSlateGrey} {DmgSlateGray}
 
-\colorlet{themecolor}{PhbLightGreen}
+
+% set main colors
+\RpgSetThemeColor[PhbLightGreen]{}

@@ -3,6 +3,7 @@
 % Map Areas and their References
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\ExplSyntaxOn
 \tl_new:N \l__rpg_area_num_depth_tl
 
 % Options
@@ -77,18 +78,18 @@
   }
 
 % Functions to reference a label
-\NewDocumentCommand {\RpgAreaRef} { o m }
+\NewDocumentCommand {\RpgAreaRef} { O{} m }
   {
     \group_begin:
       \keys_set:nn { rpg / areas } {#1} % Temp set keys to reference other regions
-      #2 ~ ( pg\ \pageref { \l__rpg_region_tl \l__rpg_area_label_tl : #2 } )
+      #2 ~ (Area \ref { \l__rpg_region_tl \l__rpg_area_label_tl : #2 }, pg\ \pageref { \l__rpg_region_tl \l__rpg_area_label_tl : #2 } )
     \group_end:
   }
 
-\NewDocumentCommand {\RpgSubAreaRef} { o m }
+\NewDocumentCommand {\RpgSubAreaRef} { O{} m }
   {
     \group_begin:
       \keys_set:nn { rpg / areas } { #1 } % Temp set keys to reference other regions
-      #2 ~ ( pg\ \pageref { \l__rpg_region_tl \l__rpg_sub_area_label_tl : #2 } )
+      #2 ~ (Area \ref { \l__rpg_region_tl \l__rpg_area_label_tl : #2 }, pg\ \pageref { \l__rpg_region_tl \l__rpg_sub_area_label_tl : #2 } )
     \group_end:
   }
