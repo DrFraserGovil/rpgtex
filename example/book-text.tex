@@ -1,18 +1,31 @@
-\RpgDropCap{H}{ello} there young children! How are you today? \blindtext
+
+\frontmatter
+\maketitle
+\tableofcontents
 
 
-\subparagraph{A thing} Do you see what I mean?
-\part{The first part}
+\mainmatter
 
-\chapter{A thing}
+\part{Basic Commands}
 
-\blindtext
-\section{Another thing}
-
-\blindtext
-\subsection{A less important thing}
-\blindtext
+	\chapter{Introduction}
 
 
+	\RpgDropCap{H}{ello and welcome!} This package is designed to aid you in writing beautifully typeset documents for a variety of RPG documents. It is derived from \href{https://github.com/rpgtex/DND-5e-LaTeX-Template}{a D\&D-specific package}, but whilst we have retained much of the internal engine, we have adapted it to work with a variety of themes, thus making it a system-agnostic \verb|rpgtex|.
 
-% \Blindtext
+	\chapter{Sections}
+		\section{Section}
+			Sections break up chapters into large groups of associated text.
+
+			\subsection{Subsection}
+				Subsections further break down the information for the reader.
+
+				\subsubsection{Subsubsection}
+					Subsubsections are the furthest division of text that still have a block header. Below this level, headers are displayed inline.
+
+					\paragraph{Paragraph}
+					The paragraph format is seldom used in the core books, but is available if you prefer it to the ``normal'' style.
+
+					\subparagraph{Subparagraph}
+					The subparagraph format with the paragraph indent is likely going to be more familiar to the reader.
+
