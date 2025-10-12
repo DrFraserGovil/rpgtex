@@ -1,0 +1,17 @@
+\documentclass{standalone}
+
+\usepackage{tikz}
+
+\definecolor {midgray}  {HTML}{454545}
+\begin{document}
+
+\begin{tikzpicture}
+	\fill[shading = radial, inner color=midgray!50!white, outer color=midgray,] (0,0)--++(1*0.15\paperwidth,0)--++(1*0.05\paperwidth,2cm)--++(1*0.8\paperwidth,0)--++(0,-1.4cm)--++({1*(-0.74\paperwidth+0.2cm)},0)--++(1*-0.015\paperwidth,-0.6cm)--cycle;
+	\fill[black] (0,0)--++({1*(0.15\paperwidth+0.2cm)},0)--++(1*0.045\paperwidth,1.8cm)--++({1*(0.805\paperwidth-0.2cm)},0)--++(0,-1cm)--++(1*-0.74\paperwidth,0)--++(1*-0.02\paperwidth,-0.8cm)--cycle;
+	\def\lcol{blue!50!black}
+	\def\rcol{blue!20!black}
+
+	\fill[midgray,shading=radial,left color=\lcol,right color=\rcol] (0,0)--++({1*(0.15\paperwidth+0.3cm)},0)--++(1*0.0425\paperwidth,1.7cm)--++({1*(0.805\paperwidth-0.25cm)},0)--++(0,-0.8cm)--++(1*-0.745\paperwidth,0)--++(1*-0.02222\paperwidth,-0.9cm)--cycle;
+	\fill[opacity=0.2,shading=ball,ball color=blue!30!black] (0,0)--++({1*(0.15\paperwidth+0.3cm)},0)--++(1*0.0425\paperwidth,1.7cm)--++({1*(0.805\paperwidth-0.25cm)},0)--++(0,-0.8cm)--++(1*-0.745\paperwidth,0)--++(1*-0.02222\paperwidth,-0.9cm)--cycle;
+\end{tikzpicture}
+\end{document}

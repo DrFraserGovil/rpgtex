@@ -1,0 +1,38 @@
+
+
+\fancyhead{
+  \bool_if:NT \l__rpg_show_background_bool
+    {
+    \begin{tikzpicture}[remember~picture,overlay]
+      \node[inner~sep=0pt] at (current~page.center) {\includegraphics[width=\paperwidth,height=\paperheight]{img/paper3}};
+    \end{tikzpicture}
+    }
+}
+
+\renewcommand*{\chaptermark}[1]{}
+\fancyfoot[LE]{%
+    \begin{tikzpicture}[remember~picture,overlay]
+      \bool_if:NT \l__rpg_show_footer_scroll_bool {
+        \node[xscale=1,inner~sep=0pt,anchor=south,nearly~opaque] at (current~page.south) {\includegraphics[width=\paperwidth,height=.6in]{img/scifi_scroll}};
+      }
+        \node[inner~sep=0pt,anchor=south,xshift=.28in,yshift=.3in,anchor=west] at (current~page.south~west)  {\parbox[t]{2cm}{
+          \RpgFontPageNumber \thepage
+          \\
+          \raggedright \RpgFontFooter \CurrentRpgChapter
+        }};
+    \end{tikzpicture}
+  }
+\fancyfoot[RO]{%
+	 \begin{tikzpicture}[remember~picture,overlay]
+      \bool_if:NT \l__rpg_show_footer_scroll_bool {
+        \node[xscale=-1,inner~sep=0pt,anchor=south,nearly~opaque] at (current~page.south) {\includegraphics[width=\paperwidth,height=.6in]{img/scifi_scroll}};
+      }
+       \node[inner~sep=0pt,anchor=east,xshift=-0.28in,yshift=.3in] at (current~page.south~east)  {\parbox[t]{2cm}{
+      \begin{flushright}
+        \RpgFontPageNumber \thepage
+        \\
+        \raggedleft \RpgFontFooter \CurrentRpgChapter
+      \end{flushright}
+      }};
+    \end{tikzpicture}
+  }
