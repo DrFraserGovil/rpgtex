@@ -17,12 +17,7 @@
 \RequirePackage {tikz} % drawing ornaments and lines
 \RequirePackage {xcolor}
 \RequirePackage {xparse} % \NewDocumentCommand and expl3
-\RequirePackage {hyperref}
-
-\hypersetup{
-		hidelinks,
-		urlcolor=blue
-	}
+\RequirePackage[hidelinks] {hyperref}
 
 \sys_if_engine_luatex:T
   {
@@ -82,7 +77,7 @@
 
 % % % Main modules in alphabetical order
 \RequirePackage {core/rpgtip}    % inline tip boxes
-% % \RequirePackage {lib/rpgheader}     % fancy headers and footers
+\RequirePackage {core/rpgheader}     % fancy headers and footers
 % % \RequirePackage {lib/rpgmonster}    % stat blocks
 % % \RequirePackage {lib/rpgreadaloud}  % read-aloud text
 \RequirePackage {core/rpgmap}   % section styling and special section headers
