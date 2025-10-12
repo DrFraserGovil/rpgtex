@@ -4,13 +4,14 @@
 % Environment for read-aloud text.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Standard for every read-aloud text
-\DeclareTColorBox {__dnd_read_aloud} {o}
-  {
-    before~upper    =
+
+\tcbset{
+  rpg narration/.style={
+	    before~upper    =
       {
-        \bool_if:NT \l__dnd_layout_bool
+        \bool_if:NT \l__rpg_layout_bool
           {
-            \bool_if:NF \l__dnd_justified_bool
+            \bool_if:NF \l__rpg_justified_bool
               {\RaggedRight}
           }
       },
@@ -28,53 +29,52 @@
     bottom          = 0pt,
     sharp~corners,
     parbox          = false,
-    borderline~west = {1pt} {-0.5pt} {titlered},
-    borderline~east = {1pt} {-0.5pt} {titlered},
-    fontupper       = \DndFontReadAloud,
-    fontlower       = \DndFontReadAloud,
-    overlay         =
-      {
-        \foreach\n ~ in ~ { north~east, north~west, south~east, south~west }
-        {\draw [ titlered, fill = titlered ] ( frame.\n ) circle (1.5pt); };
-      },
+    fontupper       = \RpgFontNarration,
+    fontlower       = \RpgFontNarration,
     after~skip      = 13pt plus 4pt minus 4pt,
+  }
+}
+
+\DeclareTColorBox {__rpg_narration} {o}
+  {
+	rpg narration,
     #1,
   }
 
 % Extra key for controlling the color of the title and the background
-\keys_define:nn { dnd / read_aloud }
+\keys_define:nn { rpg / narration }
   {
-    color .tl_set:N         = \l__dnd_read_aloud_color_tl,
-    color .initial:n        = readaloudcolor,
+    color .tl_set:N         = \l__rpg_narration_color_tl,
+    color .initial:n        = narrationcolor,
     color .value_required:n = true,
   }
 
 % This function, through its variant, forces the expansion of the tcb keys
 % passed to the environment by the user before it invokes the tcolorbox
-\cs_new_protected:Nn \__dnd_start_read_aloud:nn
+\cs_new_protected:Nn \__rpg_start_narration:nn
   {
-    \begin {__dnd_read_aloud} [ #1, #2 ]
+    \begin {__rpg_narration} [ #1, #2 ]
   }
 
-\cs_generate_variant:Nn \__dnd_start_read_aloud:nn { nV }
+\cs_generate_variant:Nn \__rpg_start_narration:nn { nV }
 
-% The DndReadAloud environment
+% The RpgNarration environment
 % #1 - keys. We handle the custom color key before passing other keys on
-\NewDocumentEnvironment {DndReadAloud} {o}
+\NewDocumentEnvironment {RpgNarration} {o}
   {
     \group_begin:
-    \keys_set_known:nnN { dnd / read_aloud } {#1} \l_tmpa_tl
+    \keys_set_known:nnN { rpg / narration } {#1} \l_tmpa_tl
 
     \str_if_eq:VnT \l_tmpa_tl { -NoValue- }
       { \tl_set_eq:NN \l_tmpa_tl \c_empty_tl }
 
-    \__dnd_start_read_aloud:nV
+    \__rpg_start_narration:nV
       {
-          colback = \l__dnd_read_aloud_color_tl,
+          colback = \l__rpg_narration_color_tl,
       }
       {\l_tmpa_tl}
   }
   {
-    \end {__dnd_read_aloud}
+    \end {__rpg_narration}
     \group_end:
   }
