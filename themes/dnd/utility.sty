@@ -9,3 +9,14 @@
        (#4)~{#1 d #2 #3} 	 % CASE: Is a dice roll (e.g., "2d6+5")
      }
 }
+
+
+
+%%% Redefine toc formatting
+  \titlecontents{part}
+    [0pt] % left
+    { \addvspace{.06in} \RpgFontTocPart } % above-code
+    {Part\ \thecontentslabel :~ } % numbered-entry-format
+    {\RpgFontTocPart} % numberless-entry-format
+    {} % filler-page-format
+    [ \addvspace{-.03in} \titleline{ \color{titlegold} \titlerule[1pt] } \addvspace{.05in } ] % below-code

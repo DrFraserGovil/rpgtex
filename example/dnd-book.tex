@@ -14,31 +14,5 @@
    \input{book-text}
 
 
-\chapter{Print Testing}
-
-Mode is \csPrintMode \\
-
-
-\ExplSyntaxOn
-\bool_if:NTF \l__rpg_show_background_bool
-{
-	Background~ is~ being~ shown
-}
-{
-	Background~ is~ suppressed
-}
-
-\\
-
-\bool_if:NTF \l__rpg_show_footer_scroll_bool
-{
-	Footerscroll~ is~ being~ shown
-}
-{
-	Footerscroll~ is~ suppressed
-}
-
-
-
 \ExplSyntaxOff
 \end{document}

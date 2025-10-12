@@ -17,6 +17,12 @@
 \RequirePackage {tikz} % drawing ornaments and lines
 \RequirePackage {xcolor}
 \RequirePackage {xparse} % \NewDocumentCommand and expl3
+\RequirePackage {hyperref}
+
+\hypersetup{
+		hidelinks,
+		urlcolor=blue
+	}
 
 \sys_if_engine_luatex:T
   {
@@ -73,9 +79,6 @@
 \RequirePackage {core/rpgcolors}	% color definitions
 \RequirePackage {core/rpgfonts}	    % font definitions
 
-% % % Conditionally load deprecated code for backwards compatibility
-% % \bool_if:NF \l__rpg_no_deprecated_code_bool
-% %   { \RequirePackage {lib/rpgdeprecated} }
 
 % % % Main modules in alphabetical order
 \RequirePackage {core/rpgtip}    % inline tip boxes
@@ -86,4 +89,4 @@
 \RequirePackage {core/rpgsections}   % section styling and special section headers
 % % \RequirePackage {lib/rpgsidebar}    % sidebars
 % % \RequirePackage {lib/rpgtable}      % tables
-% % \RequirePackage {lib/rpgtoc}        % table of contents styling
+\RequirePackage {core/rpgtoc}        % table of contents styling
