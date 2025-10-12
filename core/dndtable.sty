@@ -14,48 +14,48 @@
   }
 
 % Table options
-\keys_define:nn { dnd / table }
+\keys_define:nn { rpg / table }
   {
-    color .tl_set:N            = \l__dnd_table_color_tl,
+    color .tl_set:N            = \l__rpg_table_color_tl,
     color .initial:n           = tablecolor,
     color .value_required:n    = true,
-    header .tl_set:N           = \l__dnd_table_header_tl,
+    header .tl_set:N           = \l__rpg_table_header_tl,
     header .value_required:n   = true,
-    width .dim_set:N           = \l__dnd_table_width_dim,
+    width .dim_set:N           = \l__rpg_table_width_dim,
     width .value_required:n    = true,
   }
 
 % Table Definition
-\NewDocumentEnvironment {DndTable} { o m }
+\NewDocumentEnvironment {RpgTable} { o m }
 {
   \group_begin:
 
-  \dim_set:Nn \l__dnd_table_width_dim { \linewidth }
+  \dim_set:Nn \l__rpg_table_width_dim { \linewidth }
   \tl_if_novalue:nF {#1}
-    { \keys_set:nn { dnd / table } {#1} }
+    { \keys_set:nn { rpg / table } {#1} }
 
   \par \vspace { 9pt plus 3pt minus 3pt } \noindent
 
-  \tl_if_empty:NF \l__dnd_table_header_tl
+  \tl_if_empty:NF \l__rpg_table_header_tl
     {
       \group_begin:
-        \DndFontTableTitle \l__dnd_table_header_tl \nopagebreak
+        \RpgFontTableTitle \l__rpg_table_header_tl \nopagebreak
         \par \vspace{ 5pt plus 2pt minus 2pt } \noindent
       \group_end:
     }
 
-  \DndFontTableBody
+  \RpgFontTableBody
 
-  \rowcolors {1} {} {\l__dnd_table_color_tl}
+  \rowcolors {1} {} {\l__rpg_table_color_tl}
 
   \regex_extract_all:NnNTF \c__preamble_regex {#2} \l_tmpa_seq
   {
     \tl_set:Nn \l_tmpa_tl {\seq_use:Nn \l_tmpa_seq {^}}
-    \use:x { \exp_not:n {\tabularx{\l__dnd_table_width_dim}}{`\l_tmpa_tl}}
-    \rowstyle{\DndFontTableHeader}
+    \use:x { \exp_not:n {\tabularx{\l__rpg_table_width_dim}}{`\l_tmpa_tl}}
+    \rowstyle{\RpgFontTableHeader}
   }
   {
-    \tabularx {\l__dnd_table_width_dim} {#2}
+    \tabularx {\l__rpg_table_width_dim} {#2}
   }
 
 }
