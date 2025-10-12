@@ -102,6 +102,7 @@
 {
     \bool_set_false:N \l__rpg_show_background_bool
     \bool_set_true:N \l__rpg_show_footer_scroll_bool
+
 }
 
 

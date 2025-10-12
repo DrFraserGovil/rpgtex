@@ -21,6 +21,10 @@
 \RequirePackage {xparse} % \NewDocumentCommand and expl3
 \RequirePackage[hidelinks] {hyperref}
 
+\ExplSyntaxOff
+\usetikzlibrary{calc}
+\ExplSyntaxOn
+
 \sys_if_engine_luatex:T
   {
     \RequirePackage {luacolor}
@@ -80,10 +84,9 @@
 % % % Main modules in alphabetical order
 \RequirePackage {core/rpgtip}    % inline tip boxes
 \RequirePackage {core/rpgheader}     % fancy headers and footers
-% % \RequirePackage {lib/rpgmonster}    % stat blocks
 \RequirePackage {core/rpgsections}   % section styling and special section headers
 \RequirePackage {core/rpgnarration}  % read-aloud text
 \RequirePackage {core/rpgmap}   % section styling and special section headers
-% % \RequirePackage {lib/rpgsidebar}    % sidebars
-\RequirePackage {core/dndtable}      % tables
+\RequirePackage {core/dndsidebar}    % sidebars
+\RequirePackage {core/rpgtable}      % tables
 \RequirePackage {core/rpgtoc}        % table of contents styling

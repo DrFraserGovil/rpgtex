@@ -1,0 +1,22 @@
+
+\tcbset{
+	  rpg sidebar /.append~style={
+		no~borderline,
+		toptitle=5pt,
+			overlay          =
+      {
+        \def\N{15}
+        \def\w{0.66\linewidth/\N}
+
+		\coordinate (bs) at (frame.north~west);
+		\coordinate (ts) at (frame.south~west);
+        \foreach \r in {1,...,\N}
+        {
+			\fill[red,shading=radial,outer~color=black,inner~color=red!50!black,opacity=(1.0-\r/\N)] (bs)--++(7pt,-5pt)--++(\w,0)--++(-7pt,5pt)--cycle;
+			\fill[red,shading=radial,outer~color=black,inner~color=red!50!black,opacity=(1.0-\r/\N)] (ts)--++(7pt,5pt)--++(\w,0)--++(-7pt,-5pt)--cycle;
+			\coordinate (bs) at ($(bs) + ({1.5*\w},0)$);
+			\coordinate (ts) at ($(ts) + ({1.5*\w},0)$);
+        }
+      },
+	  }
+}
