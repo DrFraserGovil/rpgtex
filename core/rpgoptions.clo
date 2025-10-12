@@ -96,6 +96,16 @@
 
 \ProcessKeysOptions { rpg / options }
 
+%%now check the command line options
+\providecommand{\csPrintMode}{0}
+\str_if_eq:VnT \csPrintMode { 1 }
+{
+    \bool_set_false:N \l__rpg_show_background_bool
+    \bool_set_true:N \l__rpg_show_footer_scroll_bool
+}
+
+
+%then insert the saved arguments into the parent class
 \bool_if:NT \c__rpg_isclass_bool
 {
 
@@ -110,4 +120,5 @@
 		\PassOptionsToClass{ openany }{\g__rpg_base_class_tl }
 	}
 }
+
 
