@@ -9,7 +9,10 @@
     }
 }
 
-\renewcommand*{\chaptermark}[1]{}
+ \cs_if_exist:NT \chapter
+    {
+		\renewcommand*{\chaptermark}[1]{}
+	}
 \fancyfoot[LE]{%
     \begin{tikzpicture}[remember~picture,overlay]
       \bool_if:NT \l__rpg_show_footer_scroll_bool {
