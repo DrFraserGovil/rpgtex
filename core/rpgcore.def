@@ -81,9 +81,9 @@
 \RequirePackage {core/rpgtip}    % inline tip boxes
 \RequirePackage {core/rpgheader}     % fancy headers and footers
 % % \RequirePackage {lib/rpgmonster}    % stat blocks
-% % \RequirePackage {lib/rpgreadaloud}  % read-aloud text
-\RequirePackage {core/rpgmap}   % section styling and special section headers
 \RequirePackage {core/rpgsections}   % section styling and special section headers
+\RequirePackage {core/rpgnarration}  % read-aloud text
+\RequirePackage {core/rpgmap}   % section styling and special section headers
 % % \RequirePackage {lib/rpgsidebar}    % sidebars
 \RequirePackage {core/dndtable}      % tables
 \RequirePackage {core/rpgtoc}        % table of contents styling
