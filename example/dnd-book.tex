@@ -14,5 +14,202 @@
    \input{book-text}
 
 
-\ExplSyntaxOff
+
+   \part{The D\&D Book Class}
+
+		\chapter{Differences \& Overrides}
+
+		\chapter{Monsters}
+
+			\begin{RpgMonster}[colback=red]{The Typesetter}
+				 \RpgMonsterType{Medium aberration, lawful evil}
+
+				  \RpgMonsterBasics[
+						armor-class = {9 (12 with \emph{mage armor})},
+						hit-points  = {\RpgDice{3d8 + 3}},
+						speed       = {30 ft., fly 30 ft.},
+						initiative  = {+5},
+					]
+
+
+					\RpgMonsterAbilityScores[
+						proficiency=2,
+						str = 12,
+						dex = 8,
+						con = 13,
+						int = 10,
+						wis = 14,
+						cha = 15,
+						str_save,
+						cha_save,
+					]
+
+				\RpgMonsterDetails[
+					%saving-throws = {Str +0, Dex +0, Con +0, Int +0, Wis +0, Cha +0},
+					%skills = {Acrobatics +0, Animal Handling +0, Arcana +0, Athletics +0, Deception +0, History +0, Insight +0, Intimidation +0, Investigation +0, Medicine +0, Nature +0, Perception +0, Performance +0, Persuasion +0, Religion +0, Sleight of Hand +0, Stealth +0, Survival +0},
+					%damage-vulnerabilities = {cold},
+					%damage-resistances = {bludgeoning, piercing, and slashing from nonmagical attacks},
+					%damage-immunities = {poison},
+					%condition-immunities = {poisoned},
+					senses = {darkvision 60 ft., passive Perception 12},
+					languages = {\LaTeX},
+					challenge = 1,
+					% proficiency-bonus, % = +2
+				]
+			\end{RpgMonster}
+			\begin{RpgMonster}{The Monster}
+				 \RpgMonsterType{Medium aberration, lawful evil}
+
+				  \RpgMonsterBasics[
+						armor-class = {9 (12 with \emph{mage armor})},
+						hit-points  = {\RpgDice{3d8 + 3}},
+						speed       = {30 ft., fly 30 ft.},
+					]
+
+
+					\RpgMonsterAbilityScores[
+						proficiency=2,
+						str = 12,
+						dex = 8,
+						con = 13,
+						int = 10,
+						wis = 14,
+						cha = 15,
+						str_save,
+						cha_save,
+					]
+
+				\RpgMonsterDetails[
+					%saving-throws = {Str +0, Dex +0, Con +0, Int +0, Wis +0, Cha +0},
+					%skills = {Acrobatics +0, Animal Handling +0, Arcana +0, Athletics +0, Deception +0, History +0, Insight +0, Intimidation +0, Investigation +0, Medicine +0, Nature +0, Perception +0, Performance +0, Persuasion +0, Religion +0, Sleight of Hand +0, Stealth +0, Survival +0},
+					%damage-vulnerabilities = {cold},
+					%damage-resistances = {bludgeoning, piercing, and slashing from nonmagical attacks},
+					%damage-immunities = {poison},
+					%condition-immunities = {poisoned},
+					senses = {darkvision 60 ft., passive Perception 12},
+					languages = {\LaTeX},
+					challenge = 1,
+					% proficiency-bonus, % = +2
+				]
+			\end{RpgMonster}
+
+			\begin{RpgMonster*}[b][]{Monster Foo}
+    \RpgMonsterType{Medium aberration (metasyntactic variable), neutral evil}
+
+    % If you want to use commas in the key values, enclose the values in braces.
+    \RpgMonsterBasics[
+        armor-class = {9 (12 with \emph{mage armor})},
+        hit-points  = {\RpgDice{3d8 + 3}},
+        speed       = {30 ft., fly 30 ft.},
+		initiative  = {+5},
+      ]
+
+    \RpgMonsterAbilityScores[
+        str = 12,
+        dex = 8,
+        con = 13,
+        int = 10,
+        wis = 14,
+        cha = 15,
+		str_save,
+		cha_save,
+      ]
+
+    \RpgMonsterDetails[
+        %saving-throws = {Str +0, Dex +0, Con +0, Int +0, Wis +0, Cha +0},
+        %skills = {Acrobatics +0, Animal Handling +0, Arcana +0, Athletics +0, Deception +0, History +0, Insight +0, Intimidation +0, Investigation +0, Medicine +0, Nature +0, Perception +0, Performance +0, Persuasion +0, Religion +0, Sleight of Hand +0, Stealth +0, Survival +0},
+        %damage-vulnerabilities = {cold},
+        %damage-resistances = {bludgeoning, piercing, and slashing from nonmagical attacks},
+        %damage-immunities = {poison},
+        %condition-immunities = {poisoned},
+        senses = {darkvision 60 ft., passive Perception 10},
+        languages = {Common, Goblin, Undercommon},
+        challenge = 1,
+        % proficiency-bonus, % = +2
+      ]
+    % Traits
+    \RpgMonsterAction{Innate Spellcasting}
+    Foo's spellcasting ability is Charisma (spell save DC 12, +4 to hit with spell attacks). It can innately cast the following spells, requiring no material components:
+    \begin{RpgMonsterSpells}
+      \RpgInnateSpellLevel{misty step}
+      \RpgInnateSpellLevel[3]{fog cloud, rope trick}
+      \RpgInnateSpellLevel[1]{identify}
+    \end{RpgMonsterSpells}
+
+    \RpgMonsterAction{Spellcasting}
+    Foo is a 2nd-level spellcaster. Its spellcasting ability is Charisma (spell save DC 12, +4 to hit with spell attacks). It has the following sorcerer spells prepared:
+    \begin{RpgMonsterSpells}
+      \RpgMonsterSpellLevel{blade ward, fire bolt, light, shocking grasp}
+      \RpgMonsterSpellLevel[1][3]{burning hands, mage armor, shield}
+    \end{RpgMonsterSpells}
+
+    \RpgMonsterSection{Actions}
+    \RpgMonsterAction{Multiattack}
+    The foo makes two melee attacks.
+
+    %Default values are shown commented out
+    \RpgMonsterAttack[
+      name=Dagger,
+      %distance=both, % valid options are in the set {both,melee,ranged},
+      %type=weapon, %valid options are in the set {weapon,spell}
+      mod=+3,
+      %reach=5,
+      %range=20/60,
+      %targets=one target,
+      dmg=\RpgDice{1d4+1},
+      dmg-type=piercing,
+      %plus-dmg=,
+      %plus-dmg-type=,
+      %or-dmg=,
+      %or-dmg-when=,
+      %extra=,
+    ]
+
+    %\RpgMonsterMelee calls \RpgMonsterAttack with the melee option
+    \RpgMonsterMelee[
+      name=Flame Tongue Longsword,
+      mod=+3,
+      %reach=5,
+      %targets=one target,
+      dmg=\RpgDice{1d8+1},
+      dmg-type=slashing,
+      plus-dmg=\RpgDice{2d6},
+      plus-dmg-type=fire,
+      or-dmg=\RpgDice{1d10+1},
+      or-dmg-when=if used with two hands,
+      %extra=,
+    ]
+
+    %\RpgMonsterRanged calls \RpgMonsterAttack with the ranged option
+    \RpgMonsterRanged[
+      name=Assassin's Light Crossbow,
+      mod=+1,
+      range=80/320,
+      dmg=\RpgDice{1d8},
+      dmg-type=piercing,
+      %plus-dmg=,
+      %plus-dmg-type=,
+      %or-dmg=,
+      %or-dmg-when=,
+      extra={, and the target must make a DC 15 Constitution saving throw, taking 24 (7d6) poison damage on a failed save, or half as much damage on a successful one}
+    ]
+
+    % Legendary Actions
+    \RpgMonsterSection{Legendary Actions}
+    The foo can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The foo regains spent legendary actions at the start of its turn.
+
+    \begin{RpgMonsterLegendaryActions}
+      \RpgMonsterLegendaryAction{Move}{The foo moves up to its speed.}
+      \RpgMonsterLegendaryAction{Dagger Attack}{The foo makes a dagger attack.}
+      \RpgMonsterLegendaryAction{Create Contract (Costs 3 Actions)}{The foo presents a contract in a language it knows and waves it in the face of a creature within 10 feet. The creature must make a DC 10 Intelligence saving throw. On a failure, the creature is incapacitated until the start of the foo's next turn. A creature who cannot read the language in which the contract is written has advantage on this saving throw.}
+    \end{RpgMonsterLegendaryActions}
+\end{RpgMonster*}
+	\Blindtext
+	\Blindtext
+	\Blindtext
+	\Blindtext
+	\Blindtext
+	\Blindtext
+	\Blindtext
+	\Blindtext
 \end{document}

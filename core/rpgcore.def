@@ -16,6 +16,8 @@
 \RequirePackage [breakable,skins,xparse]{tcolorbox} % styled text boxes
 \RequirePackage {tikz} % drawing ornaments and lines
 \RequirePackage {xcolor}
+\RequirePackage{float}
+\RequirePackage{dblfloatfix}
 \RequirePackage {xparse} % \NewDocumentCommand and expl3
 \RequirePackage[hidelinks] {hyperref}
 
@@ -83,5 +85,5 @@
 \RequirePackage {core/rpgmap}   % section styling and special section headers
 \RequirePackage {core/rpgsections}   % section styling and special section headers
 % % \RequirePackage {lib/rpgsidebar}    % sidebars
-% % \RequirePackage {lib/rpgtable}      % tables
+\RequirePackage {core/dndtable}      % tables
 \RequirePackage {core/rpgtoc}        % table of contents styling
