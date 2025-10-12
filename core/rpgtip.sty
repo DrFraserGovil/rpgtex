@@ -4,9 +4,10 @@
 % Environment for tips.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Standard for every tip
-\DeclareTColorBox {__rpg_tip} {o}
-  {
-    before~upper =
+
+\tcbset{
+  rpg tip/.style={
+	 before~upper =
       {
         \bool_if:NT \l__rpg_layout_bool
           {
@@ -33,6 +34,14 @@
     parbox       = false,
     coltitle     = black,
     after~skip   = 13pt plus 4pt minus 4pt,
+	arc={2mm},
+	rounded~corners,
+  }
+}
+
+\DeclareTColorBox {__rpg_tip} {o}
+  {
+	rpg tip,
     #1,
   }
 

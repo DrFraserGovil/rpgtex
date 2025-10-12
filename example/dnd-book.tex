@@ -21,7 +21,7 @@
 
 		\chapter{Monsters}
 
-			\begin{RpgMonster}[colback=red]{The Typesetter}
+			\begin{RpgMonster}{The Typesetter}
 				 \RpgMonsterType{Medium aberration, lawful evil}
 
 				  \RpgMonsterBasics[
@@ -57,43 +57,9 @@
 					% proficiency-bonus, % = +2
 				]
 			\end{RpgMonster}
-			\begin{RpgMonster}{The Monster}
-				 \RpgMonsterType{Medium aberration, lawful evil}
-
-				  \RpgMonsterBasics[
-						armor-class = {9 (12 with \emph{mage armor})},
-						hit-points  = {\RpgDice{3d8 + 3}},
-						speed       = {30 ft., fly 30 ft.},
-					]
 
 
-					\RpgMonsterAbilityScores[
-						proficiency=2,
-						str = 12,
-						dex = 8,
-						con = 13,
-						int = 10,
-						wis = 14,
-						cha = 15,
-						str_save,
-						cha_save,
-					]
-
-				\RpgMonsterDetails[
-					%saving-throws = {Str +0, Dex +0, Con +0, Int +0, Wis +0, Cha +0},
-					%skills = {Acrobatics +0, Animal Handling +0, Arcana +0, Athletics +0, Deception +0, History +0, Insight +0, Intimidation +0, Investigation +0, Medicine +0, Nature +0, Perception +0, Performance +0, Persuasion +0, Religion +0, Sleight of Hand +0, Stealth +0, Survival +0},
-					%damage-vulnerabilities = {cold},
-					%damage-resistances = {bludgeoning, piercing, and slashing from nonmagical attacks},
-					%damage-immunities = {poison},
-					%condition-immunities = {poisoned},
-					senses = {darkvision 60 ft., passive Perception 12},
-					languages = {\LaTeX},
-					challenge = 1,
-					% proficiency-bonus, % = +2
-				]
-			\end{RpgMonster}
-
-			\begin{RpgMonster*}[b][]{Monster Foo}
+			\begin{RpgMonster*}[bh][]{Monster Foo}
     \RpgMonsterType{Medium aberration (metasyntactic variable), neutral evil}
 
     % If you want to use commas in the key values, enclose the values in braces.

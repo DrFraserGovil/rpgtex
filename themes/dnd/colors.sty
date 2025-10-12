@@ -36,3 +36,18 @@
 
 % set main colors
 \RpgSetThemeColor[PhbLightGreen]{}
+
+%then the print mode contingencies
+\ifnum\csPrintMode=1
+% 	\else
+	\RpgSetThemeColor[white]{}
+	\colorlet{narrationcolor}{white}
+	\tcbset{
+		rpg tip/.append~style={
+		% borderline~west = {1pt} {-0.5pt} {titlered},
+		% borderline~east = {1pt} {-0.5pt} {titlered},
+		frame~style={draw=black,fill=none,line~width=2pt,rounded~corners},
+
+		}
+	}
+  \fi
