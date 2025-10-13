@@ -11,9 +11,34 @@
 
 \input {core/rpgoptions.clo}
 \LoadClass { \g__rpg_base_class_tl }
+\ExplSyntaxOff
 
 %%overload title stuff here? Otherwise fairly basic
 \pagestyle{empty}
 
 \RequirePackage{rpg}
-\renewcommand{\RpgTitle}[1]{\ArticleTitle{#1}}
+\renewcommand{\RpgTitle}[1]{\RpgHandoutTitle{#1}}
+
+
+
+\RenewDocumentCommand{\maketitle}{ m } % Redefine \maketitle to accept one optional argument
+{
+	\RpgHandoutTitle{#1}
+}
+
+
+\renewcommand{\RpgHandoutTitle}[1]{
+	\noindent
+		\twocolumn[
+			\begin{center}
+
+				{\RpgFontTitle \@title}
+
+				{\RpgFontSubTitle \@subtitle}
+
+				{\RpgFontSubTitle \@author}
+
+			\end{center}
+			\vspace{8pt}
+    ]
+}

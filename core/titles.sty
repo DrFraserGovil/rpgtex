@@ -66,9 +66,11 @@
 
 
 \let\__rpg_orig_title\maketitle
+\def\subtitle#1{\gdef\@subtitle{#1}} %let a subtitle be defined
+\subtitle{}%clear value
 \newcommand\RpgTitle[1]{\__rpg_orig_title}
 \newcommand\RpgBookTitle[1]{\__rpg_orig_title}
-\newcommand\RpgArticleTitle[1]{\__rpg_orig_title}
+\newcommand\RpgHandoutTitle[1]{\__rpg_orig_title}
 
 \RenewDocumentCommand{\maketitle}{ m } % Redefine \maketitle to accept one optional argument
 {

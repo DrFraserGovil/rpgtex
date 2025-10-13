@@ -46,3 +46,20 @@
 	\clearpage
 
 }
+
+\renewcommand{\RpgHandoutTitle}[1]{
+	\noindent
+		\twocolumn[
+			\begin{center}
+
+				{\RpgFontTitle \@title}
+
+				{\RpgFontSubTitle  \@subtitle}
+
+				{\RpgFontSubTitle  \@author}
+
+			\end{center}
+			\vspace{8pt}
+    ] % End of the twocolumn content
+
+}

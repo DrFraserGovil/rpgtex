@@ -15,8 +15,25 @@
 
 
 \RequirePackage{rpg}
-\def\subtitle#1{\gdef\@subtitle{#1}} %let a subtitle be defined
-\subtitle{}%clear value
-\renewcommand{\RpgTitle}[1]{\RpgBookTitle{#1}}
 
+
+\RenewDocumentCommand{\maketitle}{ m } % Redefine \maketitle to accept one optional argument
+{
+	\group_begin:
+
+	\str_if_empty:NTF { #1 }
+		{
+			\__rpg_orig_title
+		}
+		{
+			\tl_if_empty:nTF { #1 }
+			{
+				\__rpg_orig_title
+			}
+			{
+				\RpgBookTitle{#1}
+			}
+		}
+	\group_end:
+}
 
