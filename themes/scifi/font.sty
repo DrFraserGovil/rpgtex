@@ -77,3 +77,12 @@
 	drop-cap-family		= {\starTrek},
 	drop-cap-internal-style = {\scifi},
 ]{}
+
+\str_if_eq:NNT \g__rpg_base_class_tl {article}
+{
+	\RpgSetFont[
+		title-style			= {\Huge\color{black}},
+		subtitle-style			= {\large\scifi\color{black}},
+	]
+	{}
+}
