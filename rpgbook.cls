@@ -13,11 +13,10 @@
 \input {core/rpgoptions.clo}
 \LoadClass { \g__rpg_base_class_tl }
 
-% % %% Define custom title page and part page stuff here
-% % {
-
-% % }
 
 \RequirePackage{rpg}
+\def\subtitle#1{\gdef\@subtitle{#1}} %let a subtitle be defined
+\subtitle{}%clear value
+\renewcommand{\RpgTitle}[1]{\RpgBookTitle{#1}}
 
 

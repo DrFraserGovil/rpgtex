@@ -18,7 +18,21 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Sectioning commands
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Part
+	% Title
+    title-family .tl_set:N         = \l__rpg_title_family_tl,
+    title-family .initial:n        = \normalfont,
+    title-family .value_required:n = true,
+    title-style .tl_set:N         = \l__rpg_title_style_tl,
+    title-style .initial:n        = \Huge,
+    title-style .value_required:n = true,
+	% Subtitle
+    subtitle-family .tl_set:N         = \l__rpg_subtitle_family_tl,
+    subtitle-family .initial:n        = \normalfont,
+    subtitle-family .value_required:n = true,
+    subtitle-style .tl_set:N         = \l__rpg_subtitle_style_tl,
+    subtitle-style .initial:n        = \Large,
+    subtitle-style .value_required:n = true,
+	% Part
     part-family .tl_set:N         = \l__rpg_part_family_tl,
     part-family .initial:n        = \normalfont,
     part-family .value_required:n = true,
@@ -220,7 +234,13 @@
 % % Font access functions combine the selected family and style
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % % Sectioning commands
-\NewDocumentCommand{\RpgFontPart}{}
+\NewDocumentCommand{\RpgFontTitle}{}
+  { \l__rpg_title_family_tl \l__rpg_title_style_tl}
+
+\NewDocumentCommand{\RpgFontSubTitle}{}
+  { \l__rpg_subtitle_family_tl \l__rpg_subtitle_style_tl}
+
+  \NewDocumentCommand{\RpgFontPart}{}
   { \l__rpg_part_family_tl \l__rpg_part_style_tl}
 
 \NewDocumentCommand{\RpgFontChapter}{}

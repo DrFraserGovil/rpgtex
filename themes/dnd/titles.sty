@@ -1,0 +1,57 @@
+
+\ExplSyntaxOff
+\renewcommand\DrawPartPage[2]
+{
+	%
+    % 1. Background Image
+   \node [anchor=south west, inner sep=0pt, minimum width=\paperwidth, minimum height=\paperheight] (image) at (current page.south west)
+    {
+        \includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
+    };
+
+	    % Optional: Add a semi-transparent black overlay for text visibility
+    % \fill [white, opacity=0.5] (current page.south west) rectangle (current page.north east);
+
+	\def\radius{0.2\paperwidth}
+	\def\overset{10}
+	\draw[line width=3pt,titlegold,fill=statblockbg] (current page.north) ++ ({-\radius*cos(\overset)},{8pt}) arc ({180-\overset}:{360+\overset}:\radius)--cycle;
+
+	\node at ($(current page.north)+(0,-1)$) {{\RpgFontPart \textcolor{titlered}{\bf {\MakeUppercase{Part \thepart}}}}};
+	\node at ($(current page.north)+(0,-2.4)$) {\parbox[t]{6cm}{\centering \Huge \textcolor{titlered}{\bf\jkfont #2}}};
+}
+
+
+
+\usetikzlibrary {shadows}
+\renewcommand{\RpgBookTitle}[1]{
+
+	\thispagestyle{empty} % Ensure no headers/footers on the part page
+	\begin{tikzpicture}[remember picture, overlay]
+		\node [anchor=south west, inner sep=0pt, minimum width=\paperwidth, minimum height=\paperheight] (image) at (current page.south west)
+		{
+		\includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
+		};
+
+			\node at ($(current page.north)+(0,-3cm)$) {{\RpgContour[black]{\RpgFontTitle\@title}}};
+
+			\def\w{0.3\paperwidth}
+			\def\h{0.005\paperwidth}
+			\fill[red,circular glow={fill=black!80!red,scale=1}] ($(current page.north)+(0,-4cm)$)--++(\w,-\h)--++(-\w,-\h)--++(-\w,\h)--cycle;
+
+		\node[anchor=south] at ($(current page.south)+(0,+3cm)$) {\parbox[t]{0.9\paperwidth}{
+			\begin{center}
+			{\RpgContour[black]{\RpgFontSubTitle\@subtitle}}
+
+			\vspace{1cm}
+
+			\RpgContour[black]{\RpgFontSubTitle\@author}
+			\end{center}
+			}
+
+
+	};
+
+	\end{tikzpicture}
+	\clearpage
+
+}

@@ -16,3 +16,4 @@
 \pagestyle{empty}
 
 \RequirePackage{rpg}
+\renewcommand{\RpgTitle}[1]{\ArticleTitle{#1}}

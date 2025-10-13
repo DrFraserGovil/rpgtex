@@ -1,0 +1,94 @@
+\ExplSyntaxOn
+
+\newcommand\DrawPartPage[2]
+{
+	%
+    % 1. Background Image
+   \node [inner~sep=0pt, minimum~width=\paperwidth, minimum~height=\paperheight] (image) at (current~page.south~west)
+    {
+        \includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
+    };
+
+	    % Optional: Add a semi-transparent black overlay for text visibility
+    \fill [white, opacity=0.5] (current~page.south~west) rectangle (current~page.north~east);
+
+
+    % 2. Text Placement and Styling (Fix applied below)
+    \node at (current~page.center) [ % Fixed here
+        text~width=0.8\paperwidth,
+        align=center,
+        yshift=2cm
+    ]
+    {
+        % Part Number
+
+		\MakeUppercase{\RpgFontPart Part~\thepart} \par
+		\vspace{1em}
+
+        % Part Title
+		{\RpgFontPart #2}
+    };
+
+}
+
+
+\cs_new_protected:Nn \__part_with_image:nn
+{
+	\thispagestyle{empty} % Ensure no headers/footers on the part page
+	\begin{tikzpicture}[remember~picture, overlay]
+		\DrawPartPage{#1}{#2}
+	\end{tikzpicture}
+	\phantomsection
+	\addcontentsline{toc}{part}{Part~\thepart{}:~#2}
+	\clearpage % Ensure the content starts on the next page
+}
+
+
+%%Redefine part to accept custom arguments
+\let\__rpg_orig_part\part
+\RenewDocumentCommand{\part}{s O{} m }
+{
+	\IfBooleanTF {#1}
+	{ \__rpg_orig_part*{#3} } % Starred version
+	{
+		\IfNoValueTF { #2 }
+		{
+			% Case 1: NO image provided - use the standard part command
+			\__rpg_orig_part{#3}
+		}
+		{
+			% Case 2: IMAGE provided - use the custom command with the image
+			\stepcounter{part}
+			\__part_with_image:nn { #2 } { #3 }
+		}
+	}
+}
+
+
+\let\__rpg_orig_title\maketitle
+\newcommand\RpgTitle[1]{\__rpg_orig_title}
+\newcommand\RpgBookTitle[1]{\__rpg_orig_title}
+\newcommand\RpgArticleTitle[1]{\__rpg_orig_title}
+
+\RenewDocumentCommand{\maketitle}{ m } % Redefine \maketitle to accept one optional argument
+{
+	\group_begin:
+
+	\str_if_empty:NTF { #1 }
+		{
+			\__rpg_orig_title
+		}
+		{
+			\tl_if_empty:nTF { #1 }
+			{
+				\__rpg_orig_title
+			}
+			{
+				\RpgTitle{#1}
+			}
+		}
+	\group_end:
+}
+
+
+\ExplSyntaxOff
