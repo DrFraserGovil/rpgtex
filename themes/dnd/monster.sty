@@ -452,13 +452,13 @@
 			\l__rpg_monster_name{}
 		}
 
-		\NewDocumentCommand \RpgSavingThrow { m m m D{} }
+		\NewDocumentCommand \RpgSavingThrow { m m m m }
 		{
 			\textit{#1 Save, DC #2}. \textbf{Failure:} #3.
 			\IfValueT {#4} {\textbf{~Success:} #4}
 		}
 
-		\NewDocumentCommand\RpgRepeatableSavingThrow{O{The~target~can~repeat~the~save~at~the~end~of~each~turn.} m m m D{}}
+		\NewDocumentCommand\RpgRepeatableSavingThrow{O{The~target~can~repeat~the~save~at~the~end~of~each~turn.} m m m m}
 		{
 			\RpgSavingThrow{#2}{#3}{#4}{#5} \\ #1
 		}
