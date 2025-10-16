@@ -3,676 +3,738 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Monster environments
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 % Stat block made to look like stat blocks in the PHB.
-\DeclareTColorBox {RpgMonsterBox} { O{} m }
+% Some some modifications made to include 2024 updates
 
-  {
-    enhanced,
-    % frame~hidden,
-    before~skip      = 12pt plus 3pt minus 3pt,
-    boxrule          = 2pt,
-    breakable,
-    parbox           = false,
-    boxsep           = 2pt,
-    toptitle         = 8pt,
-    top              = 0pt,
-    left             = 2pt,
-    right            = 2pt,
-    bottom           = 7pt,
-    rounded~corners,
-    arc=4mm,
-    oversize         = 0pt,
-    colback          = statblockbg,
-    colbacktitle     = statblockbg,
-    colframe         = statblockoutline,
-    fontupper        = \RpgFontStatBlockBody,
-    fontlower        = \RpgFontStatBlockBody,
-    title            = {#2},
-    #1
-  }
+%%%%%% Main box
+	\DeclareTColorBox {RpgMonsterBox} { O{} m }
+	{
+	enhanced,
+	before~skip      = 12pt plus 3pt minus 3pt,
+	boxrule          = 2pt,
+	breakable,
+	parbox           = false,
+	boxsep           = 2pt,
+	toptitle         = 8pt,
+	top              = 0pt,
+	left             = 2pt,
+	right            = 2pt,
+	bottom           = 7pt,
+	rounded~corners,
+	arc=4mm,
+	oversize         = 0pt,
+	colback          = statblockbg,
+	colbacktitle     = statblockbg,
+	colframe         = statblockoutline,
+	fontupper        = \RpgFontStatBlockBody,
+	fontlower        = \RpgFontStatBlockBody,
+	title            = {#2},
+	#1
+	}
 
-% \NewEnviron{RpgMonster}[2][]
-% {
-% 	\def\monster{#2}
-% 	\bool_if:NTF \l__rpg_show_background_bool
-% 	{
-% 		\begin{RpgMonsterBox}[#1]{}
-% 	}
-% 	{
-% 		\begin{RpgMonsterBox}[#1,colback=white,colframe=black!30!white]{}
-% 	}
-% 		\vspace{5pt}{\RpgFontStatBlockTitle \color{titlered}\monster{}}
-% 		\BODY
-% 	\end{RpgMonsterBox}
-% }
 
-% \NewEnviron{RpgMonster*}[2][]
-% {
-% 	\def\monster{#2}
-% \begin{figure*}[#1]
-% 	\bool_if:NTF \l__rpg_show_background_bool
-% 	{
-% 		\begin{RpgMonsterBox}[#1]{}
-% 	}
-% 	{
-% 		\begin{RpgMonsterBox}[#1,colback=white,colframe=black!30!white]{}
-% 	}
-% 		\vspace{5pt}{\RpgFontStatBlockTitle \color{titlered}\monster{}}
-% 		\BODY
-% 	\end{RpgMonsterBox}
-% \end{figure*}
-% }
 
-% --- Helper Macro for common box content/styling ---
-% #1: Optional arguments for RpgMonsterBox (tcolorbox options)
-% #2: Mandatory argument for the title
-% #3: Environment body content (\BODY)
-\NewDocumentCommand \rpg_monster_box:nn { m m }
+%%%%%% RpgMonster Environment
+
+	%%Helper function for print mode injection
+	\NewDocumentCommand \rpg_monster_box:nn { m m }
+	{
+		\RpgSetMonsterName{#2} %make #the monster's name accessible via macro so stat blocks can easily change names
+		\bool_if:NTF \l__rpg_show_background_bool
+		{
+			\begin{RpgMonsterBox}[#1]{}
+		}
+		{
+			\begin{RpgMonsterBox}[#1,colback=white,colframe=black!30!white]{}
+		}
+			\vspace{5pt}{\RpgFontStatBlockTitle \color{titlered}#2}
+
+
+	}
+
+	%%Standard dnd monster environment
+	\NewDocumentEnvironment {RpgMonster} { O{} m +b}
+	{
+		\rpg_monster_box:nn {#1}{#2}
+
+		#3
+	}
+	{
+		\end{RpgMonsterBox}
+	}
+
+
+	%%Starred version is a floating, two column version used for boss monsters
+	%%Takes two sets of optional arguments: one to the float, one to the tcolorbox
+	\NewDocumentEnvironment {RpgMonster*} { O{} O{} m +b}
+	{
+		\begin{figure*}[#1]
+		\centering
+		\rpg_monster_box:nn {#2} {#3}
+
+		\vspace{-1em}
+		\begin{multicols}{2}
+		#4
+	}
+	{
+		\end{multicols}
+		\end{RpgMonsterBox}
+		\end{figure*}
+	}
+
+
+
+%%%%%% Internal Helper functions
+	% A description variant used to list creature attributes.
+	\newlist {__rpg_monster_attributes} {description} {1}
+	\setlist [__rpg_monster_attributes]
+	{
+		before   = \color {titlered},
+		font     = \RpgFontStatBlockBody,
+		labelsep = \l__rpg_space_dim,
+		nosep,
+	}
+
+	% Only prints the item label if the value was supplied
+	\cs_new_protected_nopar:Npn \__rpg_if_monster_attribute:nn #1#2
+	{
+		\tl_if_empty:NF {#1}
+		{ \item [#2] #1 }
+	}
+
+	% Function to format signed integers
+	\cs_new_protected_nopar:Npn \__rpg_format_signed_integer:N #1
+	{
+		\int_compare:nNnTF {#1} < {0}
+		{ -- }
+		{+}
+		\int_abs:n {#1}
+	}
+
+
+	\cs_new_protected_nopar:Npn \__rpg_ability_score_modifier:N #1
+	{
+		\regex_match:NnTF \c__pos_int_regex {#1}
+		{
+			\int_set:Nn \l_tmpa_int { \fp_eval:n { floor ( ( #1 - 10 ) / 2 ) } }
+			\exp_args:Nf \__rpg_format_signed_integer:N \l_tmpa_int
+		}
+		{(#1)}
+	}
+
+	\cs_new_protected_nopar:Npn \__rpg_save_modifier:Nn #1 #2
+	{
+			% Add proficiency bonus if the boolean #2 is true
+			\bool_if:NT #2
+			{\int_set:Nn \l_tmpa_int { \fp_eval:n { floor ( ( #1 - 10 ) / 2 ) } }
+			\int_add:Nn \l_tmpa_int { \g__rpg_proficiency_bonus_int }
+
+			% Format and return the result
+		\exp_args:Nf \__rpg_format_signed_integer:N \l_tmpa_int}
+	}
+
+\int_new:N \l__spell_modifier_int
+\int_set:Nn \l__spell_modifier_int {0}
+\cs_new:Npn \__rpg_get_ability_mod:Nnn #1#2#3
 {
-    	\bool_if:NTF \l__rpg_show_background_bool
+	%%retrieve ability scores based on string names
+    % \group_begin:
+	\tl_set:Nn \l_tmpa_tl { \tl_use:N #1 }
+    \tl_set:Nn \l_tmpb_tl { l__\l_tmpa_tl _tl }
+    \cs_if_exist:cTF { \l_tmpb_tl }
     {
-        % Use first optional arg for tcolorbox options
-        \begin{RpgMonsterBox}[#1]{}
+		\int_set:Nn \l__spell_modifier_int { \fp_eval:n {#3+#2 + floor ( ( \tl_use:c{ \l_tmpb_tl } - 10 ) / 2 ) } }
+        % \int_set:Nn \l_tmpa_int { \fp_eval:n { floor ( ( \tl_use:c{ \l_tmpb_tl } - 10 ) / 2 ) } }
+		% \exp_args:Nf \l_tmpa_int
     }
     {
-        % Use first optional arg + override options
-        \begin{RpgMonsterBox}[#1,colback=white,colframe=black!30!white]{}
+		\msg_set:nnnn { rpg } { bad-modifier } { #1~expands~to~\l_tmpa_tl} { looong }
+        \msg_error:nnnn { rpg } { bad-modifier }
+        +0
     }
-        % The mandatory title argument
-        \vspace{5pt}{\RpgFontStatBlockTitle \color{titlered}#2}
 
-
+    % \group_end:
 }
+%%%%%% Variable definitions
+	\tl_new:N \l__initiative_bonus_tl
+	\bool_new:N \l__manual_initiative_bool
+	\bool_new:N  \l__str_save_proficient_bool
+	\bool_new:N  \l__dex_save_proficient_bool
+	\bool_new:N  \l__con_save_proficient_bool
+	\bool_new:N  \l__int_save_proficient_bool
+	\bool_new:N  \l__wis_save_proficient_bool
+	\bool_new:N  \l__cha_save_proficient_bool
+	\bool_new:N  \l__save_row_bool
 
-\NewDocumentEnvironment {RpgMonster} { O{} m +b}
-{
-	 \rpg_monster_box:nn {#1}{#2}
+	%% This is a big long keyval section, there's no real way to make it pretty
+	\keys_define:nn { rpg / monster / basics }
+	{
+		%%Basic Properties
+		armor-class .tl_set:N          = \l__armor_class_tl,
+		armor-class .initial:n         = 10,
+		armor-class .value_required:n  = true,
+		armorclass .meta:n = { armor-class = {#1} },
+		hit-points .tl_set:N         = \l__hit_points_tl,
+		hit-points .initial:n        = \RpgDice {1d8},
+		hit-points .value_required:n = true,
+		hitpoints .meta:n = { hit-points = {#1} },
+		speed .tl_set:N         = \l__speed_tl,
+		speed .initial:n        = 30 ~ ft,
+		speed .value_required:n = true,
+		initiative .code:n = {\tl_set:Nn \l__initiative_bonus_tl{#1}
+		\bool_set_true:N \l__manual_initiative_bool},
+		%%Ability scores
+		str .tl_set:N         = \l__str_tl,
+		str .initial:n        = 10,
+		str .value_required:n = true,
+		STR .meta:n = { str = #1 },
+		dex .tl_set:N         = \l__dex_tl,
+		dex .initial:n        = 10,
+		dex .value_required:n = true,
+		DEX .meta:n = { dex = #1 },
+		con .tl_set:N         = \l__con_tl,
+		con .initial:n        = 10,
+		con .value_required:n = true,
+		CON .meta:n = { con = #1 },
+		int .tl_set:N         = \l__int_tl,
+		int .initial:n        = 10,
+		int .value_required:n = true,
+		INT .meta:n = { int = #1 },
+		wis .tl_set:N         = \l__wis_tl,
+		wis .initial:n        = 10,
+		wis .value_required:n = true,
+		WIS .meta:n = { wis = #1 },
+		cha .tl_set:N         = \l__cha_tl,
+		cha .initial:n        = 10,
+		cha .value_required:n = true,
+		CHA .meta:n = { cha = #1 },
+		%%%%SAVES
+		str_save .code:n 	=	{\bool_set_true:N \l__str_save_proficient_bool
+							\bool_set_true:N \l__save_row_bool
+		},
+		str_save .value_forbidden:n = true,
+		dex_save .code:n 	=	{\bool_set_true:N \l__dex_save_proficient_bool
+							\bool_set_true:N \l__save_row_bool
+		},
+		dex_save .value_forbidden:n = true,
+		con_save .code:n 	=	{\bool_set_true:N \l__con_save_proficient_bool
+							\bool_set_true:N \l__save_row_bool
+		},
+		con_save .value_forbidden:n = true,
+		int_save .code:n 	=	{\bool_set_true:N \l__int_save_proficient_bool
+							\bool_set_true:N \l__save_row_bool
+		},
+		int_save .value_forbidden:n = true,
+		wis_save .code:n 	=	{\bool_set_true:N \l__wis_save_proficient_bool
+							\bool_set_true:N \l__save_row_bool
+		},
+		wis_save .value_forbidden:n = true,
+		cha_save .code:n 	=	{\bool_set_true:N \l__cha_save_proficient_bool
+							\bool_set_true:N \l__save_row_bool
+		},
+		cha_save .value_forbidden:n = true,
+		% Proficiency Bonus
+		proficiency_bonus .int_set:N  = \g__rpg_proficiency_bonus_int,
+		proficiency_bonus .initial:n = 2,
+		proficiency .meta:n = { proficiency_bonus = #1 },
+	}
 
-	 #3
-}
-{
-     \end{RpgMonsterBox}
-}
+	%% Monster details
+	\keys_define:nn { rpg / monster / details }
+	{
+		saving-throws .tl_set:N         = \l__saving_throws_tl,
+		saving-throws .value_required:n = true,
+		savingthrows .meta:n = { saving-throws = {#1} },
+		skills .tl_set:N         = \l__skills_tl,
+		skills .value_required:n = true,
+		damage-vulnerabilities .tl_set:N         = \l__damage_vulnerabilities_tl,
+		damage-vulnerabilities .value_required:n = true,
+		damagevulnerabilities .meta:n = { damage-vulnerabilities = {#1} },
+		damage-resistances .tl_set:N         = \l__damage_resistances_tl,
+		damage-resistances .value_required:n = true,
+		damageresistances .meta:n = { damage-resistances = {#1} },
+		damage-immunities .tl_set:N         = \l__damage_immunities_tl,
+		damage-immunities .value_required:n = true,
+		damageimmunities .meta:n = { damage-immunities = {#1} },
+		condition-immunities .tl_set:N         = \l__condition_immunities_tl,
+		condition-immunities .value_required:n = true,
+		conditionimmunities .meta:n = { condition-immunities = {#1} },
+		condition-resistances .tl_set:N         = \l__condition_resistances_tl,
+		condition-resistances .value_required:n = true,
+		conditionresistances .meta:n = { condition-immunities = {#1} },
+		senses .tl_set:N         = \l__senses_tl,
+		senses .initial:n        = \defaultsensesname,
+		senses .value_required:n = true,
+		languages .tl_set:N         = \l__languages_tl,
+		languages .initial:n        = ---,
+		languages .value_required:n = true,
+		challenge .tl_set:N         = \l__challenge_tl,
+		challenge .initial:n        = 1,
+		challenge .value_required:n = true,
+	}
 
-\NewDocumentEnvironment {RpgMonster*} { O{} O{} m +b}
-{
-    \begin{figure*}[#1]
-    \centering
-    \rpg_monster_box:nn {#2} {#3}
-	\begin{multicols}{2}
-	#4
-}
-{
-	\end{multicols}
-	 \end{RpgMonsterBox}
-    \end{figure*}
-}
+	\tl_new:N \l__rpg_attack_distance_tl
+	\tl_new:N \l__rpg_attack_type_tl
+	\keys_define:nn { rpg / monster / attack }
+	{
+		distance .choice:,
+		distance .choices:nn =
+		{ both, melee, ranged }
+		{ \tl_set:Nn \l__rpg_attack_distance_tl {\l_keys_choice_tl} },
+		distance .initial:n  = both,
+		type .choice:,
+		type / weapon .code:n = { \tl_set:Nn \l__rpg_attack_type_tl {} },
+		type / spell .code:n = { \tl_set:Nn \l__rpg_attack_type_tl {Spell~} },
+		type .initial:n  = weapon,
+		mod .tl_set:N         = \l__mod_tl,
+		mod .value_required:n = true,
+		reach .tl_set:N         = \l__reach_tl,
+		reach .initial:n        = 5,
+		reach .value_required:n = true,
+		range .tl_set:N         = \l__range_tl,
+		range .initial:n        = 20/60,
+		range .value_required:n = true,
+		dmg .tl_set:N         = \l__dmg_tl,
+		dmg .value_required:n = true,
+		dmg-type .tl_set:N         = \l__dmg_type_tl,
+		dmg-type .value_required:n = true,
+		plus-dmg .tl_set:N         = \l__plus_dmg_tl,
+		plus-dmg .value_required:n = true,
+		plus-dmg-type .tl_set:N         = \l__plus_dmg_type_tl,
+		plus-dmg-type .value_required:n = true,
+		or-dmg .tl_set:N         = \l__or_dmg_tl,
+		or-dmg .value_required:n = true,
+		or-dmg-when .tl_set:N         = \l__or_dmg_when_tl,
+		or-dmg-when .value_required:n = true,
+		extra .tl_set:N         = \l__extra_tl,
+		extra .value_required:n = true,
+	}
 
-
-
-% Italicized text appearing immediately after monster's name
-\NewDocumentCommand {\RpgMonsterType} {m}
-  {
-    \begin {hangingpar}
-      \textit {#1}
-    \end {hangingpar}
-  }
-
-% Fancy DnD 5e stat block rule
-\NewDocumentCommand {\RpgMonsterLine} {}
-  {
-    \par \vspace{-2pt} \noindent
-    \begin {tikzpicture}
-      \draw [ rulered, fill = rulered ] ( 0, 0 ) -- ( 0, 0.1 ) -- ( \linewidth, 0.05 );
-    \end {tikzpicture}
-    \par
-  }
-
-% A description variant used to list creature attributes.
-\newlist {__rpg_monster_attributes} {description} {1}
-\setlist [__rpg_monster_attributes]
-  {
-    before   = \color {titlered},
-    font     = \RpgFontStatBlockBody,
-    labelsep = \l__rpg_space_dim,
-    nosep,
-  }
-
-% Only prints the item label if the value was supplied
-\cs_new_protected_nopar:Npn \__rpg_if_monster_attribute:nn #1#2
-  {
-    \tl_if_empty:NF {#1}
-      { \item [#2] #1 }
-  }
-
-\tl_new:N \l__initiative_bonus_tl
-\bool_new:N \l__manual_initiative_bool
-
-
-%% Monster basics
-\keys_define:nn { rpg / monster / basics }
-  {
-    armor-class .tl_set:N          = \l__armor_class_tl,
-    armor-class .initial:n         = 10,
-    armor-class .value_required:n  = true,
-    armorclass .meta:n = { armor-class = {#1} },
-    hit-points .tl_set:N         = \l__hit_points_tl,
-    hit-points .initial:n        = \RpgDice {1d8},
-    hit-points .value_required:n = true,
-    hitpoints .meta:n = { hit-points = {#1} },
-    speed .tl_set:N         = \l__speed_tl,
-    speed .initial:n        = 30 ~ ft,
-    speed .value_required:n = true,
-	initiative .code:n = {\tl_set:Nn \l__initiative_bonus_tl{#1}
-	\bool_set_true:N \l__manual_initiative_bool}
-  }
-
-%% Monster details
-\keys_define:nn { rpg / monster / details }
-{
-  saving-throws .tl_set:N         = \l__saving_throws_tl,
-  saving-throws .value_required:n = true,
-  savingthrows .meta:n = { saving-throws = {#1} },
-  skills .tl_set:N         = \l__skills_tl,
-  skills .value_required:n = true,
-  damage-vulnerabilities .tl_set:N         = \l__damage_vulnerabilities_tl,
-  damage-vulnerabilities .value_required:n = true,
-  damagevulnerabilities .meta:n = { damage-vulnerabilities = {#1} },
-  damage-resistances .tl_set:N         = \l__damage_resistances_tl,
-  damage-resistances .value_required:n = true,
-  damageresistances .meta:n = { damage-resistances = {#1} },
-  damage-immunities .tl_set:N         = \l__damage_immunities_tl,
-  damage-immunities .value_required:n = true,
-  damageimmunities .meta:n = { damage-immunities = {#1} },
-  condition-immunities .tl_set:N         = \l__condition_immunities_tl,
-  condition-immunities .value_required:n = true,
-  condition-immunities .meta:n = { condition-immunities = {#1} },
-  condition-resistances .tl_set:N         = \l__condition_resistances_tl,
-  condition-resistances .value_required:n = true,
-  conditionresistances .meta:n = { condition-immunities = {#1} },
-  senses .tl_set:N         = \l__senses_tl,
-  senses .initial:n        = \defaultsensesname,
-  senses .value_required:n = true,
-  languages .tl_set:N         = \l__languages_tl,
-  languages .initial:n        = ---,
-  languages .value_required:n = true,
-  challenge .tl_set:N         = \l__challenge_tl,
-  challenge .initial:n        = 1,
-  challenge .value_required:n = true,
-}
-
-%% Ability scores
-% Print ability score stats with auto-computed modifier
-% e.g. \stat{12} prints "12 (+1)"
-% Define a reusable function to format signed integers
-\cs_new_protected_nopar:Npn \__rpg_format_signed_integer:N #1
-  {
-    \int_compare:nNnTF {#1} < {0}
-      { -- }
-      {+}
-    \int_abs:n {#1}
-  }
-
-\cs_new_protected_nopar:Npn \__rpg_monster_basics:
-  {
+	\tl_new:N \l__spell_stat_tl
+	\tl_new:N \l__spell_stat_nice_tl
+	\bool_new:N \l__spells_nocomponents_bool
+	\bool_new:N \l__spells_notext_bool
+	% \bool_set_false:N \l__spells_nocomponents_bool
+	\keys_define:nn { rpg / monster / spells }
+	{
+		spellcasting-name	.tl_set:N= \l__spell_list_name_tl,
+		spellcasting-name .value_required:n = true,
+		spellcasting-name .initial:n = {Spellcasting},
+		modifier .choice:,
+		modifier / STR .code:n = {\tl_set:Nn \l__spell_stat_tl{str} \tl_set:Nn \l__spell_stat_nice_tl{Strength}},
+		modifier / DEX .code:n = {\tl_set:Nn \l__spell_stat_tl{dex} \tl_set:Nn \l__spell_stat_nice_tl{Dexterity}},
+		modifier / CON .code:n = {\tl_set:Nn \l__spell_stat_tl{con} \tl_set:Nn \l__spell_stat_nice_tl{Constitution}},
+		modifier / INT .code:n = {\tl_set:Nn \l__spell_stat_tl{int} \tl_set:Nn \l__spell_stat_nice_tl{Intelligence}},
+		modifier / WIS .code:n = {\tl_set:Nn \l__spell_stat_tl{wis} \tl_set:Nn \l__spell_stat_nice_tl{Wisdom}},
+		modifier / CHA .code:n = {\tl_set:Nn \l__spell_stat_tl{cha} \tl_set:Nn \l__spell_stat_nice_tl{Charisma}},
+        modifier .initial:n = {INT},
+		bonus .int_set:N=\l__spell_bonus_int,
+		bonus .initial:n = 0,
+		no-components .code:n = {\bool_set_true:N \l__spells_nocomponents_bool},
+		no-components .value_forbidden:n = true,
+		no-text .code:n = {\bool_set_true:N \l__spells_notext_bool},
+		no-text .value_forbidden:n = true,
+		notext .code:n = {\bool_set_true:N \l__spells_notext_bool},
+		notext .value_forbidden:n = true,
+	}
+%%%%% Formatting functions
+	%% These are the functions which do the actual nitty gritty of formatting the environments the user declared
+	\cs_new_protected_nopar:Npn \__rpg_monster_basics:
+	{
 		{
 			\color{titlered}
 			\noindent\begin{tabularx}{\linewidth}{lXlX}
 				\textbf{AC} & \l__armor_class_tl & \textbf{Speed} &  \l__speed_tl
 				\\
-				\textbf{HP} &  \l__hit_points_tl & \bool_if:NT \l__manual_initiative_bool {\textbf{Initiative} & \l__initiative_bonus_tl}
+				\textbf{HP} &  \l__hit_points_tl & \textbf{Initiative} &
+				\bool_if:NTF \l__manual_initiative_bool
+				{
+					\l__initiative_bonus_tl
+					}{
+						\exp_args:NV \__rpg_ability_score_modifier:N \l__dex_tl
+					}
 			\end{tabularx}
 		}
-  }
+	}
 
-\NewDocumentCommand {\RpgMonsterBasics} {o}
-  {
-    \group_begin:
-		\keys_set:nn { rpg / monster / basics } {#1}
-      \RpgMonsterLine
-      \__rpg_monster_basics:
-      \RpgMonsterLine
-    \group_end:
-  }
-
-
-\cs_new_protected_nopar:Npn \__rpg_monster_details:
-{
-    \begin {__rpg_monster_attributes}
-      \__rpg_if_monster_attribute:nn {\l__skills_tl}                 {Skills}
-      \__rpg_if_monster_attribute:nn {\l__damage_vulnerabilities_tl} {Damage~Vulnerabilities}
-      \__rpg_if_monster_attribute:nn {\l__damage_resistances_tl}     {Damage~Resistances}
-      \__rpg_if_monster_attribute:nn {\l__damage_immunities_tl}      {Damage~Immunities}
-      \__rpg_if_monster_attribute:nn {\l__condition_immunities_tl}   {Condition~Immunities}
-	  \__rpg_if_monster_attribute:nn {\l__condition_resistances_tl}   {Condition~Resistances}
-      \item [Senses]    \l__senses_tl
-      \item [Languages] \l__languages_tl
-      \item [Challenge] \l__challenge_tl
-    \end {__rpg_monster_attributes}
-}
-
-\NewDocumentCommand {\RpgMonsterDetails} {o}
-{
-  \group_begin:
-    \keys_set:nn { rpg / monster / details } {#1}
-    \RpgMonsterLine{}
-    \__rpg_monster_details:
-    \RpgMonsterLine{}
-  \group_end:
-}
+	\cs_new_protected_nopar:Npn \__rpg_monster_details:
+	{
+		\begin {__rpg_monster_attributes}
+		\__rpg_if_monster_attribute:nn {\l__skills_tl}                 {Skills}
+		\__rpg_if_monster_attribute:nn {\l__damage_vulnerabilities_tl} {Damage~Vulnerabilities}
+		\__rpg_if_monster_attribute:nn {\l__damage_resistances_tl}     {Damage~Resistances}
+		\__rpg_if_monster_attribute:nn {\l__damage_immunities_tl}      {Damage~Immunities}
+		\__rpg_if_monster_attribute:nn {\l__condition_immunities_tl}   {Condition~Immunities}
+		\__rpg_if_monster_attribute:nn {\l__condition_resistances_tl}   {Condition~Resistances}
+		\item [Senses]    \l__senses_tl
+		\item [Languages] \l__languages_tl
+		\item [Challenge] \l__challenge_tl
+		\end {__rpg_monster_attributes}
+	}
 
 
 
-\cs_new_protected_nopar:Npn \__rpg_ability_score_modifier:N #1
-  {
-    \regex_match:NnTF \c__pos_int_regex {#1}
-      {
-        \int_set:Nn \l_tmpa_int { \fp_eval:n { floor ( ( #1 - 10 ) / 2 ) } }
-         \exp_args:Nf \__rpg_format_signed_integer:N \l_tmpa_int
-      }
-      {#1}
-  }
-
-  \cs_new_protected_nopar:Npn \__rpg_save_modifier:Nn #1 #2
-  {
-        % Add proficiency bonus if the boolean #2 is true
-        \bool_if:NT #2
-         {\int_set:Nn \l_tmpa_int { \fp_eval:n { floor ( ( #1 - 10 ) / 2 ) } }
-           \int_add:Nn \l_tmpa_int { \g__rpg_proficiency_bonus_int }
-
-        % Format and return the result
-    \exp_args:Nf \__rpg_format_signed_integer:N \l_tmpa_int}
-  }
-
-  \bool_new:N  \l__str_save_proficient_bool
-  \bool_new:N  \l__dex_save_proficient_bool
-  \bool_new:N  \l__con_save_proficient_bool
-  \bool_new:N  \l__int_save_proficient_bool
-  \bool_new:N  \l__wis_save_proficient_bool
-  \bool_new:N  \l__cha_save_proficient_bool
-  \bool_new:N  \l__save_row_bool
-
-\keys_define:nn { rpg / monster / ability_scores }
-  {
-    str .tl_set:N         = \l__str_tl,
-    str .initial:n        = 10,
-    str .value_required:n = true,
-    STR .meta:n = { str = #1 },
-    dex .tl_set:N         = \l__dex_tl,
-    dex .initial:n        = 10,
-    dex .value_required:n = true,
-    DEX .meta:n = { dex = #1 },
-    con .tl_set:N         = \l__con_tl,
-    con .initial:n        = 10,
-    con .value_required:n = true,
-    CON .meta:n = { con = #1 },
-    int .tl_set:N         = \l__int_tl,
-    int .initial:n        = 10,
-    int .value_required:n = true,
-    INT .meta:n = { int = #1 },
-    wis .tl_set:N         = \l__wis_tl,
-    wis .initial:n        = 10,
-    wis .value_required:n = true,
-    WIS .meta:n = { wis = #1 },
-    cha .tl_set:N         = \l__cha_tl,
-    cha .initial:n        = 10,
-    cha .value_required:n = true,
-    CHA .meta:n = { cha = #1 },
-	%%%%SAVES
-	str_save .code:n 	=	{\bool_set_true:N \l__str_save_proficient_bool
-							\bool_set_true:N \l__save_row_bool
-	},
-	str_save .value_forbidden:n = true,
-	dex_save .code:n 	=	{\bool_set_true:N \l__dex_save_proficient_bool
-							\bool_set_true:N \l__save_row_bool
-	},
-	dex_save .value_forbidden:n = true,
-	con_save .code:n 	=	{\bool_set_true:N \l__con_save_proficient_bool
-							\bool_set_true:N \l__save_row_bool
-	},
-	con_save .value_forbidden:n = true,
-	int_save .code:n 	=	{\bool_set_true:N \l__int_save_proficient_bool
-							\bool_set_true:N \l__save_row_bool
-	},
-	int_save .value_forbidden:n = true,
-	wis_save .code:n 	=	{\bool_set_true:N \l__wis_save_proficient_bool
-							\bool_set_true:N \l__save_row_bool
-	},
-	wis_save .value_forbidden:n = true,
-	cha_save .code:n 	=	{\bool_set_true:N \l__cha_save_proficient_bool
-							\bool_set_true:N \l__save_row_bool
-	},
-	cha_save .value_forbidden:n = true,
-	 % Proficiency Bonus
-    proficiency_bonus .int_set:N  = \g__rpg_proficiency_bonus_int,
-    proficiency_bonus .initial:n = 2,
-	proficiency .meta:n = { proficiency_bonus = #1 },
-  }
-
-\newcommand\labeller[1]
-{
-  \rotatebox[origin=c]{90}{\scriptsize \hspace{0.1cm} #1 \hspace{0.1cm}}
-}
-\newcommand\statTitle[2]
-    {
-      & \parbox[t]{1.25cm}{\RpgFontStatBlockTitle  \scriptsize{#1} ~{ (#2)} }
-    }
-% Ability scores in a table
-\cs_new_protected_nopar:Npn \__rpg_monster_ability_scores:
-  {
-    \color {titlered}
-    % \par \vspace{1pt} \noindent
-
-    % \rule {0pt} {3.7mm} % adds space between hline and table
-    \addtolength{\tabcolsep}{-0.5em}
-    \begin{RpgTable}{rcccccc}
-      ~
-      \statTitle{STR}{\l__str_tl}
-      \statTitle{DEX}{\l__dex_tl}
-      \statTitle{CON}{\l__con_tl}
-      \statTitle{INT}{\l__int_tl}
-      \statTitle{WIS}{\l__wis_tl}
-      \statTitle{CHA}{\l__cha_tl}
-      \\
-      \labeller{mod} &
-      \exp_args:NV \__rpg_ability_score_modifier:N \l__str_tl &
-      \exp_args:NV \__rpg_ability_score_modifier:N \l__dex_tl &
-      \exp_args:NV \__rpg_ability_score_modifier:N \l__con_tl &
-      \exp_args:NV \__rpg_ability_score_modifier:N \l__int_tl &
-      \exp_args:NV \__rpg_ability_score_modifier:N \l__wis_tl &
-      \exp_args:NV \__rpg_ability_score_modifier:N \l__cha_tl
-      \\
-      \bool_if:NT \l__save_row_bool{
-
-      \labeller{save}&
-      \__rpg_save_modifier:Nn \l__str_tl \l__str_save_proficient_bool &
-      \__rpg_save_modifier:Nn \l__dex_tl \l__dex_save_proficient_bool &
-      \__rpg_save_modifier:Nn \l__con_tl \l__con_save_proficient_bool &
-      \__rpg_save_modifier:Nn \l__int_tl \l__int_save_proficient_bool &
-      \__rpg_save_modifier:Nn \l__wis_tl \l__wis_save_proficient_bool &
-      \__rpg_save_modifier:Nn \l__cha_tl \l__cha_save_proficient_bool
-      }{}
-
-    \end{RpgTable}
+	%%Formatters for ability table
+		\cs_new:Npn \__rpg_format_mod_labels:n #1
+		{
+			\rotatebox[origin=c]{90}{\scriptsize \hspace{0.1cm} #1 \hspace{0.1cm}}
+		}
+		\cs_new:Npn \__rpg_format_stat_titles:nn #1#2
+		{
+			& \parbox[t]{1.25cm}{\RpgFontStatBlockTitle  \scriptsize{#1} ~{ (#2)} }
+		}
 
 
-    \par \vspace{-5pt}%
-  }
+	% Ability scores in a table
+	\cs_new_protected_nopar:Npn \__rpg_monster_ability_scores:
+	{
+		\color {titlered}
+		\addtolength{\tabcolsep}{-0.5em}
+		\begin{RpgTable}{rcccccc}
+		~
+		\__rpg_format_stat_titles:nn{STR}{\l__str_tl}
+		\__rpg_format_stat_titles:nn{DEX}{\l__dex_tl}
+		\__rpg_format_stat_titles:nn{CON}{\l__con_tl}
+		\__rpg_format_stat_titles:nn{INT}{\l__int_tl}
+		\__rpg_format_stat_titles:nn{WIS}{\l__wis_tl}
+		\__rpg_format_stat_titles:nn{CHA}{\l__cha_tl}
+		\\
+		\__rpg_format_mod_labels:n{mod} &
+		\exp_args:NV \__rpg_ability_score_modifier:N \l__str_tl &
+		\exp_args:NV \__rpg_ability_score_modifier:N \l__dex_tl &
+		\exp_args:NV \__rpg_ability_score_modifier:N \l__con_tl &
+		\exp_args:NV \__rpg_ability_score_modifier:N \l__int_tl &
+		\exp_args:NV \__rpg_ability_score_modifier:N \l__wis_tl &
+		\exp_args:NV \__rpg_ability_score_modifier:N \l__cha_tl
+		\\
+		\bool_if:NT \l__save_row_bool{
 
-\NewDocumentCommand {\RpgMonsterAbilityScores} {o}
-  {
-    \group_begin:
-      \keys_set:nn { rpg / monster / ability_scores } {#1}
-      \__rpg_monster_ability_scores:
-    \group_end:
-  }
+		\__rpg_format_mod_labels:n{save}&
+		\__rpg_save_modifier:Nn \l__str_tl \l__str_save_proficient_bool &
+		\__rpg_save_modifier:Nn \l__dex_tl \l__dex_save_proficient_bool &
+		\__rpg_save_modifier:Nn \l__con_tl \l__con_save_proficient_bool &
+		\__rpg_save_modifier:Nn \l__int_tl \l__int_save_proficient_bool &
+		\__rpg_save_modifier:Nn \l__wis_tl \l__wis_save_proficient_bool &
+		\__rpg_save_modifier:Nn \l__cha_tl \l__cha_save_proficient_bool
+		}{}
 
-% Inline header for monster actions - similar to a paragraph
-\NewDocumentCommand {\RpgMonsterAction} {m}
-  { \par \smallskip \noindent \textsl { \textbf {#1.} } }
+		\end{RpgTable}
 
-% Inline header for monster sub actions - similar to a subparagraph
-\NewDocumentCommand {\RpgMonsterSubAction} {m}
-  { \par \textsl { \textbf {#1.} } }
+		\par \vspace{-5pt}%
+	}
 
-% Monster subsection header style
-\NewDocumentCommand {\RpgMonsterSection} {m}
-  {
-    \addvspace{6pt plus 2pt minus 2pt} \noindent
-    \group_begin:
-      \RpgFontStatBlockSection #1\nopagebreak[4]
-      % \rule is a horizontal command, so placing it under the title incurs extra
-      % line spacing. Use \hrule (a vertical command) instead.
-      \vspace {2pt}\nopagebreak[4]
-      \hrule height 0.6pt
-    \group_end:
-      \par \vspace{5pt}
-    \noindent \ignorespaces
-  }
 
-% Spellcasting levels
-\newlist {RpgMonsterSpells} {description} {1}
-\setlist [RpgMonsterSpells]
-  {
-    font     = \normalfont \RpgFontStatBlockBody,
-    labelsep = \l__rpg_space_dim,
-    noitemsep,
-    topsep   = 6pt plus 2pt minus 2pt,
-  }
 
-\NewDocumentCommand {\RpgEmphSpellString} {m}
-  {
-    \group_begin:
-      \seq_set_from_clist:Nn \l_tmpa_seq {#1}
-      \seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n { \emph {##1} } }
-      \seq_use:Nn \l_tmpb_seq { ,~ }
-    \group_end:
-  }
+%%%% User-facing functions
 
-\NewDocumentCommand {\RpgInnateSpellLevel} { O {At~will} m }
-  {
-    \item
-      [
-        \regex_match:NnTF \c__pos_int_regex {#1}
-        {
-          \str_if_in:NnTF {#2} {,}
-          { #1/day~each }
-          { #1/day~each }
-        }
-        {#1}
-        :
-      ]
-      \RpgEmphSpellString {#2}
-  }
+	% Utility
+		% Fancy DnD 5e stat block rule
+		\NewDocumentCommand {\RpgMonsterLine} {}
+		{
+			\par \vspace{-2pt} \noindent
+			\begin {tikzpicture}
+			\draw [ rulered, fill = rulered ] ( 0, 0 ) -- ( 0, 0.1 ) -- ( \linewidth, 0.05 );
+			\end {tikzpicture}
+			\par
 
-  \newcommand\spellfirstlevelname{1st~level}
-\newcommand\spellsecondlevelname{2nd~level}
-\newcommand\spellthirdlevelname{3rd~level}
-\newcommand\spellfourthlevelname{4th~level}
-\newcommand\spellfifthlevelname{5th~level}
-\newcommand\spellsixthlevelname{6th~level}
-\newcommand\spellseventhlevelname{7th~level}
-\newcommand\spelleighthlevelname{8th~level}
-\newcommand\spellninthlevelname{9th~level}
-\newcommand\spellatwillname{at~will}
-\newcommand\spelloneslotname{1~slot}
-\newcommand\spelltwoslotsname{2~slots}
-\newcommand\spellthreeslotsname{3~slots}
-\newcommand\spellfourslotsname{4~slots}
-\NewDocumentCommand {\RpgMonsterSpellLevel} { O{Cantrips} O{at~will} m }
+
+		}
+
+		\tl_new:N \l__rpg_monster_name
+		%overwrites the internal macro
+		\NewDocumentCommand\RpgSetMonsterName{m}
+		{
+			\tl_set:Nn \l__rpg_monster_name {#1}
+		}
+
+		\NewDocumentCommand\RpgMonsterName{}
+		{
+			\l__rpg_monster_name{}
+		}
+
+		\NewDocumentCommand \RpgSavingThrow { m m m D{} }
+		{
+			\textit{#1 Save, DC #2}. \textbf{Failure:} #3.
+			\IfValueT {#4} {\textbf{~Success:} #4}
+		}
+
+		\NewDocumentCommand\RpgRepeatableSavingThrow{O{The~target~can~repeat~the~save~at~the~end~of~each~turn.} m m m D{}}
+		{
+			\RpgSavingThrow{#2}{#3}{#4}{#5} \\ #1
+		}
+
+		\NewDocumentCommand\RpgMonsterReaction{m m m}
+		{
+			\RpgMonsterAction{#1} \textit{Trigger:} #2 \\ \textit{Response:} #3
+		}
+
+		\NewDocumentCommand\RpgLegendaryDefiance{}
+		{
+			\RpgMonsterLegendaryAction{Legendary~Defiance}~{At~the~end~of~another~creature's~turn,~\RpgMonsterName{}~chooses~to~repeat~a~saving~throw~that~they~failed~in~the~past~hour~(using~their~original~modifier).}
+		}
+
+
+
+	%%Core monster environments
+		% Italicized text appearing immediately after monster's name
+		\NewDocumentCommand {\RpgMonsterType} {m}
+		{
+			\begin {hangingpar}
+			\textit {#1}
+			\end {hangingpar}
+		}
+
+		%%Formats Speed, hp, ability scores etc
+		\NewDocumentCommand {\RpgMonsterBasics} {o}
+		{
+			%%deliberately not wrapped in a group because we want these variables to expose to other sections!
+			\keys_set:nn { rpg / monster / basics } {#1}
+			\RpgMonsterLine
+			\__rpg_monster_basics:
+			\RpgMonsterLine
+			\__rpg_monster_ability_scores:
+
+		}
+
+		%% Resistances, langages etc.
+		\NewDocumentCommand {\RpgMonsterDetails} {o}
+		{
+			\group_begin:
+				\keys_set:nn { rpg / monster / details } {#1}
+				\RpgMonsterLine{}
+				\__rpg_monster_details:
+				\RpgMonsterLine{}
+			\group_end:
+		}
+
+		% Monster subsection header style
+		\NewDocumentCommand {\RpgMonsterSection} {m}
+		{
+			\addvspace{6pt plus 2pt minus 2pt} \noindent
+			\group_begin:
+			\RpgFontStatBlockSection #1\nopagebreak[4]
+			\vspace {2pt}\nopagebreak[4]
+			\hrule height 0.6pt
+			\group_end:
+			\par \ignorespaces\nopagebreak[4]
+			\vspace {5pt}\nopagebreak[4]
+		}
+
+		% Inline header for monster actions - similar to a paragraph
+		\NewDocumentCommand {\RpgMonsterAction} {m}
+		{ \par \smallskip \noindent \textsl { \textbf {#1.} } }
+
+		% Inline header for monster sub actions - similar to a subparagraph
+		\NewDocumentCommand {\RpgMonsterSubAction} {m}
+		{ \par \textsl { \textbf {#1.} } }
+
+%%%%%% Spellcasting
+
+	\newlist {__rpg_spell_block} {description} {1}
+	\setlist [__rpg_spell_block]
+	{
+		font     = \normalfont \RpgFontStatBlockBody,
+		labelsep = \l__rpg_space_dim,
+		noitemsep,
+		topsep   = 5pt plus 2pt minus 2pt,
+	}
+
+	\NewDocumentEnvironment{RpgMonsterSpells}{O{}}
+	{
+		\group_begin:
+			\keys_set:nn { rpg / monster / spells } {#1}
+			\bool_if:NF {\l__spells_notext_bool}
+			{
+				\__rpg_get_ability_mod:Nnn {\l__spell_stat_tl}{\g__rpg_proficiency_bonus_int}{\l__spell_bonus_int}
+
+				\RpgMonsterAction{\l__spell_list_name_tl} ~{Save~DC~\fp_eval:n {8+\l__spell_modifier_int},~\__rpg_format_signed_integer:N {\l__spell_modifier_int}~to~hit}.\newline\RpgMonsterName{}~can~cast~the ~following~spells~using~\l__spell_stat_nice_tl{}
+				\bool_if:NT \l__spells_nocomponents_bool
+				{
+					,~requiring~no~material~components
+				}
+				:
+			}
+			\begin{__rpg_spell_block}
+	}
+	{
+			\end{__rpg_spell_block}
+		\group_end:
+	}
+
+	%general wrapper for printing all spells in a list, with nice parsing of commans and whitespace
+	\NewDocumentCommand {\RpgEmphSpellString} {m}
+	{
+		\group_begin:
+		\seq_set_from_clist:Nn \l_tmpa_seq {#1}
+		\seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n { \emph {##1} } }
+		\seq_use:Nn \l_tmpb_seq { ,~ }
+		\group_end:
+	}
+
+	\NewDocumentCommand {\RpgSpellList} { O {At~will} m }
+	{
+		\item
+		[
+			\regex_match:NnTF \c__pos_int_regex {#1} %checks it's a positive integer (no -2.4 times per day!)
+			{
+			\str_if_in:NnTF {#2} {,} %checks if there's one or more elements in list
+			{ #1/day~each }
+			{ #1/day}
+			}
+			{#1}
+			:
+		]
+		\RpgEmphSpellString {#2}
+	}
+
+	%%New design paradigm has moved away from spell slots on monsters, but this is here for consistency
+	\NewDocumentCommand {\RpgMonsterSpellSlots} { o o m }
   {
     \item
       [
-        \str_case_e:nnF {#1}
-          {
-            {1} {\spellfirstlevelname}
-            {2} {\spellsecondlevelname}
-            {3} {\spellthirdlevelname}
-            {4} {\spellfourthlevelname}
-            {5} {\spellfifthlevelname}
-            {6} {\spellsixthlevelname}
-            {7} {\spellseventhlevelname}
-            {8} {\spelleighthlevelname}
-            {9} {\spellninthlevelname}
-          }
-          {#1}
+		\IfNoValueTF{#1}{
+			Cantrips
+		}
+		{
+			\ordinal{#1}~level
+		}
+
         {~}(
-        \str_case_e:nnF {#2}
-          {
-            {1} {\spelloneslotname}
-            {2} {\spelltwoslotsname}
-            {3} {\spellthreeslotsname}
-            {4} {\spellfourslotsname}
-          }
-          {#2}
+        \IfNoValueTF{#2}{
+			at~will
+		}
+		{
+			#2~slot\PluralS{#2}
+		}
         ) :
       ]
     \RpgEmphSpellString{#3}
   }
 
-%% Monster attacks
-\tl_new:N \l__rpg_attack_distance_tl
-\tl_new:N \l__rpg_attack_type_tl
+%%%%%% Attacks
 
-\keys_define:nn { rpg / monster / attack }
-  {
-    name .tl_set:N         = \l__name_tl,
-    name .value_required:n = true,
-    distance .choice:,
-    distance .choices:nn =
-      { both, melee, ranged }
-      { \tl_set:Nn \l__rpg_attack_distance_tl {\l_keys_choice_tl} },
-    distance .initial:n  = both,
-    type .choice:,
-    type / weapon .code:n = { \tl_set:Nn \l__rpg_attack_type_tl {} },
-    type / spell .code:n = { \tl_set:Nn \l__rpg_attack_type_tl {Spell~} },
-    type .initial:n  = weapon,
-    mod .tl_set:N         = \l__mod_tl,
-    mod .value_required:n = true,
-    reach .tl_set:N         = \l__reach_tl,
-    reach .initial:n        = 5,
-    reach .value_required:n = true,
-    range .tl_set:N         = \l__range_tl,
-    range .initial:n        = 20/60,
-    range .value_required:n = true,
-    dmg .tl_set:N         = \l__dmg_tl,
-    dmg .value_required:n = true,
-    dmg-type .tl_set:N         = \l__dmg_type_tl,
-    dmg-type .value_required:n = true,
-    plus-dmg .tl_set:N         = \l__plus_dmg_tl,
-    plus-dmg .value_required:n = true,
-    plus-dmg-type .tl_set:N         = \l__plus_dmg_type_tl,
-    plus-dmg-type .value_required:n = true,
-    or-dmg .tl_set:N         = \l__or_dmg_tl,
-    or-dmg .value_required:n = true,
-    or-dmg-when .tl_set:N         = \l__or_dmg_when_tl,
-    or-dmg-when .value_required:n = true,
-    extra .tl_set:N         = \l__extra_tl,
-    extra .value_required:n = true,
-  }
+	%%Wrapper & formatters
+		\cs_new_protected:Npn \__rpg_monster_reach:
+		{
+			\l__reach_tl\ ft
+		}
 
-\cs_new_protected:Npn \__rpg_monster_reach:
-  {
-    \l__reach_tl\ ft
-  }
+		\cs_new_protected:Npn \__rpg_monster_range:
+		{
+			\l__range_tl\ ft
+		}
 
-\cs_new_protected:Npn \__rpg_monster_range:
-  {
-    \l__range_tl\ ft
-  }
+		\cs_new_protected:Npn \__rpg_if_plus_dmg:
+		{
+			\tl_if_empty:NF {\l__plus_dmg_tl}
+			{ ~ plus\ \l__plus_dmg_tl\ \l__plus_dmg_type_tl\ damage }
+		}
 
-\cs_new_protected:Npn \__rpg_if_plus_dmg:
-  {
-    \tl_if_empty:NF {\l__plus_dmg_tl}
-    { ~ plus\ \l__plus_dmg_tl\ \l__plus_dmg_type_tl\ damage }
-  }
+		\cs_new_protected_nopar:Npn \__rpg_if_or_dmg:
+		{
+			\tl_if_empty:NF {\l__or_dmg_tl}
+			{
+			, ~ or\ \l__or_dmg_tl\ \l__dmg_type_tl\ damage\ \l__or_dmg_when_tl
 
-\cs_new_protected_nopar:Npn \__rpg_if_or_dmg:
-  {
-    \tl_if_empty:NF {\l__or_dmg_tl}
-    {
-      , ~ or\ \l__or_dmg_tl\ \l__dmg_type_tl\ damage\ \l__or_dmg_when_tl
+			\tl_if_empty:NF {\l__plus_dmg_tl}
+				{,}
+			}
+		}
 
-      \tl_if_empty:NF {\l__plus_dmg_tl}
-        {,}
-    }
-  }
+	%%Main complex print function
 
 
+		\cs_new_protected:Npn \__rpg_monster_attack:N #1
+		{
+			\__rpg_check_for_key:Nnn \l__mod_tl {\RpgMonsterAttack} {mod}
+
+			\begin{RpgMonsterAction} {#1}~
+
+			\str_case_e:nnF {\l__rpg_attack_distance_tl}
+				{
+				{ melee }
+					{
+					\textit{ Melee~\l__rpg_attack_type_tl{}(\__rpg_monster_reach:): } ~ \l__mod_tl{}~to~hit
+					}
+				{ ranged }
+					{
+					\textit{Ranged~\l__rpg_attack_type_tl{}(\__rpg_monster_range:):} ~ \l__mod_tl{}~to~hit
+					}
+				}
+				{% Melee and Ranged is the default
+				\textit{Melee~or~Ranged~\l__rpg_attack_type_tl{}(\__rpg_monster_reach:\ or\ \__rpg_monster_range:): } ~ \l__mod_tl{}~to~hit
+				}
+			. ~
+			\textit { On~Hit : } ~
+
+			\str_if_empty:NF {\l__dmg_tl} % Don't show any damage if `dmg' is not set.
+				{
+				\l__dmg_tl\ \l__dmg_type_tl\ damage
+				\__rpg_if_or_dmg:
+				\__rpg_if_plus_dmg:
+				}
+
+			% `extra' is any special text that goes after the final damage; do not
+			% include the final full stop.
+			\l__extra_tl .
+			\end{RpgMonsterAction}
+		}
+
+	%%User interface
+		\NewDocumentCommand {\RpgMonsterAttack} {o m}
+		{
+			\group_begin:
+			\keys_set:nn { rpg / monster / attack } {#1}
+			\__rpg_monster_attack:N {#2}
+			\group_end:
+		}
+
+		\NewDocumentCommand {\RpgMonsterMelee} {o m}
+		{
+			\group_begin:
+			\keys_set:nn { rpg / monster / attack } { #1, distance = melee }
+			\__rpg_monster_attack:N {#2}
+			\group_end:
+		}
+
+		\NewDocumentCommand {\RpgMonsterRanged} {o m}
+		{
+			\group_begin:
+			\keys_set:nn { rpg / monster / attack } { #1, distance = ranged }
+			\__rpg_monster_attack:N {#2}
+			\group_end:
+		}
+
+%%%%%% Legendary Actions
 
 
-\cs_new_protected:Npn \__rpg_monster_attack:
-  {
-    \__rpg_check_for_key:Nnn \l__name_tl {\RpgMonsterAttack} {name}
-    \__rpg_check_for_key:Nnn \l__mod_tl {\RpgMonsterAttack} {mod}
+	\newlist {__rpg_legendary} {description} {1}
+	\setlist [__rpg_legendary]
+	{
+		font     = \RpgFontStatBlockBody,
+		labelsep = \l__rpg_space_dim,
+		noitemsep,
+		topsep   = 6pt plus 2pt minus 2pt,
+	}
 
-    \begin{RpgMonsterAction} {\l__name_tl}~
 
-      \str_case_e:nnF {\l__rpg_attack_distance_tl}
-        {
-          { melee }
-            {
-              \textit{ Melee~\l__rpg_attack_type_tl{}(\__rpg_monster_reach:): } ~ \l__mod_tl{}~to~hit
-            }
-          { ranged }
-            {
-              \textit{Ranged~\l__rpg_attack_type_tl{}(\__rpg_monster_range:):} ~ \l__mod_tl{}~to~hit
-            }
-        }
-        {% Melee and Ranged is the default
-          \textit{Melee~or~Ranged~\l__rpg_attack_type_tl{}(\__rpg_monster_reach:\ or\ \__rpg_monster_range:): } ~ \l__mod_tl{}~to~hit
-        }
-      . ~
-      \textit { On~Hit : } ~
+	\NewDocumentEnvironment{RpgMonsterLegendaryActions}{ O{} +b}
+		{
+			\RpgMonsterSection{Legendary~Actions}
+			\str_if_empty:NF #1
+			{
+				\RpgMonsterName{}~can~take~\textbf{#1}~legendary~actions.~Only~one~legendary~action~option~can~be~used~at~a~time~and~only~at~the~end~of~another~creature's~turn.~\RpgMonsterName{}~regains~spent~legendary~actions~at~the~start~of~its~turn.
+			}
+			\begin{__rpg_legendary}
+				#2
+		}{
+			\end{__rpg_legendary}
+		}
 
-      \str_if_empty:NF {\l__dmg_tl} % Don't show any damage if `dmg' is not set.
-        {
-          \l__dmg_tl\ \l__dmg_type_tl\ damage
-          \__rpg_if_or_dmg:
-          \__rpg_if_plus_dmg:
-        }
-
-      % `extra' is any special text that goes after the final damage; do not
-      % include the final full stop.
-      \l__extra_tl .
-    \end{RpgMonsterAction}
-  }
-
-\NewDocumentCommand {\RpgMonsterAttack} {o}
-  {
-    \group_begin:
-      \keys_set:nn { rpg / monster / attack } {#1}
-      \__rpg_monster_attack:
-    \group_end:
-  }
-
-\NewDocumentCommand {\RpgMonsterMelee} {o}
-  {
-    \group_begin:
-      \keys_set:nn { rpg / monster / attack } { #1, distance = melee }
-      \__rpg_monster_attack:
-    \group_end:
-  }
-
-\NewDocumentCommand {\RpgMonsterRanged} {o}
-  {
-    \group_begin:
-      \keys_set:nn { rpg / monster / attack } { #1, distance = ranged }
-      \__rpg_monster_attack:
-    \group_end:
-  }
-
-%% Legendary Actions
-
-\newlist {RpgMonsterLegendaryActions} {description} {1}
-\setlist [RpgMonsterLegendaryActions]
-  {
-    font     = \RpgFontStatBlockBody,
-    labelsep = \l__rpg_space_dim,
-    noitemsep,
-    topsep   = 6pt plus 2pt minus 2pt,
-  }
-
-\NewDocumentCommand {\RpgMonsterLegendaryAction} { m m }
-  {
-    \item [ #1 . ] #2
-  }
+	\NewDocumentCommand {\RpgMonsterLegendaryAction} {O{} m m }
+	{
+		\item [ #2 \str_if_empty:NF#1{~(\textbf{#1~actions})}. ] #3
+	}
 
 
 
-  \newcommand\RpgSavingThrow[5][]
-{
-    \def\temp{#1}\ifx\temp\empty \else #1. \fi\textit{#2 Save, DC #3}. \textbf{Failure:} #4.\def\succ{#5}\ifx\succ\empty\else\textbf{ Success: }#5\fi
-}
-\newcommand\RpgRepeatableSavingThrow[5][]
-{
-    \DndSavingThrow[#1]{#2}{#3}{#4}{#5} \\ The target can repeat the save at the end of each turn.
-}
-\newcommand\RpgMonsterReaction[3]{
-  \DndMonsterAction{#1} \textit{Trigger:} #2 \\ \textit{Response:} #3
-}
-\newcommand\RpgLegendaryDefiance
-{
-  \DndMonsterAction{Legendary Defiance}  {At the end of another creature's turn, \monster{} chooses to repeat a saving throw that they failed in the past hour. On a success, any effects applied by that saving throw end.}
-}
