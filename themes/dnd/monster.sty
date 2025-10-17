@@ -133,25 +133,25 @@
 		\exp_args:Nf \__rpg_format_signed_integer:N \l_tmpa_int}
 	}
 
-\int_new:N \l__spell_modifier_int
-\int_set:Nn \l__spell_modifier_int {0}
-\cs_new:Npn \__rpg_get_ability_mod:Nnn #1#2#3
-{
-	%%retrieve ability scores based on string names
-    % \group_begin:
-	\tl_set:Nn \l_tmpa_tl { \tl_use:N #1 }
-    \tl_set:Nn \l_tmpb_tl { l__\l_tmpa_tl _tl }
-    \cs_if_exist:cTF { \l_tmpb_tl }
-    {
-		\int_set:Nn \l__spell_modifier_int { \fp_eval:n {#3+#2 + floor ( ( \tl_use:c{ \l_tmpb_tl } - 10 ) / 2 ) } }
-        % \int_set:Nn \l_tmpa_int { \fp_eval:n { floor ( ( \tl_use:c{ \l_tmpb_tl } - 10 ) / 2 ) } }
-		% \exp_args:Nf \l_tmpa_int
-    }
-    {
-		\msg_set:nnnn { rpg } { bad-modifier } { #1~expands~to~\l_tmpa_tl} { looong }
-        \msg_error:nnnn { rpg } { bad-modifier }
-        +0
-    }
+	\int_new:N \l__ability_modifier_int
+	\int_set:Nn \l__ability_modifier_int {0}
+	\cs_new:Npn \__rpg_get_ability_mod:Nn #1#2
+	{
+		%%retrieve ability scores based on string names
+		% \group_begin:
+		\tl_set:Nn \l_tmpa_tl { \tl_use:N #1 }
+		\tl_set:Nn \l_tmpb_tl { l__\l_tmpa_tl _tl }
+		\cs_if_exist:cTF { \l_tmpb_tl }
+		{
+			\int_set:Nn \l__ability_modifier_int { \fp_eval:n {#2 + floor ( ( \tl_use:c{ \l_tmpb_tl } - 10 ) / 2 ) } }
+			% \int_set:Nn \l_tmpa_int { \fp_eval:n { floor ( ( \tl_use:c{ \l_tmpb_tl } - 10 ) / 2 ) } }
+			% \exp_args:Nf \l_tmpa_int
+		}
+		{
+			\msg_set:nnnn { rpg } { bad-modifier } { #1~expands~to~\l_tmpa_tl} { looong }
+			\msg_error:nnnn { rpg } { bad-modifier }
+			+0
+		}
 
     % \group_end:
 }
@@ -275,6 +275,7 @@
 
 	\tl_new:N \l__rpg_attack_distance_tl
 	\tl_new:N \l__rpg_attack_type_tl
+	\tl_new:N \l__attack_stat_tl
 	\keys_define:nn { rpg / monster / attack }
 	{
 		distance .choice:,
@@ -286,8 +287,16 @@
 		type / weapon .code:n = { \tl_set:Nn \l__rpg_attack_type_tl {} },
 		type / spell .code:n = { \tl_set:Nn \l__rpg_attack_type_tl {Spell~} },
 		type .initial:n  = weapon,
-		mod .tl_set:N         = \l__mod_tl,
-		mod .value_required:n = true,
+		modifier .choice:,
+		modifier / STR .code:n = {\tl_set:Nn \l__attack_stat_tl{str} },
+		modifier / DEX .code:n = {\tl_set:Nn \l__attack_stat_tl{dex} },
+		modifier / CON .code:n = {\tl_set:Nn \l__attack_stat_tl{con} },
+		modifier / INT .code:n = {\tl_set:Nn \l__attack_stat_tl{int} },
+		modifier / WIS .code:n = {\tl_set:Nn \l__attack_stat_tl{wis} },
+		modifier / CHA .code:n = {\tl_set:Nn \l__attack_stat_tl{cha} },
+        modifier .initial:n = {INT},
+		bonus .int_set:N=\l__attack_bonus_int,
+		bonus .initial:n = 0,
 		reach .tl_set:N         = \l__reach_tl,
 		reach .initial:n        = 5,
 		reach .value_required:n = true,
@@ -493,7 +502,7 @@
 			\__rpg_monster_basics:
 			\RpgMonsterLine
 			\__rpg_monster_ability_scores:
-
+			% (\g__rpg_proficiency_bonus_int)
 		}
 
 		%% Resistances, langages etc.
@@ -505,6 +514,7 @@
 				\__rpg_monster_details:
 				\RpgMonsterLine{}
 			\group_end:
+
 		}
 
 		% Monster subsection header style
@@ -545,9 +555,9 @@
 			\keys_set:nn { rpg / monster / spells } {#1}
 			\bool_if:NF {\l__spells_notext_bool}
 			{
-				\__rpg_get_ability_mod:Nnn {\l__spell_stat_tl}{\g__rpg_proficiency_bonus_int}{\l__spell_bonus_int}
+				\__rpg_get_ability_mod:Nn {\l__spell_stat_tl}{\g__rpg_proficiency_bonus_int+\l__spell_bonus_int}
 
-				\RpgMonsterAction{\l__spell_list_name_tl} ~{Save~DC~\fp_eval:n {8+\l__spell_modifier_int},~\__rpg_format_signed_integer:N {\l__spell_modifier_int}~to~hit}.\newline\RpgMonsterName{}~can~cast~the ~following~spells~using~\l__spell_stat_nice_tl{}
+				\RpgMonsterAction{\l__spell_list_name_tl} ~{Save~DC~\fp_eval:n {8+\l__ability_modifier_int},~\__rpg_format_signed_integer:N {\l__ability_modifier_int}~to~hit}.\newline\RpgMonsterName{}~can~cast~the ~following~spells~using~\l__spell_stat_nice_tl{}
 				\bool_if:NT \l__spells_nocomponents_bool
 				{
 					,~requiring~no~material~components
@@ -646,23 +656,24 @@
 
 		\cs_new_protected:Npn \__rpg_monster_attack:N #1
 		{
-			\__rpg_check_for_key:Nnn \l__mod_tl {\RpgMonsterAttack} {mod}
+			\__rpg_check_for_key:Nnn \l__attack_stat_tl {\RpgMonsterAttack} {mod}
 
 			\begin{RpgMonsterAction} {#1}~
+			\__rpg_get_ability_mod:Nn {\l__attack_stat_tl}{\g__rpg_proficiency_bonus_int+\l__attack_bonus_int}
 
 			\str_case_e:nnF {\l__rpg_attack_distance_tl}
 				{
 				{ melee }
 					{
-					\textit{ Melee~\l__rpg_attack_type_tl{}(\__rpg_monster_reach:): } ~ \l__mod_tl{}~to~hit
+					\textit{ Melee~\l__rpg_attack_type_tl{}(\__rpg_monster_reach:): } ~ \__rpg_format_signed_integer:N {\l__ability_modifier_int}~to~hit
 					}
 				{ ranged }
 					{
-					\textit{Ranged~\l__rpg_attack_type_tl{}(\__rpg_monster_range:):} ~ \l__mod_tl{}~to~hit
+					\textit{Ranged~\l__rpg_attack_type_tl{}(\__rpg_monster_range:):} ~ \__rpg_format_signed_integer:N {\l__ability_modifier_int}~to~hit
 					}
 				}
 				{% Melee and Ranged is the default
-				\textit{Melee~or~Ranged~\l__rpg_attack_type_tl{}(\__rpg_monster_reach:\ or\ \__rpg_monster_range:): } ~ \l__mod_tl{}~to~hit
+				\textit{Melee~or~Ranged~\l__rpg_attack_type_tl{}(\__rpg_monster_reach:\ or\ \__rpg_monster_range:): } ~  \__rpg_format_signed_integer:N {\l__ability_modifier_int}~to~hit
 				}
 			. ~
 			\textit { On~Hit : } ~
