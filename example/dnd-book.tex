@@ -76,6 +76,7 @@
         cha = 15,
 		str_save,
 		cha_save,
+		proficiency=3
       ]
 
     \RpgMonsterDetails[
@@ -91,7 +92,7 @@
       ]
     % Traits
 
-    \begin{RpgMonsterSpells}[modifier=CHA,bonus=-9]
+    \begin{RpgMonsterSpells}[modifier=CHA,bonus={0}]
       \RpgSpellList{misty step}
       \RpgSpellList[3]{fog cloud, rope trick}
       \RpgSpellList[1]{identify}
@@ -106,7 +107,7 @@
     \RpgMonsterAttack[
       %distance=both, % valid options are in the set {both,melee,ranged},
       %type=weapon, %valid options are in the set {weapon,spell}
-      mod=+3,
+      modifier=STR,
       %reach=5,
       %range=20/60,
       %targets=one target,
@@ -121,7 +122,7 @@
 
     %\RpgMonsterMelee calls \RpgMonsterAttack with the melee option
     \RpgMonsterMelee[
-      mod=+3,
+      modifier=DEX,
       %reach=5,
       %targets=one target,
       dmg=\RpgDice{1d8+1},
@@ -135,7 +136,7 @@
 
     %\RpgMonsterRanged calls \RpgMonsterAttack with the ranged option
     \RpgMonsterRanged[
-      mod=+1,
+      modifier=CHA,
       range=80/320,
       dmg=\RpgDice{1d8},
       dmg-type=piercing,
