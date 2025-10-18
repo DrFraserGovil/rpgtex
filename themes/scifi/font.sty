@@ -1,5 +1,5 @@
 %%Set the D&D specific fonts
-
+\ExplSyntaxOn
 \sys_if_engine_xetex:F
 {
   % Spit out a warning if XeLaTeX is detected for the PDFLaTeX-based D&D theme
@@ -28,7 +28,7 @@
   ItalicFont=EurostileBQ,
 ]
 
-\newcommand\titlemode{\scifi}
+
 
 \RpgSetFont[
 	%Sections
@@ -37,10 +37,11 @@
 	subtitle-family		={\scifi},
 	subtitle-style 		= {\Large \textcolor{white}},
 	part-style			= {\fontsize{60}{50}\selectfont\color{titleblue}\starTrek\scshape},
-	chapter-style		= {\titlemode \Huge},
-	section-style		= {\titlemode \huge},,
-	subsection-style	= {\titlemode \Large},,
-	subsubsection-style	= {\titlemode \large},,
+	chapter-family		= {\normalfont},
+	chapter-style		= {\scifi \Huge},
+	section-style		= {\scifi \huge},,
+	subsection-style	= {\scifi \Large},,
+	subsubsection-style	= {\scifi \large},,
 	paragraph-style		= {\bfseries \it \scifi},
 	subparagraph-style	= {\bfseries \it \scifi},
 	%Tables
@@ -86,3 +87,4 @@
 	]
 	{}
 }
+\ExplSyntaxOff

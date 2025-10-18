@@ -27,6 +27,7 @@
     }
 }
 
+
 % Left-even page footer
 \fancyfoot[LE]{%
     \RpgFontFooter \leftmark
@@ -48,3 +49,25 @@
       \node[inner~sep=0pt,anchor=south,xshift=-.28in,yshift=.39in] at (current~page.south~east) {\RpgFontPageNumber \thepage};
     \end{tikzpicture}
   }
+
+  % Clear the current definition of 'plain' footers/headers
+\fancypagestyle{plain}{}
+
+% REDEFINE 'plain' to only contain the header logic
+\fancypagestyle{plain}{
+    % Clear all headers and footers *for this style* first
+    \fancyhf{}
+
+    % Only include the custom header logic
+    \fancyhead{
+        \bool_if:NT \l__rpg_show_background_bool
+        {
+            \begin{tikzpicture}[remember~picture,overlay]
+                \node[inner~sep=0pt] at (current~page.center) {\includegraphics[width=\paperwidth,height=\paperheight]{img/paper}};
+            \end{tikzpicture}
+        }
+    }
+
+    % Ensure footers are explicitly empty for this style
+    \fancyfoot{}
+}

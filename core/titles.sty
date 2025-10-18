@@ -46,7 +46,8 @@
 
 %%Redefine part to accept custom arguments
 \let\__rpg_orig_part\part
-\RenewDocumentCommand{\part}{s O{} m }
+
+\RenewDocumentCommand{\part}{s o m }
 {
 	\IfBooleanTF {#1}
 	{ \__rpg_orig_part*{#3} } % Starred version
@@ -57,7 +58,7 @@
 			\__rpg_orig_part{#3}
 		}
 		{
-			% Case 2: IMAGE provided - use the custom command with the image
+			% % Case 2: IMAGE provided - use the custom command with the image
 			\clearpage
 			\stepcounter{part}
 			\__part_with_image:nn { #2 } { #3 }
@@ -73,25 +74,6 @@
 \newcommand\RpgBookTitle[1]{\__rpg_orig_title}
 \newcommand\RpgHandoutTitle[1]{\__rpg_orig_title}
 
-\RenewDocumentCommand{\maketitle}{ m } % Redefine \maketitle to accept one optional argument
-{
-	\group_begin:
-
-	\str_if_empty:NTF { #1 }
-		{
-			\__rpg_orig_title
-		}
-		{
-			\tl_if_empty:nTF { #1 }
-			{
-				\__rpg_orig_title
-			}
-			{
-				\RpgTitle{#1}
-			}
-		}
-	\group_end:
-}
 
 
 \ExplSyntaxOff
