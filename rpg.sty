@@ -19,12 +19,17 @@
     }
 
 
-
+\tl_if_exist:NF \g__rpg_base_class_tl
+{
+    % 1. Create the variable (necessary before setting it)
+    \tl_new:N \g__rpg_base_class_tl
+}
 
 %%Load the core definitions (which may reference the theme definitions)
 \input {core/rpgcore.def}
 
 %%Optionally input the theme overloads, which define new functions and take priority over the default functions
+
 \tl_new:N \tl__rpg_theme_path_tl
 \tl_set:Nn \tl__rpg_theme_path_tl {themes/\tl_use:N \l__rpg_theme_tl/\tl_use:N \l__rpg_theme_tl.cfg}
 \file_if_exist:nTF \tl__rpg_theme_path_tl

@@ -1,5 +1,5 @@
 %%Redefine the TOC part-level formatting
-
+\ExplSyntaxOn
 \titlecontents{part}
     [0pt] % left
     { \addvspace{.3cm} \titleline{ \color{black} \titlerule[1pt] } \addvspace{.1cm }  \RpgFontTocPart \centering } % above-code
@@ -41,3 +41,4 @@
 			\tl_set:Nn \l__rpg_current_chapter_tl { #3 }
         }
     }
+\ExplSyntaxOff

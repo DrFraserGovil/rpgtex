@@ -1,5 +1,5 @@
 
-
+\ExplSyntaxOn
 \fancyhead{
   \bool_if:NT \l__rpg_show_background_bool
     {
@@ -39,3 +39,22 @@
       }};
     \end{tikzpicture}
   }
+
+  \fancypagestyle{plain}{
+    % Clear all headers and footers *for this style* first
+    \fancyhf{}
+
+    % Only include the custom header logic
+    \fancyhead{
+        \bool_if:NT \l__rpg_show_background_bool
+        {
+            \begin{tikzpicture}[remember~picture,overlay]
+                \node[inner~sep=0pt] at (current~page.center) {\includegraphics[width=\paperwidth,height=\paperheight]{img/paper3}};
+            \end{tikzpicture}
+        }
+    }
+
+    % Ensure footers are explicitly empty for this style
+    \fancyfoot{}
+}
+\ExplSyntaxOff
