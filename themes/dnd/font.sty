@@ -14,12 +14,15 @@
 }
 
 
-\RequirePackage{Royal}
-\RequirePackage[T1]{fontenc} %%Even in xelatex, this allows T1 fonts to be loaded in
-\RequirePackage{bookman} %% Sets the default font to bookman
-\RequirePackage[type1]{gillius2} %%loads in the gilliustwo font
-\RequirePackage[notext,nomath,nott]{kpfonts}
+\ifx\@onlypreamble\@notprerrc \else
+	\RequirePackage{Royal}
+	\RequirePackage[T1]{fontenc} %%Even in xelatex, this allows T1 fonts to be loaded in
+	\RequirePackage{bookman} %% Sets the default font to bookman
+	\RequirePackage[type1]{gillius2} %%loads in the gilliustwo font
+	\RequirePackage[notext,nomath,nott]{kpfonts}
+\fi
 
+\rmfamily
 \newcommand\jkfont{\fontfamily{jkpss}\selectfont}
 
 

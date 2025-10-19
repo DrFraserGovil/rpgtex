@@ -1,3 +1,4 @@
+\ExplSyntaxOn
 %% Writes chapter name on footer when configured
 	\cs_if_free:NF \chaptermark
 	{
@@ -16,9 +17,9 @@
 			{}
 		}
 	}
+\ExplSyntaxOff
 
-
-
+\fancyhead{}
 
 % Left-even page footer
 \fancyfoot[LE]{%

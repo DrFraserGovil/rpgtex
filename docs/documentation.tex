@@ -1,19 +1,24 @@
 \documentclass[11pt,theme=default]{rpgbook}
 
+\RpgSetTheme{scifi}
+\RpgSetTheme{default}
 \title{The rpgtex Package}
+\subtitle{~}
+\usepackage{blindtext}
+\usepackage{fontspec}
 \author{Jack Fraser-Govil}
 \begin{document}
 	\frontmatter
-	\maketitle[typewriter]{}
+	\maketitle{}
 
 	\tableofcontents
 	\mainmatter
 
-	\part[typewriter]{A thing}
+	% \part[typewriter]{A thing}
 
-		\begin{RpgSidebar}{Hi!}
-			Hello
-		\end{RpgSidebar}
+	% 	\begin{RpgSidebar}{Hi!}
+	% 		Hello
+	% 	\end{RpgSidebar}
 	% \RpgSetTheme{dnd}
 
 	\part{A new thing}
@@ -21,5 +26,9 @@
 
 			\section{And now}
 
-				The grand finale
+				\RpgDropCap{T}he grand finale aklf aowhd oiah wdohaw doah duoahw odhowaid oiw doiawhd ouahw oduhoawhd \Blindtext
+
+				% \renewcommand{\familydefault}{lmr}
+				wieni wie
+				 \Blindtext
 \end{document}
