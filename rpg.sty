@@ -30,15 +30,7 @@
 
 %%Optionally input the theme overloads, which define new functions and take priority over the default functions
 
-\tl_new:N \tl__rpg_theme_path_tl
-\tl_set:Nn \tl__rpg_theme_path_tl {themes/\tl_use:N \l__rpg_theme_tl/\tl_use:N \l__rpg_theme_tl.cfg}
-\file_if_exist:nTF \tl__rpg_theme_path_tl
-	{
-		\input{\tl_use:N \tl__rpg_theme_path_tl}
-	}
-	{
-		  \iow_log:x { RPG: Theme overload file not found: \tl_use:N \tl__rpg_theme_path_tl }
-	}
 
+\RpgSetTheme{\tl_use:N \l__rpg_theme_tl}
 
 \ExplSyntaxOff
