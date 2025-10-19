@@ -6,46 +6,6 @@
 % Standard for every sidebar
 
 
-\tcbset{
-  rpg sidebar/.style={
-  before~upper     =
-      {
-        \bool_if:NT \l__rpg_layout_bool
-          {
-            \bool_if:NF \l__rpg_justified_bool
-              {\RaggedRight}
-          }
-      },
-    code={\linespread{.9}},
-    frame~hidden,
-    boxrule          = 0pt,
-    enhanced,
-    before~skip      = 13pt plus 4pt minus 4pt,
-    toptitle         = 2pt,
-    boxsep           = 3pt,
-    left             = 6pt,
-    right            = 6pt,
-    top              = 0pt,
-    bottom           = 2pt,
-    fonttitle        = \RpgFontSidebarTitle,
-    fontupper        = \RpgFontSidebarBody,
-    fontlower        = \RpgFontSidebarBody,
-    sharp~corners,
-    parbox           = false,
-    borderline~north = {1pt} {-0.5pt} {black},
-    borderline~south = {1pt} {-0.5pt} {black},
-    coltitle         = black,
-    fuzzy~shadow     = {0mm} {-3.5pt} {-0.5pt} {0.4mm} {black!60!white},
-    overlay          =
-      {
-        \fill [black] ( frame.south~west ) -- ++ (  7pt, 0 ) -- ++ ( 0, -5pt ) -- cycle;
-        \fill [black] ( frame.north~west ) -- ++ (  7pt, 0 ) -- ++ ( 0,  5pt ) -- cycle;
-        \fill [black] ( frame.north~east ) -- ++ ( -7pt, 0 ) -- ++ ( 0,  5pt ) -- cycle;
-        \fill [black] ( frame.south~east ) -- ++ ( -7pt, 0 ) -- ++ ( 0, -5pt ) -- cycle;
-      },
-    after~skip       = 14pt plus 4pt minus 4pt,
-  }
-}
 \DeclareTColorBox {__rpg_sidebar} {o}
   {
 	rpg sidebar,
