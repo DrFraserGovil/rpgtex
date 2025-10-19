@@ -7,6 +7,7 @@
 
 \bool_new:N \c__rpg_isclass_bool
 \bool_set_true:N \c__rpg_isclass_bool
+\tl_new:N \g__rpg_base_class_tl
 \tl_set:Nn \g__rpg_base_class_tl { article }
 
 \input {core/rpgoptions.clo}

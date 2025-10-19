@@ -146,3 +146,17 @@
         { \msg_error:nnnn { rpg } { key_required } { #2 } { #3 } }
     \group_end:
   }
+%%%%%% Theme switching
+
+\NewDocumentCommand\RpgSetTheme { m }
+{
+	\def\themePath{themes/#1/#1.cfg}
+	\file_if_exist:nTF \themePath
+	{
+		\input{\tl_use:N \themePath}
+	}
+	{
+		  \iow_log:x { RPG: Theme overload file not found: \themePath }
+	}
+
+}
