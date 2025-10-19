@@ -5,39 +5,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Standard for every tip
 
-\tcbset{
-  rpg tip/.style={
-	 before~upper =
-      {
-        \bool_if:NT \l__rpg_layout_bool
-          {
-            \bool_if:NF \l__rpg_justified_bool
-              { \RaggedRight }
-          }
-      },
-    code         = {\linespread{.9}},
-    frame~hidden,
-    boxrule      = 0pt,
-    breakable,
-    enhanced,
-    before~skip  = 13pt plus 4pt minus 4pt,
-    toptitle     = 2pt,
-    boxsep       = 3pt,
-    left         = 6pt,
-    right        = 6pt,
-    top          = 0pt,
-    bottom       = 2pt,
-    sharp~corners,
-    fonttitle    = \RpgFontTipTitle,
-    fontupper    = \RpgFontTipBody,
-    fontlower    = \RpgFontTipBody,
-    parbox       = false,
-    coltitle     = black,
-    after~skip   = 13pt plus 4pt minus 4pt,
-	arc={2mm},
-	rounded~corners,
-  }
-}
+
 
 \DeclareTColorBox {__rpg_tip} {o}
   {

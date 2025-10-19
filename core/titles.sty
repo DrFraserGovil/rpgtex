@@ -1,35 +1,7 @@
 \ExplSyntaxOn
 
 \newcommand\DrawPartPage[2]
-{
-	%
-    % 1. Background Image
-   \node [inner~sep=0pt, minimum~width=\paperwidth, minimum~height=\paperheight] (image) at (current~page.south~west)
-    {
-        \includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
-    };
-
-	    % Optional: Add a semi-transparent black overlay for text visibility
-    \fill [white, opacity=0.5] (current~page.south~west) rectangle (current~page.north~east);
-
-
-    % 2. Text Placement and Styling (Fix applied below)
-    \node at (current~page.center) [ % Fixed here
-        text~width=0.8\paperwidth,
-        align=center,
-        yshift=2cm
-    ]
-    {
-        % Part Number
-
-		\MakeUppercase{\RpgFontPart Part~\thepart} \par
-		\vspace{1em}
-
-        % Part Title
-		{\RpgFontPart #2}
-    };
-
-}
+{}
 
 
 \cs_new_protected:Nn \__part_with_image:nn
