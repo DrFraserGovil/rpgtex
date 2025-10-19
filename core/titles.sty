@@ -74,6 +74,30 @@
 \newcommand\RpgBookTitle[1]{\__rpg_orig_title}
 \newcommand\RpgHandoutTitle[1]{\__rpg_orig_title}
 
+\NewDocumentCommand\RpgBasicTitle{}
+{
+	\thispagestyle{empty}
+
+	\begin{tikzpicture}[remember~picture, overlay]
+		\node[anchor=south] at ($(current~page.center)$) {\parbox[t]{0.9\paperwidth}{
+			\begin{center}
+				{\RpgFontTitle\color{black} \@title}
+				\newline
+				\vspace{1cm}
+
+				{{\RpgFontSubTitle { \color{black} \@subtitle}}}
+				\newline
+
+			\vspace{1cm}
+
+			{\RpgFontSubTitle { \color{black}\@author}}
+			\end{center}
+			}};
+
+	\end{tikzpicture}
+	\clearpage
+
+}
 
 
 \ExplSyntaxOff

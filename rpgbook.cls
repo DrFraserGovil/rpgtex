@@ -21,3 +21,13 @@
 \RequirePackage{rpg}
 
 
+\RenewDocumentCommand{\maketitle}{o}
+{
+	\IfNoValueTF{#1}
+	{
+		\RpgBasicTitle{}
+	}
+	{
+		\RpgBookTitle{#1}
+	}
+}
