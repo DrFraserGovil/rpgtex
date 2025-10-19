@@ -11,7 +11,37 @@
     \RequirePackage {fontspec}
   }
 
+\cs_new_protected:Npn \rpg_save_original_font:
+{
+    % Only save if it hasn't been saved already
+    \tl_if_empty:NT \g__rpg_original_font_family_tl
+    {
+        % CRITICAL STEP: \f@family holds the current raw font family string (e.g., 'cmr')
+        \tl_gset:Nx \g__rpg_original_font_family_tl { \f@family }
+    }
+}
+% Execute the saving function immediately in the preamble (before bookman)
+\rpg_save_original_font:
 
+
+% --- 3. REVERSION COMMAND (Uses \fontfamily and \selectfont) ---
+
+\NewDocumentCommand \RevertFont { }
+{
+    % \rpg_if_preamble:T
+    % {
+        % \iow_term:n { RevertFont~called~in~preamble.~This~is~not~necessary. }
+    % }
+    % \rpg_if_preamble:F
+    % {
+        % \iow_term:n { Reverting~to~original~font:~ \tl_use:N \g__rpg_original_font_family_tl }
+        % Use the saved family string with \fontfamily and execute \selectfont
+        \normalfont is included here to reset size, weight, and shape.
+        \normalfont % Reset all attributes (size, weight, shape) to default
+        \fontfamily{\tl_use:N \g__rpg_original_font_family_tl}\selectfont
+		\lmr
+    % }
+}
 
 \keys_define:nn { rpg / fonts }
   {
