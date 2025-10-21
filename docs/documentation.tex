@@ -1,11 +1,10 @@
 \documentclass[11pt,theme=default]{rpgbook}
 
+\RpgSetTheme{dnd}
 \RpgSetTheme{scifi}
-\RpgSetTheme{default}
 \title{The rpgtex Package}
 \subtitle{~}
 \usepackage{blindtext}
-\usepackage{fontspec}
 \author{Jack Fraser-Govil}
 \begin{document}
 	\frontmatter
@@ -26,7 +25,16 @@
 
 			\section{And now}
 
-				\RpgDropCap{T}he grand finale aklf aowhd oiah wdohaw doah duoahw odhowaid oiw doiawhd ouahw oduhoawhd \Blindtext
+				\RpgDropCap{T}{he grand finale} aklf \textit{aowhd} \textbf{oiah} wdohaw doah duoahw odhowaid oiw doiawhd ouahw oduhoawhd \Blindtext
+
+				% \renewcommand{\familydefault}{lmr}
+				wieni wie
+				 \Blindtext
+
+
+			\section{And now}
+
+				\RpgDropCap{T}{he grand finale} aklf \textit{aowhd} \textbf{oiah} wdohaw doah duoahw odhowaid oiw doiawhd ouahw oduhoawhd \Blindtext
 
 				% \renewcommand{\familydefault}{lmr}
 				wieni wie

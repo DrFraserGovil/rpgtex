@@ -4,6 +4,8 @@
 \RequirePackage{expl3}
 \ProvidesExplPackage{rpg}{2025/10/09} {0.0.0} { Template for RPG material }
 
+\input{core/rpg-config.cfg}
+
 \ExplSyntaxOn
 %Am I loaded by a class?
 \cs_if_exist:NTF \c__rpg_isclass_bool

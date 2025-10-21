@@ -1,32 +1,41 @@
 %%Set the D&D specific fonts
 
 \ExplSyntaxOn
-\sys_if_engine_xetex:T
-{
-  % Spit out a warning if XeLaTeX is detected for the PDFLaTeX-based D&D theme
-  \msg_new:nnn { rpg } { dnd-xelatex-warning }{#1}
-%   { #1 }
-  \msg_warning:nnx { rpg } { dnd-xelatex-warning }
-    {
-      The~dnd~theme~is~designed~for~pdfLaTeX.~Compiling~with~XeLaTeX~may~cause
-      font~and~character~issues~due~to~reliance~on~the~legacy~NFSS~system.
-    }
-}
+% \sys_if_engine_xetex:T
+% {
+%   % Spit out a warning if XeLaTeX is detected for the PDFLaTeX-based D&D theme
+%   \msg_new:nnn { rpg } { dnd-xelatex-warning }{#1}
+% %   { #1 }
+%   \msg_warning:nnx { rpg } { dnd-xelatex-warning }
+%     {
+%       The~dnd~theme~is~designed~for~pdfLaTeX.~Compiling~with~XeLaTeX~may~cause
+%       font~and~character~issues~due~to~reliance~on~the~legacy~NFSS~system.
+%     }
+% }
 
-
+\RequirePackage{currfile}
 \ifx\@onlypreamble\@notprerrc \else
-	\RequirePackage{Royal}
 	\RequirePackage[T1]{fontenc} %%Even in xelatex, this allows T1 fonts to be loaded in
-	\RequirePackage{bookman} %% Sets the default font to bookman
+	\RequirePackage{Royal}
+	% \RequirePackage{bookman} %% Sets the default font to bookman
+	% \usepackage{fontspec}
 	\RequirePackage[type1]{gillius2} %%loads in the gilliustwo font
 	\RequirePackage[notext,nomath,nott]{kpfonts}
 \fi
-
-\rmfamily
-\newcommand\jkfont{\fontfamily{jkpss}\selectfont}
+\providecommand\jkfont{\fontfamily{jkpss}\selectfont}
 
 
-\newcommand\titlemode{\linespread{.9} \color{titlered} \scshape}
+\setmainfont[ Path= \RpgPackagePath/themes/dnd/fonts/ ]{Bookman~Old~Style~Std}
+[
+  UprightFont = *~Regular,
+  BoldFont= *~Bold,
+  ItalicFont=*~Italic,
+  BoldItalicFont=*~Bold~It,
+  SmallCapsFont=EBGaramondSC08-Regular.otf
+]
+
+
+\providecommand\titlemode{\linespread{.9} \color{titlered} \scshape}
 
 \RpgSetFont[
 	%Sections
