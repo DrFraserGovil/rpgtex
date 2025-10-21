@@ -1,18 +1,25 @@
 \ExplSyntaxOn
 
+\sys_if_engine_xetex:F
+{
+  % Spit out a warning if XeLaTeX is detected for the PDFLaTeX-based D&D theme
+  \msg_new:nnn { rpg } { require-xelatex }{#1}
+%   { #1 }
+  \msg_error:nnx { rpg } { require-xelatex }
+    {
+		 rpgtex~requires~compilation~with~xelatex
+    }
+}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Font definitions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\RequirePackage{fontspec} %%for xelatex fontss
 \RequirePackage{lettrine} %%fancy drop cap
+\RequirePackage{Royal} %%Used for fancy drop caps
 \RequirePackage[auto]{contour} %%for outlining text
-\sys_if_engine_xetex:T
-  {
-    \RequirePackage{fontspec}
-  }
-
-
-% --- 3. REVERSION COMMAND (Uses \fontfamily and \selectfont) ---
 
 
 \keys_define:nn { rpg / fonts }
