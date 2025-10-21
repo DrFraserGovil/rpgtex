@@ -1,7 +1,5 @@
 \documentclass[11pt,theme=default]{rpgbook}
 
-\RpgSetTheme{dnd}
-\RpgSetTheme{scifi}
 \title{The rpgtex Package}
 \subtitle{~}
 \usepackage{blindtext}
@@ -11,32 +9,25 @@
 	\maketitle{}
 
 	\tableofcontents
-	\mainmatter
-
-	% \part[typewriter]{A thing}
-
-	% 	\begin{RpgSidebar}{Hi!}
-	% 		Hello
-	% 	\end{RpgSidebar}
-	% \RpgSetTheme{dnd}
-
-	\part{A new thing}
-		\chapter{Lets test this bitch out}
-
-			\section{And now}
-
-				\RpgDropCap{T}{he grand finale} aklf \textit{aowhd} \textbf{oiah} wdohaw doah duoahw odhowaid oiw doiawhd ouahw oduhoawhd \Blindtext
-
-				% \renewcommand{\familydefault}{lmr}
-				wieni wie
-				 \Blindtext
+	\mainmatter{}
 
 
-			\section{And now}
+	\part{rpgtex Core Package}
 
-				\RpgDropCap{T}{he grand finale} aklf \textit{aowhd} \textbf{oiah} wdohaw doah duoahw odhowaid oiw doiawhd ouahw oduhoawhd \Blindtext
+	\part{Classes}
+		\chapter{}
+	\part{Themes}
+	\chapter{Default Theme}
 
-				% \renewcommand{\familydefault}{lmr}
-				wieni wie
-				 \Blindtext
+		\RpgSetTheme{dnd}
+		\chapter{dnd Theme}
+
+			\RpgDropCap{D}{ungeons \& Dragons} is the self-proclaimed `greatest roleplaying game in the world'. It is therefore natural that we provide a theme which mimics the style of the D\&D rulebooks. \blindtext
+
+		\RpgSetTheme{scifi}
+	\chapter{scifi Theme}
+		Hi!
+
+
+
 \end{document}

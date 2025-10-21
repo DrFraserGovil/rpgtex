@@ -156,6 +156,7 @@
 
 \NewDocumentCommand\RpgSetTheme { m }
 {
+	\clearpage
 	\def\themePath{themes/#1/#1.cfg}
 	\file_if_exist:nTF \themePath
 	{
