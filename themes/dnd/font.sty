@@ -13,25 +13,37 @@
 %     }
 % }
 
-\RequirePackage{currfile}
-\ifx\@onlypreamble\@notprerrc \else
-	\RequirePackage[T1]{fontenc} %%Even in xelatex, this allows T1 fonts to be loaded in
-	\RequirePackage{Royal}
-	% \RequirePackage{bookman} %% Sets the default font to bookman
-	% \usepackage{fontspec}
-	\RequirePackage[type1]{gillius2} %%loads in the gilliustwo font
-	\RequirePackage[notext,nomath,nott]{kpfonts}
-\fi
-\providecommand\jkfont{\fontfamily{jkpss}\selectfont}
+\providecommand\kpfont{\fontfamily{jkpss}\selectfont}
 
-
-\setmainfont[ Path= \RpgPackagePath/themes/dnd/fonts/ ]{Bookman~Old~Style~Std}
+\providefontfamily{\kepler}{KpSans}
 [
-  UprightFont = *~Regular,
-  BoldFont= *~Bold,
-  ItalicFont=*~Italic,
-  BoldItalicFont=*~Bold~It,
-  SmallCapsFont=EBGaramondSC08-Regular.otf
+	Path= \RpgPackagePath/themes/dnd/fonts/,
+	UprightFont = *-Regular,
+	BoldFont= *-Bold,
+	ItalicFont=*-Italic,
+	BoldItalicFont=*-BoldItalic,
+	SmallCapsFont=EBGaramondSC08-Regular.otf
+]
+
+\providefontfamily{\gillius}{GilliusADFNo2}
+[
+	Path= \RpgPackagePath/themes/dnd/fonts/,
+	UprightFont = *-Regular,
+	BoldFont= *-Bold,
+	ItalicFont=*-Italic,
+	BoldItalicFont=*-BoldItalic,
+	SmallCapsFont=EBGaramondSC08-Regular.otf
+]
+
+
+\setmainfont[  ]{Bookman~Old~Style~Std}
+[
+	Path= \RpgPackagePath/themes/dnd/fonts/,
+	UprightFont = *~Regular,
+	BoldFont= *~Bold,
+	ItalicFont=*~Italic,
+	BoldItalicFont=*~Bold~It,
+	SmallCapsFont=EBGaramondSC08-Regular.otf
 ]
 
 
@@ -50,17 +62,17 @@
 	paragraph-style	= {\bfseries \slshape},
 	subparagraph-style	= {\bfseries \slshape},
 	%Tables
-	table-title-family	= {\jkfont},
+	table-title-family	= {\kepler},
 	table-title-style	= {\bfseries\large\scshape},
-	table-header-family	= {\jkfont},
+	table-header-family	= {\kepler},
 	table-body-family	= {\gilliustwo},
 	%tip boxes
-	tip-title-family= {\jkfont},
+	tip-title-family= {\kepler},
 	tip-title-style	= {\bfseries\scshape},
 	tip-body-family	= {\gilliustwo},
 	tip-body-style	= {\small},
 	%sidebars
-	sidebar-title-family= {\jkfont},
+	sidebar-title-family= {\kepler},
 	sidebar-title-style	= {\bfseries\scshape},
 	sidebar-body-family	= {\gilliustwo},
 	sidebar-body-style	= {\small},
@@ -75,7 +87,7 @@
 	stat-block-title-style= {\bfseries\scshape \LARGE},
 	stat-block-body-family={\gilliustwo},
 	stat-block-body-style={\small},
-	stat-block-section-family={\jkfont},
+	stat-block-section-family={\kepler},
 	stat-block-section-style={\color{titlered} \scshape \large},
 	%%misc
 	footer-style		= {\color{pagegold}\scriptsize},

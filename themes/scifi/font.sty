@@ -1,32 +1,24 @@
 %%Set the D&D specific fonts
 \ExplSyntaxOn
-\sys_if_engine_xetex:F
-{
-  % Spit out a warning if XeLaTeX is detected for the PDFLaTeX-based D&D theme
-  \msg_new:nnn { rpg } { scifi-xelatex-error }{#1}
-%   { #1 }
-  \msg_error:nnx { rpg } { scifi-xelatex-error }
-    {
-      The~scifi~theme~requires~compilation~with~xelatex
-    }
-}
+
 
 \providefontfamily{\starTrek}{GalaxyEdge} % <--- Use Family + Style
 [Path=\RpgPackagePath/themes/scifi/fonts/]
 
 \providefontfamily{\scifi}{Orbitron}
-[Path=\RpgPackagePath/themes/scifi/fonts/,
-  UprightFont = *-Bold,
-  BoldFont= *-ExtraBold,
-  ItalicFont=*-Bold,
+[
+	Path=\RpgPackagePath/themes/scifi/fonts/,
+	UprightFont = *-Bold,
+	BoldFont= *-ExtraBold,
+	ItalicFont=*-Bold,
 ]
 
 \setmainfont{Jura}
 [
 	Path=\RpgPackagePath/themes/scifi/fonts/,
-  UprightFont = *-Regular,
-  BoldFont= *-Bold,
-  ItalicFont=EurostileBQ-Italic,
+	UprightFont = *-Regular,
+	BoldFont= *-Bold,
+	ItalicFont=EurostileBQ-Italic,
 ]
 
 
