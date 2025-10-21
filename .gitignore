@@ -9,3 +9,4 @@
 *.toc
 
 *.build*
+core/rpg-config.cfg
