@@ -106,7 +106,7 @@
 	\cs_new_protected_nopar:Npn \__rpg_format_signed_integer:N #1
 	{
 		\int_compare:nNnTF {#1} < {0}
-		{ -- }
+		{ - }
 		{+}
 		\int_abs:n {#1}
 	}
@@ -390,7 +390,7 @@
 		}
 		\cs_new:Npn \__rpg_format_stat_titles:nn #1#2
 		{
-			& \parbox[t]{1.25cm}{\RpgFontStatBlockTitle  \scriptsize{#1} ~{ (#2)} }
+			& \parbox[t]{1.25cm}{\centering \RpgFontStatBlockTitle  \footnotesize{#1} ~{ (#2)} }
 		}
 
 

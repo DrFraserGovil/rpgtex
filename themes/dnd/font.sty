@@ -13,7 +13,7 @@
 %     }
 % }
 
-\providecommand\kpfont{\fontfamily{jkpss}\selectfont}
+% \providecommand\kpfont{\fontfamily{jkpss}\selectfont}
 
 \providefontfamily{\kepler}{KpSans}
 [
@@ -22,7 +22,17 @@
 	BoldFont= *-Bold,
 	ItalicFont=*-Italic,
 	BoldItalicFont=*-BoldItalic,
-	SmallCapsFont=EBGaramondSC08-Regular.otf
+	% SmallCapsFont=EBGaramondSC08-Regular.otf
+]
+
+\providefontfamily{\keplerserif}{KpRoman}
+[
+	Path= \RpgPackagePath/themes/dnd/fonts/,
+	UprightFont = *-Regular,
+	BoldFont= *-Bold,
+	ItalicFont=*-Italic,
+	BoldItalicFont=*-BoldItalic,
+	SmallCapsFont=*-Light,
 ]
 
 \providefontfamily{\gillius}{GilliusADFNo2}
@@ -36,7 +46,7 @@
 ]
 
 
-\setmainfont[  ]{Bookman~Old~Style~Std}
+\setmainfont{Bookman~Old~Style~Std}
 [
 	Path= \RpgPackagePath/themes/dnd/fonts/,
 	UprightFont = *~Regular,
@@ -47,45 +57,45 @@
 ]
 
 
-\providecommand\titlemode{\linespread{.9} \color{titlered} \scshape}
+\providecommand\titlemode{\linespread{.9} \color{titlered} \keplerserif \scshape }
 
 \RpgSetFont[
 	%Sections
-	title-style			= {\bf\scshape\fontsize{30}{50}\selectfont\color{white}},
+	title-style			= {\bf\fontsize{30}{50}\selectfont\color{white}},
 	subtitle-family		={\scshape},
 	subtitle-style 		= {\LARGE \textcolor{white}},
 	part-style			= {\color{titlered}\fontsize{50}{30}\selectfont},
-	chapter-style		= {\titlemode \Huge},
-	section-style		= {\titlemode \huge},,
-	subsection-style	= {\titlemode \Large},,
-	subsubsection-style	= {\titlemode \large},,
+	chapter-style		= {\titlemode\fontsize{30}{50}\selectfont},
+	section-style		= {\titlemode \Huge},,
+	subsection-style	= {\titlemode \huge},,
+	subsubsection-style	= {\titlemode \Large},,
 	paragraph-style	= {\bfseries \slshape},
 	subparagraph-style	= {\bfseries \slshape},
 	%Tables
 	table-title-family	= {\kepler},
 	table-title-style	= {\bfseries\large\scshape},
 	table-header-family	= {\kepler},
-	table-body-family	= {\gilliustwo},
+	table-body-family	= {\gillius},
 	%tip boxes
 	tip-title-family= {\kepler},
 	tip-title-style	= {\bfseries\scshape},
-	tip-body-family	= {\gilliustwo},
+	tip-body-family	= {\gillius},
 	tip-body-style	= {\small},
 	%sidebars
 	sidebar-title-family= {\kepler},
 	sidebar-title-style	= {\bfseries\scshape},
-	sidebar-body-family	= {\gilliustwo},
+	sidebar-body-family	= {\gillius},
 	sidebar-body-style	= {\small},
 	%narration
-	narration-family	= {\gilliustwo},
+	narration-family	= {\gillius},
 	narration-style		= {\small},
 	% TOC
-	toc-part-style		= {\Large \scshape \color{titlered}},
-	toc-chapter-style	= {\large \scshape \color{titlered}},
+	toc-part-style		= {\LARGE \keplerserif \scshape \color{titlered}},
+	toc-chapter-style	= {\Large \keplerserif \scshape \color{titlered}},
 	toc-section-style	= {\normalsize},
 	%stat block
 	stat-block-title-style= {\bfseries\scshape \LARGE},
-	stat-block-body-family={\gilliustwo},
+	stat-block-body-family={\gillius},
 	stat-block-body-style={\small},
 	stat-block-section-family={\kepler},
 	stat-block-section-style={\color{titlered} \scshape \large},
