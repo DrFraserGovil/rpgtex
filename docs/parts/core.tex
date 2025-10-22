@@ -68,39 +68,51 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 			echo $cmd >> core/rpg-config.cfg
 		\end{lstlisting}
 
-		% \begin{RpgTip}{Why is configuration necessary?}
-		% 	\TeX{} is generally set up so that when a file calls \verb|include| or \verb|input| it is possible to use filepaths relative to the package itself. \texttt{rpg.sty} can call \verb|\input{core/font.sty}| and it will know to first check for the file relative to rpg.sty; even if the package resides within the texmf path and the user has no idea where \texttt{rpgroot/rpg.sty}, or \texttt{rpgroot/core/font.sty}, are.
+		\begin{RpgTip}{Why is configuration necessary?}
+			\TeX{} is generally set up so that when a file calls \verb|include| or \verb|input| it is possible to use filepaths relative to the package itself. \texttt{rpg.sty} can call \verb|\input{core/font.sty}| and it will know to first check for the file relative to rpg.sty; even if the package resides within the texmf path and the user has no idea where \texttt{rpgroot/rpg.sty}, or \texttt{rpgroot/core/font.sty}, are.
 
-		% 	An annoying exception to this is fonts and typefaces. \texttt{xelatex} searches for fonts based on \textit{filepaths relative to the current working directory} -- or from those installed in as system fonts.
+			An annoying exception to this is fonts and typefaces. \texttt{xelatex} searches for fonts based on \textit{filepaths relative to the current working directory} -- or from those installed in as system fonts.
 
-		% 	Since \texttt{rpgtex} includes several (license free) typefaces as part of the provided themes, this poses a problem. We must either require that:
-		% 	\begin{enumerate}
-		% 		\item \rpgtex{} documents can only be prepared in restricted locations relative to the install location of \rpgtex{}.
-		% 		\item Users must identify and specify the \rpgtex{} root path when preparing a document
-		% 		\item Users must install the provided fonts to the system path
-		% 		\item \rpgtex{} must be configured to know `where it is', and so provide an absolute filepath to the internal fonts.
-		% 	\end{enumerate}
-		% 	The Configuration step is the most portable and easiest-to-use of these options.
-		% \end{RpgTip}
+			Since \texttt{rpgtex} includes several (license free) typefaces as part of the provided themes, this poses a problem. We must either require that:
+			\begin{enumerate}
+				\item \rpgtex{} documents can only be prepared in restricted locations relative to the install location of \rpgtex{}.
+				\item Users must identify and specify the \rpgtex{} root path when preparing a document
+				\item Users must install the provided fonts to the system path
+				\item \rpgtex{} must be configured to know `where it is', and so provide an absolute filepath to the internal fonts.
+			\end{enumerate}
+			The Configuration step is the most portable and easiest-to-use of these options.
+		\end{RpgTip}
 
 		Without a \texttt{core/rpg-config.cfg} file, any document which includes \rpgtex{} will fail to compile.
-
+	\newpage
 
 	\section{Package \& Class Usage}
 
-		\rpgtex{} can be used either directly by including the \rpgtex{} package:
-		\begin{lstlisting}
-			\documentclass{arbitrary-class}
+		\rpgtex{} can be used either as a standalone package, or as part of a number of classes
 
-			\usepackage{rpgtex}
+		\subsection{Standalone Package}
+			The standalone package can be used directly by including the \rpgtex{} package:
+			\begin{lstlisting}
+				\documentclass{arbitrary-class}
 
-			\begin{document}
-			....
-		\end{lstlisting}
+				\usepackage[options]{rpgtex}
 
-		This will load only the core commands into the document, and (unless called explicitly) no themes will be imported. Using the package in this way does not activate any of the commands which change the overall geometry, background or headers of the document.
+				\begin{document}
+				....
+			\end{lstlisting}
 
+			This will load only the core commands into the document, and (unless called explicitly) no themes will be imported. Using the package in this way does not activate any of the commands which change the overall geometry, background or headers of the document.
 
+		\subsection{Classes}
+
+			\rpgtex{} can also be loaded through a number of classes which drastically alter the appearance of the document, defining new geometries backgrounds and adding headers.
+
+			The provided classes are:
+			\begin{enumerate}
+				\item \texttt{rpgbook} (page \pageref{S:bookClass}). Based on the standard book class, this is designed for larger RPG documents.
+				\item \texttt{rpghandout} (page \pageref{S:handoutClass}). Based on the article class, this is designed for shorter documents
+				\item \texttt{rpgcard} (page \pageref{S:cardClass}). A small-document class designed for creating modular `handout' cards for items, spells or abilities.
+			\end{enumerate}
 	\section{Compiling}
 
 		\rpgtex{} uses the \texttt{fontspec} package to allow custom fonts, and therefore requires compiling with \texttt{xelatex} or \texttt{luatex}:
@@ -112,4 +124,4 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 		\end{lstlisting}
 
 
-\chapter{Commands}
+\chapter{Core Commands}

@@ -5,20 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+<!-- ## [Unreleased] -->
 
-### Changed
+## Version 0.1.0 (2025-10-22)
+
+### Added
+
+* More robust (and human-friendly) layout-modifying isolation
 
 #### Documentation
 
 * Created main documentation structure
 * Wrote download/installation instructions (cribbing from initial DnD-5e template instructions)
+* Wrote package/class usage instructions
 
 ### Bugfixes
 
 * Removed trailing semicolon from pagenumber in default theme
 
 * Set initial theme to 'default' not 'dnd'
+
+* Switched rpgbook base-class back to book (from extbook) due to blank pages being inserted after part pages
+
 ## Version 0.0.0 (2025-10-22)
 
 This initial version is a complete refactoring of the base [rpglatex's D&D 5e template](https://github.com/rpgtex/DND-5e-LaTeX-Template) library, including a wholesale overhaul of the API.
@@ -31,7 +39,7 @@ This initial version is a complete refactoring of the base [rpglatex's D&D 5e te
 
 * Switched to a xelatex-only system with fonts saved locally, rather than relying on system fonts or latex-defaults.
 
-* Added a ```rpghandout``` and (currently unsupoprted) ```rpgcard``` class to supplement ```rpgbook```.
+* Added a ```rpghandout``` and (currently unsupported) ```rpgcard``` class to supplement ```rpgbook```.
 
 * Generated example code and documentation
 
