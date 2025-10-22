@@ -5,17 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## Version 0.0.0 (2025-10-22)
 
-### Total Refactoring
-
-This is a complete refactoring of the base [rpglatex's D&D 5e template](https://github.com/rpgtex/DND-5e-LaTeX-Template) library, including a wholesale overhaul of the API.
+This initial version is a complete refactoring of the base [rpglatex's D&D 5e template](https://github.com/rpgtex/DND-5e-LaTeX-Template) library, including a wholesale overhaul of the API.
 
 ### Added
 
+* Theme-engine split, abstracting specific implementation details from the core engine
+
+    * Current supported themes are ```default```, ```dnd``` and ```scifi```.
+
+* Switched to a xelatex-only system with fonts saved locally, rather than relying on system fonts or latex-defaults.
+
+* Added a ```rpghandout``` and (currently unsupoprted) ```rpgcard``` class to supplement ```rpgbook```.
+
+* Generated example code and documentation
+
+* Implemented ```\RpgPackagePath``` and a ```configure``` script that allows the package to use relative paths within the package, without needing the main tex document needing to know where the package is installed.
+
 ### Changed
 
+#### Core engine
 * Rewrote supporting documentation (README, CHANGELOG) etc. to reflect the new fork & its priorities
 
-* Removed explicit references to D&D from filenames and commands; make basic structure system-agnostic
+* Removed explicit references to D&D from filenames and commands; changed to 'Rpg' in most instances.
 
+#### dndmonster
+* Shifted to the dnd theme, rather than part of the core engine.
+
+* attack and spellcasting commands now automatically computes modifiers using a stat-lookup system.
+
+* combined the 'details' and 'basics' settings into a single command (so that initiative could be computed from dexterity)
+
+* Changed the styling to reflect D&D24 changes, and added some different information
+
+### Removed
+
+* Removed localisation strings - localisation is now considered a part of a theme, and it simplifies the code considerably.
