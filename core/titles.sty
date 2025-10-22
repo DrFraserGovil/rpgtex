@@ -1,7 +1,5 @@
 \ExplSyntaxOn
 
-\newcommand\DrawPartPage[2]
-{}
 
 
 \cs_new_protected:Nn \__part_with_image:nn
@@ -18,6 +16,12 @@
 
 %%Redefine part to accept custom arguments
 \let\__rpg_orig_part\part
+
+
+\newcommand\DrawPartPage[2]
+{}
+
+\RequirePackage{emptypage}
 
 \RenewDocumentCommand{\part}{s o m }
 {

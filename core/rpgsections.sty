@@ -1,8 +1,5 @@
 \ExplSyntaxOn
 
-\bool_if:NT \l__rpg_layout_bool
-{
-
   % Set spacing around floats
   \setlength{\textfloatsep}{11pt plus 4pt minus 4pt}
   \setlength{\intextsep}{11pt plus 4pt minus 4pt}
@@ -15,12 +12,6 @@
   % Section formatting
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Part
-  \titleformat {\part}
-    [display]
-    { \centering \RpgFontPart } % format
-    { \RpgContour{\partname\ \thepart} } % label
-    { 2ex } % sep
-    { \RpgContour } % before-code
 
   % Chapter
   \titleformat {\chapter}
@@ -95,5 +86,3 @@
     {\parindent} % left
     {\parskip}   % before-sep
     {\wordsep}   % after-sep
-}
-

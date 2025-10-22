@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Created main documentation structure
 * Wrote download/installation instructions (cribbing from initial DnD-5e template instructions)
 
+### Bugfixes
+
+* Removed trailing semicolon from pagenumber in default theme
+
+* Set initial theme to 'default' not 'dnd'
 ## Version 0.0.0 (2025-10-22)
 
 This initial version is a complete refactoring of the base [rpglatex's D&D 5e template](https://github.com/rpgtex/DND-5e-LaTeX-Template) library, including a wholesale overhaul of the API.

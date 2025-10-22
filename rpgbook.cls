@@ -8,10 +8,10 @@
 \bool_new:N \c__rpg_isclass_bool
 \bool_set_true:N \c__rpg_isclass_bool
 \tl_new:N \g__rpg_base_class_tl
-\tl_set:Nn \g__rpg_base_class_tl { extbook }
+\tl_set:Nn \g__rpg_base_class_tl { book }
 
 \input {core/rpgoptions.clo}
-\LoadClass { \g__rpg_base_class_tl }
+\LoadClass[openany] { \g__rpg_base_class_tl }
 
 % % %% Define custom title page and part page stuff here
 % % {

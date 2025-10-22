@@ -1,13 +1,17 @@
-\documentclass[size=12pt,theme=default]{rpgbook}
+\documentclass[size=10pt]{rpgbook}
 
-\usepackage{blindtext}
+% \usepackage[document]{ragged2e}
+% \usepackage[size=10pt]{rpg}
+
+% \usepackage{blindtext}
+% \usepackage{hyperref}
 \usepackage{listings}
 \lstset{
   basicstyle=\ttfamily,
   columns=fullflexible, % Uses the actual font width (best match for \verb)
   flexiblecolumns=true, % Allows for variable-width fonts (important for \ttfamily)
   breaklines=true,
-%   breakatwhitespace=true,
+  breakatwhitespace=true,
   showtabs=false,
   tabsize=1,
 }
@@ -22,8 +26,38 @@
 	\frontmatter
 	\maketitle{}
 
+	%%% fancy intro/abstract
+		\onecolumn{}
+		~
+		\vfill{}
+		\newcommand\forcelink[2]
+		{
+			\href{#1}{{\color{blue!70!black}#2}}
+		}
+		\begin{center}
+		\parbox[c]{0.8\linewidth}{
+			\large
+			\justifying
+
+			\RpgDropCap{W}{elcome to the \rpgtex{} package}. This \LaTeX{} package is designed to allow users to flexibly typeset documents associated with Role Playing Games such as \textit{Dungeons \& Dragons} -- and many more besides. This packages defines a central engine: \texttt{rpgcore} which define a number of useful functions and classes, and a flexible set of \texttt{themes} which control how those commands are rendered in the final document.
+
+			\vspace{2cm}
+			\subsection*{Attribution \& License}
+
+			This package would not have been possible without the team who developed \forcelink{https://github.com/rpgtex/DND-5e-LaTeX-Template/tree/dev}{its predecessor, the `DND 5e LateX Template'}. That code was released under an MIT license, the text of which can be found in the LICENSE file. \texttt{rpgtex} is released under the same license.
+			}
+		\end{center}
+
+		\vfill{}
+		\twocolumn{}
+
 	\tableofcontents
 	\mainmatter{}
+
+
+% \chapter{Introduction}
+
+
 
 
 	\part{rpgtex Core}
@@ -37,6 +71,7 @@
 	\part{Themes}
 		\input{parts/themes_default.tex}
 		\input{parts/themes_dnd.tex}
+		\RpgActivateLayout{}
 		\input{parts/themes_scifi.tex}
 
 
