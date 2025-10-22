@@ -1,3 +1,4 @@
+\ExplSyntaxOn
 \RenewDocumentCommand{ \RpgDiceFormat }{m m m m}
 {
      % #1: Dice Number, #2: Dice Sides, #3: Modifier, #4: Mean result
@@ -9,7 +10,7 @@
        #4~({#1 d #2 #3}) 	 % CASE: Is a dice roll (e.g., "2d6+5")
      }
 }
-
+\ExplSyntaxOff
 
 
 %%% Redefine toc formatting

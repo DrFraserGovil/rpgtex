@@ -4,8 +4,7 @@
   rpg sidebar/.style={
   before~upper     =
       {
-        \bool_if:NT \l__rpg_layout_bool
-          {
+        \RpgLayoutOnly{
             \bool_if:NF \l__rpg_justified_bool
               {\RaggedRight}
           }
@@ -40,8 +39,7 @@
   rpg narration/.style={
 	    before~upper    =
       {
-        \bool_if:NT \l__rpg_layout_bool
-          {
+        \RpgLayoutOnly{
             \bool_if:NF \l__rpg_justified_bool
               {\RaggedRight}
           }
@@ -71,8 +69,7 @@
   rpg tip/.style={
 	 before~upper =
       {
-        \bool_if:NT \l__rpg_layout_bool
-          {
+         \RpgLayoutOnly{
             \bool_if:NF \l__rpg_justified_bool
               { \RaggedRight }
           }
@@ -101,9 +98,7 @@
   }
 }
 \ExplSyntaxOn
-\bool_if:NT \l__rpg_layout_bool
-{
-
+\RpgLayoutOnly{
   % Set spacing around floats
   \setlength{\textfloatsep}{11pt plus 4pt minus 4pt}
   \setlength{\intextsep}{11pt plus 4pt minus 4pt}
@@ -116,12 +111,7 @@
   % Section formatting
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   % Part
-  \titleformat {\part}
-    [display]
-    { \centering \RpgFontPart } % format
-    { \RpgContour{\partname\ \thepart} } % label
-    { 2ex } % sep
-    { \RpgContour } % before-code
+
 
   % Chapter
   \titleformat {\chapter}

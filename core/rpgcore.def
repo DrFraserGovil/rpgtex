@@ -78,18 +78,21 @@
 % % % Load other modules of this package after all dependencies to avoid load order
 % % % conflicts (e.g., package options).
 % % % Low-level modules first.
+
 \RequirePackage {core/rpgutility}   % utility functions
 \RequirePackage {core/rpgcolors}	% color definitions
 \RequirePackage {core/rpgfonts}	    % font definitions
-\RequirePackage {core/rpgsections}   % section styling and special section headers
-
 
 % % % Main modules in alphabetical order
 \RequirePackage {core/rpgtip}    % inline tip boxes
-\RequirePackage {core/rpgheader}     % fancy headers and footers
 \RequirePackage {core/rpgnarration}  % read-aloud text
 \RequirePackage {core/rpgmap}   % section styling and special section headers
 \RequirePackage {core/rpgsidebar}    % sidebars
 \RequirePackage {core/rpgtable}      % tables
-\RequirePackage {core/titles}        % table of contents styling
-\RequirePackage {core/rpgtoc}        % table of contents styling
+\RequirePackage {core/titles}
+% % %% packages which do nothing but alter geometry/page settings, and so are ignored if the header layout setting is not active
+\RpgLayoutOnly{
+	\RequirePackage {core/rpgsections}   % section styling and special section headers
+	\RequirePackage {core/rpgheader}     % fancy headers and footers
+	\RequirePackage {core/rpgtoc}        % table of contents styling
+}

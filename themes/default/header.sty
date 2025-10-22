@@ -1,5 +1,5 @@
 \ExplSyntaxOn
-%% Writes chapter name on footer when configured
+% Writes chapter name on footer when configured
 	\cs_if_free:NF \chaptermark
 	{
 		\renewcommand*{\chaptermark}[1]
@@ -9,7 +9,7 @@
 				\MakeUppercase
 				{
 					\ifnum\value{secnumdepth}>-1
-					\chaptertitlename\ \thechapter :~
+					\chaptertitlename~\thechapter :~
 					\fi
 					#1
 				}
@@ -17,30 +17,34 @@
 			{}
 		}
 	}
-\ExplSyntaxOff
 
-\fancyhead{}
 
-% Left-even page footer
-\fancyfoot[LE]{%
-    \RpgFontFooter \leftmark \newline
-    {\RpgFontPageNumber \thepage};
-  }
+\RpgLayoutOnly{
+	\fancyhead{}
+	\renewcommand{\headrulewidth}{0pt}
 
-% Right-odd page footer
-\fancyfoot[RO]{%
-   \RpgFontFooter \leftmark \newline
-    {\RpgFontPageNumber \thepage};
-  }
+	% Left-even page footer
+	\fancyfoot[LE]{%
+		\RpgFontFooter \leftmark \newline
+		{\RpgFontPageNumber~\thepage}
+	}
 
-  % Clear the current definition of 'plain' footers/headers
-\fancypagestyle{plain}{}
+	% Right-odd page footer
+	\fancyfoot[RO]{%
+	\RpgFontFooter \leftmark \newline
+		{\RpgFontPageNumber~\thepage}
+	}
 
-% REDEFINE 'plain' to only contain the header logic
-\fancypagestyle{empty}{
-    % Clear all headers and footers *for this style* first
-    \fancyhf{}
+	% Clear the current definition of 'plain' footers/headers
+	\fancypagestyle{plain}{}
 
-    % Ensure footers are explicitly empty for this style
-    \fancyfoot{}
+	% REDEFINE 'plain' to only contain the header logic
+	\fancypagestyle{empty}{
+		% Clear all headers and footers *for this style* first
+		\fancyhf{}
+
+		% Ensure footers are explicitly empty for this style
+		\fancyfoot{}
+	}
 }
+\ExplSyntaxOff

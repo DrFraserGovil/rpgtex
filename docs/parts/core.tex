@@ -1,25 +1,4 @@
-\onecolumn{}
-\chapter{Introduction}
 
-\vfill{}
-
-\begin{center}
-\parbox[c]{0.8\linewidth}{
-	\large
-	\justifying
-
-	\RpgDropCap{W}{elcome to the \rpgtex{} package}. This \LaTeX{} package is designed to allow users to flexibly typeset documents associated with Role Playing Games such as \textit{Dungeons \& Dragons} -- and many more besides. This packages defines a central engine: \texttt{rpgcore} which define a number of useful functions and classes, and a flexible set of \texttt{themes} which control how those commands are rendered in the final document.
-
-	\vspace{2cm}
-	\subsection*{Attribution \& License}
-
-	This package would not have been possible without the team who developed its predecessor\footnote{}. That code was released under an MIT license, the text of which can be found in the LICENSE file. \texttt{rpgtex} is released under the same license.
-	}
-\end{center}
-\footnotetext[\numexpr\value{footnote}\relax]{\url{{https://github.com/rpgtex/DND-5e-LaTeX-Template/tree/dev}}}
-\vfill{}
-
-\twocolumn{}
 \chapter{Installation \& Usage}
 
 	\section{Getting \rpgtex}
@@ -32,7 +11,7 @@
 			The simplest way to use \rpgtex{} is to install it on the \texttt{texmf} path, where the compiler can automatically find it:
 
 			\begin{lstlisting}
-			git clone https://github.com/DrFraserGovil/rpgtex.git "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
+git clone https://github.com/DrFraserGovil/rpgtex.git "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
 			\end{lstlisting}
 
 			This will clone the repository into your\LaTeX{} path.
@@ -42,7 +21,7 @@
 			If you want to tinker with \rpgtex{} -- such as by creating a new theme -- it is helpful to have it in a more accessible location. Clone the repository into a location of your choice:
 
 			\begin{lstlisting}
-			git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
+git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 			\end{lstlisting}
 
 			You then have two options to make the package visible to the compiler:
@@ -89,19 +68,48 @@
 			echo $cmd >> core/rpg-config.cfg
 		\end{lstlisting}
 
-		\begin{RpgTip}{Why is configuration necessary?}
-			\TeX{} is generally set up so that when a file calls \verb|include| or \verb|input| it is possible to use filepaths relative to the package itself. \texttt{rpg.sty} can call \verb|\input{core/font.sty}| and it will know to first check for the file relative to rpg.sty; even if the package resides within the texmf path and the user has no idea where \texttt{rpgroot/rpg.sty}, or \texttt{rpgroot/core/font.sty}, are.
+		% \begin{RpgTip}{Why is configuration necessary?}
+		% 	\TeX{} is generally set up so that when a file calls \verb|include| or \verb|input| it is possible to use filepaths relative to the package itself. \texttt{rpg.sty} can call \verb|\input{core/font.sty}| and it will know to first check for the file relative to rpg.sty; even if the package resides within the texmf path and the user has no idea where \texttt{rpgroot/rpg.sty}, or \texttt{rpgroot/core/font.sty}, are.
 
-			An annoying exception to this is fonts and typefaces. \texttt{xelatex} searches for fonts based on \textit{filepaths relative to the current working directory} -- or from those installed in as system fonts.
+		% 	An annoying exception to this is fonts and typefaces. \texttt{xelatex} searches for fonts based on \textit{filepaths relative to the current working directory} -- or from those installed in as system fonts.
 
-			Since \texttt{rpgtex} includes several (license free) typefaces as part of the provided themes, this poses a problem. We must either require:
-			\begin{enumerate}
-				\item \rpgtex{} documents can only be prepared in restricted locations relative to the install location of \rpgtex{}.
-				\item Users must identify and specify the \rpgtex{} root path when preparing a document
-				\item \rpgtex{} must be configured to know `where it is', and so provide an absolute filepath to the internal fonts.
-			\end{enumerate}
-			The Configuration step is the easiest-to-use of these options.
-		\end{RpgTip}
+		% 	Since \texttt{rpgtex} includes several (license free) typefaces as part of the provided themes, this poses a problem. We must either require that:
+		% 	\begin{enumerate}
+		% 		\item \rpgtex{} documents can only be prepared in restricted locations relative to the install location of \rpgtex{}.
+		% 		\item Users must identify and specify the \rpgtex{} root path when preparing a document
+		% 		\item Users must install the provided fonts to the system path
+		% 		\item \rpgtex{} must be configured to know `where it is', and so provide an absolute filepath to the internal fonts.
+		% 	\end{enumerate}
+		% 	The Configuration step is the most portable and easiest-to-use of these options.
+		% \end{RpgTip}
+
+		Without a \texttt{core/rpg-config.cfg} file, any document which includes \rpgtex{} will fail to compile.
+
+
+	\section{Package \& Class Usage}
+
+		\rpgtex{} can be used either directly by including the \rpgtex{} package:
+		\begin{lstlisting}
+			\documentclass{arbitrary-class}
+
+			\usepackage{rpgtex}
+
+			\begin{document}
+			....
+		\end{lstlisting}
+
+		This will load only the core commands into the document, and (unless called explicitly) no themes will be imported. Using the package in this way does not activate any of the commands which change the overall geometry, background or headers of the document.
+
+
+	\section{Compiling}
+
+		\rpgtex{} uses the \texttt{fontspec} package to allow custom fonts, and therefore requires compiling with \texttt{xelatex} or \texttt{luatex}:
+
+		\begin{lstlisting}
+			xelatex main.tex		#works
+			luatex main.tex			#works
+			pdflatex main.tex #fails
+		\end{lstlisting}
 
 
 \chapter{Commands}

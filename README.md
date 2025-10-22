@@ -3,86 +3,47 @@
 <!-- [![Latest release](https://img.shields.io/github/release/rpgtex/DND-5e-LaTeX-Template/all.svg)](https://github.com/rpgtex/DND-5e-LaTeX-Template/releases/latest)
 [![Build Status](https://img.shields.io/circleci/project/github/rpgtex/DND-5e-LaTeX-Template/master.svg?style=flat)](https://circleci.com/gh/rpgtex/DND-5e-LaTeX-Template) -->
 
-This is a LaTeX template for typesetting documents for Roleplaying Games of all types, using a variety of different styles and customised commands, as well as a number of inbuilt styles.
+This is a LaTeX template for typesetting documents for Roleplaying Games of all types. `rpgtex` consists of a central 'core' which defines a number of useful commands and classes and an interface by which 'themes' may be loaded to modify the visual appearance -- we provide three basic themes (default, dnd and scifi).
 
-## Inheritance & Credit
-
-This project is forked from [rpglatex's D&D 5e template](https://github.com/rpgtex/DND-5e-LaTeX-Template). Much of the technical aspect of this library is credited solely to them.
-
-The modifications made here serve to update the D&D aspects of the library to a more modern format (D&D24), and decouple some of the core engines to allow more flexibility in style; thus allowing the scifi library to exist alongside.
-
-For simplicity and streamlining (and because I find latex3e confusing at the best of times), I have also removed much of the localisation code - this was written for my own personal use, and I only need it to work in English. A future project may reintegrate other languages.
 
 
 ## Features
 
 (Some things that need to be written!)
 
-## Installation
+## Usage
 
-[Detailed documentation for compilation] (https://raw.githubusercontent.com/DrFraserGovil/rpgtex/main/docs/documentation.pdf)
-<!-- There are three options for using this project; choose the one that's -->
-<!-- right for you. -->
+We provide detailed documentation for this package, including installation and configuration. This documentation is
+[found here](https://raw.githubusercontent.com/DrFraserGovil/rpgtex/dev/docs/documentation.pdf). The following is a brief summary to get you started.
 
-### User install using `TEXMFHOME` (recommended)
+We assume you are familiar with basic LaTeX usage, and have a working installation. If you are not, we recommend [familiarising yourself first](https://latex-tutorial.com/tutorials/).
 
-This will install the template for your current user in one of the following locations:
+### Installation & Configuration
 
-* Linux: `~/.texmf/tex/latex`
+We recommend installing via cloning into your `texmf` path
+```
+   git clone https://github.com/DrFraserGovil/rpgtex.git "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
+```
+
+This location will depend on your latex installation, but will most likely install the template for your current user in one of the following locations:
+
+* Linux: `~/.texmf/tex/latex` (or `~/texmf/tex/latex/`)
 * OS X / macOS: `~/Library/texmf/tex/latex`
 * Windows: `C:\Users\{username}\texmf\tex\latex`
 
-LaTeX will find the package automatically.
+### Configuration
 
-1. Prepare your `TEXMFHOME` directory.
-
-    ```sh
-    mkdir "$(kpsewhich -var-value TEXMFHOME)/tex/latex/"
-    ```
-
-2. Download the [latest release](https://github.com/rpgtex/DND-5e-LaTeX-Template/releases/latest) and extract it in `$TEXMFHOME/tex/latex/`.
-
-    ```sh
-    wget https://github.com/rpgtex/DND-5e-LaTeX-Template/archive/master.zip
-    unzip -d "$(kpsewhich -var-value TEXMFHOME)/tex/latex/" master.zip
-    cd "$(kpsewhich -var-value TEXMFHOME)/tex/latex/"
-    mv DND-5e-LaTeX-Template-master dnd
-    ```
-
-    Alternatively, clone the repo to the same location:
-
-    ```sh
-    git clone https://github.com/rpgtex/DND-5e-LaTeX-Template.git "$(kpsewhich -var-value TEXMFHOME)/tex/latex/dnd"
-    ```
-
-### Using Overleaf
-
-[Overleaf](https://overleaf.com) is an online TeX editor -- think
-about it like Google Docs for TeX documents.  This option does not
-require a local TeX installation and is an ideal approach for one-off
-projects.
-
-1. Download this GitHub repository as a ZIP archive using the *Clone
-   or download* link above.
-2. On Overleaf, click the *New Project* button and select *Upload
-   Project*.  Upload the ZIP archive you downloaded from this
-   repository.
-
-### Project install using `TEXINPUTS`
-
-You can also clone a copy of the repository to each LaTeX project. For example, to clone the repository to a `lib/` directory in your project:
-
-```sh
-mkdir lib/
-git clone https://github.com/rpgtex/DND-5e-LaTeX-Template.git lib/dnd
+It is necessary to configure the package so that it is aware of its installation directory. We provide [a script](https://github.com/DrFraserGovil/rpgtex/blob/dev/configure) which does this, or users can manually create a file named `rpg-config.cfg` within `core` with the contents:
 ```
-
-LaTeX will not find the template automatically. Set `TEXINPUTS` when compiling your project to locate the package:
-
-```sh
-TEXINPUTS=./lib//: pdflatex project.tex
+  \edef{RpgPackagePath}{~/path/to/installation/location}
 ```
+If this file is not located, the document will throw an error and will not compile.
 
+### Compilation
+
+Documents which import `rpgtex` must be compiled with `xelatex` or `luatex`, since the package makes use of the `fontspec` package to load custom typefaces.
+
+<!--
 ## Usage
 
 ### Class (recommended)
@@ -162,117 +123,20 @@ Excludes all deprecated code from the build process.
 ## Dependencies
 
 If you don't have LaTeX installed, we recommend installing a complete [TeX Live distribution](https://www.tug.org/texlive/).
-
-### Ubuntu
-
-```sh
-sudo apt-get install texlive-full
-```
-
-### Arch
-
-```sh
-sudo pacman -S texlive-bin texlive-core texlive-latexextra
-```
-
-### OSX
-
-MacTex has its own [installer](https://www.tug.org/mactex/), but you can install it through brew cask:
-
-#### Full version
-
-```sh
-brew cask install mactex
-```
-
-#### Slightly smaller version without GUI
-
-```sh
-brew cask install mactex-no-gui
-```
-
-#### Minimal version
-
-Use `tlmgr` to install packages as needed, see this [answer](https://tex.stackexchange.com/a/470285) for more information
-
-```sh
-brew cask install basictex
-brew cask install tex-live-utility
-```
-
-After any of this, use the following such that the texlive directory doesn't require admin rights.
-
-```sh
-sudo chown -R myuser:mygroup /usr/local/texlive
-```
-
-For more information about MacTex permissions, see the following StackExchange [post](https://tex.stackexchange.com/questions/3744/how-do-i-set-up-mactex-so-admin-rights-arent-necessary)
-
-## Known issues and solutions
-
-### Stat block text color does not survive page breaks
-
-This is a known issue in `tcolorbox`. According to the `tcolorbox` 4.12 manual (p. 363):
-
-> If your text content contains some text color changing commands, your color will not survive the break to the next box.
-
-You can use LuaTeX to compile the document.
-
-```sh
-lualatex main.tex
-```
-
-### Wrapping `monsterbox` in float disrupts spacing inside stat block
-
-Wrapping a `monsterbox` (or `monsterboxnobg`) in a floating figure adds extra space between stat block elements:
-
-```latex
-\begin{figure}[b]
-  \begin{monsterbox}{Orc Warden}
-    % ...
-  \end{monsterbox}
-\end{figure}
-```
-
-Instead, use the `tcolorbox` `float` parameter:
-
-```latex
-\begin{monsterbox}[float=b]{Orc Warden}
-  % ...
-\end{monsterbox}
-```
-
-Refer to the `tcolorbox` documentation (section 4.13) for more float parameters.
-
-## Contributing
-
-### Style
-
-We use [EditorConfig](https://editorconfig.org/) to enforce consistent formatting.
-Install the appropriate plugin for your editor.
-
-### Preparing a new release
-
-1. Run `./bin/bump-version` to tag the new version.
-
-    ```sh
-    ./bin/bumpversion <version>
-    ```
-
-2. Compile the example PDF.
-3. Save the first page of the PDF as scrot.jpg.
-4. Update the change log for the new release; commit your changes.
-5. Push changes.
-
-    ```sh
-    git push && git push --tags
-    ```
-
-6. [Create a new release](https://help.github.com/articles/creating-releases/) and attach the PDF and scrot.
+-->
 
 ## Credits
 
+
 * Background image from [Lost and Taken](https://lostandtaken.com/)
+* Original code from [the rpglatex project](https://github.com/rpgtex/DND-5e-LaTeX-Template)
+
+This project is forked from [rpglatex's D&D 5e template](https://github.com/rpgtex/DND-5e-LaTeX-Template). Much of the technical aspect of this library is credited solely to them.
+
+The modifications made here serve to update the D&D aspects of the library to a more modern format (D&D24), and decouple some of the core engines to allow more flexibility in style; thus allowing the scifi library to exist alongside.
+
+For simplicity and streamlining much of the localisation code has been removed. A future project may reimplement this.
+
 
 ## License
 

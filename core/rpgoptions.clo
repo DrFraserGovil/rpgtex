@@ -65,7 +65,7 @@
       {
         \tl_set:Nn \l__rpg_theme_tl { #1 }
       },
-    theme .initial:n = dnd, % Default to D&D theme
+    theme .initial:n = default, % Default to D&D theme
 
 
 	%% Standard document options (used for classes without pass-through)
@@ -82,12 +82,12 @@
 	columns / 2 .code:n = { \tl_set:Nn \l__rpg_cols_tl { twocolumn } },
 	columns .initial:n = 2,
 
-	Use openany
+	%Use openany
     openright .code:n =
       {
         \bool_set_true:N \l__rpg_openright_bool
       },
-    openright .value_forbidden:n = true,
+    openright .value_forbidden:n = false,
   }
 
 

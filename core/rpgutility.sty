@@ -22,7 +22,6 @@
 \DeclareDocumentCommand{ \RpgDiceFormat} {m m m m}
 {
 	  % #1: Dice Number, #2: Dice Sides, #3: Modifier, #4: Mean result
-
 	 \str_if_empty:nTF { #2 }
       {
         % CASE: Not a roll (just a number like "12")
@@ -32,7 +31,6 @@
         % CASE: Is a dice roll (e.g., "2d6+5")
 		#1 d #2 #3
       }
-
 }
 
 \DeclareDocumentCommand { \RpgDice } { m }
@@ -150,8 +148,18 @@
 
 %%%%%% Some preamble stuff
 
-%%Allows checking if you are in preamb,e
+\NewDocumentCommand \RpgLayoutOnly { m }
+{
+	\bool_if:NT \l__rpg_layout_bool
+	  {
+			#1
+	  }
+}
 
+\NewDocumentCommand \RpgActivateLayout { }
+{
+	\bool_set_true:N \l__rpg_layout_bool
+}
 %%%%%% Theme switching
 
 \NewDocumentCommand\RpgSetTheme { m }
@@ -167,3 +175,4 @@
 	}
 
 }
+
