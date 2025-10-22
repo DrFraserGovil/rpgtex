@@ -16,16 +16,13 @@ For simplicity and streamlining (and because I find latex3e confusing at the bes
 
 ## Features
 
-* Color schemes, fonts, and layout are close to the core books (but not exactly the same).
-* TeX Live includes the default fonts.
-* Works with pdfTeX, LuaTeX, and XeTeX.
-
-![Preview](scrot.jpg)
+(Some things that need to be written!)
 
 ## Installation
 
-There are three options for using this project; choose the one that's
-right for you.
+[Detailed documentation for compilation] (https://raw.githubusercontent.com/DrFraserGovil/rpgtex/main/docs/documentation.pdf)
+<!-- There are three options for using this project; choose the one that's -->
+<!-- right for you. -->
 
 ### User install using `TEXMFHOME` (recommended)
 
