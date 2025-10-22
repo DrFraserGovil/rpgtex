@@ -1,5 +1,107 @@
+\onecolumn{}
 \chapter{Introduction}
 
-\chapter{Usage \& Compiling}
+\vfill{}
+
+\begin{center}
+\parbox[c]{0.8\linewidth}{
+	\large
+	\justifying
+
+	\RpgDropCap{W}{elcome to the \rpgtex{} package}. This \LaTeX{} package is designed to allow users to flexibly typeset documents associated with Role Playing Games such as \textit{Dungeons \& Dragons} -- and many more besides. This packages defines a central engine: \texttt{rpgcore} which define a number of useful functions and classes, and a flexible set of \texttt{themes} which control how those commands are rendered in the final document.
+
+	\vspace{2cm}
+	\subsection*{Attribution \& License}
+
+	This package would not have been possible without the team who developed its predecessor\footnote{}. That code was released under an MIT license, the text of which can be found in the LICENSE file. \texttt{rpgtex} is released under the same license.
+	}
+\end{center}
+\footnotetext[\numexpr\value{footnote}\relax]{\url{{https://github.com/rpgtex/DND-5e-LaTeX-Template/tree/dev}}}
+\vfill{}
+
+\twocolumn{}
+\chapter{Installation \& Usage}
+
+	\section{Getting \rpgtex}
+
+		There are a number of different ways to acquire \rpgtex{}. Once you have installed it, it is vital to ensure that it is \href{\ref{S:Configuration}}{properly configured} (see below).
+
+
+		\subsection{texmf Installation}
+
+			The simplest way to use \rpgtex{} is to install it on the \texttt{texmf} path, where the compiler can automatically find it:
+
+			\begin{lstlisting}
+			git clone https://github.com/DrFraserGovil/rpgtex.git "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
+			\end{lstlisting}
+
+			This will clone the repository into your\LaTeX{} path.
+
+		\subsection{Indirect Installation}
+
+			If you want to tinker with \rpgtex{} -- such as by creating a new theme -- it is helpful to have it in a more accessible location. Clone the repository into a location of your choice:
+
+			\begin{lstlisting}
+			git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
+			\end{lstlisting}
+
+			You then have two options to make the package visible to the compiler:
+
+			\subsubsection{Use TEXINPUTS}
+
+			Setting the environment variable \verb|TEXINPUTS| allows the compiler access:
+				\begin{lstlisting}
+	TEXINPUTS=~/your/rpgtex/directory/::
+				\end{lstlisting}
+				(Or similar commands, depending on your shell -- in \texttt{fish} you would call \verb|set TEXINPUTS dir|).
+
+			\subsubsection{Use Symlinks}
+
+			You can symlink the install location to the texmf directory, allowing the compiler to act as if you had performed the texmf installation:
+
+			\begin{lstlisting}
+				ln -sf ~/your/rpgtex/directory "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
+			\end{lstlisting}
+
+		\subsection{Overleaf (Not recommended!)}
+
+			We do not recommend using Overleaf since the free-tier subscription has reduced compilation times drastically, making compiling documents using complex packages such as this one extremely difficult. Nevertheless:
+
+			\begin{enumerate}
+				\item  Download this GitHub repository as a ZIP archive using the Clone or download link above.
+    			\item On Overleaf, click the New Project button and select Upload Project. Upload the ZIP archive you downloaded from this repository.
+				\item Manually create the file \texttt{rpg-config.cfg} with the contents ``\verb|\edef\RpgPackagePath{../}|''. This replaces the configuration step described below.
+
+			\end{enumerate}
+
+
+	\section{Configuring \rpgtex{}} \label{S:Configuration}
+
+		Wherever one installs \rpgtex{} from, it is vital that it is properly configured. From within the \rpgtex{}-root directory, call:
+
+		\begin{lstlisting}
+			./configure
+		\end{lstlisting}
+		Or -- if one is (reasonably!) wary about running arbitrary executables -- manually create the relevant file:
+		\begin{lstlisting}
+			cd <rpgtex root directory>
+			cmd="\edef\RpgPackagePath{$(pwd)}"
+			echo $cmd >> core/rpg-config.cfg
+		\end{lstlisting}
+
+		\begin{RpgTip}{Why is configuration necessary?}
+			\TeX{} is generally set up so that when a file calls \verb|include| or \verb|input| it is possible to use filepaths relative to the package itself. \texttt{rpg.sty} can call \verb|\input{core/font.sty}| and it will know to first check for the file relative to rpg.sty; even if the package resides within the texmf path and the user has no idea where \texttt{rpgroot/rpg.sty}, or \texttt{rpgroot/core/font.sty}, are.
+
+			An annoying exception to this is fonts and typefaces. \texttt{xelatex} searches for fonts based on \textit{filepaths relative to the current working directory} -- or from those installed in as system fonts.
+
+			Since \texttt{rpgtex} includes several (license free) typefaces as part of the provided themes, this poses a problem. We must either require:
+			\begin{enumerate}
+				\item \rpgtex{} documents can only be prepared in restricted locations relative to the install location of \rpgtex{}.
+				\item Users must identify and specify the \rpgtex{} root path when preparing a document
+				\item \rpgtex{} must be configured to know `where it is', and so provide an absolute filepath to the internal fonts.
+			\end{enumerate}
+			The Configuration step is the easiest-to-use of these options.
+		\end{RpgTip}
+
 
 \chapter{Commands}

@@ -126,9 +126,9 @@
   % Chapter
   \titleformat {\chapter}
     { \RpgFontChapter } % format
-    { \RpgContour{\chaptertitlename\ \thechapter :} } % label
+    { {\chaptertitlename\ \thechapter :} } % label
     { \wordsep } % sep
-    { \RpgContour } % before-code
+    {  } % before-code
 
   \titlespacing* {\chapter}
     { 0pt }  % left
@@ -145,7 +145,7 @@
   \titlespacing* { \section }
     { 0pt } % left
     { 3ex plus .43ex minus .43ex } % before-sep
-    { 0pt } % after-sep
+    { 1ex plus .43ex minus .43ex } % after-sep
 
   % Subsection
   \titleformat {\subsection}
