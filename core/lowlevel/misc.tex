@@ -1,0 +1,27 @@
+\ExplSyntaxOn{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Gets the width of a space
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\box_new:N \l__rpg_space_box
+\hbox_set:Nn \l__rpg_space_box {~}
+\dim_new:N \l__rpg_space_dim
+\dim_set:Nn \l__rpg_space_dim { \box_wd:N \l__rpg_space_box }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Some keys are required for proper execution of macros.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\msg_new:nnn { rpg } { key_required } { #1~requires~key~``#2''~to~be~set. }
+
+% #1 - key value
+% #2 - macro name
+% #3 - key name
+\cs_new_protected:Npn \__rpg_check_for_key:Nnn #1#2#3
+  {
+    \group_begin:
+      \str_set:Nx \l_tmpa_str { #1 }
+
+      \str_if_empty:NT { \l_tmpa_str }
+        { \msg_error:nnnn { rpg } { key_required } { #2 } { #3 } }
+    \group_end:
+  }

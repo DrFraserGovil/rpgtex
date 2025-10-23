@@ -1,0 +1,39 @@
+\ExplSyntaxOn{}
+
+% Ordinal wrapper function, compute the suffix: checks for 11, 12, 13 first
+\cs_new:Npn \__compute_ordinal_suffix:n #1
+{
+    % Get the last two digits (modulo 100) for teens check
+    \int_set:Nn \l_tmpa_int { \int_mod:nn { #1 } { 100 } }
+
+    % Check special cases 11, 12, 13
+    \int_case:nnF { \l_tmpa_int }
+    {
+        {11} {th}
+        {12} {th}
+        {13} {th}
+    }
+    {
+        % If not a teen, defer to the single-digit check
+        \__compute_ordinal_suffix_normal:n { #1 }
+    }
+}
+
+% compute the suffix based on the last digit
+\cs_new:Npn \__compute_ordinal_suffix_normal:n #1
+{
+    % Get the last digit (modulo 10)
+    \int_set:Nn \l_tmpa_int { \int_mod:nn { #1 } { 10 } }
+
+    % Check for 1, 2, or 3
+    \int_case:nnF { \l_tmpa_int }
+    {
+        {1} {st}
+        {2} {nd}
+        {3} {rd}
+    }
+    {
+        % Default case
+        {th}
+    }
+}

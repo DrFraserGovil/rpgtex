@@ -1,0 +1,15 @@
+\ExplSyntaxOn
+
+\RenewDocumentCommand{\RpgDiceFormat} { m m m }
+{
+	  \str_if_empty:nTF { #1 }
+      {
+        % CASE: called without a dice count (i.e. d8), equal to 1d8
+        1
+      }
+	  {
+		#1
+	  }
+		d #2
+	\fp_compare:nNnTF { #3 } { = } { 0 }{}{#3}
+}
