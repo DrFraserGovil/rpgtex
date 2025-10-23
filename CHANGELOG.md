@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Added
 
+* RpgPage macro for automatic page \pageref formatting
 ### Changed
 
 * Minor stylistic changes to make the linter happy
