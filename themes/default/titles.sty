@@ -1,49 +1,35 @@
-\renewcommand\DrawPartPage[2]
+\RenewDocumentCommand\RpgDrawPartPage{m}
 {
-	%
-    % 1. Background Image
-   \node [inner~sep=0pt, minimum~width=\paperwidth, minimum~height=\paperheight] (image) at (current~page.center)
-    {
-        \includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
-    };
+    \fill [white, opacity=0.5] (current page.south west) rectangle (current page.north east);
 
-	    % Optional: Add a semi-transparent black overlay for text visibility
-    \fill [white, opacity=0.5] (current~page.south~west) rectangle (current~page.north~east);
-
-
-    % 2. Text Placement and Styling (Fix applied below)
-    \node at (current~page.center) [ % Fixed here
-        text~width=0.8\paperwidth,
+    \node at (current page.center) 
+	[
+        text width=0.8\paperwidth,
         align=center,
         yshift=2cm
     ]
     {
-        % Part Number
-
-		\MakeUppercase{\RpgFontPart Part~\thepart} \par
+		\MakeUppercase{\RpgFontPart Part \thepart} \par
 		\vspace{1em}
-
-        % Part Title
-		{\RpgFontPart #2}
+		{\RpgFontPart #1}
     };
 
 }
 
-\ExplSyntaxOn
 \renewcommand\RpgBookTitle[1]
 {
 	\thispagestyle{empty} % Ensure no headers/footers on the part page
-	\begin{tikzpicture}[remember~picture, overlay]
+	\begin{tikzpicture}[remember picture, overlay]
 	%
     % 1. Background Image
-   \node [inner~sep=0pt, minimum~width=\paperwidth, minimum~height=\paperheight] (image) at (current~page.center)
+   \node [inner sep=0pt, minimum width=\paperwidth, minimum height=\paperheight] (image) at (current page.center)
     {
         \includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
     };
 
 	    % Optional: Add a semi-transparent black overlay for text visibility
-    \fill [white, opacity=0.5] (current~page.south~west) rectangle (current~page.north~east);
-\node at (current~page.center) {\parbox[t]{\paperwidth}{\begin{center}\RpgFontTitle\color{black}\@title
+    \fill [white, opacity=0.5] (current page.south west) rectangle (current page.north east);
+\node at (current page.center) {\parbox[t]{\paperwidth}{\begin{center}\RpgFontTitle\color{black}\@title
 				\\\vspace{1cm}
 				\RpgFontSubTitle {\color{black} \@author}
 				\\

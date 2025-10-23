@@ -1,0 +1,41 @@
+
+\let\__rpg_orig_part\part
+
+\cs_new_protected:Nn \__part_page:nn
+{
+	\clearpage
+	\stepcounter{part}
+	\thispagestyle{empty} % Ensure no headers/footers on the part page
+	\begin{tikzpicture}[remember~picture, overlay]
+		 #1
+	\end{tikzpicture}
+	\phantomsection
+	\addcontentsline{toc}{part}{Part~\thepart{}:~#2}
+	\clearpage % Ensure the content starts on the next page
+}
+\cs_new_protected:Nn \__part_with_image:nn
+{
+	\__part_page:nn{
+		 \node [inner~sep=0pt, minimum~width=\paperwidth, minimum~height=\paperheight] (image) at (current~page.center)
+		{
+			\includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
+		};
+
+		\RpgDrawPartPage{#2}
+	}{#2}
+}
+\cs_new_protected:Nn \__part_no_image:n
+{
+	\__part_page:nn{
+		\RpgDrawPartPage{#1}
+	}{#1}
+}
+
+
+
+
+\cs_new:Npn \__blank_background:n #1
+{
+	\tl_if_novalue_p:n{#1}
+	
+}

@@ -133,8 +133,40 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 
 	\blindtext{}
 
+	\section{Redefinitions of Common Commands}
+		\begin{macrolist}
+			\RpgMacro{\part,{\part*},{{o m}}}
+				{\label{Macro:part}
+					Defines a wrapper around the standard \verb|part| command that allows for tikz-based custom page formatting
+				}
+				{
+					\part(*)[<image>]{<part-name>}
+				}
+				{
+					There are three distinct behaviours that can be exhibited, depending on the presence or absence of the \verb|*|, and the presence and value of \verb|<image>|.
 
+					\begin{RpgTable}{XX}
+						Command & Behaviour
+						\\
+						\parbox[t]{6cm}{\verb|\part*{partname}| \\ \verb|\part*[<any text>]{partname}| \\ \verb|\part[none]{partname}|} & Uses original \verb|part| command defined by underlying class. 
+						\\
+						\verb|\part{partname}| & Calls \verb|RpgDrawPartPage| on a blank background.
+						\\
+						\parbox[t]{6cm}{\verb|\part[path/to/image]{partname}||} & Places the corresponding image as a full-page background, and then calls \verb|RpgDrawPartPage|.
+					\end{RpgTable}
+					\verb|RpgDrawPartPage| \RpgPage[p]{Macro:DrawPartPage} is a Theme Function, which executes a series of tikz functions to place the part title according to the theme specifications. 
+					% \paragraph{p} When used without the optional argument, or with a star (\verb|part*|) this directly calls the original \verb|part| command\footnote{ saved as \lMacroName{rpg\_orig\_part}.} without modification.
 
+					% \paragraph{Optional behaviour} With the optional argument, the \verb|part| call is instead replaced and performs the following actions:
+					% \begin{enumerate}
+					% 	\item Clears the page
+					% 	\item Begins a \verb|tikzpicture| environment
+					% 	\item Places the image located at \verb|<graphics-path>/<image>| at the centre of the page, 
+					% \end{enumerate}
+
+				}
+
+		\end{macrolist}
 	\section{Document Commands}
 
 		\begin{macrolist}
@@ -267,6 +299,20 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 
 					\verb|RpgDiceFormat| is loaded in both \verb|layout| and non-\verb|layout| calls.
 				}
+
+			\RpgMacro{\RpgDrawPartPage,{{m}}}
+				{\label{Macro:DrawPartPage}
+					Uses Tikz to draw a custom part page when activated by \verb|\part| \RpgPage[p]{Macro:part}.
+				}
+				{
+					\RpgDrawPartPage{<part title>}
+				}
+				{
+					This function is mostly used to determine where to place the part name on the page, and what embellishments accompany it. The command is called from within an existing tikz environment with the \verb|remember,overlay| options active, allowing for page coordinates (i.e. current page.north) to be used.
+
+					The default \verb|part| command allows a user to specify a background image for their part page -- it is not necessary to provide one within the drawing command.
+				}
+
 			\RpgMacro{\RpgLayoutOnly,{{m}}}
 				{
 					Executes the contents of the command if \verb|layout| mode is active.

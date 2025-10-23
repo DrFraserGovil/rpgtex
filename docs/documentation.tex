@@ -37,20 +37,33 @@
 		#1
     \end{xltabular}}{}
 
+\NewDocumentCommand{\lMacroName}{m}{
+	\texttt{\textbackslash\_\_#1}
+}
+
+\NewDocumentCommand{\macrosection}{m}
+{
+\newline\vspace{1em}
+	{\RpgFontSubsubsection{} #1}
+	\newline
+}
+% \NewDocumentCommand{\macrosubsection}{m}
+% {
+% \newline\vspace{1em}
+% 	{\RpgFontSubsubsection{} #1}
+% 	\newline
+% }
+
+
 \NewDocumentCommand{\RpgMacro}{m +m +m +m}{\vspace{1em}\makecell[rt]{  \__rpg_doc_macro_list:n { #1 }} &
 
 	#2
 
-	% \subsubsection*{Syntax}
-	\newline\vspace{1em}
-	{\RpgFontSubsubsection{} Syntax}
-	\newline
+	\macrosection{Syntax}
 
 	\verb|#3|
 	
-	\newline\vspace{1em}
-	{\RpgFontSubsubsection{} Behaviour}
-	\newline
+	\macrosection{Behaviour}
 
 	#4
 	\\
