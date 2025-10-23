@@ -254,16 +254,18 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 
 		\begin{macrolist}
 			\RpgMacro{\RpgDiceFormat,{{m m m}}}
-				{\label{Macro:DiceFormat}
-					Prints the values computed by \verb|RpgDice| \RpgPage[p]{Macro:Dice}
+				{\label{Macro:DiceFormat} Prints the values computed by \verb|RpgDice| \RpgPage[p]{Macro:Dice}
 				}
 				{
-					\RpgLayoutOnly{<content-to-execute>}
+					\RpgDiceFormat{<dice-count>}{<dice-size>}{<added bonus>}
 				}
 				{
-					If the internal value \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, then \verb|content-to-execute| is run, otherwise it is ignored.
+					This function is used by theme designers to determine how \verb|RpgDice| is rendered. The default option is:
+					\verb|\RpgDiceFormat{m m m} { #1d#2 #3}|, such that \verb|RpgDice{ndx + a + b}| gives ``ndx + c'', where c is the numerical value of a+b, with an additional check to see if \verb|#3| is equal to 0, in which case it is not printed (so as not to `1d6 + 0'). 
+					
+					The dnd implementation performs a more advanced operation, computing the average value of the roll, and formatting that first, to replicate the format used by monster stat blocks. 
 
-					This command is primarily used by theme developers and document class files to conditionally load or activate modules based on whether the package was loaded via a document class (layout mode active) or directly via \verb|\usepackage{rpgtex}|.
+					\verb|RpgDiceFormat| is loaded in both \verb|layout| and non-\verb|layout| calls.
 				}
 			\RpgMacro{\RpgLayoutOnly,{{m}}}
 				{
@@ -292,6 +294,16 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 					\verb|<theme-path>| is modified via \verb|RpgSetThemePath|.
 				}
 
+			\RpgMacro{\RpgSetThemeColor,{{m}}}
+				{\label{Macro:SetThemeColor}
+					Sets the \verb|themecolor|, and simultaneously updates the co-varying colors \RpgPage[p]{S:Colors}.
+				}{
+					\RpgSetThemeColor{color-name}
+				}{
+					If \verb|color-name| specifies a valid color, then the value of \verb|themecolor| is updated, as well as a number of other colors (\verb|tipcolor|, \verb|sidebarcolor| and \verb|tablecolor|) which are set to be equal to the themecolor by default.
+
+					Of the rpg-provided colors, only \verb|narrationcolor| is unaffected by this command.
+				}
 			\RpgMacro{\RpgSetThemePath,{{m}}}
 				{
 					Changes the value of the theme path searched for by \verb|RpgSetTheme|
@@ -303,3 +315,18 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 					Updates an internal variable to be equal to the input value; does not check if the theme path is valid or not. Useful if you wish to create a new theme outside of the \verb|rpgtex| file structure.
 				}
 		\end{macrolist}
+	\section{Variables}
+		\subsection{Colo(u)rs}\label{S:Colors}
+
+			\rpgtex{} by default defines five colors\footnote{Yes, I hate myself, but we're going with the code-based spelling.} which are used for different elements:
+			\begin{description}
+				\item[themecolor] A `basic color' which is (by default) equal to the following three colors:
+				\begin{enumerate}
+					\item \textbf{sidebarcolor} The background color of the \verb|RpgSidebar| environment
+					\item \textbf{tablecolor} The background color of every other row in an \verb|RpgTable| 
+					\item \textbf{tipcolor} The background color of the \verb|RpgTip| environment 
+				\end{enumerate} 
+				\item[narrationcolor]  The background color of the \verb|RpgTip| environment 
+			\end{description}
+
+			Calling \verb|\RpgSetThemeColor| \RpgPage[p]{Macro:SetThemeColor} updates the value of \verb|themecolor|, as well as the three `co-varying' colors (i.e. everything except \verb|narrationcolor|). When \verb|printmode| is active \verb|\RpgSetThemeColor{white}| is called, making environments transparent.
