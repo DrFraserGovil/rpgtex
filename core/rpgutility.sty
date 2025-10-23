@@ -1,71 +1,29 @@
 \ExplSyntaxOn
 
-% Useful regex strings
-\regex_const:Nn \c__pos_int_regex { \d+ }
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Dice macro
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Matches { # | #d# | #d# + # | #d# - # } while ignoring spaces
-% \regex_const:Nn \c__valid_dice_regex { \A\s*(\d+)(?:[dD](\d+)\s*(?:([+\-])\s*(\d+))?)?\s*\Z }
-\regex_const:Nn \c__valid_dice_regex { \A\s*(\d*)[dD](\d+)(.*)\s*\Z }
-
-\seq_new:N \l__dice_args_seq
-\tl_new:N \l__dice_number_tl
-\tl_new:N \l__dice_sides_tl
-% \tl_new:N \l__dice_mod_sign_tl
-\tl_new:N \l__dice_mod_tl
-
-\msg_new:nnn { rpg } { dice / invalid_argument } { Invalid~argument~``#1''~passed~to~\noexpand\RpgDice. }
-
-
+\input{core/lowlevel/regex}
 
 \DeclareDocumentCommand{ \RpgDiceFormat} {m m m}
 {
-	  % #1: Dice Number, #2: Dice Sides, #3: Modifier
-	
-	  \str_if_empty:nTF { #1 }
-      {
-        % CASE: called without a dice count (i.e. d8), equal to 1d8
-        1
-      }
-	  {
-		#1
-	  }
-		d #2
-	\fp_compare:nNnTF { #3 } { = } { 0 }{}{#3}
+	%Arguments: #1: Dice Number, #2: Dice Sides, #3: Modifier
+
+	%Declare the command here, wait for themes to override it. 
 }
 
 \DeclareDocumentCommand { \RpgDice } { m }
   {
-    \group_begin:
-	\tl_set:Nn\l__dice_sides_tl\empty
-      \regex_extract_once:NnNTF { \c__valid_dice_regex } { #1 } \l__dice_args_seq
-        {
-          \seq_pop_left:NN \l__dice_args_seq \l_tmpa_str % Don't need the full match
-          \seq_pop_left:NN \l__dice_args_seq \l__dice_number_tl % # of dice
-          \seq_pop_left:NN \l__dice_args_seq \l__dice_sides_tl % # of sides
-        %   \seq_pop_left:NN \l__dice_args_seq \l__dice_mod_sign_tl % +/- for add/sub
-          \seq_pop_left:NN \l__dice_args_seq \l__dice_mod_tl % modifier
-		
-
-		\fp_set:Nn \l_tmpa_fp { \tl_if_empty:NTF \l__dice_mod_tl { 0 } { \l__dice_mod_tl } }
-		
-
-          % --- Pass everything to the formatter ---
-          \RpgDiceFormat
-            { \l__dice_number_tl }     % #1: Number/Dice Count (can be empty = 1)
-            { \l__dice_sides_tl }      % #2: Size of dice
-            { \fp_compare:nNnT { \fp_use:N \l_tmpa_fp } { > } { 0 }{+}\fp_use:N \l_tmpa_fp} % #3 final computed modifier (with + if positive)
-        }
-        {
-			 \msg_error:nnn { rpg } { dice / invalid_argument } { #1  }
-			 }
-    \group_end:
+	%%Parses input of the form { #d# | d# | #d# ± # | d# ± #}
+	%%Final argument (the ± term) can be arbitrary arithmetic statements
+	%%Passes the output to RpgDiceFormat
+	\__rpg_dice_parse:n {#1}
   }
 
+%Pluralises words based on the tokens
 \NewDocumentCommand{\RpgPlural}{o m m }
 {
+	% #1: override plural (replaces +s) #2 count #3 word/phrase to be checked
 	\int_compare:nTF {#2  = 1 }
 	{
 		1~#3
@@ -80,126 +38,25 @@
 		}
 	}
 }
+
+\input{core/lowlevel/ordinal.tex}
+
 % takes an integer and outputs the ordinal text
 \NewExpandableDocumentCommand{\RpgOrdinal}{o m}
 {
-    % Output the number first, then the calculated suffix
+    % Output the number first
     \int_to_arabic:n { #2 }
+	%then the calculated suffix
 	\IfNoValueTF{#1}
 	{
-		\__compute_suffix:n { #2 }
+		\__compute_ordinal_suffix:n { #2 }
 	}
 	{
-		#1{\__compute_suffix:n { #2 }}
+		%Allow for arbitrary token insertion between the two (i.e. for formatting)
+		#1{\__compute_ordinal_suffix:n { #2 }}
 	}
 }
 
-% Ordinal wrapper function, compute the suffix: checks for 11, 12, 13 first
-\cs_new:Npn \__compute_suffix:n #1
-{
-    % Get the last two digits (modulo 100) for teens check
-    \int_set:Nn \l_tmpa_int { \int_mod:nn { #1 } { 100 } }
 
-    % Check special cases 11, 12, 13
-    \int_case:nnF { \l_tmpa_int }
-    {
-        {11} {th}
-        {12} {th}
-        {13} {th}
-    }
-    {
-        % If not a teen, defer to the single-digit check
-        \__compute_suffix_normal:n { #1 }
-    }
-}
+\input{core/lowlevel/misc}
 
-% compute the suffix based on the last digit
-\cs_new:Npn \__compute_suffix_normal:n #1
-{
-    % Get the last digit (modulo 10)
-    \int_set:Nn \l_tmpa_int { \int_mod:nn { #1 } { 10 } }
-
-    % Check for 1, 2, or 3
-    \int_case:nnF { \l_tmpa_int }
-    {
-        {1} {st}
-        {2} {nd}
-        {3} {rd}
-    }
-    {
-        % Default case
-        {th}
-    }
-}
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Gets the width of a space
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\box_new:N \l__rpg_space_box
-\hbox_set:Nn \l__rpg_space_box {~}
-\dim_new:N \l__rpg_space_dim
-\dim_set:Nn \l__rpg_space_dim { \box_wd:N \l__rpg_space_box }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Some keys are required for proper execution of macros.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\msg_new:nnn { rpg } { key_required } { #1~requires~key~``#2''~to~be~set. }
-
-% #1 - key value
-% #2 - macro name
-% #3 - key name
-\cs_new_protected:Npn \__rpg_check_for_key:Nnn #1#2#3
-  {
-    \group_begin:
-      \str_set:Nx \l_tmpa_str { #1 }
-
-      \str_if_empty:NT { \l_tmpa_str }
-        { \msg_error:nnnn { rpg } { key_required } { #2 } { #3 } }
-    \group_end:
-  }
-
-
-%%%%%% Some preamble stuff
-
-\NewDocumentCommand \RpgLayoutOnly { +m }
-{
-	\bool_if:NT \l__rpg_layout_bool
-	  {
-			#1
-	  }
-}
-
-\NewDocumentCommand \RpgActivateLayout { }
-{
-	\bool_set_true:N \l__rpg_layout_bool
-}
-%%%%%% Theme switching
-
-\tl_new:N \l__rpg_theme_path
-\msg_new:nnn { rpg } { theme_missing } {Could~not~locate~theme~#1~on~filepath~#2}
-
-\NewDocumentCommand\RpgSetTheme { m }
-{
-	\RpgLayoutOnly
-	{
-		\clearpage
-	}
-	\def\temp@themePath{\l__rpg_theme_path/#1/#1.cfg}
-	\file_if_exist:nTF \temp@themePath
-	{
-		\input{\tl_use:N \temp@themePath}
-	}
-	{
-		\msg_error:nnxx { rpg } { theme_missing } { #1 } { \temp@themePath }
-	}
-
-}
-
-\NewDocumentCommand\RpgSetThemePath { m }
-{
-	\tl_set:Nn \l__rpg_theme_path {#1}
-}
-\RpgSetThemePath{themes}

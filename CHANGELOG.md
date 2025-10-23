@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * Minor stylistic changes to make the linter happy
 
+#### RpgDice
+
+* Altered the regular expression capture/evaluate to allow arbitrary numerical evaluation of modifiers, and non-counted dice (i.e. d8 -> 1d8)
+
+* Changed the behaviour of RpgDiceFormat to take only three arguments (and shifted the mean-calculation into the dnd-specific implementation)
+
+* Wrote documentation for functions
+
 ## Version 0.1.0 (2025-10-22)
 
 ### Added

@@ -79,6 +79,7 @@
 % % % conflicts (e.g., package options).
 % % % Low-level modules first.
 
+\RequirePackage{core/theme_engine}
 \RequirePackage {core/rpgutility}   % utility functions
 \RequirePackage {core/rpgcolors}	% color definitions
 \RequirePackage {core/rpgfonts}	    % font definitions
