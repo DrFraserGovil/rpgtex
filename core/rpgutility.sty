@@ -1,10 +1,12 @@
 \ExplSyntaxOn
 
+\input{core/lowlevel/regex}
+\input{core/lowlevel/ordinal.tex}
+\input{core/lowlevel/misc}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Dice macro
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{core/lowlevel/regex}
-
 \DeclareDocumentCommand{ \RpgDiceFormat} {m m m}
 {
 	%Arguments: #1: Dice Number, #2: Dice Sides, #3: Modifier
@@ -13,12 +15,18 @@
 }
 
 \DeclareDocumentCommand { \RpgDice } { m }
-  {
+{
 	%%Parses input of the form { #d# | d# | #d# ± # | d# ± #}
 	%%Final argument (the ± term) can be arbitrary arithmetic statements
 	%%Passes the output to RpgDiceFormat
 	\__rpg_dice_parse:n {#1}
-  }
+	
+	%%Parsing function defined in lowlevel/regex
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Text Formatting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Pluralises words based on the tokens
 \NewDocumentCommand{\RpgPlural}{o m m }
@@ -39,9 +47,8 @@
 	}
 }
 
-\input{core/lowlevel/ordinal.tex}
-
 % takes an integer and outputs the ordinal text
+% internal functions defined in lowlevel/ordinal.tex
 \NewExpandableDocumentCommand{\RpgOrdinal}{o m}
 {
     % Output the number first
@@ -58,5 +65,5 @@
 }
 
 
-\input{core/lowlevel/misc}
+
 

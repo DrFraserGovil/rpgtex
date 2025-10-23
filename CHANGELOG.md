@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * Minor stylistic changes to make the linter happy
 
+* Migrated most of the ugly expl3 internal implementations into the /core/lowlevel directory to improve readability of the main modules.
+
 #### RpgDice
 
 * Altered the regular expression capture/evaluate to allow arbitrary numerical evaluation of modifiers, and non-counted dice (i.e. d8 -> 1d8)
