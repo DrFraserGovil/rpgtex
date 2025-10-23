@@ -10,12 +10,12 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Some keys are required for proper execution of macros.
+% Forces a readable error if the key is not provided (rather than waiting to 
+% throw when the variable is used-but-not-there)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \msg_new:nnn { rpg } { key_required } { #1~requires~key~``#2''~to~be~set. }
 
-% #1 - key value
-% #2 - macro name
-% #3 - key name
+% #1 - key value  #2 - macro name   #3 - key name
 \cs_new_protected:Npn \__rpg_check_for_key:Nnn #1#2#3
   {
     \group_begin:
