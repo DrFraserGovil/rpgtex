@@ -1,0 +1,40 @@
+\ExplSyntaxOn
+\NewDocumentCommand \RpgLayoutOnly { +m }
+{
+	\bool_if:NT \l__rpg_layout_bool
+	  {
+			#1
+	  }
+}
+
+\NewDocumentCommand \RpgActivateLayout { }
+{
+	\bool_set_true:N \l__rpg_layout_bool
+}
+%%%%%% Theme switching
+
+\tl_new:N \l__rpg_theme_path
+\msg_new:nnn { rpg } { theme_missing } {Could~not~locate~theme~#1~on~filepath~#2}
+
+\NewDocumentCommand\RpgSetTheme { m }
+{
+	\RpgLayoutOnly
+	{
+		\clearpage
+	}
+	\def\temp@themePath{\l__rpg_theme_path/#1/#1.cfg}
+	\file_if_exist:nTF \temp@themePath
+	{
+		\input{\tl_use:N \temp@themePath}
+	}
+	{
+		\msg_error:nnxx { rpg } { theme_missing } { #1 } { \temp@themePath }
+	}
+
+}
+
+\NewDocumentCommand\RpgSetThemePath { m }
+{
+	\tl_set:Nn \l__rpg_theme_path {#1}
+}
+\RpgSetThemePath{themes}
