@@ -20,7 +20,7 @@
 	%%Final argument (the ± term) can be arbitrary arithmetic statements
 	%%Passes the output to RpgDiceFormat
 	\__rpg_dice_parse:n {#1}
-	
+
 	%%Parsing function defined in lowlevel/regex
 }
 
@@ -64,6 +64,27 @@
 	}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Referencing
+%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\NewDocumentCommand{\RpgPage}{O{t} m}
+{
+    % O{t}: Optional argument #1 (default is 't' for standard 'text' style)
+    % m: Mandatory argument #2 (the label)
+
+    \def\temp@content{page~\pageref{#2}}
+
+	\str_case:nnF {#1}
+	{
+		{p}{(\temp@content)}
+		{b}{[\temp@content]}
+		{c}{\{\temp@content\}}
+		{t}{\temp@content}
+	}
+	{
+		?\temp@content?
+	}
+}
 
 

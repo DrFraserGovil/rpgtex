@@ -108,9 +108,9 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 
 			The provided classes are:
 			\begin{enumerate}
-				\item \texttt{rpgbook} (page~\pageref{S:bookClass}). Based on the standard book class, this is designed for larger RPG documents.
-				\item \texttt{rpghandout} (page~\pageref{S:handoutClass}). Based on the article class, this is designed for shorter documents
-				\item \texttt{rpgcard} (page~\pageref{S:cardClass}). A small-document class designed for creating modular `handout' cards for items, spells or abilities.
+				\item \texttt{rpgbook} (\RpgPage{S:bookClass}). Based on the standard book class, this is designed for larger RPG documents.
+				\item \texttt{rpghandout} (\RpgPage{S:handoutClass}). Based on the article class, this is designed for shorter documents
+				\item \texttt{rpgcard} (\RpgPage{S:cardClass}). A small-document class designed for creating modular `handout' cards for items, spells or abilities.
 			\end{enumerate}
 	\section{Compiling}
 
@@ -139,7 +139,7 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 
 		\begin{macrolist}
 			\RpgMacro{\RpgDice,{{m}}}
-				{
+				{\label{Macro:Dice}
 					Evaluates expressions of the form $n\mathrm{d}x + m$, and outputs using a theme-dependent layout.
 				}
 				{
@@ -164,7 +164,7 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 					\newline\vspace{1em}
 					{\RpgFontSubsubsection{} Themes}
 					\newline
-					\verb|RpgDice| is neat, but not necessarily impressive by itself. The true power of the expression is that it calls \verb|RpgDiceFormat| (page~\pageref{Macro:DiceFormat}) on the internal values. This is a value which can be overwritten by themes, and allows (for instance), the \verb|dnd| theme to compute mean values, as is found in D\&D monster stat blocks:
+					\verb|RpgDice| is neat, but not necessarily impressive by itself. The true power of the expression is that it calls \verb|RpgDiceFormat| (\RpgPage{Macro:DiceFormat}) on the internal values. This is a value which can be overwritten by themes, and allows (for instance), the \verb|dnd| theme to compute mean values, as is found in D\&D monster stat blocks:
 					
 					\RenewDocumentCommand{\RpgDiceFormat}{m m m}{\DndTempDiceFormat{#1}{#2}{#3}}
 
@@ -178,6 +178,52 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 					\end{RpgTable}
 
 				
+				}
+			\RpgMacro{\RpgOrdinal,{{o m}}}
+				{
+					Converts a numeric value to the corresponding ordinal.
+				}
+				{
+					\RpgOrdinal[<command>]{<count>}
+				}
+				{
+					The command outputs the \verb|count| followed by the english abbreviations for the corresponding ordinal. The optional \verb|command| argument is inserted between the numeral and the suffix, allowing for the customisation of appearances.
+					\begin{RpgTable}{XX}
+						Example & Output \\
+						\tabverbExample{\RpgOrdinal{1}}
+						\tabverbExample{\RpgOrdinal{2}}
+						\tabverbExample{\RpgOrdinal{13}}
+						\tabverbExample{\RpgOrdinal[\textsuperscript]{7}}
+						\tabverbExample{\RpgOrdinal[\textbf]{133}}
+						\tabverbExample{\RpgOrdinal[<arbitrary text>]{133}}
+					\end{RpgTable}
+					{\it Note that due to a lack of brace-capturing, it is not possible to chain multiple commands.}.
+				}
+			\RpgMacro{\RpgPage,{{O{t} m}}}
+				{
+					Outputs the current page reference for a label, with an option to enclose it in specific brackets or parentheses.
+				}
+				{
+					\RpgPage[t/p/b/c]{<label-reference>}
+				}
+				{
+					The optional arguments wrapping of the main reference. The options are:
+					\begin{description}
+						\item[t (default)] No wrapping
+						\item[p] (parentheses)
+						\item[b] [square brackets]
+						\item[c] \{curly braces\}
+					\end{description}
+					An invalid input resolves to \verb|?page~\pageref{<ref}?|. 
+					\label{example:current page}
+					\begin{RpgTable}{XX}
+						Example & Output \\
+						\tabverbExample{\RpgPage{example:current page}}
+						\tabverbExample{\RpgPage[p]{example:current page}}
+						\tabverbExample{\RpgPage[b]{example:current page}}
+						\tabverbExample{\RpgPage[c]{example:current page}}
+						\tabverbExample{\RpgPage[(error)]{example:current page}}
+					\end{RpgTable}
 				}
 			\RpgMacro{\RpgPlural,{{o m m}}}
 				{
@@ -200,35 +246,16 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 						\tabverbExample{\RpgPlural[octopodes]{359}{octopus}}
 					\end{RpgTable}
 				}
-			\RpgMacro{\RpgOrdinal,{{o m}}}
-				{
-					Converts a numeric value to the corresponding ordinal.
-				}
-				{
-					\RpgOrdinal[<command>]{<count>}
-				}
-				{
-					The command outputs the \verb|count| followed by the english abbreviations for the corresponding ordinal. The optional \verb|command| argument is inserted between the numeral and the suffix, allowing for the customisation of appearances.
-					\begin{RpgTable}{XX}
-						Example & Output \\
-						\tabverbExample{\RpgOrdinal{1}}
-						\tabverbExample{\RpgOrdinal{2}}
-						\tabverbExample{\RpgOrdinal{13}}
-						\tabverbExample{\RpgOrdinal[\textsuperscript]{7}}
-						\tabverbExample{\RpgOrdinal[\textbf]{133}}
-						\tabverbExample{\RpgOrdinal[<arbitrary text>]{133}}
-					\end{RpgTable}
-					{\it Note that due to a lack of brace-capturing, it is not possible to chain multiple commands.}.
-				}
-				
+
+			
 		\end{macrolist}
 
 	\section{Theme Commands}
 
 		\begin{macrolist}
-			\RpgMacro{\RpgDiceFormat,{{m m m m}}}
+			\RpgMacro{\RpgDiceFormat,{{m m m}}}
 				{\label{Macro:DiceFormat}
-					Executes the contents of the command if \verb|layout| mode is active.
+					Prints the values computed by \verb|RpgDice| \RpgPage[p]{Macro:Dice}
 				}
 				{
 					\RpgLayoutOnly{<content-to-execute>}
