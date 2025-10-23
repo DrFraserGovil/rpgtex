@@ -1,49 +1,46 @@
 
-\ExplSyntaxOff
 \renewcommand{\thepart}{\arabic{part}}
-\renewcommand\DrawPartPage[2]
+\ExplSyntaxOn
+
+\RenewDocumentCommand\RpgDrawPartPage{m}
 {
-   \node [anchor=south west, inner sep=0pt, minimum width=\paperwidth, minimum height=\paperheight] (image) at (current page.south west)
-    {
-        \includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
-    };
 
     % Optional: Add a semi-transparent black overlay for text visibility
-	\fill [black, opacity=0.8] ($(current page.center)+(-4cm,-4cm)$) rectangle ($(current page.center)+(4cm,4cm)$) ;
+	\fill [black, opacity=0.8] ($(current~page.center)+(-4cm,-4cm)$) rectangle ($(current~page.center)+(4cm,4cm)$) ;
 	\def\radius{0.2\paperwidth}
 	\def\overset{10}
 
-	\node at ($(current page.center)+(0,1)$) {\RpgContour[white]{\MakeUppercase{\RpgFontPart{}Part \thepart}}};
-	\node at ($(current page.center)+(0,-1)$) {\parbox[t]{6cm}{\RpgContour[white!70!titleblue]{\RpgFontPart \Huge {#2}}}};
+	\node at ($(current~page.center)+(0,1)$) {\RpgContour[white]{\MakeUppercase{\RpgFontPart{}Part~~\thepart}}};
+	\node at ($(current~page.center)+(0,-1)$) {\parbox[c]{6cm}{\centering\RpgContour[white!70!titleblue]{\RpgFontPart \Huge {#1}}}};
 }
 
 
 \renewcommand{\RpgBookTitle}[1]{
 
-	\thispagestyle{empty} % Ensure no headers/footers on the part page
-	\begin{tikzpicture}[remember picture, overlay]
-		\node [anchor=south west, inner sep=0pt, minimum width=\paperwidth, minimum height=\paperheight] (image) at (current page.south west)
-		{
-		\includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
-		};
+	% \thispagestyle{empty} % Ensure no headers/footers on the part page
+	% \begin{tikzpicture}[remember~picture, overlay]
+	% 	\node [anchor=south west, inner sep=0pt, minimum width=\paperwidth, minimum height=\paperheight] (image) at (current page.south west)
+	% 	{
+	% 	\includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
+	% 	};
 
-			\node at ($(current page.north)+(0,-3cm)$) {{\RpgContour[black]{\RpgFontTitle\@title}}};
+	% 		\node at ($(current page.north)+(0,-3cm)$) {{\RpgContour[black]{\RpgFontTitle\@title}}};
 
-		\node[anchor=south] at ($(current page.south)+(0,+3cm)$) {\parbox[t]{0.9\paperwidth}{
-			\begin{center}
-			{\RpgContour[black]{\RpgFontSubTitle\@subtitle}}
+	% 	\node[anchor=south] at ($(current page.south)+(0,+3cm)$) {\parbox[t]{0.9\paperwidth}{
+	% 		\begin{center}
+	% 		{\RpgContour[black]{\RpgFontSubTitle\@subtitle}}
 
-			\vspace{1cm}
+	% 		\vspace{1cm}
 
-			\RpgContour[black]{\RpgFontSubTitle\@author}
-			\end{center}
-			}
+	% 		\RpgContour[black]{\RpgFontSubTitle\@author}
+	% 		\end{center}
+	% 		}
 
 
-	};
+	% };
 
-	\end{tikzpicture}
-	\clearpage
+	% \end{tikzpicture}
+	% \clearpage
 
 }
 

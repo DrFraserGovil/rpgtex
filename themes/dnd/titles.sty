@@ -1,16 +1,7 @@
 
 \ExplSyntaxOff
-\renewcommand\DrawPartPage[2]
+\renewcommand\RpgDrawPartPage[2]
 {
-	%
-    % 1. Background Image
-   \node [anchor=south west, inner sep=0pt, minimum width=\paperwidth, minimum height=\paperheight] (image) at (current page.south west)
-    {
-        \includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
-    };
-
-	    % Optional: Add a semi-transparent black overlay for text visibility
-    % \fill [white, opacity=0.5] (current page.south west) rectangle (current page.north east);
 
 	\def\radius{0.2\paperwidth}
 	\def\overset{10}

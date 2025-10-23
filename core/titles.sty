@@ -1,43 +1,32 @@
 \ExplSyntaxOn
 
+\input{core/lowlevel/image_pages}
 
 
-\cs_new_protected:Nn \__part_with_image:nn
-{
-	\thispagestyle{empty} % Ensure no headers/footers on the part page
-	\begin{tikzpicture}[remember~picture, overlay]
-		\DrawPartPage{#1}{#2}
-	\end{tikzpicture}
-	\phantomsection
-	\addcontentsline{toc}{part}{Part~\thepart{}:~#2}
-	\clearpage % Ensure the content starts on the next page
-}
-
+\NewDocumentCommand\RpgDrawPartPage{m}{}
 
 %%Redefine part to accept custom arguments
-\let\__rpg_orig_part\part
-
-
-\newcommand\DrawPartPage[2]
-{}
-
-\RequirePackage{emptypage}
-
+%% internal arguments defined in core/lowlevel/image_pages.tex
 \RenewDocumentCommand{\part}{s o m }
 {
-	\IfBooleanTF {#1}
-	{ \__rpg_orig_part*{#3} } % Starred version
+	\bool_if:NTF{#1}
+	{ %%starred version uses the underlying class part
+		\__rpg_orig_part{#3}
+	}
 	{
-		\IfNoValueTF { #2 }
-		{
-			% Case 1: NO image provided - use the standard part command
+		\bool_if:NTF{\str_if_eq_p:nn{#2}{none}}
+		{ %%use default version if optional argument = 'none'
 			\__rpg_orig_part{#3}
 		}
 		{
-			% % Case 2: IMAGE provided - use the custom command with the image
-			\clearpage
-			\stepcounter{part}
-			\__part_with_image:nn { #2 } { #3 }
+			%%otherwise use the custom theme part (RpgDrawPartPage), with or without a background image
+			\bool_if:NTF{\__blank_background:n{#2}}
+			{
+				\__part_no_image:n{#3}
+			}
+			{
+				\__part_with_image:nn{#2}{#3}
+			}
 		}
 	}
 }
@@ -54,22 +43,22 @@
 {
 	\thispagestyle{empty}
 
-	\begin{tikzpicture}[remember~picture, overlay]
-		\node[anchor=south] at ($(current~page.center)$) {\parbox[t]{0.9\paperwidth}{
-			\begin{center}
-				{\RpgFontTitle\color{black} \@title}
-				\newline
-				\vspace{1cm}
+	% \begin{tikzpicture}[remember~picture, overlay]
+	% 	\node[anchor=south] at ($(current~page.center)$) {\parbox[t]{0.9\paperwidth}{
+	% 		\begin{center}
+	% 			{\RpgFontTitle\color{black} \@title}
+	% 			\newline
+	% 			\vspace{1cm}
 
-				{{\RpgFontSubTitle { \color{black} \@subtitle}}}
+	% 			{{\RpgFontSubTitle { \color{black} \@subtitle}}}
 
-			\vspace{1cm}
+	% 		\vspace{1cm}
 
-			\par{\RpgFontSubTitle { \color{black}\@author}}
-			\end{center}
-			}};
+	% 		\par{\RpgFontSubTitle { \color{black}\@author}}
+	% 		\end{center}
+	% 		}};
 
-	\end{tikzpicture}
+	% \end{tikzpicture}
 	\clearpage
 
 }
