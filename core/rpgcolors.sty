@@ -12,7 +12,7 @@
 \colorlet {tablecolor}   {themecolor} % Table even row background
 
 % Assign a new value to all the co-varying elements
-\NewDocumentCommand {\RpgSetThemeColor} { O {themecolor} }
+\NewDocumentCommand {\RpgSetThemeColor} { m }
   {
     \colorlet {themecolor}   {#1}
     \colorlet {tipcolor} {#1}

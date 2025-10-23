@@ -35,12 +35,12 @@
 
 
 % set main colors
-\RpgSetThemeColor[PhbLightGreen]{}
+\RpgSetThemeColor{PhbLightGreen}
 
 %then the print mode contingencies
 \ifnum\csPrintMode=1
 % 	\else
-	\RpgSetThemeColor[white]{}
+	\RpgSetThemeColor{white}
 	\colorlet{narrationcolor}{white}
 	\tcbset{
 		rpg tip/.append~style={
