@@ -1,10 +1,7 @@
+
 \documentclass[size=10pt]{rpgbook}
+\usepackage{xltabular}
 
-% \usepackage[document]{ragged2e}
-% \usepackage[size=10pt]{rpg}
-
-% \usepackage{blindtext}
-% \usepackage{hyperref}
 \usepackage{listings}
 \lstset{
   basicstyle=\ttfamily,
@@ -15,6 +12,61 @@
   showtabs=false,
   tabsize=1,
 }
+\usepackage{makecell}
+\ExplSyntaxOn{}
+% Define a function to process the list of macros
+\cs_new_protected:Npn \__rpg_doc_macro_list:n #1
+{
+    % Split the argument #1 by commas and iterate over each item
+    \clist_map_inline:nn { #1 }
+    {
+        % This code runs for each item (#1) in the list
+        \tl_set:Nn \l_tmpa_tl { ##1 } % Store the item in a temp token list
+        \tl_trim_spaces:N \l_tmpa_tl % Remove any surrounding spaces
+
+        % Print the item using \verb, followed by \\ to force a newline.
+        \verb| ##1 | \\
+    }
+}
+
+\NewDocumentEnvironment{macrolist}{+b}{
+	\vspace{1em}
+    % \hspace{-1.5cm}
+	\let\__rpg_colsep:&
+	\noindent\begin{xltabular}{\linewidth}{rX}
+		#1
+    \end{xltabular}}{}
+
+\NewDocumentCommand{\RpgMacro}{m +m +m +m}{\vspace{1em}\makecell[rt]{  \__rpg_doc_macro_list:n { #1 }} &
+
+	#2
+
+	% \subsubsection*{Syntax}
+	\newline\vspace{1em}
+	{\RpgFontSubsubsection{} Syntax}
+	\newline
+
+	\verb|#3|
+	
+	\newline\vspace{1em}
+	{\RpgFontSubsubsection{} Behaviour}
+	\newline
+
+	#4
+	\\
+}
+\newcommand{\code}[1]{\texttt{(\detokenize{#1})}}
+\usepackage{verbatimbox}
+\newcommand\tabverbExample[1]
+{
+	\verb|#1| & #1 \\
+}
+
+\ExplSyntaxOff{}
+\usepackage{blindtext}
+
+
+
 
 
 \def\rpgtex{\texttt{rpgtex}}
@@ -28,8 +80,7 @@
 
 	%%% fancy intro/abstract
 		\onecolumn{}
-		~
-		\vfill{}
+		~\vfill{}
 		\newcommand\forcelink[2]
 		{
 			\href{#1}{{\color{blue!70!black}#2}}
@@ -37,7 +88,7 @@
 		\begin{center}
 		\parbox[c]{0.8\linewidth}{
 			\large
-			\justifying
+			\justifying{}
 
 			\RpgDropCap{W}{elcome to the \rpgtex{} package}. This \LaTeX{} package is designed to allow users to flexibly typeset documents associated with Role Playing Games such as \textit{Dungeons \& Dragons} -- and many more besides. This packages defines a central engine: \texttt{rpgcore} which define a number of useful functions and classes, and a flexible set of \texttt{themes} which control how those commands are rendered in the final document.
 
@@ -57,7 +108,26 @@
 
 % \chapter{Introduction}
 
-
+\ExplSyntaxOn
+	\tl_new:N \l__temp_dice
+	\NewDocumentCommand{ \DndTempDiceFormat }{m m m}
+	{
+		% #1: Dice Number, #2: Dice Sides, #3: Modifier
+		\tl_if_blank:VTF {#1}
+		{
+			% CASE: called without a dice count (i.e. d8), equal to 1d8
+			\tl_set:Nn\l__temp_dice{1}
+		}
+		{
+			\tl_set:Nn \l__temp_dice{#1}
+		}
+		\tl_set:Nn \l_tmp_mean_tl { \fp_eval:n {
+				floor ( \tl_use:N{\l__temp_dice} * ( #2 + 1 ) / 2 ) + (#3)
+			}}
+			\l_tmp_mean_tl{}~(#1 d#2
+			\fp_compare:nNnTF { #3 } { = } { 0 }{}{#3})
+	}
+	\ExplSyntaxOff
 
 
 	\part{rpgtex Core}

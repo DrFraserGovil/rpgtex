@@ -1,14 +1,19 @@
 \ExplSyntaxOn
-\RenewDocumentCommand{ \RpgDiceFormat }{m m m m}
+\RenewDocumentCommand{ \RpgDiceFormat }{m m m}
 {
-     % #1: Dice Number, #2: Dice Sides, #3: Modifier, #4: Mean result
-     \str_if_empty:nTF { #2 }
-     {
-       #1				     % CASE: Not a roll (just a number like "12")
-     }
-     {
-       #4~({#1 d #2 #3}) 	 % CASE: Is a dice roll (e.g., "2d6+5")
-     }
+     % #1: Dice Number, #2: Dice Sides, #3: Modifier
+     \str_if_empty:nTF { #1 }
+	 {
+		 % CASE: called without a dice count (i.e. d8), equal to 1d8
+		  \def\temp@dice{1}
+      }
+	  {
+		  \def\temp@dice{#1}
+	  }
+	  \tl_set:Nn \l_tmp_mean_tl { \fp_eval:n {
+              floor ( \temp@dice * ( #2 + 1 ) / 2 ) + (#3)
+          }}
+		\temp@dice{#1}d#2#3
 }
 \ExplSyntaxOff
 

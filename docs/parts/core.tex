@@ -50,11 +50,10 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 				\item  Download this GitHub repository as a ZIP archive using the Clone or download link above.
     			\item On Overleaf, click the New Project button and select Upload Project. Upload the ZIP archive you downloaded from this repository.
 				\item Manually create the file \texttt{rpg-config.cfg} with the contents ``\verb|\edef\RpgPackagePath{../}|''. This replaces the configuration step described below.
-
 			\end{enumerate}
 
 
-	\section{Configuring \rpgtex{}} \label{S:Configuration}
+	\section{Configuring \rpgtex{}}\label{S:Configuration}
 
 		Wherever one installs \rpgtex{} from, it is vital that it is properly configured. From within the \rpgtex{}-root directory, call:
 
@@ -109,9 +108,9 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 
 			The provided classes are:
 			\begin{enumerate}
-				\item \texttt{rpgbook} (page \pageref{S:bookClass}). Based on the standard book class, this is designed for larger RPG documents.
-				\item \texttt{rpghandout} (page \pageref{S:handoutClass}). Based on the article class, this is designed for shorter documents
-				\item \texttt{rpgcard} (page \pageref{S:cardClass}). A small-document class designed for creating modular `handout' cards for items, spells or abilities.
+				\item \texttt{rpgbook} (page~\pageref{S:bookClass}). Based on the standard book class, this is designed for larger RPG documents.
+				\item \texttt{rpghandout} (page~\pageref{S:handoutClass}). Based on the article class, this is designed for shorter documents
+				\item \texttt{rpgcard} (page~\pageref{S:cardClass}). A small-document class designed for creating modular `handout' cards for items, spells or abilities.
 			\end{enumerate}
 	\section{Compiling}
 
@@ -123,5 +122,157 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 			pdflatex main.tex #fails
 		\end{lstlisting}
 
+\onecolumn
+
+% \begin{myverbbox}{\RpgPluralCode}
+
+% \end{myverbbox}
+
 
 \chapter{Core Commands}
+
+	\blindtext{}
+
+
+
+	\section{Document Commands}
+
+		\begin{macrolist}
+			\RpgMacro{\RpgDice,{{m}}}
+				{
+					Evaluates expressions of the form $n\mathrm{d}x + m$, and outputs using a theme-dependent layout.
+				}
+				{
+					\RpgDice{<dice-expression>}
+				}{
+					Uses regular expressions to extract and evaluate the dice expression. The \verb|dice-expression| must follow the following format:
+					\begin{enumerate}
+						\item It must contain either `d' or `D' (the `dice symbol')
+						\item The dice symbol must be immediately followed by a single number (the `dice size')
+						\item The dice symbol may optionally be prefixed by a single number (the `dice count')
+						\item The first (non-whitespace) character must be either the dice count (if present) or the dice symbol
+						\item The dice size must be followed by either a `+', '-', or the end of the expression.
+						\item After this, any number of standard numeric expressions may follow. This expression will be evaluated into a single `modifier'.
+					\end{enumerate} 
+					\begin{RpgTable}{XX}
+						Example & Output \\
+						\tabverbExample{\RpgDice{1d6-2}}
+						\tabverbExample{\RpgDice{2D6 + 3*2^2}}
+						\tabverbExample{\RpgDice{1d16}}
+						\tabverbExample{\RpgDice{d8-3}}
+					\end{RpgTable}
+					\newline\vspace{1em}
+					{\RpgFontSubsubsection{} Themes}
+					\newline
+					\verb|RpgDice| is neat, but not necessarily impressive by itself. The true power of the expression is that it calls \verb|RpgDiceFormat| (page~\pageref{Macro:DiceFormat}) on the internal values. This is a value which can be overwritten by themes, and allows (for instance), the \verb|dnd| theme to compute mean values, as is found in D\&D monster stat blocks:
+					
+					\RenewDocumentCommand{\RpgDiceFormat}{m m m}{\DndTempDiceFormat{#1}{#2}{#3}}
+
+					
+					\begin{RpgTable}{XX}
+						Example (with \verb|\RpgSetTheme{dnd}|) & Output \\
+						\tabverbExample{\RpgDice{1d6-2}}
+						\tabverbExample{\RpgDice{2D6 + 3*2^2}}
+						\tabverbExample{\RpgDice{1d12}}
+						\tabverbExample{\RpgDice{d83-3}}
+					\end{RpgTable}
+
+				
+				}
+			\RpgMacro{\RpgPlural,{{o m m}}}
+				{
+					Generates grammatically correct plural forms of a word based on a given count.
+				}
+				{
+					\RpgPlural[<custom-plural>]{count}{<text>}
+				}
+				{
+					The command outputs the count followed by the value of \verb|<text>|. For a count of 1, the command then finishes. For any other count, it appends an ``s'', pluralizing the text.
+
+					The optional argument \verb|[<custom-plural>]| overrides the default logic, allowing for irregular plurals.
+
+
+					\begin{RpgTable}{XX}
+						Example & Output \\
+						\tabverbExample{\RpgPlural{1}{hat}}
+						\tabverbExample{\RpgPlural{2}{hat}}
+						\tabverbExample{\RpgPlural[octopodes]{1}{octopus}}
+						\tabverbExample{\RpgPlural[octopodes]{359}{octopus}}
+					\end{RpgTable}
+				}
+			\RpgMacro{\RpgOrdinal,{{m}}}
+				{
+					Converts a numeric value to the corresponding ordinal.
+				}
+				{
+					\RpgOrdinal[<command>]{<count>}
+				}
+				{
+					The command outputs the \verb|count| followed by the english abbreviations for the corresponding ordinal. The optional \verb|command| argument is inserted between the numeral and the suffix, allowing for the customisation of appearances.
+					\begin{RpgTable}{XX}
+						Example & Output \\
+						\tabverbExample{\RpgOrdinal{1}}
+						\tabverbExample{\RpgOrdinal{2}}
+						\tabverbExample{\RpgOrdinal{13}}
+						\tabverbExample{\RpgOrdinal[\textsuperscript]{7}}
+						\tabverbExample{\RpgOrdinal[\textbf]{133}}
+						\tabverbExample{\RpgOrdinal[<arbitrary text>]{133}}
+					\end{RpgTable}
+					{\it Note that due to a lack of brace-capturing, it is not possible to chain multiple commands.}.
+				}
+				
+		\end{macrolist}
+
+	\section{Theme Commands}
+
+		\begin{macrolist}
+			\RpgMacro{\RpgDiceFormat,{{m m m m}}}
+				{\label{Macro:DiceFormat}
+					Executes the contents of the command if \verb|layout| mode is active.
+				}
+				{
+					\RpgLayoutOnly{<content-to-execute>}
+				}
+				{
+					If the internal value \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, then \verb|content-to-execute| is run, otherwise it is ignored.
+
+					This command is primarily used by theme developers and document class files to conditionally load or activate modules based on whether the package was loaded via a document class (layout mode active) or directly via \verb|\usepackage{rpgtex}|.
+				}
+			\RpgMacro{\RpgLayoutOnly,{{m}}}
+				{
+					Executes the contents of the command if \verb|layout| mode is active.
+				}
+				{
+					\RpgLayoutOnly{<content-to-execute>}
+				}
+				{
+					If the internal value \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, then \verb|content-to-execute| is run, otherwise it is ignored.
+
+					This command is primarily used by theme developers and document class files to conditionally load or activate modules based on whether the package was loaded via a document class (layout mode active) or directly via \verb|\usepackage{rpgtex}|.
+				}
+			\RpgMacro{\RpgSetTheme,{{m}}}
+				{
+					Activates a chosen theme.
+				}
+				{
+					\RpgSetTheme{<theme-name>}
+				}
+				{
+					Searches for the file \verb|<theme-path>/<theme-name>/<theme-name>.cfg|, and inputs it. If this is a properly configured theme file, then it activates the chosen theme given the current global parameters. If the file does not exist, throws an error.
+
+					If   \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, the command automatically inserts \verb|\clearpage|, as required to ensure the old headers are not overwritten by the new theme.
+
+					\verb|<theme-path>| is modified via \verb|RpgSetThemePath|.
+				}
+
+			\RpgMacro{\RpgSetThemePath,{{m}}}
+				{
+					Changes the value of the theme path searched for by \verb|RpgSetTheme|
+				}
+				{
+					\RpgSetTheme{<path-name>}
+				}
+				{
+					Updates an internal variable to be equal to the input value; does not check if the theme path is valid or not. Useful if you wish to create a new theme outside of the \verb|rpgtex| file structure.
+				}
+		\end{macrolist}

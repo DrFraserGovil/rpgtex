@@ -7,75 +7,91 @@
 %% Dice macro
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Matches { # | #d# | #d# + # | #d# - # } while ignoring spaces
-\regex_const:Nn \c__valid_dice_regex { \A\s*(\d+)(?:[dD](\d+)\s*(?:([+\-])\s*(\d+))?)?\s*\Z }
+% \regex_const:Nn \c__valid_dice_regex { \A\s*(\d+)(?:[dD](\d+)\s*(?:([+\-])\s*(\d+))?)?\s*\Z }
+\regex_const:Nn \c__valid_dice_regex { \A\s*(\d*)[dD](\d+)(.*)\s*\Z }
 
 \seq_new:N \l__dice_args_seq
 \tl_new:N \l__dice_number_tl
 \tl_new:N \l__dice_sides_tl
-\tl_new:N \l__dice_mod_sign_tl
+% \tl_new:N \l__dice_mod_sign_tl
 \tl_new:N \l__dice_mod_tl
 
 \msg_new:nnn { rpg } { dice / invalid_argument } { Invalid~argument~``#1''~passed~to~\noexpand\RpgDice. }
 
 
 
-\DeclareDocumentCommand{ \RpgDiceFormat} {m m m m}
+\DeclareDocumentCommand{ \RpgDiceFormat} {m m m}
 {
-	  % #1: Dice Number, #2: Dice Sides, #3: Modifier, #4: Mean result
-	 \str_if_empty:nTF { #2 }
+	  % #1: Dice Number, #2: Dice Sides, #3: Modifier
+	
+	  \str_if_empty:nTF { #1 }
       {
-        % CASE: Not a roll (just a number like "12")
-        #1
+        % CASE: called without a dice count (i.e. d8), equal to 1d8
+        1
       }
-      {
-        % CASE: Is a dice roll (e.g., "2d6+5")
-		#1 d #2 #3
-      }
+	  {
+		#1
+	  }
+		d #2
+	\fp_compare:nNnTF { #3 } { = } { 0 }{}{#3}
 }
 
 \DeclareDocumentCommand { \RpgDice } { m }
   {
     \group_begin:
+	\tl_set:Nn\l__dice_sides_tl\empty
       \regex_extract_once:NnNTF { \c__valid_dice_regex } { #1 } \l__dice_args_seq
         {
           \seq_pop_left:NN \l__dice_args_seq \l_tmpa_str % Don't need the full match
           \seq_pop_left:NN \l__dice_args_seq \l__dice_number_tl % # of dice
           \seq_pop_left:NN \l__dice_args_seq \l__dice_sides_tl % # of sides
-          \seq_pop_left:NN \l__dice_args_seq \l__dice_mod_sign_tl % +/- for add/sub
+        %   \seq_pop_left:NN \l__dice_args_seq \l__dice_mod_sign_tl % +/- for add/sub
           \seq_pop_left:NN \l__dice_args_seq \l__dice_mod_tl % modifier
+		
 
-		% --- Calculate the FINAL numerical result (Handles number-only and rolls) ---
-          % If \l__dice_sides_tl is empty, the calculation logic still works
-          % because the regex ensured one of the groups is always populated.
-          \tl_set:Nn \l_tmpa_tl { \l__dice_mod_sign_tl \l__dice_mod_tl } % Full modifier
-          \tl_set:Nn \l_tmpb_tl { \fp_eval:n {
-              floor ( \l__dice_number_tl * ( \l__dice_sides_tl + 1 ) / \tl_if_empty:NTF \l__dice_sides_tl { 1 } { 2 } ) \l_tmpa_tl
-          }}
+		\fp_set:Nn \l_tmpa_fp { \tl_if_empty:NTF \l__dice_mod_tl { 0 } { \l__dice_mod_tl } }
+		
 
           % --- Pass everything to the formatter ---
           \RpgDiceFormat
-            { \tl_use:N \l__dice_number_tl }     % #1: Number/Dice Count
-            { \tl_use:N \l__dice_sides_tl }      % #2: Sides (empty if not a roll)
-            { \tl_use:N \l_tmpa_tl }             % #3: Full Modifier (+X or -X or empty)
-            { \tl_use:N \l_tmpb_tl }             % #4: Calculated Result
+            { \l__dice_number_tl }     % #1: Number/Dice Count (can be empty = 1)
+            { \l__dice_sides_tl }      % #2: Size of dice
+            { \fp_compare:nNnT { \fp_use:N \l_tmpa_fp } { > } { 0 }{+}\fp_use:N \l_tmpa_fp} % #3 final computed modifier (with + if positive)
         }
-        { \msg_error:nnn { rpg } { dice / invalid_argument } { #1 }}
+        {
+			 \msg_error:nnn { rpg } { dice / invalid_argument } { #1  }
+			 }
     \group_end:
   }
 
-\NewDocumentCommand{\PluralS}{m}
+\NewDocumentCommand{\RpgPlural}{o m m }
 {
-	\int_compare:nF {#1  = 1 }
+	\int_compare:nTF {#2  = 1 }
 	{
-		s
+		1~#3
+	}
+	{
+		\IfNoValueTF{#1}
+		{
+			#2~#3s
+		}
+		{
+			#2~#1
+		}
 	}
 }
 % takes an integer and outputs the ordinal text
-\NewExpandableDocumentCommand{\ordinal}{m}
+\NewExpandableDocumentCommand{\RpgOrdinal}{o m}
 {
     % Output the number first, then the calculated suffix
-    \int_to_arabic:n { #1 }
-    \__compute_suffix:n { #1 }
+    \int_to_arabic:n { #2 }
+	\IfNoValueTF{#1}
+	{
+		\__compute_suffix:n { #2 }
+	}
+	{
+		#1{\__compute_suffix:n { #2 }}
+	}
 }
 
 % Ordinal wrapper function, compute the suffix: checks for 11, 12, 13 first
@@ -148,7 +164,7 @@
 
 %%%%%% Some preamble stuff
 
-\NewDocumentCommand \RpgLayoutOnly { m }
+\NewDocumentCommand \RpgLayoutOnly { +m }
 {
 	\bool_if:NT \l__rpg_layout_bool
 	  {
@@ -162,17 +178,28 @@
 }
 %%%%%% Theme switching
 
+\tl_new:N \l__rpg_theme_path
+\msg_new:nnn { rpg } { theme_missing } {Could~not~locate~theme~#1~on~filepath~#2}
+
 \NewDocumentCommand\RpgSetTheme { m }
 {
-	\clearpage
-	\def\themePath{themes/#1/#1.cfg}
-	\file_if_exist:nTF \themePath
+	\RpgLayoutOnly
 	{
-		\input{\tl_use:N \themePath}
+		\clearpage
+	}
+	\def\temp@themePath{\l__rpg_theme_path/#1/#1.cfg}
+	\file_if_exist:nTF \temp@themePath
+	{
+		\input{\tl_use:N \temp@themePath}
 	}
 	{
-		  \iow_log:x { RPG: Theme overload file not found: \themePath }
+		\msg_error:nnxx { rpg } { theme_missing } { #1 } { \temp@themePath }
 	}
 
 }
 
+\NewDocumentCommand\RpgSetThemePath { m }
+{
+	\tl_set:Nn \l__rpg_theme_path {#1}
+}
+\RpgSetThemePath{themes}
