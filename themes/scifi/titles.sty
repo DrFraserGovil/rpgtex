@@ -5,25 +5,31 @@
 \RenewDocumentCommand\RpgDrawPartPage{m}
 {
     % Add a semi-transparent black overlay for text visibility
-	\fill [black, opacity=0.8] ($(current  page.center)+(-4cm,-4cm)$) rectangle ($(current  page.center)+(4cm,4cm)$) ;
+	\fill [white, opacity=0.3] ($(current  page.center)+(-4cm,-4cm)$) rectangle ($(current  page.center)+(4cm,4cm)$) ;
 
-	\node at ($(current  page.center)+(0,1)$) {\RpgContour[white]{\MakeUppercase{\RpgFontPart{}Part    \thepart}}};
+	\node at ($(current  page.center)+(0,1)$) {
+		\RpgContour[outer=white!50!titleblue,inner=titleblue,style=\RpgFontPart{}]
+		{
+			\MakeUppercase{Part    \thepart}
+		}};
 	
-	\node at ($(current  page.center)+(0,-1)$) {\parbox[c]{6cm}{\centering\RpgContour[white!70!titleblue]{\RpgFontPart \Huge {#1}}}};
+	\node at ($(current  page.center)+(0,-1)$) {\parbox[c]{6cm}{\centering
+		\RpgContour[outer=white!50!titleblue,inner=titleblue,style=\RpgFontPart\Huge]{{#1}}}};
 }
 
 \RenewDocumentCommand{\RpgDrawCover}{}
 {
-	\node at ($(current page.north)+(0,-3cm)$) {\RpgColorContour{titleblue}{white}{\RpgFontTitle\@title}};
+	\node at ($(current page.north)+(0,-3cm)$) {\RpgContour[outer=titleblue,inner=white,style=
+	\RpgFontTitle]{\@title}};
 
 	\node[anchor=south] at ($(current page.south)+(0,+3cm)$) {\parbox[t]{0.9\paperwidth}{
 		\begin{center}
 			
-			{\RpgColorContour{titleblue}{white}{\RpgFontSubTitle\@subtitle}}
+			{\RpgContour[outer=white,inner=titleblue!90!white,style=\RpgFontSubTitle]{\@subtitle}}
 
 			\vspace{1cm}
 
-			\RpgColorContour{titleblue}{white}{\RpgFontSubTitle\@author}
+			{\RpgContour[outer=white,inner=titleblue!90!white,style=\RpgFontSubTitle]{\@author}}
 		\end{center}
 	}};
 }

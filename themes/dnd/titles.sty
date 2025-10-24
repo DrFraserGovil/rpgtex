@@ -17,7 +17,7 @@
 
 \RenewDocumentCommand{\RpgDrawCover}{}
 {	
-	\node at ($(current page.north)+(0,-3cm)$) {\RpgColorContour{black}{white}{\RpgFontTitle \@title}};
+	\node at ($(current page.north)+(0,-3cm)$) {\RpgContour[inner=white,outer=black,style=\RpgFontTitle]{ \@title}};
 
 	%%fancy red diamond
 	\def\w{0.3\paperwidth}
@@ -26,13 +26,13 @@
 
 	%%subtitle/author block
 	\node[anchor=south] at ($(current page.south)+(0,+3cm)$) {\parbox[t]{0.9\paperwidth}{
-		\begin{center}
-		{\RpgColorContour{black}{white}{\RpgFontSubTitle\@subtitle}}
+		% \begin{center}
+		% {\RpgContour[inner=white,outer=black,style=\RpgFontSubTitle]{\@subtitle}}
 
-		\vspace{1cm}
+		% \vspace{1cm}
 
-		{\RpgColorContour{black}{white}{\RpgFontSubTitle\@author}}
-		\end{center}
+		% {\RpgContour[inner=white,outer=black,style=\RpgFontSubTitle]{\@author}}
+		% \end{center}
 		}
 
 	};
