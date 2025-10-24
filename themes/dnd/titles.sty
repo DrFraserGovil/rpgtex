@@ -1,14 +1,14 @@
 
 \ExplSyntaxOff
-\renewcommand\RpgDrawPartPage[2]
+\RenewDocumentCommand\RpgDrawPartPage{m}
 {
 
 	\def\radius{0.2\paperwidth}
 	\def\overset{10}
 	\draw[line width=3pt,titlegold,fill=statblockbg] (current page.north) ++ ({-\radius*cos(\overset)},{8pt}) arc ({180-\overset}:{360+\overset}:\radius)--cycle;
 
-	\node at ($(current page.north)+(0,-1)$) {{\RpgFontPart \textcolor{titlered}{\bf {\MakeUppercase{Part \thepart}}}}};
-	\node at ($(current page.north)+(0,-2.4)$) {\parbox[t]{6cm}{\centering \Huge \textcolor{titlered}{\bf\kepler #2}}};
+	\node at ($(current page.north)+(0,-1.2)$) {{\RpgFontPart \textcolor{titlered}{\bf {\MakeUppercase{Part \thepart}}}}};
+	\node[anchor=north] at ($(current page.north)+(0,-2.4)$) {\parbox[t]{6cm}{\centering \Huge \textcolor{titlered}{\bf\kepler #1}}};
 }
 
 

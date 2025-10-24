@@ -246,8 +246,8 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 						\item[b] [square brackets]
 						\item[c] \{curly braces\}
 					\end{description}
-					An invalid input resolves to \verb|?page~\pageref{<ref}?|. 
-					\label{example:current page}
+					An invalid input resolves to \verb|?page~\pageref{<ref}?|.\label{example:current page}
+					
 					\begin{RpgTable}{XX}
 						Example & Output \\
 						\tabverbExample{\RpgPage{example:current page}}
@@ -311,6 +311,8 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 					This function is mostly used to determine where to place the part name on the page, and what embellishments accompany it. The command is called from within an existing tikz environment with the \verb|remember,overlay| options active, allowing for page coordinates (i.e. current page.north) to be used.
 
 					The default \verb|part| command allows a user to specify a background image for their part page -- it is not necessary to provide one within the drawing command.
+
+
 				}
 
 			\RpgMacro{\RpgLayoutOnly,{{m}}}
