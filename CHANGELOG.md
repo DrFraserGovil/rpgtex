@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * RpgPage macro for automatic page \pageref formatting
 
+* RpgSetTheme for theme management
+
+* RpgUseCoverPage for cover page management
+
 ### Changed
 
 * Minor stylistic changes to make the linter happy
@@ -19,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * Changed (and renamed) RpgDrawPart page, abstracting the background image handling to the engine wrapper.
 
+* Defined a global default colour value for the contour inner and outer colours
 #### RpgDice
 
 * Altered the regular expression capture/evaluate to allow arbitrary numerical evaluation of modifiers, and non-counted dice (i.e. d8 -> 1d8)

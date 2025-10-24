@@ -1,0 +1,29 @@
+\ExplSyntaxOn
+
+\keys_define:nn {rpg/contour}
+{
+	inner .tl_set:N = \l__rpg_contour_inner_tl,
+	inner .initial:n = {contourinnercolor},
+	inner .value_required:n = true,
+	outer .tl_set:N = \l__rpg_contour_outer_tl,
+	outer .initial:n = {contouroutercolor},
+	outer .value_required:n = true,
+	style .tl_set:N = \l__rpg_contour_style_tl,
+	style .initial:n = {},
+	style .value_required:n = true,
+}
+
+\cs_new_protected:Npn \__rpg_contour_preserve_space:n #1
+  {
+    \group_begin:
+    \seq_set_split:Nnn \l_tmpa_seq { ~ } { #1 }
+    \seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n {\l__rpg_contour_style_tl\contour{\l__rpg_contour_outer_tl}{\color{\l__rpg_contour_inner_tl}##1}} }
+    \seq_use:Nn \l_tmpb_seq { ~ }
+    \group_end:
+  }
+\cs_new_protected:Npn \__rpg_contour_split_lines:n #1
+{
+	\seq_set_split:Nnn \l_tmpa_seq { \newline } { #1 }
+    \seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n {\__rpg_contour_preserve_space:n{##1}} }
+    \seq_use:Nn \l_tmpb_seq { \newline }
+}

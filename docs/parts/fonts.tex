@@ -1,3 +1,51 @@
 \chapter{Fonts}
+	\begin{RpgSidebar}{Family vs Style}
+		When defining the Font for an element, the interface allows one to specify both a \texttt{family} and a \texttt{style}. Formally speaking, \texttt{family} defines the \textbf{typeface} used by the associated element, whilst the \texttt{style} determines the options passed to that typeface (bold, italics, size etc.).
 
-	
+		The distinction is largely irrelevant, as the construction of the final font object is often simply the concatenation of the two:
+		\begin{lstlisting}
+			\def\RpgFontX
+			{
+				\l__rpg_x_family \l__rpg_x_style
+			}
+		\end{lstlisting}
+		The separate definitions is therefore largely a matter of clarity and readability. It is generally fine to place commands should be `family' in the `style' element.
+	\end{RpgSidebar}
+	\section{Font Names}
+
+	\section{Contours}
+		
+		\begin{macrolist}
+			\RpgMacro{\RpgContour,{{O{} m}}}
+				{
+					Renders text with a \RpgContour[inner=red,outer=black]{contour effect}. The color and style are set through key/value pairs.
+				}
+				{
+					\RpgContour[inner=<color>,outer=<color>,style=<code>]{<text>}
+				}
+				{
+					The \texttt{style} command is applied to the text, whilst the optional \texttt{inner} and \texttt{outer} commands set the base text colour and the external contour color respectively. If the colors are not set, the default values are the \verb|contourinnercolor| and \verb|contouroutercolor| values defined by the theme \RpgPage[p]{S:Colors}.
+					
+					The contour does not automatically linebreak, but can be controlled manually with a \verb|\newline| command (not \verb|\\| or \texttt{\textbackslash{}par})
+					
+					\begin{RpgTable}{lX}
+						Example & Output \\
+						\tabverbExample{\RpgContour[inner=red,outer=black]{example}}
+						\tabverbExample{\RpgContour[style=\Huge\it]{example}}
+						\tabverbExample{\RpgContour[]{multi\newline line\newline example}}
+					\end{RpgTable}					
+					~\macrosection{Quirks}
+
+					Due to the tokenisation required for the line-splitting and space-preservation, the text inside the contour can exhibit some quirks if stylisation is applied within the \verb|<text>| argument. 
+
+					Unbraced commands (such as \verb|\it| or \verb|\footnotesize|) will only apply to the first word in the text. Braced commands \textit{can} work, but will cause a compilation error if a \verb|\newline| is included. 
+
+					
+					\begin{RpgTable}{lX}
+						\footnotesize\tabverbExample{\RpgContour[]{\Huge\it only first word changes}}
+						\footnotesize\tabverbExample{\RpgContour[]{\textit{all words change}}}
+						\footnotesize\verb|\RpgContour[]{\textit{all word \newline change}}| & (fails to compile)
+					\end{RpgTable}
+					For robustness, we therefore recommend that all stylisation be applied through the \verb|style| command, which is applied to each tokenised element, and therefore guaranteed to work as expected.
+				}
+		\end{macrolist}

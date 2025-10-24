@@ -1,7 +1,7 @@
 \chapter{Variables}
 	\section{Colo(u)rs}\label{S:Colors}
 
-		\rpgtex{} by default defines five colors\footnote{Yes, I hate myself, but we're going with the code-based spelling.} which are used for different elements:
+		\rpgtex{} by default defines a number of colors\footnote{Yes, I hate myself, but we're going with the code-based spelling.} which are used for different elements:
 		\begin{description}
 			\item[themecolor] A `basic color' which is (by default) equal to the following three colors:
 			\begin{enumerate}
@@ -10,6 +10,8 @@
 				\item \textbf{tipcolor} The background color of the \verb|RpgTip| environment 
 			\end{enumerate} 
 			\item[narrationcolor]  The background color of the \verb|RpgTip| environment 
+			\item[contourinnercolor]  The default color of the inner text within a \verb|RpgContour| command 
+			\item[contouroutercolor]  The default color of the external contour drawn around text within a \verb|RpgContour| command.
 		\end{description}
 
 		Calling \verb|\RpgSetThemeColor| \RpgPage[p]{Macro:SetThemeColor} updates the value of \verb|themecolor|, as well as the three `co-varying' colors (i.e. everything except \verb|narrationcolor|). When \verb|printmode| is active \verb|\RpgSetThemeColor{white}| is called, making environments transparent.
