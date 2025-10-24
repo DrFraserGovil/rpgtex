@@ -3,9 +3,7 @@
 \input{core/lowlevel/image_pages}
 
 
-\NewDocumentCommand\RpgDrawPartPage{m}{}
-
-%%Redefine part to accept custom arguments
+%%Redefine part to accept images as background
 %% internal arguments defined in core/lowlevel/image_pages.tex
 \RenewDocumentCommand{\part}{s o m }
 {
@@ -30,6 +28,13 @@
 		}
 	}
 }
+
+
+%%The original definition to be overwritten by the themes 
+\NewDocumentCommand\RpgDrawPartPage{m}{
+	\node at (current~page.center) {\parbox[t]{0.8\linewidth}{\centering \RpgFontPart Part~\thepart \\ #1}};
+}
+
 
 
 \let\__rpg_orig_title\maketitle
