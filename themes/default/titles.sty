@@ -1,3 +1,4 @@
+\ExplSyntaxOff %%turn off to simplify formatting
 \RenewDocumentCommand\RpgDrawPartPage{m}
 {
     \fill [white, opacity=0.5] (current page.south west) rectangle (current page.north east);
@@ -16,23 +17,26 @@
 
 }
 
-\RenewDocumentCommand\RpgDrawCoverTitle{}
+\RenewDocumentCommand\RpgDrawCover{}
 {
 
     %Add a semi-transparent black overlay for text visibility
     \fill [white, opacity=0.5] (current page.south west) rectangle (current page.north east);
 
 	\node at (current page.center) {
-		\parbox[t]{\paperwidth}{
+		\parbox[t]{0.8\paperwidth}{
 			\begin{center}
 				\RpgFontTitle\color{black}
-				
 				\@title
 				
-				\\\vspace{1cm}
+				\vspace{1em}
 				
+				\RpgFontSubTitle {\color{black} \@subtitle}
+				
+				\vspace{1em}
+
 				\RpgFontSubTitle {\color{black} \@author}
-				\\
+				
 				\@date
 				\end{center}
 		}
@@ -40,7 +44,7 @@
 			
 }
 
-\ExplSyntaxOn
+\ExplSyntaxOn %%turn on for if statement
 \RenewDocumentCommand{\RpgSimpleTitle}{}{
 	\def\contents{
 		\begin{center}

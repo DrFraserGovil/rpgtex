@@ -1,5 +1,5 @@
 
-\documentclass[size=10pt]{rpgbook}
+\documentclass[size=10pt,theme=default]{rpgbook}
 \usepackage{xltabular}
 
 \usepackage{listings}
@@ -25,7 +25,7 @@
         \tl_trim_spaces:N \l_tmpa_tl % Remove any surrounding spaces
 
         % Print the item using \verb, followed by \\ to force a newline.
-        \verb| ##1 | \\
+        \small \verb| ##1 | \\
     }
 }
 
@@ -55,19 +55,26 @@
 % }
 
 
-\NewDocumentCommand{\RpgMacro}{m +m +m +m}{\vspace{1em}\makecell[rt]{  \__rpg_doc_macro_list:n { #1 }} &
+\NewDocumentCommand{\RpgMacro}{s m +m +m +m}{\vspace{2em}\makecell[rt]{  \__rpg_doc_macro_list:n { #2 }} &
 
-	#2
+	#3
 
-	\macrosection{Syntax}
+	\str_if_empty:nF{#4}
+	{
+		\macrosection{Syntax}
 
-	\verb|#3|
-	
-	\macrosection{Behaviour}
+		\IfBooleanTF{#1}
+		{#4}
+		{\verb|#4|}
+	}
+	\macrosection{Details}
 
-	#4
+	#5
 	\\
 }
+
+
+
 \newcommand{\code}[1]{\texttt{(\detokenize{#1})}}
 \usepackage{verbatimbox}
 \newcommand\tabverbExample[1]
@@ -85,6 +92,7 @@
 \def\rpgtex{\texttt{rpgtex}}
 
 \title{The rpgtex Package}
+\subtitle{A package for generating beautiful RPG documents}
 \author{Jack Fraser-Govil}
 
 \begin{document}

@@ -129,11 +129,115 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 % \end{myverbbox}
 
 
-\chapter{Core Commands}
+\chapter{Main Engine}
 
-	\blindtext{}
+	\section{``Theme Commands''}\label{S:ThemeCommands}
 
-	\section{Redefinitions of Common Commands}
+		Several commands in this documentation are described as \textbf{Theme Commands}. These are commands that the user is \textit{not expected to call}, but which are executed by the internal engine in the process of rendering the page, or as a result of other commands that the user has called. 
+
+		\begin{center}
+		\large \textbf{A user who wishes to simply write documents using an unmodified \rpgtex{} need only concern themselves with the User-Facing Commands}. 
+		\end{center}
+		On the other hand, these Theme Commands have been designed to provide a convenient interface for creating custom Themes -- and so their documentation allows for designers to create powerful and flexible themes from within \rpgtex{}. 
+		
+		Theme Commands can be split into two groups:
+		
+		\begin{enumerate}
+			\item \textbf{Backend Commands} These are commands which are executed within a theme (or a class) to modify internal values, such as fonts and colors. A designer interacts with these commands by calling them.
+			\item \textbf{Placeholder Commands} These are virtual commands which are designed to be overwritten with completely custom code, which is executed when the core engine runs the command. A user interacts with these commands by redefining them  (usually with \verb|RenewDocumentCommand|).
+		\end{enumerate}
+
+		A `theme' is therefore a collection of Backend Commands (to configure the `core engine') and redefinitions of Placeholder Commands to provide their own unique functionality.
+		\def\backendCommand{\hyperref[S:ThemeCommands]{\textcolor{blue!40!black}{{Backend Command}}}}
+		\def\placeholderCommand{\hyperref[S:ThemeCommands]{\textcolor{blue!40!black}{{Placeholder Command}}}}
+		
+	\section{Title Pages}
+		\subsection{User-Facing Commands}
+			\begin{macrolist}
+				\RpgMacro*{\maketitle,{{}}}
+					{	
+						When called, creates theme-defined title pages using a custom format.
+					}{
+						\verb|\title{A title}|
+
+						\verb|\subtitle{The subtitle}| (optional)
+						
+						\verb|\cover{path/to/image}| (optional)
+						
+						\verb|\author{Dr. W. Riter} | (optional)
+						
+						\verb|\begin{document}|
+						
+						\verb|	\maketitle|
+						
+						\verb|	....|
+						
+						\verb|\end{document}|
+					}{
+						Calls either \verb|\RpgDrawCover| or \verb|\RpgSimpleTitle| depending on the value passed to \verb|RpgUseCoverPage|.
+
+						If \verb|RpgUseCoverPage| has been set to true (usually by a class such as \verb|rpgbook.cls|), then the image stored in \verb|\@cover| (if there is one) is automatically used as a full-page background image. This is independent of the theme definition of \verb|RpgDrawCover|, and occurs before that function is called -- all subsequent drawing occurs over the top of the cover image.
+					}
+				\RpgMacro{\cover,{{m}},\@cover}
+					{
+						Saves an image path to the variable \verb|\@cover|, automatically used by \verb|\maketitle| as the background image.
+					}
+					{
+						\cover{path/to/cover_image}				
+					}
+					{
+						If \verb|RpgUseCoverPage| has been set to true, then the image at this path will be used as a full-page image in the background of the page created by \verb|maketitle|.
+
+						The default value is empty (\verb|\cover{}|).
+					}
+				\RpgMacro{\subtitle,{{m}},\@subtitle}
+					{
+						Saves a string to the variable \verb|\@subtitle|. Themes may use this when defining their \verb|RpgDrawCover| and \verb|RpgSimpleTitle|.
+					}
+					{
+						\subtitle{<string>}
+					}
+					{
+						This command has no effect on its own (unlike \verb|cover| which is automatically included in the background).
+
+						The default value is empty (\verb|\subtitle{}|).
+					}
+			\end{macrolist}
+		\subsection{Theme Commands}
+		\begin{macrolist}
+			\RpgMacro{\RpgUseCoverPage,{{m}}}
+				{
+					If true, \verb|maketitle| creates a title page to populate, else the title is rendered as a heading.
+				}{
+					\RpgUseCoverPage{true/false}
+				}
+				{
+					This is a \backendCommand{}. When true, \verb|maketitle| attempts to use \verb|\@cover| and then calls \verb|RpgDrawCover|. If false, it calls \verb|RpgSimpleTitle|.
+				}
+			\RpgMacro{\RpgDrawCover,{{}}}
+				{
+					Executes over the top of the \verb|\@cover| image to render a front cover.
+				}{}
+				{
+					This is a \placeholderCommand{}, used by themes to customise the appearance of the title page which appears in \verb|rpgbook| class. The default value renders a single node at the centre of the page containing \verb|\@title|, \verb|\@subtitle|, \verb|\@author| and \verb|\@date| variables in the centre. More advanced themes (such as dnd or scifi) add decorative embellishments and place the text at custom locations.
+
+					This command is executed by \verb|maketitle| if \verb|\RpgUseCoverPage{true}| has been set by the theme, class or directly by the user. 
+					The command is called from within an existing tikz environment with the \verb|remember,overlay| options active, allowing for page coordinates (i.e. current page.north) to be used.
+
+					If a \verb|\@cover| has been defined, this command is executed after the image is placed, drawing on top of it.
+				}
+			\RpgMacro{\RpgSimpleTitle,{{}}}
+				{
+					Renders a `header' title - a simple text-only title at the top of the page.
+				}{}
+				{
+					This is a \placeholderCommand{}, used by themes to customise the appearance of the title header which appears in \verb|rpghandout| class. The default value places the title, subtitle and author at the top of the page. More advanced themes (such as dnd or scifi) add decorative embellishments and place the text at custom locations.
+
+					The Simple Title is configured so that, in a twocolumn document, it occupies the full page width; calling \verb|centering| with the simple title therefore centers the text above both columns. 
+				}
+		\end{macrolist}
+
+	\section{Part Pages}
 		\begin{macrolist}
 			\RpgMacro{\part,{\part*},{{o m}}}
 				{\label{Macro:part}
@@ -155,49 +259,73 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 						\parbox[t]{6cm}{\verb|\part[path/to/image]{partname}||} & Places the corresponding image as a full-page background, and then calls \verb|RpgDrawPartPage|.
 					\end{RpgTable}
 					\verb|RpgDrawPartPage| \RpgPage[p]{Macro:DrawPartPage} is a Theme Function, which executes a series of tikz functions to place the part title according to the theme specifications. 
-					% \paragraph{p} When used without the optional argument, or with a star (\verb|part*|) this directly calls the original \verb|part| command\footnote{ saved as \lMacroName{rpg\_orig\_part}.} without modification.
-
-					% \paragraph{Optional behaviour} With the optional argument, the \verb|part| call is instead replaced and performs the following actions:
-					% \begin{enumerate}
-					% 	\item Clears the page
-					% 	\item Begins a \verb|tikzpicture| environment
-					% 	\item Places the image located at \verb|<graphics-path>/<image>| at the centre of the page, 
-					% \end{enumerate}
-
 				}
+			
+			\RpgMacro{\RpgDrawPartPage,{{m}}}
+				{\label{Macro:DrawPartPage}
+					Uses Tikz to draw a custom part page when activated by \verb|\part| \RpgPage[p]{Macro:part}.
+				}
+				{
+					\RpgDrawPartPage{<part title>}
+				}
+				{
+					This is a \placeholderCommand{}, allowing the designed to determine where to place the part name on the page, and what embellishments accompany it. The command is called from within an existing tikz environment with the \verb|remember,overlay| options active, allowing for page coordinates (i.e. current page.north) to be used.
 
+					The default \verb|part| command allows a user to specify a background image for their part page -- it is not necessary to provide one within the drawing command.
+				}
+			
 		\end{macrolist}
-	\section{Document Commands}
-
+	
+	\section{Dice Commands}
+		Dice are a mainstay of RPGs, and so it is important to have a standard way to report and simplify their expressions. We provide an interface for a standard `dice + modifier' expression.
 		\begin{macrolist}
 			\RpgMacro{\RpgDice,{{m}}}
 				{\label{Macro:Dice}
-					Evaluates expressions of the form $n\mathrm{d}x + m$, and outputs using a theme-dependent layout.
+					Evaluates expressions of the form $n\mathrm{d}x \pm m$, and outputs using a theme-dependent layout.
 				}
 				{
 					\RpgDice{<dice-expression>}
 				}{
-					Uses regular expressions to extract and evaluate the dice expression. The \verb|dice-expression| must follow the following format:
-					\begin{enumerate}
-						\item It must contain either `d' or `D' (the `dice symbol')
-						\item The dice symbol must be immediately followed by a single number (the `dice size')
-						\item The dice symbol may optionally be prefixed by a single number (the `dice count')
-						\item The first (non-whitespace) character must be either the dice count (if present) or the dice symbol
-						\item The dice size must be followed by either a `+', '-', or the end of the expression.
-						\item After this, any number of standard numeric expressions may follow. This expression will be evaluated into a single `modifier'.
-					\end{enumerate} 
+					Uses regular expressions to extract and simplify the \verb|dice-expression|, which must follow the following format:
+					\begin{RpgSidebar}{Dice format}
+						\begin{multicols}{2}
+						\begin{enumerate}
+							\item It must contain either `d' or `D' (the `dice symbol')
+							\item The dice symbol must be immediately followed by a single number (the `dice size')
+							\item The dice symbol may optionally be prefixed by a single number (the `dice count')
+							\item The first (non-whitespace) character must be either the dice count (if present) or the dice symbol
+							\item The dice size must be followed by either a `+', '-', or the end of the expression.
+							\item After this, any number of standard numeric expressions may follow. This expression will be evaluated into a single `modifier'.
+						\end{enumerate} 
+						\end{multicols}
+					\end{RpgSidebar}
+					The dice ignores any whitespace before the beginning of the expression, and arbitrary whitespace within the `modifier' part of the exprssion.  
 					\begin{RpgTable}{XX}
 						Example & Output \\
-						\tabverbExample{\RpgDice{1d6-2}}
+						\tabverbExample{\RpgDice{  1d6-2}}
 						\tabverbExample{\RpgDice{2D6 + 3*2^2}}
 						\tabverbExample{\RpgDice{1d16}}
 						\tabverbExample{\RpgDice{d8-3}}
+						\verb|\RpgDice{2*1d6}|, \verb|\RpgDice{1 d6}|, \verb|\RpgDice{3d 6 +3}| & (Fails to compile)
 					\end{RpgTable}
-					\newline\vspace{1em}
-					{\RpgFontSubsubsection{} Themes}
-					\newline
-					\verb|RpgDice| is neat, but not necessarily impressive by itself. The true power of the expression is that it calls \verb|RpgDiceFormat| (\RpgPage{Macro:DiceFormat}) on the internal values. This is a value which can be overwritten by themes, and allows (for instance), the \verb|dnd| theme to compute mean values, as is found in D\&D monster stat blocks:
+				
+					\verb|RpgDice| is neat, but not necessarily impressive by itself. The true power of the expression is that it calls \verb|RpgDiceFormat| to perform the output formatting (after performing the regular expression parsing), allowing designers to customise their dice formatting.
+
+					\verb|RpgDice| is loaded in both \verb|layout| and non-\verb|layout| calls.
+				}
+		
+			\RpgMacro{\RpgDiceFormat,{{m m m}}}
+				{\label{Macro:DiceFormat} Prints the values computed by \verb|RpgDice|
+				}
+				{
+					\RpgDiceFormat{<dice-count>}{<dice-size>}{<added bonus>}
+				}
+				{
+					This is a \placeholderCommand{}, used by theme designers to determine how \verb|RpgDice| is rendered. The default option is:
+					\verb|\RpgDiceFormat{m m m} { #1d#2 #3}|, such that \verb|RpgDice{ndx + a + b}| gives ``ndx + c'', where c is the numerical value of a+b, with an additional check to see if \verb|#3| is equal to 0, in which case it is not printed (so as not to `1d6 + 0'). 
 					
+					The dnd implementation performs a more advanced operation, computing the average value of the roll, and formatting that first, to replicate the format used by monster stat blocks. 
+
 					\RenewDocumentCommand{\RpgDiceFormat}{m m m}{\DndTempDiceFormat{#1}{#2}{#3}}
 
 					
@@ -211,6 +339,12 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 
 				
 				}
+		\end{macrolist}
+
+
+	\section{Utility Commands}
+
+		\begin{macrolist}
 			\RpgMacro{\RpgOrdinal,{{o m}}}
 				{
 					Converts a numeric value to the corresponding ordinal.
@@ -230,6 +364,7 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 						\tabverbExample{\RpgOrdinal[<arbitrary text>]{133}}
 					\end{RpgTable}
 					{\it Note that due to a lack of brace-capturing, it is not possible to chain multiple commands.}.
+
 				}
 			\RpgMacro{\RpgPage,{{O{t} m}}}
 				{
@@ -285,36 +420,6 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 	\section{Theme Commands}
 
 		\begin{macrolist}
-			\RpgMacro{\RpgDiceFormat,{{m m m}}}
-				{\label{Macro:DiceFormat} Prints the values computed by \verb|RpgDice| \RpgPage[p]{Macro:Dice}
-				}
-				{
-					\RpgDiceFormat{<dice-count>}{<dice-size>}{<added bonus>}
-				}
-				{
-					This function is used by theme designers to determine how \verb|RpgDice| is rendered. The default option is:
-					\verb|\RpgDiceFormat{m m m} { #1d#2 #3}|, such that \verb|RpgDice{ndx + a + b}| gives ``ndx + c'', where c is the numerical value of a+b, with an additional check to see if \verb|#3| is equal to 0, in which case it is not printed (so as not to `1d6 + 0'). 
-					
-					The dnd implementation performs a more advanced operation, computing the average value of the roll, and formatting that first, to replicate the format used by monster stat blocks. 
-
-					\verb|RpgDiceFormat| is loaded in both \verb|layout| and non-\verb|layout| calls.
-				}
-
-			\RpgMacro{\RpgDrawPartPage,{{m}}}
-				{\label{Macro:DrawPartPage}
-					Uses Tikz to draw a custom part page when activated by \verb|\part| \RpgPage[p]{Macro:part}.
-				}
-				{
-					\RpgDrawPartPage{<part title>}
-				}
-				{
-					This function is mostly used to determine where to place the part name on the page, and what embellishments accompany it. The command is called from within an existing tikz environment with the \verb|remember,overlay| options active, allowing for page coordinates (i.e. current page.north) to be used.
-
-					The default \verb|part| command allows a user to specify a background image for their part page -- it is not necessary to provide one within the drawing command.
-
-
-				}
-
 			\RpgMacro{\RpgLayoutOnly,{{m}}}
 				{
 					Executes the contents of the command if \verb|layout| mode is active.
