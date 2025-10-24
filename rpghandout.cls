@@ -12,7 +12,8 @@
 \input {core/rpgoptions.clo}
 \LoadClass { \g__rpg_base_class_tl }
 
-%%overload title stuff here? Otherwise fairly basic
-\pagestyle{empty}
 
 \RequirePackage{rpg}
+
+%set the flag so that it uses the simple title
+\RpgUseCoverPage{false}

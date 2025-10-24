@@ -22,13 +22,17 @@
 ]
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%
+%Important!
+%%%%%%%%%%%%%%%%%%%%%%%%
+%The white color of the cover page in rpgbook mode is not set here, but in the \RpgDrawCoverPage command
+%This is to prevent white text being used everywhere else!
 \RpgSetFont[
 	%Sections
 	title-family 		={\starTrek},
-	title-style			= {\fontsize{80}{50}\selectfont\color{white}},
+	title-style			= {\fontsize{80}{50}\selectfont},
 	subtitle-family		={\scifi},
-	subtitle-style 		= {\Large \textcolor{white}},
+	subtitle-style 		= {\Large},
 	part-style			= {\fontsize{60}{50}\selectfont\color{titleblue}\starTrek\scshape},
 	chapter-family		= {\normalfont},
 	chapter-style		= {\scifi \Huge},

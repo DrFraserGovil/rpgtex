@@ -10,11 +10,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 
 * RpgPage macro for automatic page \pageref formatting
+
 ### Changed
 
 * Minor stylistic changes to make the linter happy
 
 * Migrated most of the ugly expl3 internal implementations into the /core/lowlevel directory to improve readability of the main modules.
+
+* Changed (and renamed) RpgDrawPart page, abstracting the background image handling to the engine wrapper.
 
 #### RpgDice
 

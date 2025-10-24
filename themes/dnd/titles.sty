@@ -14,35 +14,27 @@
 
 
 \usetikzlibrary {shadows}
-\renewcommand{\RpgBookTitle}[1]{
 
-	\thispagestyle{empty} % Ensure no headers/footers on the part page
-	\begin{tikzpicture}[remember picture, overlay]
-		\node [anchor=south west, inner sep=0pt, minimum width=\paperwidth, minimum height=\paperheight] (image) at (current page.south west)
-		{
-		\includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
-		};
+\RenewDocumentCommand{\RpgDrawCoverTitle}{}
+{	
+	\node at ($(current page.north)+(0,-3cm)$) {\RpgColorContour{black}{white}{\RpgFontTitle \@title}};
 
-			\node at ($(current page.north)+(0,-3cm)$) {{\RpgContour[black]{\RpgFontTitle\@title}}};
+	%%fancy red diamond
+	\def\w{0.3\paperwidth}
+	\def\h{0.005\paperwidth}
+	\fill[red,circular glow={fill=black!80!red,scale=1}] ($(current page.north)+(0,-4cm)$)--++(\w,-\h)--++(-\w,-\h)--++(-\w,\h)--cycle;
 
-			\def\w{0.3\paperwidth}
-			\def\h{0.005\paperwidth}
-			\fill[red,circular glow={fill=black!80!red,scale=1}] ($(current page.north)+(0,-4cm)$)--++(\w,-\h)--++(-\w,-\h)--++(-\w,\h)--cycle;
+	%%subtitle/author block
+	\node[anchor=south] at ($(current page.south)+(0,+3cm)$) {\parbox[t]{0.9\paperwidth}{
+		\begin{center}
+		{\RpgColorContour{black}{white}{\RpgFontSubTitle\@subtitle}}
 
-		\node[anchor=south] at ($(current page.south)+(0,+3cm)$) {\parbox[t]{0.9\paperwidth}{
-			\begin{center}
-			{\RpgContour[black]{\RpgFontSubTitle\@subtitle}}
+		\vspace{1cm}
 
-			\vspace{1cm}
-
-			\RpgContour[black]{\RpgFontSubTitle\@author}
-			\end{center}
-			}
-
+		{\RpgColorContour{black}{white}{\RpgFontSubTitle\@author}}
+		\end{center}
+		}
 
 	};
-	\end{tikzpicture}
-	\clearpage
 }
-
 

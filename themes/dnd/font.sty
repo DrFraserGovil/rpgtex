@@ -59,11 +59,18 @@
 
 \providecommand\titlemode{\linespread{.9} \color{titlered} \keplerserif \scshape }
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+%Important!
+%%%%%%%%%%%%%%%%%%%%%%%%
+%The white color of the cover page in rpgbook mode is not set here, but in the \RpgDrawCoverPage command
+%This is to prevent white text being used everywhere else!
+
 \RpgSetFont[
 	%Sections
-	title-style			= {\bf\fontsize{30}{50}\selectfont\color{white}},
+	title-style			= {\bf\fontsize{30}{50}\selectfont},
 	subtitle-family		={\scshape},
-	subtitle-style 		= {\LARGE \textcolor{white}},
+	subtitle-style 		= {\LARGE },
 	part-style			= {\color{titlered}\fontsize{50}{30}\selectfont},
 	chapter-style		= {\titlemode\fontsize{30}{50}\selectfont},
 	section-style		= {\titlemode \Huge},,
