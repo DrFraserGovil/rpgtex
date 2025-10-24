@@ -11,23 +11,10 @@
 \tl_set:Nn \g__rpg_base_class_tl { book }
 
 \input {core/rpgoptions.clo}
-\LoadClass[openany] { \g__rpg_base_class_tl }
+\LoadClass { \g__rpg_base_class_tl }
 
-% % %% Define custom title page and part page stuff here
-% % {
 
-% % }
 
 \RequirePackage{rpg}
 
-
-\RenewDocumentCommand{\maketitle}{o}
-{
-	\IfNoValueTF{#1}
-	{
-		\RpgBasicTitle{}
-	}
-	{
-		\RpgBookTitle{#1}
-	}
-}
+\RpgUseCoverPage{true}

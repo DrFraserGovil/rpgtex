@@ -2,8 +2,10 @@
 
 \input{core/lowlevel/image_pages}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Part pages (with images)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%Redefine part to accept images as background
 %% internal arguments defined in core/lowlevel/image_pages.tex
 \RenewDocumentCommand{\part}{s o m }
 {
@@ -18,55 +20,57 @@
 		}
 		{
 			%%otherwise use the custom theme part (RpgDrawPartPage), with or without a background image
-			\bool_if:NTF{\__blank_background:n{#2}}
-			{
-				\__part_no_image:n{#3}
-			}
-			{
-				\__part_with_image:nn{#2}{#3}
-			}
+			\__custom_part_page:nn{#2}{#3}
 		}
 	}
 }
 
-
 %%The original definition to be overwritten by the themes 
-\NewDocumentCommand\RpgDrawPartPage{m}{
+\NewDocumentCommand\RpgDrawPartPage{m}
+{
 	\node at (current~page.center) {\parbox[t]{0.8\linewidth}{\centering \RpgFontPart Part~\thepart \\ #1}};
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Title pages (with images)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\let\__rpg_orig_title\maketitle
-\def\subtitle#1{\gdef\@subtitle{#1}} %let a subtitle be defined
-\subtitle{~}%clear value
-\newcommand\RpgTitle[1]{\__rpg_orig_title}
-\newcommand\RpgBookTitle[1]{\__rpg_orig_title}
-\newcommand\RpgHandoutTitle[1]{\__rpg_orig_title}
-
-\NewDocumentCommand\RpgBasicTitle{}
+%%Add new commands in vein of \title, \author etc.
+\NewDocumentCommand{\subtitle}{m}
 {
-	\thispagestyle{empty}
-
-	% \begin{tikzpicture}[remember~picture, overlay]
-	% 	\node[anchor=south] at ($(current~page.center)$) {\parbox[t]{0.9\paperwidth}{
-	% 		\begin{center}
-	% 			{\RpgFontTitle\color{black} \@title}
-	% 			\newline
-	% 			\vspace{1cm}
-
-	% 			{{\RpgFontSubTitle { \color{black} \@subtitle}}}
-
-	% 		\vspace{1cm}
-
-	% 		\par{\RpgFontSubTitle { \color{black}\@author}}
-	% 		\end{center}
-	% 		}};
-
-	% \end{tikzpicture}
-	\clearpage
-
+	\gdef\@subtitle{#1}
+}
+\NewDocumentCommand{\cover}{m}
+{
+	\gdef\@cover{#1}
 }
 
+%set default values to blank
+\subtitle{} 
+\cover{}
+
+%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%
+%Commands called by \maketitle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%Used for books, similar ot part page, draws the contents of this macro over the top of the background image specified by \@cover
+\NewDocumentCommand\RpgDrawCoverTitle{}{}
+
+%%%Used for articles, a lightweight, text-only title. Not rendered within a tikzpicture.
+\NewDocumentCommand\RpgSimpleTitle{}{\__rpg_orig_title}
+
+%%Switching command used by classes to choose to use a full-page drawn title, or a simple text title
+\NewDocumentCommand{\RpgUseCoverPage}{m}{
+	\str_case:nnF { #1 }
+    {
+        {true}  { \bool_set_true:N  \g__rpg_use_cover_page_bool }
+        
+        {false} { \bool_set_false:N \g__rpg_use_cover_page_bool }
+    }
+    {
+        % Fallback Case: Invalid value detected. Raise an error.
+        \msg_error:nnn { rpg } { bad_switch_value } { #1 }
+    }
+}
 
 \ExplSyntaxOff

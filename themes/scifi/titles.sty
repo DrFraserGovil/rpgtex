@@ -1,62 +1,30 @@
 
 \renewcommand{\thepart}{\arabic{part}}
-\ExplSyntaxOn
+\ExplSyntaxOff
 
 \RenewDocumentCommand\RpgDrawPartPage{m}
 {
+    % Add a semi-transparent black overlay for text visibility
+	\fill [black, opacity=0.8] ($(current  page.center)+(-4cm,-4cm)$) rectangle ($(current  page.center)+(4cm,4cm)$) ;
 
-    % Optional: Add a semi-transparent black overlay for text visibility
-	\fill [black, opacity=0.8] ($(current~page.center)+(-4cm,-4cm)$) rectangle ($(current~page.center)+(4cm,4cm)$) ;
-	\def\radius{0.2\paperwidth}
-	\def\overset{10}
-
-	\node at ($(current~page.center)+(0,1)$) {\RpgContour[white]{\MakeUppercase{\RpgFontPart{}Part~~\thepart}}};
-	\node at ($(current~page.center)+(0,-1)$) {\parbox[c]{6cm}{\centering\RpgContour[white!70!titleblue]{\RpgFontPart \Huge {#1}}}};
+	\node at ($(current  page.center)+(0,1)$) {\RpgContour[white]{\MakeUppercase{\RpgFontPart{}Part    \thepart}}};
+	
+	\node at ($(current  page.center)+(0,-1)$) {\parbox[c]{6cm}{\centering\RpgContour[white!70!titleblue]{\RpgFontPart \Huge {#1}}}};
 }
 
+\RenewDocumentCommand{\RpgDrawCoverTitle}{}
+{
+	\node at ($(current page.north)+(0,-3cm)$) {\RpgColorContour{titleblue}{white}{\RpgFontTitle\@title}};
 
-\renewcommand{\RpgBookTitle}[1]{
+	\node[anchor=south] at ($(current page.south)+(0,+3cm)$) {\parbox[t]{0.9\paperwidth}{
+		\begin{center}
+			
+			{\RpgColorContour{titleblue}{white}{\RpgFontSubTitle\@subtitle}}
 
-	% \thispagestyle{empty} % Ensure no headers/footers on the part page
-	% \begin{tikzpicture}[remember~picture, overlay]
-	% 	\node [anchor=south west, inner sep=0pt, minimum width=\paperwidth, minimum height=\paperheight] (image) at (current page.south west)
-	% 	{
-	% 	\includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
-	% 	};
+			\vspace{1cm}
 
-	% 		\node at ($(current page.north)+(0,-3cm)$) {{\RpgContour[black]{\RpgFontTitle\@title}}};
-
-	% 	\node[anchor=south] at ($(current page.south)+(0,+3cm)$) {\parbox[t]{0.9\paperwidth}{
-	% 		\begin{center}
-	% 		{\RpgContour[black]{\RpgFontSubTitle\@subtitle}}
-
-	% 		\vspace{1cm}
-
-	% 		\RpgContour[black]{\RpgFontSubTitle\@author}
-	% 		\end{center}
-	% 		}
-
-
-	% };
-
-	% \end{tikzpicture}
-	% \clearpage
-
+			\RpgColorContour{titleblue}{white}{\RpgFontSubTitle\@author}
+		\end{center}
+	}};
 }
 
-\renewcommand{\RpgHandoutTitle}[1]{
-	\noindent
-		\twocolumn[
-			\begin{center}
-
-				{\RpgFontTitle \@title}
-
-				{\RpgFontSubTitle  \@subtitle}
-
-				{\RpgFontSubTitle  \@author}
-
-			\end{center}
-			\vspace{8pt}
-    ] % End of the twocolumn content
-
-}

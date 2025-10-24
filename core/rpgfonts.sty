@@ -323,3 +323,8 @@
     \seq_use:Nn \l_tmpb_seq { \newline }
     \group_end:
   }
+
+  \NewDocumentCommand{\RpgColorContour}{m m m}
+  {
+	\RpgContour[#1]{\textcolor{#2}{#3}}
+  }

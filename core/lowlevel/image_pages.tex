@@ -1,41 +1,125 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Image pages internal commands
+%% Used by both title and part pages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\let\__rpg_orig_part\part
-
-\cs_new_protected:Nn \__part_page:nn
+%%main custom part page wrapper function
+\cs_new_protected:Nn \__tikz_page:nn
 {
+	%% #1 preamble code  #2 tikz code to render on page
 	\clearpage
-	\stepcounter{part}
-	\thispagestyle{empty} % Ensure no headers/footers on the part page
+
+	#1
+	
+	%% Draw the page contents
+	\thispagestyle{empty} 
 	\begin{tikzpicture}[remember~picture, overlay]
-		 #1
+		 #2
 	\end{tikzpicture}
-	\phantomsection{}
-	\addcontentsline{toc}{part}{Part~\thepart{}:~#2}
 	\clearpage % Ensure the content starts on the next page
 }
+
+\cs_new_protected:Nn \__tikz_page_background:nnn
+{
+	%% #1 preamble code  #2 tikz code to render on page
+	\clearpage
+
+	#1
+	
+	%% Draw the page contents
+	\thispagestyle{empty} 
+	\begin{tikzpicture}[remember~picture, overlay]
+		\node [inner~sep=0pt, minimum~width=\paperwidth, minimum~height=\paperheight] (image) at (current~page.center)
+		{
+			\includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#2}
+		};
+		 #3
+	\end{tikzpicture}
+	\clearpage % Ensure the content starts on the next page
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Part pages implementation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\let\__rpg_orig_part\part %save the original
+
+\cs_new_protected:Nn \__add_part_contents:n
+{
+	% %%make sure the part behaves properly wrt TOC
+	\stepcounter{part}
+	\phantomsection{}
+	\addcontentsline{toc}{part}{Part~\thepart{}:~#1}
+}
+
+
+\cs_new_protected:Nn \__custom_part_page:nn
+{
+	\bool_if:NTF{\tl_if_novalue_p:n{#1}}
+	{
+		\__part_no_image:n{#2}
+	}
+	{
+		\__part_with_image:nn{#1}{#2}
+	}
+}
+
+%% Called when \part[image] is used
 \cs_new_protected:Nn \__part_with_image:nn
 {
-	\__part_page:nn{
-		 \node [inner~sep=0pt, minimum~width=\paperwidth, minimum~height=\paperheight] (image) at (current~page.center)
-		{
-			\includegraphics[width=!, height=\paperheight, keepaspectratio=true]{#1}
-		};
-
+	\__tikz_page_background:nnn
+	{
+		\__add_part_contents:n {#2}
+	}
+	{
+		#1
+	}
+	{
 		\RpgDrawPartPage{#2}
-	}{#2}
+	}
 }
+
+%% Called when \part{} is called with no image
 \cs_new_protected:Nn \__part_no_image:n
 {
-	\__part_page:nn{
+	\__tikz_page:nn
+	{
+		\__add_part_contents:n {#1}
+	}
+	{
 		\RpgDrawPartPage{#1}
-	}{#1}
+	}
 }
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Title internal commands
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\let\__rpg_orig_title\maketitle
+\bool_new:N \g__rpg_use_cover_page_bool
 
-\cs_new:Npn \__blank_background:n #1
+\cs_new_protected:Nn \__cover_page:
 {
-	\tl_if_novalue_p:n{#1}
-	
+	\str_if_empty:NTF{\@cover}
+	{
+		\__tikz_page:nn{}{\RpgDrawCoverTitle}
+	}
+	{
+		\__tikz_page_background:nnn{}{\@cover}{\RpgDrawCoverTitle}
+	}
+}
+
+
+\RenewDocumentCommand{\maketitle}{}
+{
+	\bool_if:NTF\g__rpg_use_cover_page_bool
+	{
+		\__cover_page:{}
+	}
+	{
+		\RpgSimpleTitle
+	}
 }
