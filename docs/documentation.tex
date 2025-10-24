@@ -1,95 +1,11 @@
 
 \documentclass[size=10pt,theme=default]{rpgbook}
-\usepackage{xltabular}
 
-\usepackage{listings}
-\lstset{
-  basicstyle=\ttfamily,
-  columns=fullflexible, % Uses the actual font width (best match for \verb)
-  flexiblecolumns=true, % Allows for variable-width fonts (important for \ttfamily)
-  breaklines=true,
-  breakatwhitespace=true,
-  showtabs=false,
-  tabsize=1,
-}
-\usepackage{makecell}
-\ExplSyntaxOn{}
-% Define a function to process the list of macros
-\cs_new_protected:Npn \__rpg_doc_macro_list:n #1
-{
-    % Split the argument #1 by commas and iterate over each item
-    \clist_map_inline:nn { #1 }
-    {
-        % This code runs for each item (#1) in the list
-        \tl_set:Nn \l_tmpa_tl { ##1 } % Store the item in a temp token list
-        \tl_trim_spaces:N \l_tmpa_tl % Remove any surrounding spaces
-
-        % Print the item using \verb, followed by \\ to force a newline.
-        \small \verb| ##1 | \\
-    }
-}
-
-\NewDocumentEnvironment{macrolist}{+b}{
-	\vspace{1em}
-    % \hspace{-1.5cm}
-	\let\__rpg_colsep:&
-	\noindent\begin{xltabular}{\linewidth}{rX}
-		#1
-    \end{xltabular}}{}
-
-\NewDocumentCommand{\lMacroName}{m}{
-	\texttt{\textbackslash\_\_#1}
-}
-
-\NewDocumentCommand{\macrosection}{m}
-{
-\newline\vspace{1em}
-	{\RpgFontSubsubsection{} #1}
-	\newline
-}
-% \NewDocumentCommand{\macrosubsection}{m}
-% {
-% \newline\vspace{1em}
-% 	{\RpgFontSubsubsection{} #1}
-% 	\newline
-% }
-
-
-\NewDocumentCommand{\RpgMacro}{s m +m +m +m}{\vspace{2em}\makecell[rt]{  \__rpg_doc_macro_list:n { #2 }} &
-
-	#3
-
-	\str_if_empty:nF{#4}
-	{
-		\macrosection{Syntax}
-
-		\IfBooleanTF{#1}
-		{#4}
-		{\verb|#4|}
-	}
-	\macrosection{Details}
-
-	#5
-	\\
-}
-
-
-
-\newcommand{\code}[1]{\texttt{(\detokenize{#1})}}
-\usepackage{verbatimbox}
-\newcommand\tabverbExample[1]
-{
-	\verb|#1| & #1 \\
-}
-
-\ExplSyntaxOff{}
-\usepackage{blindtext}
-
-
-
-
+\usepackage{doc}
 
 \def\rpgtex{\texttt{rpgtex}}
+
+\cover{../example/img/typewriter}
 
 \title{The rpgtex Package}
 \subtitle{A package for generating beautiful RPG documents}
@@ -127,33 +43,12 @@
 	\mainmatter{}
 
 
-% \chapter{Introduction}
-
-\ExplSyntaxOn
-	\tl_new:N \l__temp_dice
-	\NewDocumentCommand{ \DndTempDiceFormat }{m m m}
-	{
-		% #1: Dice Number, #2: Dice Sides, #3: Modifier
-		\tl_if_blank:VTF {#1}
-		{
-			% CASE: called without a dice count (i.e. d8), equal to 1d8
-			\tl_set:Nn\l__temp_dice{1}
-		}
-		{
-			\tl_set:Nn \l__temp_dice{#1}
-		}
-		\tl_set:Nn \l_tmp_mean_tl { \fp_eval:n {
-				floor ( \tl_use:N{\l__temp_dice} * ( #2 + 1 ) / 2 ) + (#3)
-			}}
-			\l_tmp_mean_tl{}~(#1 d#2
-			\fp_compare:nNnTF { #3 } { = } { 0 }{}{#3})
-	}
-	\ExplSyntaxOff
-
-
+		
 	\part{rpgtex Core}
-
-		\input{parts/core.tex}
+		\input{parts/intro.tex}
+		\input{parts/commands.tex}
+		\input{parts/variables.tex}
+		\input{parts/fonts.tex}
 
 	\part{rpgtex Classes}
 		\input{parts/class_book.tex}
@@ -162,7 +57,6 @@
 	\part{Themes}
 		\input{parts/themes_default.tex}
 		\input{parts/themes_dnd.tex}
-		\RpgActivateLayout{}
 		\input{parts/themes_scifi.tex}
 
 
