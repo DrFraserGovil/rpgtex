@@ -44,7 +44,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\let{\__rpg_orig_part}{\part} %save the original
+\let\__rpg_orig_part\part %save the original
 
 \cs_new_protected:Nn \__add_part_contents:n
 {
@@ -98,7 +98,7 @@
 %% Title internal commands
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\let{\__rpg_orig_title}{\maketitle}
+\let\__rpg_orig_title\maketitle
 \bool_new:N \g__rpg_use_cover_page_bool
 
 \cs_new_protected:Nn \__cover_page:
@@ -120,6 +120,6 @@
 		\__cover_page:{}
 	}
 	{
-		\RpgSimpleTitle
+		\RpgSimpleTitle{}
 	}
 }
