@@ -65,12 +65,35 @@
 		{#4}
 		{\verb|#4|}
 	}
+
+	\str_if_empty:nF{#5}
+	{
 	\macrosection{Details}
 
 	#5
+	}
 	\\
 }
 
+\NewDocumentEnvironment{fontlist}{+b}{
+	\vspace{1em}
+	
+    % \hspace{-1.5cm}
+	\let\__rpg_colsep:&
+	\noindent\begin{xltabular}{\linewidth}{llX}
+		Font~Element & Values & Usage \\
+		#1
+    \end{xltabular}}{}
+
+	\NewDocumentCommand{\FontElement}{m +m +m}{\vspace{2em}\makecell[lt]{  \__rpg_doc_macro_list:n { #1 }} &
+
+	\makecell[lt]{  \__rpg_doc_macro_list:n { {#2-family},{#2-style} }}
+
+	&
+
+	#3
+	\\
+}
 
 
 \newcommand{\code}[1]{\texttt{(\detokenize{#1})}}

@@ -1,5 +1,6 @@
 \ExplSyntaxOn
 
+%%define the key/values used within the contour command
 \keys_define:nn {rpg/contour}
 {
 	inner .tl_set:N = \l__rpg_contour_inner_tl,
@@ -13,6 +14,7 @@
 	style .value_required:n = true,
 }
 
+%%splits the command up by word, and contours each word individually
 \cs_new_protected:Npn \__rpg_contour_preserve_space:n #1
   {
     \group_begin:
@@ -21,6 +23,8 @@
     \seq_use:Nn \l_tmpb_seq { ~ }
     \group_end:
   }
+
+  %%splits the command up at \newline, and then contours each line individually
 \cs_new_protected:Npn \__rpg_contour_split_lines:n #1
 {
 	\seq_set_split:Nnn \l_tmpa_seq { \newline } { #1 }
