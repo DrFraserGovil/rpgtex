@@ -2,7 +2,9 @@
 \documentclass[size=10pt,theme=default]{rpgbook}
 
 \usepackage{doc}
-
+\usepackage{blindtext}
+\usepackage{imakeidx}
+\makeindex
 \def\rpgtex{\texttt{rpgtex}}
 
 \cover{../example/img/typewriter}
@@ -10,6 +12,28 @@
 \title{The rpgtex Package}
 \subtitle{A package for generating beautiful RPG documents}
 \author{Jack Fraser-Govil}
+
+\newcommand{\lindex}[1]{%
+  \lowercase{\def\temp{#1}}%
+  \expandafter\index\expandafter{\temp}%
+}
+
+\NewDocumentCommand{\cmdidx}{ o m }{
+	\foreach \m in {#2}
+	{
+		% \lindex{\texttt{\textbackslash{}\lowercase{\m}}@{\lowercase{\m}}}
+		\IfNoValueTF{#1}
+		{
+			 \lowercase{\def\temp{\m}}
+			\expandafter\index\expandafter{\temp@\texttt{\textbackslash\m}}
+		 }
+		 {
+			% \index{\m}
+			 \lowercase{\def\temp{\m}}
+			\expandafter\index\expandafter{#1!\temp@\texttt{\textbackslash\m}}
+		 }
+	}
+}
 
 \begin{document}
 	\frontmatter
@@ -47,6 +71,7 @@
 	\part{rpgtex Core}
 		\input{parts/intro.tex}
 		\input{parts/commands.tex}
+		\input{parts/environments.tex}
 		\input{parts/variables.tex}
 		\input{parts/fonts.tex}
 
@@ -59,6 +84,6 @@
 		\input{parts/themes_dnd.tex}
 		\input{parts/themes_scifi.tex}
 
-
-
+	\RpgSetTheme{default}
+	\printindex
 \end{document}

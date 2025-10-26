@@ -22,12 +22,11 @@
 		A `theme' is therefore a collection of Backend Commands (to configure the `core engine') and redefinitions of Placeholder Commands to provide their own unique functionality.
 		\def\backendCommand{\hyperref[S:ThemeCommands]{\textcolor{blue!40!black}{{Backend Command}}}}
 		\def\placeholderCommand{\hyperref[S:ThemeCommands]{\textcolor{blue!40!black}{{Placeholder Command}}}}
-		
 	\section{Title Pages}
 		\subsection{User-Facing Commands}
 			\begin{macrolist}
 				\RpgMacro*{\maketitle,{{}}}
-					{	
+					{	\cmdidx{maketitle}
 						When called, creates theme-defined title pages using a custom format.
 					}{
 						\verb|\title{A title}|
@@ -51,7 +50,7 @@
 						If \verb|RpgUseCoverPage| has been set to true (usually by a class such as \verb|rpgbook.cls|), then the image stored in \verb|\@cover| (if there is one) is automatically used as a full-page background image. This is independent of the theme definition of \verb|RpgDrawCover|, and occurs before that function is called -- all subsequent drawing occurs over the top of the cover image.
 					}
 				\RpgMacro{\cover,{{m}},\@cover}
-					{
+					{\cmdidx{cover,{"@}cover}
 						Saves an image path to the variable \verb|\@cover|, automatically used by \verb|\maketitle| as the background image.
 					}
 					{
@@ -64,6 +63,7 @@
 					}
 				\RpgMacro{\subtitle,{{m}},\@subtitle}
 					{
+						\cmdidx{subtitle,{"@}subtitle}\label{Macro:subtitle}
 						Saves a string to the variable \verb|\@subtitle|. Themes may use this when defining their \verb|RpgDrawCover| and \verb|RpgSimpleTitle|.
 					}
 					{
@@ -79,6 +79,7 @@
 		\begin{macrolist}
 			\RpgMacro{\RpgUseCoverPage,{{m}}}
 				{
+					\cmdidx{RpgUseCoverPage}
 					If true, \verb|maketitle| creates a title page to populate, else the title is rendered as a heading.
 				}{
 					\RpgUseCoverPage{true/false}
@@ -88,6 +89,7 @@
 				}
 			\RpgMacro{\RpgDrawCover,{{}}}
 				{
+					\cmdidx{RpgDrawCover}
 					Executes over the top of the \verb|\@cover| image to render a front cover.
 				}{}
 				{
@@ -100,6 +102,7 @@
 				}
 			\RpgMacro{\RpgSimpleTitle,{{}}}
 				{
+					\cmdidx{RpgSimpleTitle}
 					Renders a `header' title - a simple text-only title at the top of the page.
 				}{}
 				{
@@ -119,6 +122,7 @@
 					\part(*)[<image>]{<part-name>}
 				}
 				{
+					\cmdidx{part,part*}
 					There are three distinct behaviours that can be exhibited, depending on the presence or absence of the \verb|*|, and the presence and value of \verb|<image>|.
 
 					\begin{RpgTable}{XX}
@@ -134,7 +138,7 @@
 				}
 			
 			\RpgMacro{\RpgDrawPartPage,{{m}}}
-				{\label{Macro:DrawPartPage}
+				{\label{Macro:DrawPartPage}\cmdidx{RpgDrawPartPage}
 					Uses Tikz to draw a custom part page when activated by \verb|\part| \RpgPage[p]{Macro:part}.
 				}
 				{
@@ -152,7 +156,7 @@
 		Dice are a mainstay of RPGs, and so it is important to have a standard way to report and simplify their expressions. We provide an interface for a standard `dice + modifier' expression.
 		\begin{macrolist}
 			\RpgMacro{\RpgDice,{{m}}}
-				{\label{Macro:Dice}
+				{\label{Macro:Dice}\cmdidx{RpgDice}
 					Evaluates expressions of the form $n\mathrm{d}x \pm m$, and outputs using a theme-dependent layout.
 				}
 				{
@@ -187,7 +191,7 @@
 				}
 		
 			\RpgMacro{\RpgDiceFormat,{{m m m}}}
-				{\label{Macro:DiceFormat} Prints the values computed by \verb|RpgDice|
+				{\label{Macro:DiceFormat}\cmdidx{RpgDiceFormat} Prints the values computed by \verb|RpgDice|
 				}
 				{
 					\RpgDiceFormat{<dice-count>}{<dice-size>}{<added bonus>}
@@ -213,12 +217,64 @@
 				}
 		\end{macrolist}
 
+		
+	\section{Theme Commands}
 
+		\begin{macrolist}
+			\RpgMacro{\RpgLayoutOnly,{{m}}}
+				{\cmdidx{RpgLayoutOnly}
+					Executes the contents of the command if \verb|layout| mode is active.
+				}
+				{
+					\RpgLayoutOnly{<content-to-execute>}
+				}
+				{
+					If the internal value \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, then \verb|content-to-execute| is run, otherwise it is ignored.
+
+					This command is primarily used by theme developers and document class files to conditionally load or activate modules based on whether the package was loaded via a document class (layout mode active) or directly via \verb|\usepackage{rpgtex}|.
+				}
+			\RpgMacro{\RpgSetTheme,{{m}}}
+				{\cmdidx{RpgSetTheme}
+					Activates a chosen theme.
+				}
+				{
+					\RpgSetTheme{<theme-name>}
+				}
+				{
+					Searches for the file \verb|<theme-path>/<theme-name>/<theme-name>.cfg|, and inputs it. If this is a properly configured theme file, then it activates the chosen theme given the current global parameters. If the file does not exist, throws an error.
+
+					If   \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, the command automatically inserts \verb|\clearpage|, as required to ensure the old headers are not overwritten by the new theme.
+
+					\verb|<theme-path>| is modified via \verb|RpgSetThemePath|.
+				}
+
+			\RpgMacro{\RpgSetThemeColor,{{m}}}
+				{\label{Macro:SetThemeColor}\cmdidx{RpgSetThemeColor}
+					Sets the \verb|themecolor|, and simultaneously updates the co-varying colors \RpgPage[p]{S:Colors}.
+				}{
+					\RpgSetThemeColor{color-name}
+				}{
+					If \verb|color-name| specifies a valid color, then the value of \verb|themecolor| is updated, as well as a number of other colors (\verb|tipcolor|, \verb|sidebarcolor| and \verb|tablecolor|) which are set to be equal to the themecolor by default.
+
+					Of the rpg-provided colors, only \verb|narrationcolor| is unaffected by this command.
+				}
+			\RpgMacro{\RpgSetThemePath,{{m}}}
+				{\cmdidx{RpgSetThemePath}
+					Changes the value of the theme path searched for by \verb|RpgSetTheme|
+				}
+				{
+					\RpgSetTheme{<path-name>}
+				}
+				{
+					Updates an internal variable to be equal to the input value; does not check if the theme path is valid or not. Useful if you wish to create a new theme outside of the \verb|rpgtex| file structure.
+				}
+			\RpgMacro{\RpgSetFont}{See \RpgPage{S:FontInterface}}{}{}
+		\end{macrolist}
 	\section{Utility Commands}
 
 		\begin{macrolist}
 			\RpgMacro{\RpgOrdinal,{{o m}}}
-				{
+				{\cmdidx{RpgOrginal}
 					Converts a numeric value to the corresponding ordinal.
 				}
 				{
@@ -239,7 +295,7 @@
 
 				}
 			\RpgMacro{\RpgPage,{{O{t} m}}}
-				{
+				{\cmdidx{RpgPage}
 					Outputs the current page reference for a label, with an option to enclose it in specific brackets or parentheses.
 				}
 				{
@@ -265,7 +321,7 @@
 					\end{RpgTable}
 				}
 			\RpgMacro{\RpgPlural,{{o m m}}}
-				{
+				{\cmdidx{RpgPlural}
 					Generates grammatically correct plural forms of a word based on a given count.
 				}
 				{
@@ -289,55 +345,3 @@
 			
 		\end{macrolist}
 
-	\section{Theme Commands}
-
-		\begin{macrolist}
-			\RpgMacro{\RpgLayoutOnly,{{m}}}
-				{
-					Executes the contents of the command if \verb|layout| mode is active.
-				}
-				{
-					\RpgLayoutOnly{<content-to-execute>}
-				}
-				{
-					If the internal value \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, then \verb|content-to-execute| is run, otherwise it is ignored.
-
-					This command is primarily used by theme developers and document class files to conditionally load or activate modules based on whether the package was loaded via a document class (layout mode active) or directly via \verb|\usepackage{rpgtex}|.
-				}
-			\RpgMacro{\RpgSetTheme,{{m}}}
-				{
-					Activates a chosen theme.
-				}
-				{
-					\RpgSetTheme{<theme-name>}
-				}
-				{
-					Searches for the file \verb|<theme-path>/<theme-name>/<theme-name>.cfg|, and inputs it. If this is a properly configured theme file, then it activates the chosen theme given the current global parameters. If the file does not exist, throws an error.
-
-					If   \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, the command automatically inserts \verb|\clearpage|, as required to ensure the old headers are not overwritten by the new theme.
-
-					\verb|<theme-path>| is modified via \verb|RpgSetThemePath|.
-				}
-
-			\RpgMacro{\RpgSetThemeColor,{{m}}}
-				{\label{Macro:SetThemeColor}
-					Sets the \verb|themecolor|, and simultaneously updates the co-varying colors \RpgPage[p]{S:Colors}.
-				}{
-					\RpgSetThemeColor{color-name}
-				}{
-					If \verb|color-name| specifies a valid color, then the value of \verb|themecolor| is updated, as well as a number of other colors (\verb|tipcolor|, \verb|sidebarcolor| and \verb|tablecolor|) which are set to be equal to the themecolor by default.
-
-					Of the rpg-provided colors, only \verb|narrationcolor| is unaffected by this command.
-				}
-			\RpgMacro{\RpgSetThemePath,{{m}}}
-				{
-					Changes the value of the theme path searched for by \verb|RpgSetTheme|
-				}
-				{
-					\RpgSetTheme{<path-name>}
-				}
-				{
-					Updates an internal variable to be equal to the input value; does not check if the theme path is valid or not. Useful if you wish to create a new theme outside of the \verb|rpgtex| file structure.
-				}
-		\end{macrolist}
-	

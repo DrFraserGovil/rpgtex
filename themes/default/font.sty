@@ -1,9 +1,14 @@
 \ExplSyntaxOn
 %%%reactivate the original rm-font loaded
-\setmainfont{Latin~Modern~Roman}
+\providefontfamily{\lrfont}{Latin~Modern~Roman}
+[
+	SmallCapsFont=Latin~Modern~Roman~Caps
+]
 
-\RpgSetFont[
-	 title-family         = \normalfont,
+\RpgSetFont{
+	main-body-family = \lrfont,
+	main-body-style= {},
+	title-family         = \normalfont,
     title-style         = \Huge,
 	% Subtitle
     subtitle-family         = \normalfont,
@@ -55,7 +60,7 @@
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Sidebar title
     sidebar-title-family         = \sffamily,
-    sidebar-title-style         = \bfseries,
+    sidebar-title-style         = \bfseries\normalsize,
     % Sidebar body
     sidebar-body-family         = \normalfont,
     sidebar-body-style         = \small,
@@ -100,5 +105,5 @@
     % Drop caps
     drop-cap-family         = \normalfont,
     drop-cap-internal-style         = \scshape,
-]{}
+}
 

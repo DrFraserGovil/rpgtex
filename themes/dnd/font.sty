@@ -66,7 +66,7 @@
 %The white color of the cover page in rpgbook mode is not set here, but in the \RpgDrawCoverPage command
 %This is to prevent white text being used everywhere else!
 
-\RpgSetFont[
+\RpgSetFont{
 	%Sections
 	title-style			= {\bf\fontsize{30}{50}\selectfont},
 	subtitle-family		={\scshape},
@@ -110,14 +110,14 @@
 	footer-style		= {\color{pagegold}\scriptsize},
 	page-number-style	= {\color{pagegold}\scriptsize},
 	drop-cap-family		= {\Royal},
-]{}
+}
 
 %%modify fonts if in handout mode
 \str_if_eq:NNT \g__rpg_base_class_tl {article}
 {
-	\RpgSetFont[
+	\RpgSetFont{
 		title-style			= {\bf\scshape\Huge\color{titlered}},
 		subtitle-style			= {\bf\normalsize\color{titlered}},
-	]
+	}
 	{}
 }

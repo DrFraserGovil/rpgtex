@@ -24,6 +24,11 @@
 
 \keys_define:nn { rpg / fonts }
   {
+	%%%% Main body font
+	main-body-family .tl_set:N = \l__rpg_main_body_family_tl,
+	main-body-family .value_required:n = true,
+	main-body-style .tl_set:N = \l__rpg_main_body_style_tl,
+	main-body-style .value_required:n = true,
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Sectioning commands
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -182,14 +187,27 @@
 
   }
 
-\NewDocumentCommand { \RpgSetFont } { o }
+
+\NewDocumentCommand { \RpgSetFont } { m }
   {
     \keys_set:nn { rpg / fonts } { #1 }
+	\renewcommand\normalfont\RpgFontBody
+	\renewcommand{\FirstLineFont}{\RpgFontDropCapInternal}
+	\normalfont
   }
+
+\AtBeginDocument{
+	\normalfont	
+}
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % % Font access functions combine the selected family and style
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\RpgFontBody}{}
+{
+	\l__rpg_main_body_family_tl \l__rpg_main_body_style_tl
+}
+
 % % Sectioning commands
 \NewDocumentCommand{\RpgFontTitle}{}
   { \l__rpg_title_family_tl \l__rpg_title_style_tl}
@@ -288,6 +306,7 @@
 % Usage: rpgDropCapLine[<lettrine options>]{<first letter>}{<small caps line>}
 %    It takes trial and error to get the 2nd argument to align with
 %    the linebreak. See the lettrine package for options.
+\RequirePackage{magaz}
 \NewDocumentCommand{\RpgDropCap}{ O{} m m }
   {
     \lettrine[
@@ -297,8 +316,9 @@
         nindent = 0pt,
         #1
       ]
-      {#2}
-      {\RpgFontDropCapInternal #3}
+      {#2}{}
+    %   {\RpgFontDropCapInternal #3}
+	\FirstLine{#3}
   }
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
