@@ -25,6 +25,8 @@
         % Print the item using \verb, followed by \\ to force a newline.
         \small \verb| ##1 | \\
     }
+	% \verb|#1|
+	% hi
 }
 
 \NewDocumentEnvironment{macrolist}{+b}{
@@ -45,32 +47,28 @@
 	{\RpgFontSubsubsection{} #1}
 	\newline
 }
-% \NewDocumentCommand{\macrosubsection}{m}
-% {
-% \newline\vspace{1em}
-% 	{\RpgFontSubsubsection{} #1}
-% 	\newline
-% }
 
 
-\NewDocumentCommand{\RpgMacro}{s m +m +m +m}{\vspace{2em}\makecell[rt]{  \__rpg_doc_macro_list:n { #2 }} &
+\NewDocumentCommand{\RpgMacro}{s o m +m +m +m}{\vspace{2em}\makecell[rt]{  \__rpg_doc_macro_list:n { #3 }} & #4
 
-	#3
-
-	\str_if_empty:nF{#4}
+	\tl_if_empty:NF{#2}
 	{
+		\label{Macro:#2}
+		\cmdidx{#2}	
+	}
+	\str_if_empty:nF{#5}
+	{~
 		\macrosection{Syntax}
 
 		\IfBooleanTF{#1}
-		{#4}
-		{\verb|#4|}
+		{#5}
+		{\verb|#5|}
 	}
 
-	\str_if_empty:nF{#5}
+	\str_if_empty:nF{#6}
 	{
 	\macrosection{Details}
-
-	#5
+	#6
 	}
 	\\
 }

@@ -91,9 +91,10 @@
 \RequirePackage {core/rpgsidebar}    % sidebars
 \RequirePackage {core/rpgtable}      % tables
 \RequirePackage {core/titles}
-% % %% packages which do nothing but alter geometry/page settings, and so are ignored if the header layout setting is not active
+\RequirePackage {core/rpgheader}     % fancy headers and footers
+%
+ % %% packages which do nothing but alter geometry/page settings, and so are ignored if the header layout setting is not active
 \RpgLayoutOnly{
 	\RequirePackage {core/rpgsections}   % section styling and special section headers
-	\RequirePackage {core/rpgheader}     % fancy headers and footers
 	\RequirePackage {core/rpgtoc}        % table of contents styling
 }

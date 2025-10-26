@@ -17,6 +17,7 @@
 %%splits the command up by word, and contours each word individually
 \cs_new_protected:Npn \__rpg_contour_preserve_space:n #1
   {
+	% hi!
     \group_begin:
     \seq_set_split:Nnn \l_tmpa_seq { ~ } { #1 }
     \seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n {\l__rpg_contour_style_tl\contour{\l__rpg_contour_outer_tl}{\color{\l__rpg_contour_inner_tl}##1}} }

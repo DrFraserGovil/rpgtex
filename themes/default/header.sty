@@ -1,28 +1,18 @@
 \ExplSyntaxOn
-% Writes chapter name on footer when configured
-	\cs_if_free:NF \chaptermark
-	{
-		\renewcommand*{\chaptermark}[1]
-		{
-			\markboth
-			{
-				\MakeUppercase
-				{
-					\ifnum\value{secnumdepth}>-1
-					\chaptertitlename~\thechapter :~
-					\fi
-					#1
-				}
-			}
-			{}
-		}
-	}
-
 
 \RpgLayoutOnly{
-	\fancyhead{}
-	\renewcommand{\headrulewidth}{0pt}
+	%%clear background images
+	\RpgSetPaper{}
 
+	% Setup for custom footer
+	\pagestyle {fancy}
+	\renewcommand*{\headrulewidth}{0pt} % no rule for header
+	\renewcommand*{\footrulewidth}{0pt} % no rule for footer
+	\fancyhf {} % clear all headers and footers
+	\fancypagestyle {plain} {}
+	\fancypagestyle{empty} {\fancyhf {}}
+
+	
 	% Left-even page footer
 	\fancyfoot[LE]{%
 		\RpgFontFooter \leftmark \newline
@@ -35,16 +25,6 @@
 		{\RpgFontPageNumber~\thepage}
 	}
 
-	% Clear the current definition of 'plain' footers/headers
-	\fancypagestyle{plain}{}
-
-	% REDEFINE 'plain' to only contain the header logic
-	\fancypagestyle{empty}{
-		% Clear all headers and footers *for this style* first
-		\fancyhf{}
-
-		% Ensure footers are explicitly empty for this style
-		\fancyfoot{}
-	}
+	
 }
 \ExplSyntaxOff
