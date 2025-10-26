@@ -1,50 +1,24 @@
 \ExplSyntaxOn
 
-% Special Columns
-\newcolumntype {Y} { > {\centering\arraybackslash } X }
-\newcolumntype {`} { > {\global\let\currentrowstyle\relax } }
-\newcolumntype {^} { > {\currentrowstyle} }
-
-% Matches {, }, >,  , and any other character
-\regex_const:Nn \c__preamble_regex {>\s*{.*}\s*\S|\S}
-
-\newcommand{\rowstyle}[1]
-  {
-    \gdef\currentrowstyle{#1}#1\ignorespaces
-  }
-
-% Table options
-\keys_define:nn { rpg / table }
-  {
-    color .tl_set:N            = \l__rpg_table_color_tl,
-    color .initial:n           = tablecolor,
-    color .value_required:n    = true,
-    title .tl_set:N           = \l__rpg_table_header_tl,
-    title .value_required:n   = true,
-    width .dim_set:N           = \l__rpg_table_width_dim,
-    width .value_required:n    = true,
-  }
+\input{core/lowlevel/table}
 
 % Table Definition
 \NewDocumentEnvironment {RpgTable} { o m }
 {
-  \group_begin:
+	\group_begin:
 
-  \dim_set:Nn \l__rpg_table_width_dim { \linewidth }
-  \tl_if_novalue:nF {#1}
-    { \keys_set:nn { rpg / table } {#1} }
+	\keys_set:nn {rpg/table}{width=\linewidth}
+	\tl_if_novalue:nF {#1}
+	{ 
+		\keys_set:nn { rpg / table } {#1} 
+	}
 
-  \par \vspace { 9pt plus 3pt minus 3pt } \noindent
+  	\par \vspace { 9pt plus 3pt minus 3pt } \noindent
 
-  \tl_if_empty:NF \l__rpg_table_header_tl
-    {
-      \group_begin:
-        \RpgFontTableTitle \l__rpg_table_header_tl \nopagebreak
-        \par \vspace{ 5pt plus 2pt minus 2pt } \noindent
-      \group_end:
-    }
-
-  \RpgFontTableBody
+ 
+	\__write_table_header:n {\l__rpg_table_header_tl}
+  
+	\RpgFontTableBody
 
   \rowcolors {1} {} {\l__rpg_table_color_tl}
 

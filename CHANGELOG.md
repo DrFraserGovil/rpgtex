@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * RpgUseCoverPage for cover page management
 
+* `clear` pagestyle, allowing for differentiation between 'clear' and 'empty'/
+
+* RpgSetPaper for easy paper-texture management
+
 ### Changed
 
 * Minor stylistic changes to make the linter happy
@@ -24,6 +28,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Changed (and renamed) RpgDrawPart page, abstracting the background image handling to the engine wrapper.
 
 * Defined a global default colour value for the contour inner and outer colours
+
+* Changed the argument signature of RpgSetFont to take a {} rather than []
+
+* Changed the 'main font' syntax, and set RpgSetFont to override the main body font
+
+* Overhauled RpgContour to accept key/value arguments and properly allow contouring of formatted text.
+
 #### RpgDice
 
 * Altered the regular expression capture/evaluate to allow arbitrary numerical evaluation of modifiers, and non-counted dice (i.e. d8 -> 1d8)

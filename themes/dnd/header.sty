@@ -1,32 +1,5 @@
-%% Writes chapter name on footer when configured
-	\cs_if_free:NF \chaptermark
-	{
-		\renewcommand*{\chaptermark}[1]
-		{
-			\markboth
-			{
-				\MakeUppercase
-				{
-					\ifnum\value{secnumdepth}>-1
-					\chaptertitlename\ \thechapter :~
-					\fi
-					#1
-				}
-			}
-			{}
-		}
-	}
 
-% Header is used to include the page background
-\fancyhead{
-  \bool_if:NT \l__rpg_show_background_bool
-    {
-    \begin{tikzpicture}[remember~picture,overlay]
-      \node[inner~sep=0pt] at (current~page.center) {\includegraphics[width=\paperwidth,height=\paperheight]{themes/dnd/img/paper}};
-    \end{tikzpicture}
-    }
-}
-
+\RpgSetPaper{\RpgPackagePath/themes/dnd/img/paper}
 
 % Left-even page footer
 \fancyfoot[LE]{%
@@ -53,21 +26,3 @@
   % Clear the current definition of 'plain' footers/headers
 \fancypagestyle{plain}{}
 
-% REDEFINE 'plain' to only contain the header logic
-\fancypagestyle{empty}{
-    % Clear all headers and footers *for this style* first
-    \fancyhf{}
-
-    % Only include the custom header logic
-    \fancyhead{
-        \bool_if:NT \l__rpg_show_background_bool
-        {
-            \begin{tikzpicture}[remember~picture,overlay]
-                \node[inner~sep=0pt] at (current~page.center) {\includegraphics[width=\paperwidth,height=\paperheight]{img/paper}};
-            \end{tikzpicture}
-        }
-    }
-
-    % Ensure footers are explicitly empty for this style
-    \fancyfoot{}
-}
