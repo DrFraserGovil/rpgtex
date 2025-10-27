@@ -35,6 +35,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * Overhauled RpgContour to accept key/value arguments and properly allow contouring of formatted text.
 
+* Added breakable option to the RpgTable
+
 #### RpgDice
 
 * Altered the regular expression capture/evaluate to allow arbitrary numerical evaluation of modifiers, and non-counted dice (i.e. d8 -> 1d8)

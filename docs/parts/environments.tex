@@ -8,4 +8,45 @@
 	\labelsection{RpgNarration}
 	\labelsection{RpgSidebar}
 	\labelsection{RpgTable}
+
+
+
+		\begin{macrolist}
+			\RpgMacro*{RpgTable,{{o m}}}{Begins an environment for creating visually appealing and consistent tables. }{
+				\verb|\begin{RpgTable}[<options>]{<column-specifications}|
+
+				~~~~\verb|<table-contents>|
+				
+				\verb|\end{RpgTable}|
+			}{
+				RpgTable is a wrapper for the \forcelink{https://ctan.org/pkg/tabularx}{tabularx} (or \forcelink{https://ctan.org/pkg/xltabular}{xltabular} -- see \verb|breakable|) environment, and so accepts the standard set of column specifications:\{c,l,r,p{width},\@,...\} and the extended set (i.e. X). It therefore acts almost identically to the standard tabular environment with a few stylistic differences.
+				\macrosection{Stylistic Changes}
+					The RpgTable environment makes the following changes:
+					\begin{enumerate}
+						\item \textbf{Title.} If the \verb|title| option is set, a title-heading is rendered above the tablular in the \verb|RpgFontTableTitle| font.
+						\item \textbf{Auto-headings.} The first row of the tabular environment is automatically rendered in the \verb|RpgFontTableHeader|, allowing for trivial header labels.
+						\item \textbf{Font Integration.} The main body of the table is rendered in \verb|RpgFontTableBody| font.
+						\item \textbf{Auto-colouring.} The rows alternate between being transparent and being set to the \verb|tablecolor| variable \RpgPage[p]{S:Colors}. This is powered by \verb|rowcolors|.
+					\end{enumerate}
+				\macrosection{Optional Arguments}
+				\begin{description}
+					\item[width=<dimexpr>] Fixes the width of the tabular environment to the value of this argument. Default value is the current \verb|\linewidth|.
+					\item[color=<color-name>] If set, uses this value instead of \verb|tablecolor| for the alternating coloration.
+					\item[title=<text>] Sets the text to be rendered as the title of the table. 
+					\item[breakable] If flag is present, renders using \verb|xltabular|, enabling the table to break over pages. \textbf{only available in 1-column mode (a fundamental limitation of xltabular).}
+					\item[noheader] If flag is present, suppresses the autoformatting of the title. The first row is instead rendered in the body formatting.
+				\end{description}
+				% The available options are as follows:
+			}
+		\end{macrolist}
+		\subsection{RpgTable Example}
+
+		This is the standard usage of the table, showing automatic formatting of the header rows and the word-wrapping abilities of the X-column:
+
+		\DualExampleRender{table1}
+
+		This example adds a title, but suppresses the header formatting:
+
+		\DualExampleRender{table2}
+		
 	\labelsection{RpgTip}
