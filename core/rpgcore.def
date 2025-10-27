@@ -85,10 +85,8 @@
 \RequirePackage {core/rpgfonts}	    % font definitions
 
 % % % Main modules in alphabetical order
-\RequirePackage {core/rpgtip}    % inline tip boxes
-\RequirePackage {core/rpgnarration}  % read-aloud text
+\RequirePackage {core/rpgboxes}    % inline tip, narration and sidebar boxes
 \RequirePackage {core/rpgmap}   % section styling and special section headers
-\RequirePackage {core/rpgsidebar}    % sidebars
 \RequirePackage {core/rpgtable}      % tables
 \RequirePackage {core/titles}
 \RequirePackage {core/rpgheader}     % fancy headers and footers
