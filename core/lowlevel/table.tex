@@ -1,0 +1,70 @@
+% Special Columns
+\newcolumntype {Y} { > {\centering\arraybackslash } X }
+\newcolumntype {`} { > {\global\let\currentrowstyle\relax } }
+\newcolumntype {^} { > {\currentrowstyle} }
+
+
+% Matches {, }, >,  , and any other character
+\regex_const:Nn \c__preamble_regex {>\s*{.*}\s*\S|\S}
+
+\newcommand{\rowstyle}[1]
+  {
+    \gdef\currentrowstyle{#1}#1\ignorespaces
+  }
+
+  % Table options
+\bool_new:N \l__rpg_table_breakable_bool
+\bool_new:N \l__rpg_table_noheader_bool
+\keys_define:nn { rpg / table }
+{
+	color .tl_set:N            = \l__rpg_table_color_tl,
+	color .initial:n           = tablecolor,
+	color .value_required:n    = true,
+	title .tl_set:N           = \l__rpg_table_header_tl,
+	title .value_required:n   = true,
+	width .dim_set:N           = \l__rpg_table_width_dim,
+	width .value_required:n    = true,
+	width .initial:n			=\linewidth,
+	breakable .code:n			= {\bool_set_true:N\l__rpg_table_breakable_bool},
+	breakable .value_required:n = false,
+	noheader .code:n			= {\bool_set_true:N\l__rpg_table_noheader_bool},
+	noheader .value_required:n = false,
+}
+
+\cs_new_protected:Npn \__write_table_title:n #1
+{
+	 \tl_if_empty:NF #1
+    {
+      \group_begin:
+        \RpgFontTableTitle #1 \nopagebreak
+        \par \vspace{ 5pt plus 2pt minus 2pt } \noindent
+      \group_end:
+    }
+}
+
+\cs_new_protected:Npn \__render_table:nnn#1#2#3
+{
+	{\RpgFontTableBody
+
+	\rowcolors {1} {} {\l__rpg_table_color_tl}
+
+	\bool_if:NTF \l__rpg_table_noheader_bool
+	{
+		\begin{#1} {\l__rpg_table_width_dim} {#2}
+	}
+	{
+		\regex_extract_all:NnNTF \c__preamble_regex {#2} \l_tmpa_seq
+		{
+			\tl_set:Nn \l_tmpa_tl {\seq_use:Nn \l_tmpa_seq {^}}
+			\use:x { \exp_not:n {\begin}{#1}{\l__rpg_table_width_dim}{`\l_tmpa_tl}}
+			\rowstyle{\RpgFontTableHeader}
+		}
+		{
+			\begin{#1} {\l__rpg_table_width_dim} {#2}
+		}
+	}
+	#3
+	\end{#1}
+	}
+}
+

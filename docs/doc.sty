@@ -25,8 +25,6 @@
         % Print the item using \verb, followed by \\ to force a newline.
         \small \verb| ##1 | \\
     }
-	% \verb|#1|
-	% hi
 }
 
 \NewDocumentEnvironment{macrolist}{+b}{
@@ -43,11 +41,19 @@
 
 \NewDocumentCommand{\macrosection}{m}
 {
-\newline\vspace{1em}
+\par\noindent\vspace{1em}
 	{\RpgFontSubsubsection{} #1}
-	\newline
+	\par\noindent
 }
 
+\newcommand\DualExampleRender[1]
+		{
+			\noindent\begin{minipage}[t]{0.5\linewidth}
+			\noindent\lstinputlisting{parts/examples/#1}
+			\end{minipage}\begin{minipage}[t]{0.5\linewidth}
+		\input{parts/examples/#1}
+		\end{minipage}
+		}
 
 \NewDocumentCommand{\RpgMacro}{s o m +m +m +m}{\vspace{2em}\makecell[rt]{  \__rpg_doc_macro_list:n { #3 }} & #4
 

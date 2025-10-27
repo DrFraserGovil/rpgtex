@@ -1,9 +1,9 @@
 \ExplSyntaxOn
 
 \input{core/lowlevel/table}
-
+\RequirePackage{supertabular}
 % Table Definition
-\NewDocumentEnvironment {RpgTable} { o m }
+\NewDocumentEnvironment {RpgTable} { o m +b}
 {
 	\group_begin:
 
@@ -13,28 +13,23 @@
 		\keys_set:nn { rpg / table } {#1} 
 	}
 
+
   	\par \vspace { 9pt plus 3pt minus 3pt } \noindent
 
  
-	\__write_table_header:n {\l__rpg_table_header_tl}
+	\__write_table_title:n {\l__rpg_table_header_tl}
   
-	\RpgFontTableBody
-
-  \rowcolors {1} {} {\l__rpg_table_color_tl}
-
-  \regex_extract_all:NnNTF \c__preamble_regex {#2} \l_tmpa_seq
-  {
-    \tl_set:Nn \l_tmpa_tl {\seq_use:Nn \l_tmpa_seq {^}}
-    \use:x { \exp_not:n {\tabularx{\l__rpg_table_width_dim}}{`\l_tmpa_tl}}
-    \rowstyle{\RpgFontTableHeader}
-  }
-  {
-    \tabularx {\l__rpg_table_width_dim} {#2}
-  }
+	\bool_if:NTF {\l__rpg_table_breakable_bool}
+	{
+		\__render_table:nnn {xltabular}{#2}{#3}	
+	}
+	{
+		\__render_table:nnn {tabularx}{#2}{#3}
+	}
 
 }
 {
-  \endtabularx \vspace { 9pt plus 3pt minus 3pt }
+  \vspace { 9pt plus 3pt minus 3pt }
 
   \group_end:
 }
