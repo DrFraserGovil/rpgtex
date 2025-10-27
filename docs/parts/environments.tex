@@ -1,12 +1,67 @@
 \chapter{Environments}
+	\def\tcref{\forcelink{https://ctan.org/pkg/tcolorbox?lang=en}{tcolorbox}}
 	\newcommand\labelsection[1]
 	{
 		\section{#1}\label{S:#1}
 	}
 
 	
-	\labelsection{RpgNarration}
-	\labelsection{RpgSidebar}
+	\labelsection{Rpg Boxes}
+
+		\rpgtex{} defines three `colorbox' environments, which inherit from \tcref{}.
+
+		\begin{macrolist}
+			\RpgMacro*{RpgNarration,{{o}}}{A \tcref{} wrapper designed for text that is read aloud to players}{
+				\verb|\begin{RpgNarration}[color=<color>,<tcbox-options>]|
+
+				~~~~\verb|<text>|
+				
+				\verb|\end{RpgNarration}|
+			}{
+				RpgNarration does not (by default) set a title, using only `body text', which is typeset using the \verb|RpgFontNarration| font. The optional \verb|<tcbox-options>| argument can be a list of all the basic tcolorbox options (see that documentation). The \verb|color| argument is an alias for \verb|colback| (\verb|colbacktitle| is also set, but is ignored as the title is empty). Due to the order of processing, if both \verb|color| and \verb|colback| are set, the value of \verb|colback| is used.
+
+				Themes may alter the appearance of the narration block using the tcb interface, calling \verb|\tcbset{rpgnarration /.append~style={...}}| to overwrite the existing instructions.
+			}
+			\RpgMacro*{RpgSidebar,{{o m}}}{A decorated \tcref{} wrapper designed for information which is set outside the main text.}{
+				\verb|\begin{RpgSidebar}[color=<color>,<tcbox-options>]{<title>}|
+
+				~~~~\verb|<text>|
+				
+				\verb|\end{RpgSidebar}|
+			}{
+				RpgSidebar requires a title (using \verb|RpgFontSidebarTitle|) as well as the body text (\verb|RpgFontSidebarBody|). 	RpgSidebar is typically more highly decorated than RpgTip, and does not have the \verb|breakable| flag set. It is usually best to use one of the `float' options.
+				
+				The optional \verb|<tcbox-options>| argument can be a list of all the basic tcolorbox options (see that documentation). The \verb|color=x| argument is equivalent to calling both \verb|colback=x| and \verb|colbacktitle=x|. Due to the order of processing, if both \verb|color| and \verb|colback| are set, the value of \verb|colback| is used.
+		 
+
+				Themes may alter the appearance of the sidebar using the tcb interface, calling \verb|\tcbset{rpgsidebar /.append~style={...}}| to overwrite the existing instructions.
+			}
+			\RpgMacro*{RpgTip,{{o m}}}{A simple \tcref{} wrapper designed for information which is set outside the main text.}{
+				\verb|\begin{RpgTip}[color=<color>,<tcbox-options>]{<title>}|
+
+				~~~~\verb|<text>|
+				
+				\verb|\end{RpgTip}|
+			}{
+				RpgTip is similar to RpgSidebar, requiring a title (\verb|RpgFontTipTitle|) in addition to the body text (\verb|RpgFontTipBody|). However, it is generally simpler, enabling it to safely break over page boundaries. The optional \verb|<tcbox-options>| argument can be a list of all the basic tcolorbox options (see that documentation). The \verb|color=x| argument is equivalent to calling both \verb|colback=x| and \verb|colbacktitle=x|. Due to the order of processing, if both \verb|color| and \verb|colback| are set, the value of \verb|colback| is used.
+
+				Themes may alter the appearance of the narration block using the tcb interface, calling \verb|\tcbset{rpgnarration /.append~style={...}}| to overwrite the existing instructions.
+			}
+		\end{macrolist}
+
+		
+
+		\subsection{Which Colorbox To Use?}
+
+			The choice between RpgSidebar and RpgTip is somewhat arbitrary -- although they have a mechanical difference by default (one being breakable, the other not) -- this can be overridden by themes. Instead, the intention is that they serve slightly different purposes:
+
+			\begin{description}
+				\item[RpgSidebar] is used for `important information' -- key rules or summaries which readers \textit{should} pay attention to.
+				\item[RpgTip] is for `helpful additions' -- tips, tricks and trivia that are not necessary, but which might be useful, and are too big to fit into a footnote or parenthetical.   
+			\end{description}
+		\subsection{Colorbox Examples}
+		\DualExampleRender{narration1}
+	
 	\labelsection{RpgTable}
 
 
@@ -49,4 +104,4 @@
 
 		\DualExampleRender{table2}
 		
-	\labelsection{RpgTip}
+

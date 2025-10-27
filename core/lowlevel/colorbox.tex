@@ -1,0 +1,44 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colorbox Internal functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Key for overriding colback/colbacktitle
+\keys_define:nn { rpg / colorboxes }
+{
+	color .tl_set:N         = \l__rpg_box_color_tl,
+	color .value_required:n = true,
+}
+
+% Forces the expansion of the tcb keys 
+% passed to the environment by the user before it invokes the tcolorbox
+\cs_new_protected:Nn \__rpg_start_tcb:nnn
+{
+	%#1 tcolorbox name, #2 automatic commands, #3 user commands
+	\begin {#1} [ #2, #3 ]
+}
+\cs_generate_variant:Nn \__rpg_start_tcb:nnn { nnV } %%clever variant hackery for expansion
+
+%Initialises the chosen colorbox, and handles the overridden commands
+\cs_new_protected:Nn \__rpg_begin_box:nnnn
+{
+	%#1 tcolorbox to open, #2 default tcolorbox color, #3 user options, #4 title (if present)
+
+	%set default color
+	\tl_set:Nn \l__rpg_box_color_tl{#2}
+
+	%catch the color overrides, but save the unused tcolorbox options
+	\keys_set_known:nnN { rpg / colorboxes } {#3} \l_tmpa_tl
+
+	%%convert empties of different types around
+    \str_if_eq:VnT \l_tmpa_tl { -NoValue- }
+      { \tl_set_eq:NN \l_tmpa_tl \c_empty_tl }
+
+	  %%invoke the chosen tcolorbox through our magic expanding macros
+    \__rpg_start_tcb:nnV{#1}
+      {
+          colback = \l__rpg_box_color_tl,
+          colbacktitle = \l__rpg_box_color_tl,
+			title = #4,
+      }
+      {\l_tmpa_tl}
+}

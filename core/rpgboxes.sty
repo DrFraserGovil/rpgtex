@@ -1,0 +1,62 @@
+\ExplSyntaxOn
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Environments for `boxed out'' text.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{core/lowlevel/colorbox}
+
+%%%%%%%
+%We define three boxes which can be used: Tip, Narration and Sidebar. 
+%They are all tcolorboxes, with properties set via \tcbset in the theme
+%Otherwise they differ only slightly in implementation
+%(Narration has no title, Tip and Sidebar do)
+%%%%%%%
+
+\DeclareTColorBox {__rpg_tip} {o}
+{
+	rpg tip,
+	#1,
+}
+\DeclareTColorBox {__rpg_narration} {o}
+{
+	rpg narration,
+	#1,
+}
+
+\DeclareTColorBox {__rpg_sidebar} {o}
+{
+	rpg sidebar,
+	#1,
+}
+
+\NewDocumentEnvironment {RpgNarration} {o}
+{
+	\group_begin:
+	\__rpg_begin_box:nnnn{__rpg_narration}{narrationcolor}{#1}{}
+}
+{
+	\end {__rpg_narration}
+	\group_end:
+}
+
+
+\NewDocumentEnvironment {RpgSidebar} {o m}
+{
+	\group_begin: 
+	\__rpg_begin_box:nnnn{__rpg_sidebar}{sidebarcolor}{#1}{#2}
+}
+{
+	\end {__rpg_sidebar}
+	\group_end:
+}
+
+\NewDocumentEnvironment {RpgTip} {o m}
+{
+	\group_begin:
+	\__rpg_begin_box:nnnn{__rpg_tip}{tipcolor}{#1}{#2}
+}
+{
+	\end {__rpg_tip}
+	\group_end:
+}
