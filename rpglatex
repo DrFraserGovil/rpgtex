@@ -1,0 +1,265 @@
+#!/usr/bin/env python3
+import argparse
+import subprocess
+import os
+import shutil
+import sys
+import time # Needed for context switch delay
+
+# --- Configuration ---
+DEFAULT_BUILD_DIR = ".build"
+
+
+def parse_arguments():
+	"""Parses command line arguments using argparse."""
+	parser = argparse.ArgumentParser(
+		description="rpglatex: A robust compiler portal for TeX engines. Cleans up intermediary files using the -output-directory flag."
+	)
+	
+	parser.add_argument('input_file', type=str, 
+						help="The main .tex file to compile (e.g., paper.tex).")
+
+	# Optional paths
+	parser.add_argument('-o', '--output', type=str, default=None,
+						help="Name of the final compiled PDF (default: <input_file>.pdf).")
+	parser.add_argument('-b', '--build', type=str, default=DEFAULT_BUILD_DIR,
+						help=f"Name of the build directory for temporary files (default: {DEFAULT_BUILD_DIR}).")
+	
+	# Verbosity/Silence (Standardized flags)
+	parser.add_argument('-v', '--verbose', action='store_true',
+						help='Exposes the full compilation engine messages (default is quiet).')
+	parser.add_argument('-q', '--quiet', action='store_true',
+						help='Disables all script progress information.')
+	
+
+	# # Engine selection (mutually exclusive group)
+	engine_group = parser.add_mutually_exclusive_group()
+	engine_group.add_argument('-x', '--xelatex', action='store_const', const='xelatex', dest='engine',
+							  help="Use XeLaTeX compiler [default]")
+	engine_group.add_argument('-l', '--lualatex', action='store_const', const='lualatex', dest='engine',
+							  help="Use LuaLaTeX compiler.")
+
+	parser.set_defaults(engine='xelatex') # Default compiler
+
+	# Functionality flags
+	parser.add_argument('-r', '--ref', action='store_true',
+						help="Enable BibTeX compilation for references.")
+	parser.add_argument('-f','--full',action='store_true',
+						help="Performs a full three-pass compilation suite. Used only for highly complex documents.")
+	parser.add_argument('--show', type=int, default=1, choices=[0, 1],
+						help="If 1, opens/context-switches to the compiled PDF when complete (default: 1).")
+
+
+	# Special engine flags
+	parser.add_argument('-p','--print',action='store_true',help="Inserts code `bg=print' into the pre-stream, activating print-background mode.")
+
+
+	args = parser.parse_args()
+	##Set default output
+	if args.output is None:
+		args.output = os.path.splitext(args.input_file)[0]
+	
+	if len(os.path.splitext(args.output)[1]) == 0:
+		args.output+=".pdf"
+
+	return args
+
+
+def run_command(command, working_directory, verbose=False, std_input=None):
+	"""Executes a subprocess command, captures all output if not verbose, and checks for errors.
+	
+	In quiet mode (verbose=False), output is captured (subprocess.PIPE) to ensure LaTeX's 
+	stdout errors are available if compilation fails.
+	"""
+	
+	capture = not verbose
+	try:
+		subprocess.run(
+			command, 
+			check=True, 
+			cwd=working_directory, 
+			capture_output=capture, 
+			input=std_input,
+			encoding='utf-8',
+		)
+		return True
+	
+	except subprocess.CalledProcessError as e:
+		# If running non-verbose, print the captured output for context
+		print("\n--- ERROR ---", file=sys.stderr)
+		print(f"Compilation failed for command: {' '.join(command)}", file=sys.stderr)
+		
+		# If running in quiet mode (capture=True), e.stdout contains the critical LaTeX output.
+		if not verbose and e.stdout:
+			# Print stdout containing the compiler messages (where LaTeX errors usually appear)
+			print("\n--- Compiler Output (Error details) ---", file=sys.stderr)
+			print(e.stdout, file=sys.stderr)
+		
+		return False
+	
+	except FileNotFoundError:
+		print(f"\n--- ERROR ---", file=sys.stderr)
+		print(f"Required program not found: {command[0]}. Is it installed and in your PATH?", file=sys.stderr)
+		return False
+
+def argprint(args,message):
+	if not args.quiet: print(message)
+	
+
+
+def code_injection(args):
+	
+	if args.print:
+		val = "print"
+	else:
+		val = "full"
+	additional_code = f"\\def\\RpgCMD{{bg={val}}}"
+	#other code
+
+
+	#then insert the desired code
+	additional_code += f" \\input"
+	return additional_code
+	
+
+def build_latex(args):
+	"""Orchestrates the multi-pass LaTeX compilation process."""
+	
+
+	# Absolute paths and file names
+	tex_path = os.path.abspath(args.input_file)
+	tex_filename = os.path.basename(tex_path)
+	base_name, _ = os.path.splitext(tex_filename)
+	injected = code_injection(args)
+
+
+	source_dir = os.path.dirname(tex_path)
+	build_dir_abs = os.path.abspath(args.build)
+	
+	if not os.path.exists(build_dir_abs):
+		os.makedirs(build_dir_abs)
+		if not args.quiet:
+			print(f"Created build directory: '{args.build}'")
+
+	# LaTeX command setup:
+	# 1. -output-directory: Redirects all generated files (AUX, LOG, PDF)
+	# 2. -jobname: Ensures the final PDF is named correctly inside the build directory
+	# 3. Non-interactive flags: Suppress interactive prompts on error/missing files
+	latex_command = [
+		args.engine,
+		"--interaction=nonstopmode",
+		f"-output-directory={build_dir_abs}",
+		f"-jobname={base_name}", 
+		"-halt-on-error",
+		"-max-print-line=10000"
+		"-file-line-error",
+		injected,
+		tex_filename 
+	]
+	# print(latex_command)
+	# exit(1)
+	# --- Compilation Passes ---
+	
+	argprint(args,"-> Pass 1: Generating auxiliary files...")
+	if not run_command(latex_command, source_dir, args.verbose): return False
+
+
+	if args.ref:
+		argprint(args,"-> Running BibTeX command...")
+		bibtex_command = ["bibtex", base_name]
+		if not run_command(bibtex_command, build_dir_abs, args.verbose): return False
+		
+	idxFileExist = os.path.exists(os.path.join(build_dir_abs, f"{base_name}.idx"))
+	if idxFileExist:
+		argprint(args,"-> Running MakeIndex command...")
+		makeindex_command = ["makeindex", base_name]
+		if not run_command(makeindex_command, build_dir_abs, args.verbose): return False
+
+	argprint(args,"-> Pass 2: Resolving basic references...")
+	if not run_command(latex_command, source_dir, args.verbose): return False
+	
+	if args.full:
+		argprint(args,"-> Pass 3: Final pass for complete document structure...")
+		if not run_command(latex_command, source_dir, args.verbose): return False
+
+	return True
+
+
+def finalize(args):
+	"""Moves the final PDF, handles compression, and opens the PDF viewer."""
+	
+	base_name = os.path.splitext(os.path.basename(args.input_file))[0]
+	
+	# 1. Move the final PDF from the build directory to the current directory
+	source_pdf = os.path.join(args.build, f"{base_name}.pdf")
+	destination_pdf = os.path.abspath(args.output)
+	
+	if os.path.exists(source_pdf):
+		# Use move for efficiency and rename protection
+		shutil.move(source_pdf, destination_pdf)
+	else:
+		print(f"Error: Final PDF not found at {source_pdf}. Compilation likely failed.", file=sys.stderr)
+		return
+
+
+	if args.show == 1:
+		# We prioritize viewer-specific commands for context switching (Okular, Evince)
+		# over generic commands (open, xdg-open)
+		viewer_commands = [
+			["xdg-open", destination_pdf],                   # Generic Linux fallback
+			["okular", destination_pdf],         # Linux/KDE (Okular: reloads and focuses)
+			["evince", destination_pdf],                    # Linux/GNOME (Evince: reloads in place)
+			["open", destination_pdf],                      # macOS (uses default viewer)
+		]
+
+		argprint(args,"-> Opening/focusing PDF viewer...")
+
+		for command in viewer_commands:
+			try:
+				# Use subprocess.Popen to launch and immediately detach/continue (non-blocking)
+				subprocess.Popen(
+					command, 
+					start_new_session=True, 
+					stderr=subprocess.DEVNULL,
+					stdout=subprocess.DEVNULL
+				)
+				
+				# Sleep briefly to give the OS time to focus the new/existing window 
+				# (essential for a smooth "context switch")
+				time.sleep(0.2) 
+				
+				break # Exit the loop once a successful command is launched
+			except FileNotFoundError:
+				# Try the next command if the current program isn't found
+				continue 
+			except Exception as e:
+				print(f"Warning: Failed to launch PDF viewer with command {command[0]}: {e}", file=sys.stderr)
+				break
+
+
+# --- MAIN EXECUTION BLOCK ---
+if __name__ == "__main__":
+	args = parse_arguments()
+	
+	# Set the verbosity for the script's own messages
+	if not args.quiet:
+		print("---------------------")
+		print("       JFG-latex")
+		print("---------------------")
+		print(f"Source file:  {args.input_file}")
+		print(f"Compiler:     {args.engine}")
+		print(f"Output PDF:   {args.output}")
+		print(f"Build Dir:    {args.build}")
+		print(f"References:   {'Enabled' if args.ref else 'Disabled'}")
+		print(f"Fullpass:     {'Enabled' if args.full else 'Disabled'}")
+		if args.verbose:
+			print("Mode:        Verbose (Full compiler output)")
+		print("---------------------")
+
+	errorCode = 0	
+	if build_latex(args):
+		finalize(args)
+		argprint(args,f"\nCompilation successful.\n\tFinal PDF written to '{args.output}'")
+
+	else:
+		sys.exit(1)

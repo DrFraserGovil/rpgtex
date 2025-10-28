@@ -57,11 +57,13 @@
 
 \NewDocumentCommand{\RpgMacro}{s o m +m +m +m}{\vspace{2em}\makecell[rt]{  \__rpg_doc_macro_list:n { #3 }} & #4
 
-	\tl_if_empty:NF{#2}
+	\tl_if_novalue:nF{#2}
 	{
 		\label{Macro:#2}
 		\cmdidx{#2}	
 	}
+	
+		
 	\str_if_empty:nF{#5}
 	{~
 		\macrosection{Syntax}

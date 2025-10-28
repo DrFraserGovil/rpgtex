@@ -131,10 +131,10 @@
 						\\
 						\parbox[t]{6cm}{\verb|\part[path/to/image]{partname}||} & Places the corresponding image as a full-page background, and then calls \verb|RpgDrawPartPage|.
 					\end{RpgTable}
-					\verb|RpgDrawPartPage| \RpgPage[p]{Macro:DrawPartPage} is a Theme Function, which executes a series of tikz functions to place the part title according to the theme specifications. 
+					\verb|RpgDrawPartPage| \RpgPage[p]{Macro:RpgDrawPartPage} is a Theme Function, which executes a series of tikz functions to place the part title according to the theme specifications. 
 				}
 			
-			\RpgMacro[RpgDrawPage]{\RpgDrawPartPage,{{m}}}{Uses Tikz to draw a custom part page when activated by \verb|\part| \RpgPage[p]{Macro:part}. 
+			\RpgMacro[RpgDrawPartPage]{\RpgDrawPartPage,{{m}}}{Uses Tikz to draw a custom part page when activated by \verb|\part| \RpgPage[p]{Macro:part}. 
 				}
 				{
 					\RpgDrawPartPage{<part title>}

@@ -11,7 +11,7 @@
 		\rpgtex{} defines three `colorbox' environments, which inherit from \tcref{}.
 
 		\begin{macrolist}
-			\RpgMacro*{RpgNarration,{{o}}}{A \tcref{} wrapper designed for text that is read aloud to players}{
+			\RpgMacro*[RpgNarration]{RpgNarration,{{o}}}{A \tcref{} wrapper designed for text that is read aloud to players}{
 				\verb|\begin{RpgNarration}[color=<color>,<tcbox-options>]|
 
 				~~~~\verb|<text>|
@@ -22,7 +22,7 @@
 
 				Themes may alter the appearance of the narration block using the tcb interface, calling \verb|\tcbset{rpgnarration /.append~style={...}}| to overwrite the existing instructions.
 			}
-			\RpgMacro*{RpgSidebar,{{o m}}}{A decorated \tcref{} wrapper designed for information which is set outside the main text.}{
+			\RpgMacro*[RpgSidebar]{RpgSidebar,{{o m}}}{A decorated \tcref{} wrapper designed for information which is set outside the main text.}{
 				\verb|\begin{RpgSidebar}[color=<color>,<tcbox-options>]{<title>}|
 
 				~~~~\verb|<text>|
@@ -36,7 +36,7 @@
 
 				Themes may alter the appearance of the sidebar using the tcb interface, calling \verb|\tcbset{rpgsidebar /.append~style={...}}| to overwrite the existing instructions.
 			}
-			\RpgMacro*{RpgTip,{{o m}}}{A simple \tcref{} wrapper designed for information which is set outside the main text.}{
+			\RpgMacro*[RpgTip]{RpgTip,{{o m}}}{A simple \tcref{} wrapper designed for information which is set outside the main text.}{
 				\verb|\begin{RpgTip}[color=<color>,<tcbox-options>]{<title>}|
 
 				~~~~\verb|<text>|
@@ -67,7 +67,7 @@
 
 
 		\begin{macrolist}
-			\RpgMacro*{RpgTable,{{o m}}}{Begins an environment for creating visually appealing and consistent tables. }{
+			\RpgMacro*[RpgTable]{RpgTable,{{o m}}}{Begins an environment for creating visually appealing and consistent tables. }{
 				\verb|\begin{RpgTable}[<options>]{<column-specifications}|
 
 				~~~~\verb|<table-contents>|
