@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+* A more robust command line interface beyond simple background setting
+
+* Added the rpglatex compiler as a shipped element, and documented it
+
+### Changed
+
+* Cleaned up the command line interface into a consistent terminology: `RpgCMD`, and set it to override document-provided commands
+
+### Bugfix
+
+* Fixed bug in dnd/diceformat which double-rendered the dice count
+
+* Fixed bug where dnd/font did not load bookman properly
+
 ## 0.2.0 (2025-10-27)
 
 ### Added

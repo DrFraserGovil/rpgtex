@@ -46,7 +46,7 @@
 ]
 
 
-\setmainfont{Bookman~Old~Style~Std}
+\providefontfamily{\bookman}{Bookman~Old~Style~Std}
 [
 	Path= \RpgPackagePath/themes/dnd/fonts/,
 	UprightFont = *~Regular,
@@ -67,6 +67,7 @@
 %This is to prevent white text being used everywhere else!
 
 \RpgSetFont{
+	main-body-family			={\bookman},
 	%Sections
 	title-style			= {\bf\fontsize{30}{50}\selectfont},
 	subtitle-family		={\scshape},

@@ -93,17 +93,15 @@
 
 
 
+%%now check the command line options
 
 \ProcessKeysOptions { rpg / options }
 
-%%now check the command line options
-\providecommand{\csPrintMode}{0}
-\str_if_eq:VnT \csPrintMode { 1 }
-{
-    \bool_set_false:N \l__rpg_show_background_bool
-    \bool_set_true:N \l__rpg_show_footer_scroll_bool
+%then override with command line
+\providecommand{\RpgCMD}{}
+\keys_set:nV {rpg/options}{\RpgCMD}
 
-}
+
 
 
 %then insert the saved arguments into the parent class
