@@ -1,0 +1,102 @@
+\newcounter {RpgAreaDepth}
+\setcounter{RpgAreaDepth}{0}
+\seq_new:N \l__rpg_map_name_stack
+\tl_new:N \l__rpg_map_parent_name
+
+\cs_new_protected:Npn \__rpg_render_heading_level:nf #1#2
+{
+	\str_case_e:nnF {\fp_eval:n{#1}}
+	{
+		{0} { \chapter       {#2} }
+		{1} { \section       {#2} }
+		{2} { \subsection    {#2} }
+		{3} { \subsubsection {#2} }
+	}
+	{
+		\subparagraph*{#2}{~~}
+	}
+}
+
+
+%%Converts the number into a heirarchical set of numbers
+\newcounter{rpgMapSpoof}
+\NewDocumentCommand{\RpgMapLevelName}{m m}
+{
+	\setcounter{rpgMapSpoof}{#2}
+	\str_case_e:nnF {\fp_eval:n{#1}}
+	{
+		{1} { \arabic		{rpgMapSpoof} }
+		{2} { \alph			{rpgMapSpoof} }
+		{3} { -\roman     	{rpgMapSpoof} }
+	}
+	{
+		[\RpgMapLevelName{\fp_eval:n{#1-3}}{#2}]
+	}
+}
+
+\cs_new_protected:Npn \__rpg_renew_map_item:
+{
+	\RenewDocumentCommand{\item}{o}
+	{
+		%Extract the current-depth counter, increment it, and then insert the new value
+		%(Weirdly is the most optimal way to increment a value in a sequence)
+		\seq_gpop_right:NN \l__rpg_map_stack {\l__map_tmp}
+		\tl_set:Nf {\l__map_tmp}{\fp_eval:n{1+\l__map_tmp{}}}
+		\seq_gput_right:Ne \l__rpg_map_stack {\l__map_tmp}
+		
+		%Use the current parent name, and the depth-counter to construct the full name
+		\tl_set:Nf \l__rpg_map_element_name_tl {\l__rpg_map_parent_name\RpgMapLevelName{\arabic{RpgAreaDepth}}{\l__map_tmp}}
+
+
+		%%Render the header name (if present), along with the depth-counter values
+		\IfNoValueTF{##1}
+		{
+			% \tl_set:Nn \l__rpg_map_header_tl{}
+			\__rpg_render_heading_level:nf {\arabic{RpgAreaDepth}+\l__rpg_manual_level_tl}
+			{
+				\l__rpg_map_blank_prefix_tl\l__rpg_map_element_name_tl
+			} 
+		}
+		{
+			\__rpg_render_heading_level:nf {\arabic{RpgAreaDepth}+\l__rpg_manual_level_tl}
+			{
+				{\l__rpg_map_prefix_tl\l__rpg_map_element_name_tl{}:~##1}
+			} 
+		}
+
+	}
+
+	%%Alias RpgArea into our modified counter
+	\ProvideDocumentCommand{\RpgArea}{m}
+	{
+		\item[##1]
+	}
+}
+
+
+\cs_new_protected:Npn \__rpg_construct_parent_prefix:
+{
+	\stepcounter{RpgAreaDepth}
+	
+	\int_compare:nT { \value{RpgAreaDepth} = 1 }
+	{
+		\seq_gclear:N \l__rpg_map_stack
+	}
+
+	\seq_gput_right:Nn \l__rpg_map_stack {0} 
+
+
+
+	\tl_set:Nn \l__rpg_map_parent_name  {}
+	\seq_map_indexed_inline:Nn \l__rpg_map_stack {
+		
+		\int_compare:nF{##1 = \value{RpgAreaDepth}}
+		{
+	\tl_put_right:Ne \l__rpg_map_parent_name {\RpgMapLevelName{##1}{##2}}}}
+}
+
+\cs_new_protected:Npn \__rpg_end_map_block:
+{
+	\seq_gpop_right:NN \l__rpg_map_stack {\l__map_tmp} %%remove the final element from the stack
+	\addtocounter{RpgAreaDepth}{-1}
+}

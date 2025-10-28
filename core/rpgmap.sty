@@ -4,92 +4,48 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \ExplSyntaxOn
-\tl_new:N \l__rpg_area_num_depth_tl
 
-% Options
-\keys_define:nn { rpg / areas }
+\input{core/lowlevel/map}
+ \keys_define:nn { rpg / areas }
   {
-    area-label .tl_set:N          = \l__rpg_area_label_tl,
-    area-label .initial:n         = area,
-    area-label .value_required:n  = true,
-    sub-area-label .tl_set:N          = \l__rpg_sub_area_label_tl,
-    sub-area-label .initial:n         = subarea,
-    sub-area-label .value_required:n  = true,
-    region .tl_set:N          = \l__rpg_region_tl,
-    region .value_required:n  = true,
-    area-num-depth .choice:,
-    area-num-depth .choices:nn =
-      { 1, 2, 3, 4 }
-      { \tl_set:Nn \l__rpg_area_num_depth_tl {\l_keys_choice_tl} },
-    area-num-depth .initial:n  = 2, % subsection
+	depth 	.tl_set:N 			= \l__rpg_manual_level_tl,
+	depth	.value_required:n 	= true,
+	depth	.initial:n			= 0, 
+	title	.tl_set:N			= \l__rpg_map_title_tl,
+	title	.value_required:n	= true,
+	title	.initial:n			={},
+	prefix	.tl_set:N			=\l__rpg_map_prefix_tl,
+	prefix	.value_required:n	=true,
+	prefix	.initial:n			={},
+	blank-prefix .tl_set:N		=\l__rpg_map_blank_prefix_tl,
+	blank-prefix	.value_required:n	=true,
+	blank-prefix	.initial:n			={Area~},
   }
 
-\NewDocumentCommand {\RpgSetAreaOptions} {o}
-  {
-    \keys_set:nn { rpg / areas } { #1 }
-  }
 
-% Counters
-\newcounter {RpgAreaCounter}
+\NewDocumentEnvironment{RpgMap}{o}
+{
+	\group_begin:   
 
-\NewDocumentCommand {\RpgResetAreas} {}
-  {
-    \setcounter {RpgAreaCounter} {0}
-  }
+	\__rpg_construct_parent_prefix:
 
-\newcounter {RpgSubAreaCounter} [RpgAreaCounter]
+	\IfNoValueF{#1}
+	{
+		\keys_set:nn { rpg / areas } {#1}
 
-% sub area references should be '5a', '5b', not '51', '52'
-\renewcommand \p@RpgSubAreaCounter { \arabic {RpgAreaCounter} }
-\renewcommand \theRpgSubAreaCounter { \alph {RpgSubAreaCounter} }
+		\int_compare:nT { \value{RpgAreaDepth} = 1 }
+		{
+			\str_if_empty:nF \l__rpg_map_title_tl
+			{
+				\__rpg_render_heading_level:nf {\l__rpg_manual_level_tl{}}{\l__rpg_map_title_tl} 
+			}
+		}
+	}
 
-% Functions to create an area including text and label
-\NewDocumentCommand {\RpgArea} {m}
-  {
-    \refstepcounter {RpgAreaCounter}
-    \label { \l__rpg_region_tl \l__rpg_area_label_tl :#1 }
-
-    \tl_set:Nn \l_tmpa_tl { \l__rpg_region_tl \arabic {RpgAreaCounter} . ~ #1 }
-
-    \str_case_e:nn {\l__rpg_area_num_depth_tl}
-      {
-        {1} { \section       {\l_tmpa_tl} }
-        {2} { \subsection    {\l_tmpa_tl} }
-        {3} { \subsubsection {\l_tmpa_tl} }
-        {4} { \paragraph     {\l_tmpa_tl} }
-      }
-  }
-
-\NewDocumentCommand {\RpgSubArea} {m}
-  {
-    \refstepcounter {RpgSubAreaCounter}
-    \label { \l__rpg_region_tl \l__rpg_sub_area_label_tl : #1 }
-
-    \tl_set:Nn \l_tmpa_tl { \l__rpg_region_tl \arabic {RpgAreaCounter} \alph {RpgSubAreaCounter} . ~ #1 }
-
-    \str_case_e:nn {\l__rpg_area_num_depth_tl}
-      {
-        {1} { \subsection    {\l_tmpa_tl} }
-        {2} { \subsubsection {\l_tmpa_tl} }
-        {3} { \paragraph     {\l_tmpa_tl} }
-        {4} { \subparagraph  {\l_tmpa_tl} }
-      }
-
-  }
-
-% Functions to reference a label
-\NewDocumentCommand {\RpgAreaRef} { O{} m }
-  {
-    \group_begin:
-      \keys_set:nn { rpg / areas } {#1} % Temp set keys to reference other regions
-      #2 ~ (Area \ref { \l__rpg_region_tl \l__rpg_area_label_tl : #2 }, pg\ \pageref { \l__rpg_region_tl \l__rpg_area_label_tl : #2 } )
-    \group_end:
-  }
-
-\NewDocumentCommand {\RpgSubAreaRef} { O{} m }
-  {
-    \group_begin:
-      \keys_set:nn { rpg / areas } { #1 } % Temp set keys to reference other regions
-      #2 ~ (Area \ref { \l__rpg_region_tl \l__rpg_area_label_tl : #2 }, pg\ \pageref { \l__rpg_region_tl \l__rpg_sub_area_label_tl : #2 } )
-    \group_end:
-  }
+	\__rpg_renew_map_item:
+}
+{
+	\__rpg_end_map_block:
+	\group_end:
+	
+}

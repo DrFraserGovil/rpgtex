@@ -8,12 +8,6 @@
 
 \mainmatter{}
 
-\part*{Commands}
-
-\part{Basic}
-
-\part[none]{Basic boo boo}
-\section{test}
 \part[engine_part]{Basic Commands}
 
 	\chapter{Introduction}
@@ -46,56 +40,56 @@
 				Parts are often allowed to define a full-page image
 
 				{\color{red} Write this bit!}
-		\section{Map Regions}
-			The map region functions \verb|\RpgArea| and \verb|\RpgSubArea| provide automatic numbering of areas.
+		% \section{Map Regions}
+		% 	The map region functions \verb|\RpgArea| and \verb|\RpgSubArea| provide automatic numbering of areas.
 
 
-			\RpgSetAreaOptions[area-label=village,area-num-depth=3]{}
-			\RpgArea{Village of Hommlet}
-			This is the village of hommlet.
-			\RpgSetAreaOptions[area-label=villages,area-num-depth=3]{}
-			\RpgSubArea{Inn of the Welcome Wench}
-			Inside the village is the inn of the Welcome Wench.
+		% 	\RpgSetAreaOptions[area-label=village,area-num-depth=3]{}
+		% 	\RpgArea{Village of Hommlet}
+		% 	This is the village of hommlet.
+		% 	\RpgSetAreaOptions[area-label=villages,area-num-depth=3]{}
+		% 	\RpgSubArea{Inn of the Welcome Wench}
+		% 	Inside the village is the inn of the Welcome Wench.
 
-			\RpgSubArea{Blacksmith's Forge}
-			There's a blacksmith in town, too.
+		% 	\RpgSubArea{Blacksmith's Forge}
+		% 	There's a blacksmith in town, too.
 
-			\RpgArea{Foo's Castle}
-			This is foo's home, a hovel of mud and sticks.
+		% 	\RpgArea{Foo's Castle}
+		% 	This is foo's home, a hovel of mud and sticks.
 
-			\RpgSubArea{Moat}
-			This ditch has a board spanning it.
+		% 	\RpgSubArea{Moat}
+		% 	This ditch has a board spanning it.
 
-			\RpgSubArea{Entrance}
-			A five-foot hole reveals the dirt floor illuminated by a hole in the roof.
-
-
+		% 	\RpgSubArea{Entrance}
+		% 	A five-foot hole reveals the dirt floor illuminated by a hole in the roof.
 
 
-			\subsection{Resetting Counters}
 
-				The counters can be reset
-			\RpgSetAreaOptions[area-label=space]{}
-			\RpgResetAreas{}
-			\RpgArea{Nyxia Subsector}
-				A dangerous region of space, accessed only by calling \verb|\RpgReset{}|
-				\RpgSubArea{Crescent Station}
-					A lawless hub of trade and crime
-				\RpgSubArea{Raxxla Penal Colony}
-					An ice planet populated with criminals
 
-			\RpgArea{Great Expanse}
-				A void of nothingness
+		% 	\subsection{Resetting Counters}
 
-			\subsection{Referencing Map Regions}
+		% 		The counters can be reset
+		% 	\RpgSetAreaOptions[area-label=space]{}
+		% 	\RpgResetAreas{}
+		% 	\RpgArea{Nyxia Subsector}
+		% 		A dangerous region of space, accessed only by calling \verb|\RpgReset{}|
+		% 		\RpgSubArea{Crescent Station}
+		% 			A lawless hub of trade and crime
+		% 		\RpgSubArea{Raxxla Penal Colony}
+		% 			An ice planet populated with criminals
 
-				Map regions are referenceable; so \verb|\RpgAreaRef[area-label=village]{Village of Hommlet}| is ``\RpgAreaRef[area-label=village]{Village of Hommlet}''
+		% 	\RpgArea{Great Expanse}
+		% 		A void of nothingness
 
-				When using reset-counters or otherwise ambiguous names, it is necessary to use \verb|\RpgSetAreaOptions[area-label={},sub-area-label={}]{}| to define prefixes to disambiguate.
+		% 	\subsection{Referencing Map Regions}
 
-			\subsection{Area Depths}
+		% 		Map regions are referenceable; so \verb|\RpgAreaRef[area-label=village]{Village of Hommlet}| is ``\RpgAreaRef[area-label=village]{Village of Hommlet}''
 
-				Map headers can be set to different `levels', using either section/subsection (etc.) for display purposes. The default value is \verb|\RpgSetAreaOptions[area-num-depth=2]{}| (subsection). For display purposes here, we used \verb|area-num-depth=3|
+		% 		When using reset-counters or otherwise ambiguous names, it is necessary to use \verb|\RpgSetAreaOptions[area-label={},sub-area-label={}]{}| to define prefixes to disambiguate.
+
+		% 	\subsection{Area Depths}
+
+		% 		Map headers can be set to different `levels', using either section/subsection (etc.) for display purposes. The default value is \verb|\RpgSetAreaOptions[area-num-depth=2]{}| (subsection). For display purposes here, we used \verb|area-num-depth=3|
 		\section{RpgTable}
 
 			\begin{RpgTable}[title=Box Colors]{lX}
@@ -133,3 +127,33 @@
 	\begin{RpgSidebar}[]{Behold the DndSidebar!}
   The |DndSidebar| is used as a sidebar. It does not break over columns and is best used with a figure environment to float it to one corner of the page where the surrounding text can then flow around it.
 \end{RpgSidebar}
+
+		\section{RpgMap}
+
+		We're trying something here!
+		\begin{RpgMap}[depth=0,title={A test map},prefix=Room~,blank-prefix=Cell~]
+			
+			\item[A place]s
+			\begin{RpgMap}
+				\item[Another place] 
+				\item[test]
+				\begin{RpgMap}
+				\item[Another place] 
+				\item[test]
+				\item[tesdt]
+				\item[tesdt]
+				\item[tesdt]
+			\end{RpgMap}
+				\item[tesdt]
+				\RpgArea{Hello} I am trying this one now
+			\end{RpgMap}
+			\item[here]
+			% \item[Another]e
+			% \item[Another]d
+		\end{RpgMap}
+		
+
+		\begin{description}
+			\item[it] still works
+			\item[as] expected  
+		\end{description}

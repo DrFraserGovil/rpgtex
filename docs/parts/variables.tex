@@ -25,14 +25,14 @@
 
 	\section{Command Line Interface}\label{S:CMD}
 
-		By default, \LaTeX does not have a `command line interface' which allows a user to modify the document from within the command line: changes to the document have to be placed inside the file, and then compiled. However, we found that -- particularly with the \textit{print} option (which suppresses background images on the paper, reducing ink requirements for printing), it was convenient to be able to compile the same document in either `normal' mode, or `print mode', without modifying the text.
+		By default, \LaTeX{} does not have a `command line interface' which allows a user to modify the document from within the command line: changes to the document have to be placed inside the file, and then compiled. However, we found that -- particularly with the \textit{print} option (which suppresses background images on the paper, reducing ink requirements for printing), it was convenient to be able to compile the same document in either `normal' mode, or `print mode', without modifying the text.
 
 		To this end, we have provided a method for pseudo-`command line variables' to be inserted into the RpgOptions module. To do this, we exploit the fact that \TeX{} can read documents from an input stream, not just files.
 
 
 		\begin{macrolist}
 			\RpgMacro[RpgCMD]{\RpgCMD}{Holds key-value pairs to be inserted into RptOptions after the standard parsing is run, ideal for command line modification.}{
-				xelatex "\def\RpgCMD{<rpg-options>} \input{<document}"
+				xelatex ``\def\RpgCMD{<rpg-options>} \input{<document}''
 			}{
 				This will compile the \verb|<document>|, with the contents of \verb|RpgCMD| parsed as if they had been placed into \verb|\documentclass[<rpg-options>]{rpgclass}| or when invoking the package: \verb|\usepackage[rpg-options]{rpgtex}|.
 
