@@ -1,5 +1,16 @@
-\chapter{rpglatex Compiler}\label{C:Compiler}
+\section{Compiling rpgtex Documents}\label{C:Compiler}
 
+
+	\rpgtex{} uses the \texttt{fontspec} package to allow custom fonts, and therefore requires compiling with \texttt{xelatex} or \texttt{luatex}:
+
+	\begin{lstlisting}
+		xelatex main.tex		#works
+		luatex main.tex			#works
+		pdflatex main.tex #fails
+	\end{lstlisting}
+	So long as \rpgtex{} is on the user's latex path, and the package properly configured \RpgPage[p]{S:Configuration} no further compilation steps are required. However, for ease of use, we provide the \verb|rpglatex| compiler as part of the \rpgtex{} distribution.
+
+	\subsection{The \texttt{rpglatex} compiler}
 
 	\rpgtex{} is shipped with a special compiler, \verb|rpglatex|. This is simply a python3 script which acts as a wrapper around either xelatex or luatex, but includes several quality-of-life changes to the interface to make it easier to use with \verb|rpgtex|.
 
