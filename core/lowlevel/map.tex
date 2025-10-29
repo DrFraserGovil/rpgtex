@@ -7,19 +7,38 @@
 \bool_new:N \l__use_label
 \tl_new:N \l__label
 \bool_new:N \l__rpg_emergency_show_labels_bool
+\tl_new:N \l__rpg_map_current_count
+\tl_new:N \l__rpg_map_save_name
+\bool_new:N \l__rpg_map_starred_bool
+
+%%%if #1 is bool_true, apends a * to the command in #3
+\cs_new_protected:Npn \__rpg_auto_star:nN#1#2
+{
+	\bool_if:NTF#1
+	{
+		#2*
+	}
+	{
+		#2
+	}
+}
+
 \cs_new_protected:Npn \__rpg_render_heading_level:nf #1#2
 {
+
 	\str_case_e:nnF {\fp_eval:n{#1}}
 	{
-		{0} { \chapter       {#2} }
-		{1} { \section       {#2} }
-		{2} { \subsection    {#2} }
-		{3} { \subsubsection {#2} }
-		{4} { \paragraph {#2} }
+		{0} {\let\rpgtmpsec\chapter}
+		{1} {\let\rpgtmpsec\section }
+		{2} {\let\rpgtmpsec\subsection }
+		{3} {\let\rpgtmpsec\subsubsection }
+		{4} {\let\rpgtmpsec\paragraph }
 	}
 	{
-		\subparagraph{#2}
+		\let\rpgtmpsec\subparagraph
 	}
+	% \rpgtmpsec{#2}
+	\__rpg_auto_star:nN {\l__rpg_map_starred_bool}{\rpgtmpsec}{#2}
 }
 
 
@@ -39,77 +58,66 @@
 	}
 }
 
-\cs_new_protected:Npn \__rpg_renew_map_item:
+\cs_new_protected:Npn \__rpg_map_increment_counter:
 {
-	
-	\ProvideDocumentCommand{\mapitem}{o}
+	%Extract the current-depth counter, increment it, and then insert the new value
+	%(Weirdly is the most optimal way to increment a value in a sequence)
+	\seq_gpop_right:NN \l__rpg_map_stack {\l__map_tmp}
+	\tl_set:Nf {\l__rpg_map_current_count}{\fp_eval:n{1+\l__map_tmp{}}}
+	\seq_gput_right:Ne \l__rpg_map_stack {\l__rpg_map_current_count}
+}
+
+
+\cs_new_protected:Npn \__rpg_map_write_labels:n#1
+{
+	%spoof in the hidden tex!
+	\tl_set:Ne \@currentlabelname{#1}
+	\refstepcounter{RpgAreaDoubleCounter}
+	\label{rpg__expanded:\l__label}
+
+	\tl_set:Ne \@currentlabelname{\l__rpg_map_prefix_tl{}\l__rpg_map_element_name_tl{}}
+	\refstepcounter{RpgAreaCounter}
+	\label{\l__label}
+
+	%%For debugging why your references didn't work
+	\bool_if:NT \l__rpg_emergency_show_labels_bool
 	{
-		%Extract the current-depth counter, increment it, and then insert the new value
-		%(Weirdly is the most optimal way to increment a value in a sequence)
-		\seq_gpop_right:NN \l__rpg_map_stack {\l__map_tmp}
-		\tl_set:Nf {\l__map_tmp}{\fp_eval:n{1+\l__map_tmp{}}}
-		\seq_gput_right:Ne \l__rpg_map_stack {\l__map_tmp}
-		
-		%Use the current parent name, and the depth-counter to construct the full name
-		\tl_set:Ne \l__rpg_map_element_name_tl {\l__rpg_map_parent_name\RpgMapLevelName{\arabic{RpgAreaDepth}}{\l__map_tmp}}
-
-
-		%%Render the header name (if present), along with the depth-counter values
-		\IfNoValueTF{##1}
-		{
-			% \tl_set:Nn \l__rpg_map_header_tl{}
-			\__rpg_render_heading_level:nf {\arabic{RpgAreaDepth}+\l__rpg_manual_level_tl}
-			{
-				\l__rpg_map_blank_prefix_tl\l__rpg_map_element_name_tl
-			} 
-		}
-		{
-			\__rpg_render_heading_level:nf {\arabic{RpgAreaDepth}+\l__rpg_manual_level_tl}
-			{
-				{\l__rpg_map_prefix_tl\l__rpg_map_element_name_tl{}:~##1}
-			}
-			
-
-			\bool_if:NTF\l__use_label
-			{
-				\tl_set:Ne \l__label_name {\l__label}
-			}
-			{
-				\tl_set:Ne \l__label_name {\l__rpg_map_ref_tl##1}
-			}
-			%%spoof in the hidden tex!
-			\tl_set:Ne \@currentlabelname{##1}
-			\refstepcounter{RpgAreaDoubleCounter}
-			\label{rpg__expanded:\l__label_name}
-
-
-			\tl_set:Ne \@currentlabelname{\l__rpg_map_prefix_tl{}\l__rpg_map_element_name_tl{}}
-			\refstepcounter{RpgAreaCounter}
-			\label{\l__label_name}
-
-			\bool_if:NT \l__rpg_emergency_show_labels_bool
-			{
-				{\it(labelled~as~`\l__label_name')}
-
-			}
-			
-		}
-
-	}
-
-	%%Alias RpgArea into our modified counter
-	\ProvideDocumentCommand{\RpgArea}{o m}
-	{
-		\IfNoValueF{##1}
-		{
-			\bool_set_true:N \l__use_label
-			\tl_set:Ne \l__label{##1}
-		}
-		\mapitem[##2]
-		\bool_set_false:N \l__use_label
+		~\par{\it(labelled~as~`\l__label')}~\par
 	}
 }
 
+
+\cs_new_protected:Npn \__rpg_map_construct_title:n#1
+{
+	%Use the current parent name, and the depth-counter to construct the full name
+	\tl_set:Ne \l__rpg_map_element_name_tl {\l__rpg_map_parent_name\RpgMapLevelName{\arabic{RpgAreaDepth}}{\l__rpg_map_current_count}}
+
+	%%Allows default construction of empty areas to give them something beyond a number.
+	\tl_if_empty:nTF {#1}
+	{
+		\tl_set:Nf \l__rpg_map_title_counter{\l__rpg_map_blank_prefix_tl\l__rpg_map_element_name_tl} 
+		\tl_set:Nf \l__rpg_map_save_name{\l__rpg_map_title_counter}
+	}
+	{
+		%%if a name was given
+		\tl_set:Nf \l__rpg_map_title_counter{\l__rpg_map_prefix_tl\l__rpg_map_element_name_tl{}:~#1}
+		
+		%%Automatically reference using the name, unless a reference label was specified in optional arguments
+		\bool_if:NF {\l__use_label}
+		{
+			\bool_set_true:N \l__use_label
+			\tl_set:Ne \l__label {\l__rpg_map_ref_tl#1}
+		}
+		\tl_set:Nf \l__rpg_map_save_name{#1}
+	}
+
+	\__rpg_render_heading_level:nf {\arabic{RpgAreaDepth}+\l__rpg_manual_level_tl}{ \l__rpg_map_title_counter}
+	
+	\bool_if:NT\l__use_label
+	{
+		\__rpg_map_write_labels:n{\l__rpg_map_save_name}
+	}
+}
 
 \cs_new_protected:Npn \__rpg_construct_parent_prefix:
 {
@@ -136,4 +144,19 @@
 {
 	\seq_gpop_right:NN \l__rpg_map_stack {\l__map_tmp} %%remove the final element from the stack
 	\addtocounter{RpgAreaDepth}{-1}
+
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Weird bug fix
+	%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Gather round children
+	% For some reason, an empty \paragraph will be cached and not flushed to the output if it is immediately followed by an \group_end:
+	% So empty RpgAreas at the end of a Map would either vanish, or 'hop' into the next level.
+	% \paragraph{A} \end{RpgMap} \subsubsection{B} <btext> would render as \end{RpgMap} \subsubsection{B} \paragraph{A} <btext>!
+	% It was weird.
+	% This is a fix to that problem
+	{
+		\mbox{} %%force in a zero-width box
+	}
+
+
 }
