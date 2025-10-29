@@ -43,14 +43,46 @@
 			}
 		}
 	}
-
-	\__rpg_renew_map_item:
 }
 {
 	\__rpg_end_map_block:
 	\group_end:
-	
 }
+
+
+\NewDocumentEnvironment{RpgMap*}{o}
+{
+	\group_begin:   
+	\bool_set_true:N\l__rpg_map_starred_bool
+	\begin{RpgMap}[#1]
+}
+{
+	\end{RpgMap}
+	\group_end:
+}
+
+
+\NewDocumentCommand{\RpgArea}{o m}
+{
+	\IfNoValueF{#1}
+	{
+		\bool_set_true:N \l__use_label
+		\tl_set:Ne \l__label{#1}
+	}
+
+	\__rpg_map_increment_counter:
+	
+	\__rpg_map_construct_title:n {#2}
+
+	\bool_set_false:N \l__use_label
+}
+
+\NewDocumentEnvironment{RpgNestedArea}{o o m}{
+	\RpgArea[#1]{#3}
+
+	\begin{RpgMap}[#2]
+}{\end{RpgMap}}
+
 
 \NewDocumentCommand{\RpgMapRef}{s m}{
 	\IfBooleanTF{#1}
@@ -67,7 +99,7 @@
 	\IfBooleanTF{#1}{\RpgMapRef*{#2}}{\RpgMapRef{#2}}~\RpgPage[p]{#2}
 }
 
-\NewDocumentCommand{\RpgMapRefReveal}{}
+\NewDocumentCommand{\RpgShowMapRefs}{}
 {
 	\bool_set_true:N \l__rpg_emergency_show_labels_bool
 }

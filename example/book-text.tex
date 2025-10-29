@@ -127,44 +127,38 @@
 	\begin{RpgSidebar}[]{Behold the DndSidebar!}
   The |DndSidebar| is used as a sidebar. It does not break over columns and is best used with a figure environment to float it to one corner of the page where the surrounding text can then flow around it.
 \end{RpgSidebar}
-		\section{RpgMap}
 
-		We're trying something here!
-		\begin{RpgMap}[depth=1,title={A test map},prefix=Room~,blank-prefix=Cell~,ref-prefix=forest:]
+		% \RpgShowMapRefs{}
+
+		\begin{RpgMap*}[depth=0,title={RPG maps}]
 			
-			\mapitem[A place]{}
-			\begin{RpgMap}
-				\mapitem[Another place] 
-				\mapitem[test]
-				\begin{RpgMap}
-					\mapitem[Another place] 
-					\begin{RpgMap}
-					\mapitem[Another place 2]\label{example}
-					
-						\begin{enumerate}
-							\item Hello!
-						\end{enumerate}
+			
 
-					\end{RpgMap} 
-					\mapitem[test]
-					\mapitem[tesdt]
-					\mapitem[tesdt]
-					\mapitem[tesdt]
-				\end{RpgMap}
-				\mapitem[tesdt]
-				\RpgArea[garp]{Hello} I am trying this one now
+			\begin{RpgNestedArea}[bob][prefix={Bob~}]{Bob's House}
+				\RpgArea{Front Room} The TV is here, and it is on
+				\RpgArea{Kitchen}
+				\RpgArea[cot]{}
+			\end{RpgNestedArea}
+
+			\RpgArea{Karen's House} Karen lives here
+			\RpgArea{}
+		\end{RpgMap*}
+
+		\begin{RpgMap}[depth=0,title={A test map}]
+			
+			\RpgArea{Bob's House} Bob lives here
+
+			\begin{RpgMap}[prefix={}]
+				\RpgArea{Front Room} The TV is here, and it is on
+				\RpgArea{Kitchen}
+				\RpgArea[cot]{}
 			\end{RpgMap}
-			\mapitem[here]
+
+			\RpgArea{Karen's House} Karen lives here
+			\RpgArea{}
 		\end{RpgMap}
 		
 
-			
+		~
 
-		Let's test: \RpgMapRef{forest:A place}
-
-		And \RpgMapRef*{forest:A place}
-
-		And then \RpgMapRefPage{forest:A place}
-		
-		
-		And aoiwhd \RpgMapRefPage*{garp}
+		Let's test: \RpgMapRef*{Map:Front Room}
