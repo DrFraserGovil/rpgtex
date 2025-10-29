@@ -1,8 +1,12 @@
 \newcounter {RpgAreaDepth}
 \setcounter{RpgAreaDepth}{0}
+\newcounter{RpgAreaCounter}
+\newcounter{RpgAreaDoubleCounter}
 \seq_new:N \l__rpg_map_name_stack
 \tl_new:N \l__rpg_map_parent_name
-
+\bool_new:N \l__use_label
+\tl_new:N \l__label
+\bool_new:N \l__rpg_emergency_show_labels_bool
 \cs_new_protected:Npn \__rpg_render_heading_level:nf #1#2
 {
 	\str_case_e:nnF {\fp_eval:n{#1}}
@@ -11,9 +15,10 @@
 		{1} { \section       {#2} }
 		{2} { \subsection    {#2} }
 		{3} { \subsubsection {#2} }
+		{4} { \paragraph {#2} }
 	}
 	{
-		\subparagraph*{#2}{~~}
+		\subparagraph{#2}
 	}
 }
 
@@ -36,7 +41,8 @@
 
 \cs_new_protected:Npn \__rpg_renew_map_item:
 {
-	\RenewDocumentCommand{\item}{o}
+	
+	\ProvideDocumentCommand{\mapitem}{o}
 	{
 		%Extract the current-depth counter, increment it, and then insert the new value
 		%(Weirdly is the most optimal way to increment a value in a sequence)
@@ -45,7 +51,7 @@
 		\seq_gput_right:Ne \l__rpg_map_stack {\l__map_tmp}
 		
 		%Use the current parent name, and the depth-counter to construct the full name
-		\tl_set:Nf \l__rpg_map_element_name_tl {\l__rpg_map_parent_name\RpgMapLevelName{\arabic{RpgAreaDepth}}{\l__map_tmp}}
+		\tl_set:Ne \l__rpg_map_element_name_tl {\l__rpg_map_parent_name\RpgMapLevelName{\arabic{RpgAreaDepth}}{\l__map_tmp}}
 
 
 		%%Render the header name (if present), along with the depth-counter values
@@ -61,15 +67,46 @@
 			\__rpg_render_heading_level:nf {\arabic{RpgAreaDepth}+\l__rpg_manual_level_tl}
 			{
 				{\l__rpg_map_prefix_tl\l__rpg_map_element_name_tl{}:~##1}
-			} 
+			}
+			
+
+			\bool_if:NTF\l__use_label
+			{
+				\tl_set:Ne \l__label_name {\l__label}
+			}
+			{
+				\tl_set:Ne \l__label_name {\l__rpg_map_ref_tl##1}
+			}
+			%%spoof in the hidden tex!
+			\tl_set:Ne \@currentlabelname{##1}
+			\refstepcounter{RpgAreaDoubleCounter}
+			\label{rpg__expanded:\l__label_name}
+
+
+			\tl_set:Ne \@currentlabelname{\l__rpg_map_prefix_tl{}\l__rpg_map_element_name_tl{}}
+			\refstepcounter{RpgAreaCounter}
+			\label{\l__label_name}
+
+			\bool_if:NT \l__rpg_emergency_show_labels_bool
+			{
+				{\it(labelled~as~`\l__label_name')}
+
+			}
+			
 		}
 
 	}
 
 	%%Alias RpgArea into our modified counter
-	\ProvideDocumentCommand{\RpgArea}{m}
+	\ProvideDocumentCommand{\RpgArea}{o m}
 	{
-		\item[##1]
+		\IfNoValueF{##1}
+		{
+			\bool_set_true:N \l__use_label
+			\tl_set:Ne \l__label{##1}
+		}
+		\mapitem[##2]
+		\bool_set_false:N \l__use_label
 	}
 }
 
