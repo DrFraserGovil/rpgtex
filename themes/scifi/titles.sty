@@ -19,7 +19,7 @@
 
 \RenewDocumentCommand{\RpgDrawCover}{}
 {
-	\node at ($(current page.north)+(0,-3cm)$) {\RpgContour[outer=titleblue,inner=white,style=
+	\node[text width=0.8\paperwidth, anchor=north] at ($(current page.north)+(0,-3cm)$) {\centering\RpgContour[outer=titleblue,inner=white,style=
 	\RpgFontTitle]{\@title}};
 
 	\node[anchor=south] at ($(current page.south)+(0,+3cm)$) {\parbox[t]{0.9\paperwidth}{

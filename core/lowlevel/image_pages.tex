@@ -12,7 +12,7 @@
 	#1
 	
 	%% Draw the page contents
-	\thispagestyle{clear} 
+	\thispagestyle{empty} 
 	\begin{tikzpicture}[remember~picture, overlay]
 		 #2
 	\end{tikzpicture}
@@ -27,7 +27,7 @@
 	#1
 	
 	%% Draw the page contents
-	\thispagestyle{clear} 
+	\thispagestyle{empty} 
 	\begin{tikzpicture}[remember~picture, overlay]
 		\node [inner~sep=0pt, minimum~width=\paperwidth, minimum~height=\paperheight] (image) at (current~page.center)
 		{

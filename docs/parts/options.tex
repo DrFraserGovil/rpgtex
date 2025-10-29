@@ -1,0 +1,32 @@
+\chapter{Package Options}
+
+
+	Whether the package is invoked directly, or through a class users have the option to pass options to it which change the behavior of the resulting document:
+	
+	\begin{lstlisting}
+		\documentclass[<options>]{rpgbook/rpghandout}
+
+		\usepackage[<options>]{rpgtex}
+	\end{lstlisting}
+
+	The options are either in the form of key-value pairs which set internal values, or flags which activate behavior when present. 
+
+	The available options are:
+	\begin{macrolist}
+		\RpgMacro{bg}{Controls the presence of the `background paper' and footer decorations.}
+		{
+			bg = full / print / none
+		}{
+			The value passed must be one of the three options (else an error is thrown). The three options change whether the `background paper' set by \cmdref{RpgSetPaper} appears in the document, or the footer decorations
+
+			\begin{tabular}{rcc}
+				Command & Paper & Footer Decorations
+				\\
+				\texttt{full} & \cmark & \cmark
+				\\
+				\texttt{print} & \xmark & \cmark
+				\\
+				\texttt{none} & \xmark & \xmark
+			\end{tabular}
+		}
+	\end{macrolist}

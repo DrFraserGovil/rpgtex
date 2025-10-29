@@ -79,20 +79,20 @@
 % % % conflicts (e.g., package options).
 % % % Low-level modules first.
 
-\RequirePackage{core/theme_engine}
-\RequirePackage {core/rpgutility}   % utility functions
-\RequirePackage {core/rpgcolors}	% color definitions
-\RequirePackage {core/rpgfonts}	    % font definitions
+
+\RequirePackage {core/utility}   % utility functions
+\RequirePackage {core/colors}	% color definitions
+\RequirePackage {core/fonts}	    % font definitions
 
 % % % Main modules in alphabetical order
-\RequirePackage {core/rpgboxes}    % inline tip, narration and sidebar boxes
-\RequirePackage {core/rpgmap}   % section styling and special section headers
-\RequirePackage {core/rpgtable}      % tables
+\RequirePackage {core/colorboxes}    % inline tip, narration and sidebar boxes
+\RequirePackage {core/map}   % section styling and special section headers
+\RequirePackage {core/table}      % tables
 \RequirePackage {core/titles}
-\RequirePackage {core/rpgheader}     % fancy headers and footers
+\RequirePackage {core/headerdecorations}     % fancy headers and footers
 %
  % %% packages which do nothing but alter geometry/page settings, and so are ignored if the header layout setting is not active
 \RpgLayoutOnly{
-	\RequirePackage {core/rpgsections}   % section styling and special section headers
-	\RequirePackage {core/rpgtoc}        % table of contents styling
+	\RequirePackage {core/sections}   % section styling and special section headers
+	\RequirePackage {core/toc}        % table of contents styling
 }
