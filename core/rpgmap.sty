@@ -8,9 +8,9 @@
 \input{core/lowlevel/map}
  \keys_define:nn { rpg / areas }
   {
-	depth 	.tl_set:N 			= \l__rpg_manual_level_tl,
-	depth	.value_required:n 	= true,
-	depth	.initial:n			= 0, 
+	header-offset 	.tl_set:N 			= \l__rpg_manual_level_tl,
+	header-offset	.value_required:n 	= true,
+	header-offset	.initial:n			= 0, 
 	title	.tl_set:N			= \l__rpg_map_title_tl,
 	title	.value_required:n	= true,
 	title	.initial:n			={},
@@ -84,19 +84,21 @@
 }{\end{RpgMap}}
 
 
+\tl_new:N \l__inserted_code
 \NewDocumentCommand{\RpgMapRef}{s m}{
 	\IfBooleanTF{#1}
 	{
 		\nameref{#2}
 	}
 	{
-		\nameref{#2}:~\nameref{rpg__expanded:#2}
+		\nameref{#2}~(\nameref{rpg__expanded:#2}\l__inserted_code)
 	}
 }
 
 \NewDocumentCommand{\RpgMapRefPage}{s m}
 {
-	\IfBooleanTF{#1}{\RpgMapRef*{#2}}{\RpgMapRef{#2}}~\RpgPage[p]{#2}
+	
+	\IfBooleanTF{#1}{\RpgMapRef*{#2}~(\RpgPage{#2})}{\tl_set:Nn{\l__inserted_code}{,~\RpgPage{#2}}\RpgMapRef{#2}}
 }
 
 \NewDocumentCommand{\RpgShowMapRefs}{}

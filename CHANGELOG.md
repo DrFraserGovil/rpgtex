@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * Added the rpglatex compiler as a shipped element, and documented it
 
+* RpgMap and RpgArea interface and labelling system completely overhauled and switched to an environment based system
+
 ### Changed
 
 * Cleaned up the command line interface into a consistent terminology: `RpgCMD`, and set it to override document-provided commands
