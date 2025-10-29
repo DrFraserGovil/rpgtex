@@ -161,31 +161,31 @@
   { 2ex plus .67ex minus .67ex } % before-sep
     { .2ex } % after-sep
 
-%   % Paragraph
-%   \titleformat {\paragraph} [runin]
-%     { \RpgFontParagraph } % format
-%     { \theparagraph \quad } % label
-%     {0pt} % sep
-%     {}    % before-code
-%     [.]   % after-code
+  % Paragraph
+  \titleformat {\paragraph} [runin]
+    { \RpgFontParagraph } % format
+    { \theparagraph \quad } % label
+    {0pt} % sep
+    {}    % before-code
+    [.]   % after-code
 
-%   \titlespacing* {\paragraph}
-%     {0pt}      % left
-%     {\parskip} % before-sep
-%     {\wordsep} % after-sep
+  \titlespacing* {\paragraph}
+    {0pt}      % left
+    {\the\dimexpr\parskip+5pt\relax} % before-sep
+    {\wordsep} % after-sep
 
-%   % Subparagraph
-%   \titleformat {\subparagraph} [runin]
-%     { \RpgFontSubparagraph } % format
-%     { \thesubparagraph \quad } % label
-%     {0pt} % sep
-%     {}    % before-code
-%     [.a]   % after-code
+  % Subparagraph
+  \titleformat {\subparagraph} [runin]
+    { \RpgFontSubparagraph } % format
+    { \thesubparagraph \quad } % label
+    {pt} % sep
+    {}    % before-code
+    [.]   % after-code
 
-%   \titlespacing* {\subparagraph}
-%     {\parindent} % left
-%     {\parskip}   % before-sep
-%     {\wordsep}   % after-sep
+  \titlespacing* {\subparagraph}
+    {\parindent} % left
+    {\the\dimexpr\parskip+5pt\relax}   % before-sep
+    {\wordsep}   % after-sep
 }
 
 \ExplSyntaxOff
