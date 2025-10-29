@@ -22,6 +22,8 @@
 \bool_set_true:N \l__rpg_multitoc_bool
 \bool_set_eq:NN \l__rpg_layout_bool \c__rpg_isclass_bool
 
+\RequirePackage{core/theme_engine} %%need this for theme path switching
+
 
 % Note that there is no 'unknown value' handling -- rpgtex passes *all* keys to the parent class first.
 % Standard latex classes fail silently if they don't recognise an option, so I reason it's fine for me to do that too.
@@ -88,8 +90,10 @@
         \bool_set_true:N \l__rpg_openright_bool
       },
     openright .value_forbidden:n = false,
-  }
 
+	themepath .code:n 	={\RpgSetThemePath{#1}},
+	themepath .value_required:n = true,
+  }
 
 
 

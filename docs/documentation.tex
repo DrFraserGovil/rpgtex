@@ -1,9 +1,12 @@
 
-\documentclass[size=10pt,theme=default]{rpgbook}
+\documentclass[size=9pt,theme=default,justified]{rpgbook}
 
 \usepackage{doc}
 \usepackage{blindtext}
 \usepackage{imakeidx}
+\usepackage{pifont}
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
 \makeindex
 \def\rpgtex{\texttt{rpgtex}}
 
@@ -33,6 +36,10 @@
 			\expandafter\index\expandafter{#1!\temp@\texttt{\textbackslash\m}}
 		 }
 	}
+}
+
+\NewDocumentCommand{\cmdref}{m}{
+	\texttt{\textbackslash#1}~\RpgPage[p]{Macro:#1}
 }
 
 \begin{document}
@@ -71,6 +78,7 @@
 	\part{rpgtex Core}
 		\input{parts/intro.tex}
 		\input{parts/compiler.tex}
+		\input{parts/options.tex}
 		\input{parts/commands.tex}
 		\input{parts/environments.tex}
 		\input{parts/variables.tex}

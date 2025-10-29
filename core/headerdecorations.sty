@@ -42,6 +42,40 @@
 		
 	}
 }
+
+
+\keys_define:nn { rpg / footer }
+{
+	reverse .code:n = {	\tl_set:Nn\l__rpg_footer_direction{-1}},
+	reverse .value_forbidden:n = true,
+	tikz-insert .tl_set:N = \l__rpg_footer_extra_tl,
+	tikz-insert .value_required:n = true,
+	tikz-insert .initial:n = {},
+	height .tl_set:N = \l__rpg_footer_height_tl,
+	height .value_required:n = true,
+	height .initial:n = .6in,
+	keepaspectratio  .code:n=
+		{
+			\tl_set:Nn \l__rpg_footer_keepaspectratio {keepaspectratio}
+		},
+	keepaspectratio .value_forbidden:n = true,
+}
+
+\NewDocumentCommand{\RpgSetFooterDecoration}{o m}
+{
+	\tl_set:Nn \l__rpg_footer_keepaspectratio {}
+	\tl_set:Nn\l__rpg_footer_direction{1}
+	\keys_set:nn{rpg/footer}{#1}
+
+	\begin{tikzpicture}[remember~picture,overlay]
+      \bool_if:NT \l__rpg_show_footer_scroll_bool {
+        \node[inner~sep=0pt,anchor=south,nearly~opaque,xscale=\l__rpg_footer_direction] at (current~page.south) {\includegraphics[width=\paperwidth,height=\l__rpg_footer_height_tl,\l__rpg_footer_keepaspectratio]{#2}};
+      }
+      \l__rpg_footer_extra_tl
+    \end{tikzpicture}
+}
+
+
 \fancypagestyle{clear}{}
 \fancypagestyle{empty}
 {

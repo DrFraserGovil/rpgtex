@@ -4,23 +4,27 @@
 % Left-even page footer
 \fancyfoot[LE]{%
     \RpgFontFooter \leftmark
-    \begin{tikzpicture}[remember~picture,overlay]
-      \bool_if:NT \l__rpg_show_footer_scroll_bool {
-        \node[xscale=-1,inner~sep=0pt,anchor=south,nearly~opaque] at (current~page.south) {\includegraphics[width=\paperwidth,height=.6in]{themes/dnd/img/footerscroll}};
-      }
-      \node[inner~sep=0pt,anchor=south,xshift=.28in,yshift=.39in] at (current~page.south~west) {\RpgFontPageNumber \thepage};
-    \end{tikzpicture}
+
+	\RpgSetFooterDecoration[
+		keepaspectratio,
+		reverse,
+		tikz-insert={
+			\node[inner~sep=0pt,anchor=south,xshift=.28in,yshift=.39in] at (current~page.south~west) {\RpgFontPageNumber \thepage};
+		},
+	]{themes/dnd/img/footerscroll}
+
   }
 
 % Right-odd page footer
 \fancyfoot[RO]{%
     \RpgFontFooter \leftmark
-    \begin{tikzpicture}[remember~picture,overlay]
-      \bool_if:NT \l__rpg_show_footer_scroll_bool {
-        \node[inner~sep=0pt,anchor=south,nearly~opaque] at (current~page.south) {\includegraphics[width=\paperwidth,height=.6in]{themes/dnd/img/footerscroll}};
-      }
-      \node[inner~sep=0pt,anchor=south,xshift=-.28in,yshift=.39in] at (current~page.south~east) {\RpgFontPageNumber \thepage};
-    \end{tikzpicture}
+	\RpgSetFooterDecoration[
+		keepaspectratio,
+		tikz-insert={
+			\node[inner~sep=0pt,anchor=south,xshift=-.28in,yshift=.39in] at (current~page.south~east) {\RpgFontPageNumber \thepage};
+		},
+	]{themes/dnd/img/footerscroll}
+ 
   }
 
   % Clear the current definition of 'plain' footers/headers

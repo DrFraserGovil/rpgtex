@@ -66,7 +66,7 @@
 
 		The RpgMap environment makes it easy to create nested blocks, useful when needing to enumerate the contents of a map. The RpgMap environment uses a stacked counter system and dynamic labelling.
 		
-			\DualExampleRender{map1}
+			
 
 		\begin{macrolist}
 			\RpgMacro*[RpgMap]{RpgMap, RpgMap*, {{o}}}{Begins a dynamic-stacked environment for generating headed and labelled lists using the \verb|RpgArea| object to provide entries. The starred version of the command is identical in function, but calls \verb|\section*| instead of \verb|\section| (and so on.), suppressing the map elements from the table of contents.}{
@@ -143,6 +143,8 @@
 			Note that since the RpgMap environment is invoked after the RpgArea is created, the options passed to \verb|<nested-opts>| do not apply to the parent Area, which uses the Map options of its own parent.
 		}
 		\end{macrolist}
+
+		\DualExampleRender{map1}
 
 		\subsection{Map Labelling \& Referencing}
 		

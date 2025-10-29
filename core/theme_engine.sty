@@ -14,7 +14,7 @@
 %%%%%% Theme switching
 
 \tl_new:N \l__rpg_theme_path
-\msg_new:nnn { rpg } { theme_missing } {Could~not~locate~theme~#1~on~filepath~#2}
+\msg_new:nnn { rpg } { theme_missing } {Could~not~locate~theme~#1~directly,~and~is~not~on~theme~path(#2)}
 
 \NewDocumentCommand\RpgSetTheme { m }
 {
@@ -22,13 +22,24 @@
 	{
 		\clearpage
 	}
+
+	%%%first try looking in the package themes
 	\def\temp@themePath{\l__rpg_theme_path/#1/#1.cfg}
 	\file_if_exist:nTF \temp@themePath
 	{
 		\input{\tl_use:N \temp@themePath}
 	}
 	{
-		\msg_error:nnxx { rpg } { theme_missing } { #1 } { \temp@themePath }
+		%%%if not found then try reading it as a direct reference
+		\file_if_exist:nTF{#1}
+		{
+			\input{#1}
+		}
+		{
+			\msg_error:nnxx { rpg } { theme_missing } { #1 } { \temp@themePath }
+
+		}
+
 	}
 
 }

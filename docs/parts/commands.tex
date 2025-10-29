@@ -1,9 +1,10 @@
 
 
 
-\chapter{Main Engine}
-
-	\section{``Theme Commands''}\label{S:ThemeCommands}
+\chapter{Commands \& Macros}
+	\def\backendCommand{\hyperref[S:ThemeCommands]{\textcolor{blue!40!black}{{Backend Command}}}}
+		\def\placeholderCommand{\hyperref[S:ThemeCommands]{\textcolor{blue!40!black}{{Placeholder Command}}}}
+	\begin{RpgSidebar}{Theme Commands}\label{S:ThemeCommands}
 
 		Several commands in this documentation are described as \textbf{Theme Commands}. These are commands that the user is \textit{not expected to call}, but which are executed by the internal engine in the process of rendering the page, or as a result of other commands that the user has called. 
 
@@ -20,8 +21,8 @@
 		\end{enumerate}
 
 		A `theme' is therefore a collection of Backend Commands (to configure the `core engine') and redefinitions of Placeholder Commands to provide their own unique functionality.
-		\def\backendCommand{\hyperref[S:ThemeCommands]{\textcolor{blue!40!black}{{Backend Command}}}}
-		\def\placeholderCommand{\hyperref[S:ThemeCommands]{\textcolor{blue!40!black}{{Placeholder Command}}}}
+		
+	\end{RpgSidebar}
 	\section{Title Pages}
 		\subsection{User-Facing Commands}
 			\begin{macrolist}
@@ -229,6 +230,25 @@
 					This command is primarily used by theme developers and document class files to conditionally load or activate modules based on whether the package was loaded via a document class (layout mode active) or directly via \verb|\usepackage{rpgtex}|.
 				}
 			\RpgMacro{\RpgSetFont}{See \RpgPage{S:FontInterface}}{}{}
+			\RpgMacro{\RpgSetFooterDecoration,{{o m}}}{Configures an image to be displayed along the bottom of a page as a `footer scroll'.}
+				{
+					\RpgSetFooterDecortation[<opts>]{path/to/img}
+				}
+				{
+					When placed within a footer, (i.e. with fancypage), places the image in a node with parameters:
+					
+					\texttt{\textbackslash{}node[inner sep=0pt,anchor=south,nearly opaque] at (current page.south) \{\textbackslash{}includegraphics[width=\textbackslash{}paperwidth]\{path/to/img\}\};}
+
+					If the package option \verb|bg=none| has been passed, then the image is suppressed.
+
+					The following options modify that code as follows:
+					\begin{description}
+						\item[reverse] adds \verb|xscale=-1| to the node arguments, reversing the image (useful for right/left page differences)
+						\item[tikz-insert={code}] inserts the code within the tikz environment after the footer scroll. This is not suppressed with \verb|bg=none| and can be used to place chaptermarks / page numbers more precisely than the standard interface allows.
+						\item[height=<dimexpr>] adds \verb|height=dimexpr| to the includegraphics arguments
+						\item[keepaspectratio] adds \verb|keepaspectratio| to the includegraphics arguments    
+					\end{description}
+				}
 			\RpgMacro[RpgSetPaper]{\RpgSetPaper}
 				{Sets a background image to be used as the `paper' image.}
 				{
