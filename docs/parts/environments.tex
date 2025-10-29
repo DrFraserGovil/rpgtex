@@ -62,6 +62,133 @@
 		\subsection{Colorbox Examples}
 		\DualExampleRender{narration1}
 	
+	\labelsection{RpgMap}
+
+		The RpgMap environment makes it easy to create nested blocks, useful when needing to enumerate the contents of a map. The RpgMap environment uses a stacked counter system and dynamic labelling.
+		
+			\DualExampleRender{map1}
+
+		\begin{macrolist}
+			\RpgMacro*[RpgMap]{RpgMap, RpgMap*, {{o}}}{Begins a dynamic-stacked environment for generating headed and labelled lists using the \verb|RpgArea| object to provide entries. The starred version of the command is identical in function, but calls \verb|\section*| instead of \verb|\section| (and so on.), suppressing the map elements from the table of contents.}{
+				\verb|\begin{RpgMap}[<opts>]|
+
+				\verb|     <contents>|
+				
+				\verb|\end{RpgMap}|				
+			}{
+				RpgMap uses the counter \verb|RpgAreaDepth| to track how many Maps have been nested. A higher value of this counter results in `smaller' headings being used, beginning with \verb|\section| and progressing to \verb|\subparagraph|.
+				
+				The permitted options are:
+				\newcommand\mapopt[2]{\verb|#1| &#2\\}
+				\begin{RpgTable}{lX}
+					Option & Effects \\
+					\mapopt{header-offset}{An offset added to RpgAreaDepth when determing the heading size to be used (an offset of 0 uses \verb|section| for the top level map entires, an offset of 1 uses \verb|subsection|, and so on).}
+					\mapopt{title}{If non-empty, places the contents in a section one size larger than \verb|RpgAreaDepth+header-offset| (using \verb|chapter| for the largest possible size). The title is only rendered at the top-level of the map (if RpgAreaDepth=1), otherwise it is ignored. Default value is blank.}
+					\mapopt{prefix}{A string which is automatically prefixed to the 'number string' of named \verb|RpgArea| entries in the map. Default is blank.}
+					\mapopt{blank-prefix}{A string which is automatically prefixed to the `number string' of unnamed (blank) \verb|RpgArea| entries in the map. Default is ``\verb|Area~|''}
+					\mapopt{ref-prefix}{A string prefixed to all labels created by \verb|RpgArea|, allowing disambiguation of references. Default is ``\verb|Map:|''}
+				\end{RpgTable}
+
+				The variables set by options are persistent throughout the nesting - setting \verb|ref-prefix| in one map will mean the same value persists in all encapsulated maps unless manually overridden. Changes do \textit{not} persist once the nesting is finished.
+
+				
+			}
+		\RpgMacro{\RpgArea,{{o m}}}{
+			Creates a formatted entry within the RpgMap environment. The appearance of the title depends on the map-depth and the current header-offset.
+		}{
+			\RpgArea[<manual-label>]{<area-name>}
+		}{
+			Creates a `header' depending on the value of \verb|RpgCounter + headeroffset|:
+			\begin{enumerate}
+				\item section
+				\item subsection
+				\item subsubsection
+				\item paragraph
+			\end{enumerate}
+			If outside these values, uses \verb|subparagraph|. The name of the section is preceeded by the `map counter', which is equal to the index within the current map, appended to the `map counter' of any parent maps. The formatting function \verb|RpgMapLevelName| enables hierarchical labelling, such that the third area inside the second map of the first map would be given the counter value `1b-iii'.
+			
+			If the manual label is set, this is used as the label for this area; otherwise the automatic labelling is used (see below).
+		}
+		\RpgMacro*{RpgNestedArea,{{o o m}}}
+		{
+			A wrapper for calling \verb|RpgArea| and then immediately \verb|RpgMap|, creating nested map areas in a single call.
+		}
+		{
+			\verb|\begin{RpgMap}[<opts>]|
+
+				\verb|     (...)|
+
+				\quad\verb|     \begin{RpgNestedArea}[area-label][<nested-opts>]{<area name>}|
+
+				\quad\quad\verb|           (...)|
+
+				\quad\verb|     \end{RpgNestedArea}|		
+
+				\verb|     (...)|
+				
+				\verb|\end{RpgMap}|		
+		}{
+			This syntax is identical to calling:
+
+			\quad\verb|     \RpgArea[area-label]{<area name>}|
+
+			\quad\quad\verb|           \begin{RpgMap}[<nested-opts>]|
+			
+			\quad	\quad\quad\verb|           (...)|
+
+			\quad\quad\verb|           \end{RpgMap}|
+
+			\quad\verb|     \end{RpgNestedArea}|	
+
+			Note that since the RpgMap environment is invoked after the RpgArea is created, the options passed to \verb|<nested-opts>| do not apply to the parent Area, which uses the Map options of its own parent.
+		}
+		\end{macrolist}
+
+		\subsection{Map Labelling \& Referencing}
+		
+			Each RpgArea with a non-empty name automatically labels itself using the syntax	\verb| \label{<ref-prefix><area-name>}|. If a manual label was passed to the RpgArea, this is used instead (without the prefix), even if the RpgArea was not named. This is designed to provide disambiguation, as no automatic checks are performed for name collisions. 
+
+			It is then possible to call \verb|\ref| on this label\footnote{Though it won't give you anything interesting -- the returned value will be the cumulative number of RpgAreas in the document at that point} and \verb|\pageref| or \verb|\RpgPage| \RpgPage[p]{Macro:RpgPage}. However, we provide a more powerful referencing interface:
+
+			\begin{macrolist}
+				\RpgMacro{\RpgMapRef,\RpgMapRef*,{{m}}}{Returns the full name of the referenced area, including the map counter. The starred version returns only the map counter.}
+				{
+					\RpgMapRef{<label-name>}
+				}
+				{
+					The provided text is fully integrated with \verb|hyerref|, and so they enable click-jumping to the referenced map area. 
+					
+					Using the example map provided above:
+					\begin{RpgTable}{XX}
+						Example & Output \\
+						\tabverbExample{\RpgMapRef{Map:Shire horse}}
+						\tabverbExample{\RpgMapRef*{Map:Shire horse}}
+						\tabverbExample{\RpgMapRef*{tomb-ref}}
+					\end{RpgTable}
+				}
+			\RpgMacro{\RpgMapRefPage,\RpgMapRefPage*,{{m}}}{Appends the page number of the referenced map area to a \verb|RpgMapRef(*)| command}
+			{
+				\RpgMapRefPage{<label-name>}
+			}
+			{
+				Using the example map provided above:
+					\begin{RpgTable}{XX}
+						Example & Output \\
+						\tabverbExample{\RpgMapRefPage{Map:Shire horse}}
+						\tabverbExample{\RpgMapRefPage*{Map:Shire horse}}
+						\tabverbExample{\RpgMapRefPage*{tomb-ref}}
+					\end{RpgTable}
+			}
+			\RpgMacro{\RpgShowMapRefs}{If called, all subsequent \verb|RpgArea|s will print out a sub-heading listing their macro name.}
+			{}
+			{
+				It is not unheard of for a writer to lose track of the labelling name conventions - especially those which are autogenerated. This provides a useful debugging tool for those who don't want to go digging into the aux files.				
+			}
+			\end{macrolist}
+
+			
+			\DualExampleRender{map2}
+
 	\labelsection{RpgTable}
 
 

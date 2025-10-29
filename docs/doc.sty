@@ -29,8 +29,6 @@
 
 \NewDocumentEnvironment{macrolist}{+b}{
 	\vspace{1em}
-    % \hspace{-1.5cm}
-	\let\__rpg_colsep:&
 	\noindent\begin{xltabular}{\linewidth}{rX}
 		#1
     \end{xltabular}}{}
@@ -76,7 +74,7 @@
 	\str_if_empty:nF{#6}
 	{
 	\macrosection{Details}
-	#6
+	{#6}
 	}
 	\\
 }
