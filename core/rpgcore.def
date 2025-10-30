@@ -45,20 +45,8 @@
     \bool_if:NT \l__rpg_multitoc_bool
       { \RequirePackage [toc] {multitoc} }
 
-    % Set page geometry.
-    \geometry
-      {
-        hmargin   = .65in, % Left and right margins
-        top       = .4in, % Top of text area to top of page
-        bottom    = .75in,  % Bottom of text area to bottom of page
-        footskip  = .3in, % Bottom of text area to bottom of footer text
-        columnsep = .25in, % Space between columns
-      }
-
-    % Set paragraph and line spacing
-    \setlength {\parindent}            {1em}
-    \setlength {\RaggedRightRightskip} {0pt plus 1em}
-    \setlength {\RaggedRightParindent} {\parindent}
+   
+    
 
     % Restrict hyphenation
     \tolerance        = 1

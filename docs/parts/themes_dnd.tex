@@ -7,26 +7,54 @@
 
 		The dnd theme defines a special command which mimics the appearance of a monster statblock - particularly those in the more modern D\&D 2024 iteration. 
 
-		\begin{multicols}{2}
-		\begin{RpgMonster}{Test}
+	% 	\begin{multicols}{2}
+	% 	\begin{RpgMonster}{Test}
 			
-		\end{RpgMonster}
-		\clearpage
-		\Blindtext
-	\end{multicols}
+	% 	\end{RpgMonster}
+	% 	\clearpage
+	% 	\Blindtext
+	% \end{multicols}
+
+	\RpgSetCardMode{true}
+
+	\begin{RpgSpell}{Hocus Pocus}{A test header}
+			{1200ft}
+			{1 year}
+			{1 century}
+			{VSM}
+			{My mind}
+
+			A thing happens, and we \it all cheer! \blindtext \cardbreak hi! \cardbreak
+		\end{RpgSpell}
+		\begin{RpgSpell}{Hocus Pocus}{A test header}
+			{1200ft}
+			{1 year}
+			{1 century}
+			{VSM}
+			{My mind}
+
+			A thing happens, and we \it all cheer! \blindtext \cardbreak hi! \cardbreak hi!
+		\end{RpgSpell}
 
 
-	% \begin{spell}{Hocus Pocus}{A test header}
-	% 		{1200ft}
-	% 		{1 year}
-	% 		{1 century}
-	% 		{VSM}
-	% 		{My mind}
+		\RpgSetCard{color=red,opacityback=1,height=3cm,text-height=2.5cm}
+		\begin{RpgCard}[]{}
+			\Blindtext
+		\end{RpgCard}
 
-	% 		A thing happens, and we all cheer! \Blindtext
-	% 	\end{spell}
+	% \newenvironment{testit}[1]{\textit{#1}\newline}{}
+	% \newenvironment{testbf}[1]{\textbf{#1}\newline}{}
 
-	% \begin{RpgCardSwitch}[1]{2}[3]{4}
-	
+
+
+
+	% \begin{RpgCardSwitch}{testit}{testbf}{test this!}
+	% 		Some text
+	% \end{RpgCardSwitch}
+
+	% \RpgCardMode{true}
+
+	% \begin{RpgCardSwitch}[test]{testit}{testbf}{test this!}
+	% 		Some text
 	% \end{RpgCardSwitch}
 	
