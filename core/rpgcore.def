@@ -78,7 +78,7 @@
 % % % Load other modules of this package after all dependencies to avoid load order
 % % % conflicts (e.g., package options).
 % % % Low-level modules first.
-
+\input{core/lowlevel/internal_utility} %% provides some general expl3 macros we use in multiple places
 
 \RequirePackage {core/utility}   % utility functions
 \RequirePackage {core/colors}	% color definitions
@@ -90,6 +90,7 @@
 \RequirePackage {core/table}      % tables
 \RequirePackage {core/titles}
 \RequirePackage {core/headerdecorations}     % fancy headers and footers
+\RequirePackage{core/card}
 %
  % %% packages which do nothing but alter geometry/page settings, and so are ignored if the header layout setting is not active
 \RpgLayoutOnly{

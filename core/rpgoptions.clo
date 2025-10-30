@@ -76,7 +76,7 @@
 	size .code:n = {
         \tl_set:Nn \l__rpg_font_size_tl { #1 }
     },
-    size .default:n = { 8pt },
+    size .default:n = { 10pt },
 
 	% Columns
 	columns .choice:,

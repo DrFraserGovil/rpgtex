@@ -2,22 +2,17 @@
 
 
 	Whether the package is invoked directly, or through a class users have the option to pass options to it which change the behavior of the resulting document:
-	
 	\begin{lstlisting}
 		\documentclass[<options>]{rpgbook/rpghandout}
-
 		\usepackage[<options>]{rpgtex}
 	\end{lstlisting}
-
-	The options are either in the form of key-value pairs which set internal values, or flags which activate behavior when present. 
-
-	The available options are:
+	The options are either in the form of key-value pairs which set internal values, or flags which activate behavior when present. The available options are:
 	\begin{macrolist}
 		\RpgMacro{bg}{Controls the presence of the `background paper' and footer decorations.}
 		{
-			bg = full / print / none
+			bg = <full / print / none>
 		}{
-			The value passed must be one of the three options (else an error is thrown). The three options change whether the `background paper' set by \cmdref{RpgSetPaper} appears in the document, or the footer decorations
+			The value passed must be one of the three options (else an error is thrown). The three options change whether the `background paper' set by \cmdref{RpgSetPaper} appears in the document, or the footer decorations set by \cmdref{RpgSetFooterDecoration}.
 
 			\begin{tabular}{rcc}
 				Command & Paper & Footer Decorations
@@ -29,4 +24,28 @@
 				\texttt{none} & \xmark & \xmark
 			\end{tabular}
 		}
+		\RpgMacro{justified}{A flag which, if present, activates justified-text mode. Otherwise, defaults to left-aligned, `ragged right'.}
+		{}{}
+		\RpgMacro{nomultitoc}{A flag which, if present, disabled the multi-column table of contents option}{}{}
+		\RpgMacro{theme}{The initial value passed to \cmdref{RpgSetTheme} when package initialization is finished.}{}{ 
+			The default value is \verb|default|, activating the Default Theme \RpgPage[p]{Theme:Default}.
+		}
+		\RpgMacro{themepath}{Calls \cmdref{RpgSetThemePath}, a directory holding multiple theme files used for auto-theme searches if a direct path not given}{}{
+			Default value is \verb|\RpgPackagePath/themes|, with the assumption that the theme `name' is stored in \verb|themes/name/name.cfg|.
+		}
+		\RpgMacro{size}{Forwards the contents on to the base-class if \verb|layout| is active, thereby setting the font size}
+		{
+			size = <font-size>pt
+		}
+		{
+			The allowed values depend on the class being used: the book class (on which rpgbook is based) for example, only accepts values in \{10pt,11pt,12pt\}. Other classes may accept different values.
+		}
+		\RpgMacro{columns}{Sets the number of columns the document is has}
+		{
+			columns = <1 / 2>
+		}
+		{
+			Internally this calls either onecolumn or twocolumn. More advanced column-settings would require the user manually using \verb|multicols|.
+		}
+		
 	\end{macrolist}
