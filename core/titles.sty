@@ -60,17 +60,9 @@
 \NewDocumentCommand\RpgSimpleTitle{}{\__rpg_orig_title}
 
 %%Switching command used by classes to choose to use a full-page drawn title, or a simple text title
+
 \NewDocumentCommand{\RpgUseCoverPage}{m}{
-	\str_case:nnF { #1 }
-    {
-        {true}  { \bool_set_true:N  \g__rpg_use_cover_page_bool }
-        
-        {false} { \bool_set_false:N \g__rpg_use_cover_page_bool }
-    }
-    {
-        % Fallback Case: Invalid value detected. Raise an error.
-        \msg_error:nnn { rpg } { bad_switch_value } { #1 }
-    }
+	\__rpg_set_bool_from_text:Ne {\g__rpg_use_cover_page_bool}{#1}
 }
 
 \ExplSyntaxOff

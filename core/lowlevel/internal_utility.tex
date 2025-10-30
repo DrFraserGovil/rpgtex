@@ -1,0 +1,21 @@
+\ExplSyntaxOn
+
+
+\msg_new:nnn { rpg } { bad_bool } {Could~not~set~boolean~variable~#1~from~value~'#2'}
+
+
+\cs_new_protected:Npn \__rpg_set_bool_from_text:Ne#1#2
+{
+	\str_case:nnF {#2}
+	{
+		{true} {\bool_set_true:N#1}
+		{True} {\bool_set_true:N#1}
+		{1} {\bool_set_true:N#1}
+		{false} {\bool_set_false:N#1}
+		{False} {\bool_set_false:N#1}
+		{0} {\bool_set_false:N#1}
+	}
+	{
+		\msg_error:nnxx { rpg } { bad_bool } { #1 }{#2}
+	}
+}
