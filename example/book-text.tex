@@ -44,10 +44,10 @@
 		% 	The map region functions \verb|\RpgArea| and \verb|\RpgSubArea| provide automatic numbering of areas.
 
 
-		% 	\RpgSetAreaOptions[area-label=village,area-num-depth=3]{}
+		% 	\RpgSetAreaOptions[area-label=village,area-num-header-offset=3]{}
 		% 	\RpgArea{Village of Hommlet}
 		% 	This is the village of hommlet.
-		% 	\RpgSetAreaOptions[area-label=villages,area-num-depth=3]{}
+		% 	\RpgSetAreaOptions[area-label=villages,area-num-header-offset=3]{}
 		% 	\RpgSubArea{Inn of the Welcome Wench}
 		% 	Inside the village is the inn of the Welcome Wench.
 
@@ -89,7 +89,7 @@
 
 		% 	\subsection{Area Depths}
 
-		% 		Map headers can be set to different `levels', using either section/subsection (etc.) for display purposes. The default value is \verb|\RpgSetAreaOptions[area-num-depth=2]{}| (subsection). For display purposes here, we used \verb|area-num-depth=3|
+		% 		Map headers can be set to different `levels', using either section/subsection (etc.) for display purposes. The default value is \verb|\RpgSetAreaOptions[area-num-header-offset=2]{}| (subsection). For display purposes here, we used \verb|area-num-header-offset=3|
 		\section{RpgTable}
 
 			\begin{RpgTable}[title=Box Colors]{lX}
@@ -130,7 +130,7 @@
 
 		% \RpgShowMapRefs{}
 
-		\begin{RpgMap*}[depth=0,title={RPG maps}]
+		\begin{RpgMap*}[header-offset=0,title={RPG maps}]
 			
 			
 
@@ -144,7 +144,7 @@
 			\RpgArea{}
 		\end{RpgMap*}
 
-		\begin{RpgMap}[depth=0,title={A test map}]
+		\begin{RpgMap}[header-offset=0,title={A test map}]
 			
 			\RpgArea{Bob's House} Bob lives here
 

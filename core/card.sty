@@ -1,0 +1,251 @@
+\ExplSyntaxOff
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Generate custom card-printouts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ExplSyntaxOn
+
+\keys_define:nn {rpg / card}
+{
+	width .tl_set:N = {\l__card_width_tl},
+	height .tl_set:N = {\l__card_height_tl},
+	text-width .tl_set:N = {\l__card_text_width_tl},
+	text-height .tl_set:N = {\l__card_text_height_tl},
+	color .tl_set:N = {\l__color_intercept_tl},
+	opacity .tl_set:N = {\l__opacity_intercept_tl},
+	hskip .tl_set:N = {\l__card_hskip_tl},
+}
+
+\tcbset{rpgcard/.style={}}
+\newtcolorbox{rpgcard}[1][]{
+  rpgcard,
+  #1
+}
+
+\msg_new:nnn { rpg } { card-dimensions}{~\\Dimension~error!\\The~#1~(#2)~cannot~be~larger~than~the~#3~(#4)}
+
+\NewDocumentCommand{\RpgSetCard}{m}{
+	\keys_set_known:nnN {rpg/card}{#1}{\l__tmpa_tl}
+	\exp_args:Ne \tcbset
+    {
+        rpgcard/.append~style={ colback=\l__color_intercept_tl,opacityback=\l__opacity_intercept_tl,\l__tmpa_tl,width=\l__card_width_tl,height=\l__card_height_tl} % \l__tmpa_tl is fully expanded here
+    }
+
+	\dim_compare:nT{\l__card_text_width_tl > \l__card_width_tl}
+	{
+		\msg_error:nneeee {rpg}{card-dimensions}{text~width}{\l__card_text_width_tl}{card~width}{\l__card_width_tl}
+	}
+	\dim_compare:nT{\l__card_text_height_tl > \l__card_height_tl}
+	{
+		\msg_error:nneeee {rpg}{card-dimensions}{text~height}{\l__card_text_height_tl}{card~height}{\l__card_height_tl}
+	}
+
+}
+\NewDocumentCommand\RpgResetCard{}{
+	% \tcbset{rpgcard/.style={}}
+	\RpgSetCard{
+		
+		width=5.35cm,
+		height=8.8cm,
+		text-width=4.5cm,
+		text-height=8.5cm,
+		% % % Appearance
+		colframe=black,         % Border color
+		arc=1mm,                % Rounded corners (card-like)
+		% % % Layout and padding
+		% left~skip=0pt, right~skip=0pt, % Ensure it fits naturally
+		boxsep=0pt,                  % No extra space around the box
+		% % % Default background
+		enhanced,
+		% standard~jigsaw,             % Use internal spacing system
+		color=white,
+		% opacity=0,
+		hskip={5pt},
+	}
+}
+
+\RpgResetCard{}
+
+
+
+
+\RequirePackage{trimclip}
+
+
+% Define a unique marker
+\cs_new_protected:Npn \cardbreak {}
+\tl_new:N \g_rpgcard_font_state_tl
+
+\box_new:N \l_rpgcard_content_box % The main box to hold ALL content
+\box_new:N \l_rpgcard_chunk_box   % The box to hold one card's content
+
+
+\NewDocumentEnvironment{RpgCard}{o +b} % #1 is optional arg, #2 is body
+{
+	\RenewDocumentCommand{\cardbreak}{}{
+		\par\penalty -10000 \vspace{0pt}
+	}
+
+    \tl_gset:Nx  \g_rpgcard_font_state_tl {} % Reset font state
+    
+    % 1. Put the entire body (#2) into the main box (\l_rpgcard_content_box)
+    % % We use \hbox to ensure the height/depth properties are correct.
+    \vbox_set:Nn \l_rpgcard_content_box{
+        \hsize=\l__card_text_width_tl
+		\linewidth=\hsize
+
+        #2
+    }
+	
+	\noindent\leavevmode
+    % % % % 2. Start the iteration loop: while the box is not empty, keep splitting
+    \bool_do_until:nn { \box_if_empty_p:N \l_rpgcard_content_box }
+    {
+        
+        % 3. SPLIT: Use \vsplit to take a vertical box of exactly 8.3cm height.
+        % The \splittopskip ensures the next chunk starts correctly.
+        \splittopskip=0pt
+        \vbox_set:Nn \l_rpgcard_chunk_box 
+        {
+            \vsplit \l_rpgcard_content_box  to \l__card_text_height_tl
+        }
+        % \hskip 0pt
+        % 4. Process the chunk (the inner card)
+		\hbox{
+			\tl_if_novalue:nTF{#1}
+			{
+				\begin{rpgcard}
+			}
+			{
+				\begin{rpgcard}[#1]
+			}
+            \g_rpgcard_font_state_tl
+           \hfil {\box_use:N \l_rpgcard_chunk_box}\hfil 
+            \tl_gset:Nx\g_rpgcard_font_state_tl{\the\font}
+        \end{rpgcard}
+		}
+
+		\bool_if:NF{\box_if_empty_p:N \l_rpgcard_content_box }
+		{
+			\hskip \l__card_hskip_tl
+		}
+    }
+	% \par
+}
+{
+    % End block is empty.
+}
+
+\bool_new:N \g__rpg_card_active_bool
+
+
+\NewDocumentCommand{\RpgSetCardMode}{m}{\__rpg_set_bool_from_text:Ne \g__rpg_card_active_bool{#1}}
+
+\NewDocumentEnvironment{RpgCardSwitch}{o m o m}
+{
+	\bool_if:NTF\g__rpg_card_active_bool
+	{
+		% Args = #1
+		\tl_if_novalue:nTF{#1}
+		{
+			\begin{#2}
+		}
+		{
+			\begin{#2}[#1]
+		}
+	}
+	{
+		\tl_if_novalue:nTF{#3}
+		{
+			\begin{#4}
+		}
+		{
+			\begin{#4}[#3]
+		}
+	}
+}
+{
+	\bool_if:NTF\g__rpg_card_active_bool
+	{
+		\end{#2}
+	}
+	{
+		\end{#4}
+	}
+}
+
+\definecolor{headercolor}{RGB}{88,23,13}
+\definecolor{linecolor}{RGB}{201,173,106}
+
+\NewDocumentEnvironment{spellcard}{m m m m m m m +b}
+{
+	\setlength{\parindent}{0pt}
+    \def\spelltitle{#1}
+    \def\spellheader{#2}
+    \def\castrange{#3}
+    \def\casttime{#4}
+    \def\duration{#5}
+    \def\components{#6}
+    \def\spellsource{#7}
+	\begin{RpgCard}[]
+		
+		{\centering
+		
+		{\scshape\scriptsize\spellheader}{\\\Large\color{headercolor}\mbox{\spelltitle}}
+		
+		\vspace{-0.5em} \\
+
+		\rule{\linewidth}{0.4pt} \\
+
+		\vspace{-0.25em}
+
+		\def\spellfont{\footnotesize\scshape{\color{headercolor}}}
+
+		{\spellfont
+		\begin{tabularx}{\linewidth}{YY}
+			% \centering
+			\color{headercolor}Casting~time & \color{headercolor}Range
+			\\
+			\casttime & \castrange
+			\\
+			\color{headercolor}Components & \color{headercolor} Duration
+			\\
+			\components & \duration
+		\end{tabularx}
+		}
+		\\ \vspace{0.5em}
+		\rule{\linewidth}{0.4pt} \\ }
+		\vspace{0.5em}
+		\normalfont \footnotesize
+
+		#8
+
+		\vfill
+		\begin{center} 
+		{\it \footnotesize Source: \spellsource}
+		\end{center}\vspace{-1em}
+}{
+	\end{RpgCard}
+}
+
+\newenvironment{spelltext}[7]
+{
+	 \def\spellsource{#7}
+	\subsection{#1}
+	{\it #2}
+
+	\subparagraph{Range} #3
+	\subparagraph{Casting Time} #4
+	\subparagraph{Duration} #5
+	\subparagraph{Components} #6
+}{
+	% \par{\it \spellsource}
+}
+
+\NewDocumentEnvironment{RpgSpell}{m m m m m m m}
+{
+	\begin{RpgCardSwitch}{spellcard}{spelltext}{#1}{#2}{#3}{#4}{#5}{#6}{#7}
+}{
+	\end{RpgCardSwitch}
+}

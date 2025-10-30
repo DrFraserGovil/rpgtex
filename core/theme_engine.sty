@@ -16,11 +16,17 @@
 \tl_new:N \l__rpg_theme_path
 \msg_new:nnn { rpg } { theme_missing } {Could~not~locate~theme~#1~directly,~and~is~not~on~theme~path(#2)}
 
+
+
+
 \NewDocumentCommand\RpgSetTheme { m }
 {
 	\RpgLayoutOnly
 	{
-		\clearpage
+		\str_if_eq:eeF{\g__rpg_base_class_tl}{standalone}
+		{
+			\clearpage
+		}
 	}
 
 	%%%first try looking in the package themes
