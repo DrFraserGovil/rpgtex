@@ -17,30 +17,26 @@
 
 	\RpgSetCardMode{true}
 
-	\begin{RpgSpell}{Hocus Pocus}{A test header}
-			{1200ft}
-			{1 year}
-			{1 century}
-			{VSM}
-			{My mind}
+	\begin{RpgSpell}{Hocus Pocus}{
+		level = 1,
+		school=Transmutation,
+		casting-time={1 bonus action},
+		source={Player's Handbook}
+	}
+		The body text of the spell
 
-			A thing happens, and we \it all cheer! \blindtext \cardbreak hi! \cardbreak
-		\end{RpgSpell}
-		\begin{RpgSpell}{Hocus Pocus}{A test header}
-			{1200ft}
-			{1 year}
-			{1 century}
-			{VSM}
-			{My mind}
+	\end{RpgSpell}
 
-			A thing happens, and we \it all cheer! \blindtext \cardbreak hi! \cardbreak hi!
-		\end{RpgSpell}
+	\begin{RpgSpell}{Hocus Pocus 2}{
+		% level = 1,
+		% school=Conjuration
+		casting-time={1 Reaction\footnote{Taken when you do a thing}}
+	}
+		The body text of the spell
+		\Blindtext
+	\end{RpgSpell}
 
-
-		\RpgSetCard{color=red,opacityback=1,height=3cm,text-height=2.5cm}
-		\begin{RpgCard}[]{}
-			\Blindtext
-		\end{RpgCard}
+	Now I test \footnote{That I didn't damage anything}.
 
 	% \newenvironment{testit}[1]{\textit{#1}\newline}{}
 	% \newenvironment{testbf}[1]{\textbf{#1}\newline}{}

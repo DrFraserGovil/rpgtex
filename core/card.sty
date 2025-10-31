@@ -49,7 +49,7 @@
 		width=5.35cm,
 		height=8.8cm,
 		text-width=4.5cm,
-		text-height=8.5cm,
+		text-height=8.4cm,
 		% % % Appearance
 		colframe=black,         % Border color
 		arc=1mm,                % Rounded corners (card-like)
@@ -57,7 +57,7 @@
 		% left~skip=0pt, right~skip=0pt, % Ensure it fits naturally
 		boxsep=0pt,                  % No extra space around the box
 		% % % Default background
-		enhanced,
+		enhanced~jigsaw,
 		% standard~jigsaw,             % Use internal spacing system
 		color=white,
 		% opacity=0,
@@ -81,24 +81,32 @@
 \box_new:N \l_rpgcard_chunk_box   % The box to hold one card's content
 
 
+\tl_new:N \l__rpgcard_footnote_tl
+
 \NewDocumentEnvironment{RpgCard}{o +b} % #1 is optional arg, #2 is body
 {
 	\RenewDocumentCommand{\cardbreak}{}{
 		\par\penalty -10000 \vspace{0pt}
 	}
 
+
+	\RenewDocumentCommand{\footnote}{m}{
+		*\tl_gset:Nn{\l__rpgcard_footnote_tl}{*##1}
+	}
+	\tl_log:N{\l__rpgcard_footnote_tl}
+
     \tl_gset:Nx  \g_rpgcard_font_state_tl {} % Reset font state
-    
-    % 1. Put the entire body (#2) into the main box (\l_rpgcard_content_box)
-    % % We use \hbox to ensure the height/depth properties are correct.
+  
     \vbox_set:Nn \l_rpgcard_content_box{
         \hsize=\l__card_text_width_tl
 		\linewidth=\hsize
 
+		
         #2
+		\l__rpgcard_footnote_tl
     }
-	
-	\noindent\leavevmode
+
+	\ignorespaces\noindent\leavevmode
     % % % % 2. Start the iteration loop: while the box is not empty, keep splitting
     \bool_do_until:nn { \box_if_empty_p:N \l_rpgcard_content_box }
     {
@@ -130,11 +138,12 @@
 		{
 			\hskip \l__card_hskip_tl
 		}
+		
     }
 	% \par
 }
 {
-    % End block is empty.
+   \bool_set_false:N \l__rpg_in_card_env
 }
 
 \bool_new:N \g__rpg_card_active_bool
@@ -175,77 +184,3 @@
 	}
 }
 
-\definecolor{headercolor}{RGB}{88,23,13}
-\definecolor{linecolor}{RGB}{201,173,106}
-
-\NewDocumentEnvironment{spellcard}{m m m m m m m +b}
-{
-	\setlength{\parindent}{0pt}
-    \def\spelltitle{#1}
-    \def\spellheader{#2}
-    \def\castrange{#3}
-    \def\casttime{#4}
-    \def\duration{#5}
-    \def\components{#6}
-    \def\spellsource{#7}
-	\begin{RpgCard}[]
-		
-		{\centering
-		
-		{\scshape\scriptsize\spellheader}{\\\Large\color{headercolor}\mbox{\spelltitle}}
-		
-		\vspace{-0.5em} \\
-
-		\rule{\linewidth}{0.4pt} \\
-
-		\vspace{-0.25em}
-
-		\def\spellfont{\footnotesize\scshape{\color{headercolor}}}
-
-		{\spellfont
-		\begin{tabularx}{\linewidth}{YY}
-			% \centering
-			\color{headercolor}Casting~time & \color{headercolor}Range
-			\\
-			\casttime & \castrange
-			\\
-			\color{headercolor}Components & \color{headercolor} Duration
-			\\
-			\components & \duration
-		\end{tabularx}
-		}
-		\\ \vspace{0.5em}
-		\rule{\linewidth}{0.4pt} \\ }
-		\vspace{0.5em}
-		\normalfont \footnotesize
-
-		#8
-
-		\vfill
-		\begin{center} 
-		{\it \footnotesize Source: \spellsource}
-		\end{center}\vspace{-1em}
-}{
-	\end{RpgCard}
-}
-
-\newenvironment{spelltext}[7]
-{
-	 \def\spellsource{#7}
-	\subsection{#1}
-	{\it #2}
-
-	\subparagraph{Range} #3
-	\subparagraph{Casting Time} #4
-	\subparagraph{Duration} #5
-	\subparagraph{Components} #6
-}{
-	% \par{\it \spellsource}
-}
-
-\NewDocumentEnvironment{RpgSpell}{m m m m m m m}
-{
-	\begin{RpgCardSwitch}{spellcard}{spelltext}{#1}{#2}{#3}{#4}{#5}{#6}{#7}
-}{
-	\end{RpgCardSwitch}
-}

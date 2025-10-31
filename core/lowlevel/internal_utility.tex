@@ -19,3 +19,30 @@
 	}
 }
 
+\cs_new_protected:Npn \__rpg_insert_tl_key:xene #1#2#3#4
+{
+	\exp_args:Ne\keys_define:nn{#1}{
+    #2 .tl_set:N = #3,
+    #2 .initial:n = {#4},
+    #2 .value_required:n = true
+	}
+}
+
+\msg_new:nnn { rpg } { bad-key-add } {Cannot~add~key~'#1'~without~specifying~group.}
+\cs_new_protected:Npn \__rpg_tl_key:nnn #1#2#3
+{
+	\tl_if_empty:NT\l__current_group_tl
+	{
+		\msg_error:nnn { rpg } { bad-key-add } {#1}
+	}
+	\__rpg_insert_tl_key:xene {\l__current_group_tl}{#1}{#2}{#3}
+}
+
+\tl_new:N \l__current_group_tl
+\cs_new_protected:Npn \__rpg_add_tl_keys:Nn#1#2
+{
+	
+	\tl_gset:Nn \l__current_group_tl {#1}
+	#2
+	\tl_gset:Nn \l__current_group_tl {}
+}
