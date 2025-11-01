@@ -27,20 +27,20 @@
 		\str_if_empty:nF{#2}{#2~}Cantrip
 	}
 	{
-		\RpgOrdinal{#1}~level~#2
+		\RpgOrdinal{#1}~level\str_if_empty:nF{#2}{~#2}
 	}
 }
 
-\NewDocumentEnvironment{spellcard}{O{} m m +b}
+\NewDocumentCommand{\FormatSpellHeading}{m}
 {
-	\setlength{\parindent}{0pt}
-    \keys_set:nn {rpg/dnd/spell}{#3}
-	\begin{RpgCard}[underlay=\RpgPackagePath/themes/dnd/img/paper,#1]
+
+	{\centering
 		
-		{\centering
-		
-		{\scshape\scriptsize\__rpg_dnd_spell_header:nn {\l__rpg_dnd_spell_level_tl}{\l__rpg_dnd_spell_school_tl}}
-		{\\\Large\color{titlered}\mbox{#2}}
+		{
+			\RpgFontSpellCardHeader\scriptsize
+			\__rpg_dnd_spell_header:nn {\l__rpg_dnd_spell_level_tl}{\l__rpg_dnd_spell_school_tl}
+		}
+		{\\\RpgFontSpellCardTitle\color{titlered}\mbox{#1}}
 		
 		\vspace{-0.5em} \\
 
@@ -48,9 +48,8 @@
 
 		\vspace{-0.25em}
 
-		\def\spellfont{\footnotesize\scshape{\color{titlered}}}
-
-		{\spellfont
+		
+		{\RpgFontSpellCardHeader
 		\begin{tabularx}{\linewidth}{YY}
 			% \centering
 			\color{titlered}Casting~time & \color{titlered}Range
@@ -62,21 +61,37 @@
 			 \l__rpg_dnd_spell_components_tl & \l__rpg_dnd_spell_duration_tl
 		\end{tabularx}
 		}
+		}
+
+}
+\NewDocumentCommand{\AddSpellSource}{}{
+		\str_if_empty:NF {\l__rpg_dnd_spell_source_tl}{
+		
+		\vfill 
+			\hfil{\it  Source:~\l__rpg_dnd_spell_source_tl} \hfil
+		%%For some reason \centering has no effect, so manually force centering via hfil
+		}
+}
+
+\NewDocumentEnvironment{spellcard}{O{} m m +b}
+{
+	\setlength{\parindent}{0pt}
+    \keys_set:nn {rpg/dnd/spell}{#3}
+	\begin{RpgCard}[underlay=\RpgPackagePath/themes/dnd/img/paper,#1]
+		
+		\FormatSpellHeading{#2}
+		
 		\\ \vspace{0.5em}
-		\rule{\linewidth}{0.4pt} \\ }
+		\rule{\linewidth}{0.4pt} 
+		\\ 
 		\vspace{0.5em}
-		\normalfont \footnotesize
+		
+		\RpgFontSpellCardBody
 
 		#4
 		
-
-		\str_if_empty:NF {\l__rpg_dnd_spell_source_tl}{
-		\vfill
-		\begin{center} 
+		\AddSpellSource{}
 		
-			{\it \footnotesize Source: \l__rpg_dnd_spell_source_tl}
-		\end{center}\vspace{-1em}
-		}
 }{
 	\end{RpgCard}
 }
