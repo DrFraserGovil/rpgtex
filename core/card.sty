@@ -130,7 +130,7 @@
 	%%For reasons to do with the risks of multiple expansions (I think), it is not possible to 
 	%%guarantee insert multiple footnotes into a sequence (you get repeated elements)
 	%%Instead, we compromise: only one footnote (the last called) is allowed 
-	% \tl_gclear:N{\l__rpgcard_footnote_tl}
+	\tl_gclear:N{\l__rpgcard_footnote_tl}
 	\RenewDocumentCommand{\footnote}{m}{
 		*\tl_gset:Nn{\l__rpgcard_footnote_tl}{*##1}
 	}

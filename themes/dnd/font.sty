@@ -1,19 +1,6 @@
 %%Set the D&D specific fonts
 
 \ExplSyntaxOn
-% \sys_if_engine_xetex:T
-% {
-%   % Spit out a warning if XeLaTeX is detected for the PDFLaTeX-based D&D theme
-%   \msg_new:nnn { rpg } { dnd-xelatex-warning }{#1}
-% %   { #1 }
-%   \msg_warning:nnx { rpg } { dnd-xelatex-warning }
-%     {
-%       The~dnd~theme~is~designed~for~pdfLaTeX.~Compiling~with~XeLaTeX~may~cause
-%       font~and~character~issues~due~to~reliance~on~the~legacy~NFSS~system.
-%     }
-% }
-
-% \providecommand\kpfont{\fontfamily{jkpss}\selectfont}
 
 \providefontfamily{\kepler}{KpSans}
 [
@@ -59,6 +46,23 @@
 
 \providecommand\titlemode{\linespread{.9} \color{titlered} \keplerserif \scshape }
 
+
+\__rpg_add_tl_keys:Nn {rpg/fonts}
+{
+	\__rpg_tl_key:nnn {spell-card-title-family}{\l__rpg_spell_card_title_family_tl}{}
+	\__rpg_tl_key:nnn {spell-card-title-style}{\l__rpg_spell_card_title_style_tl}{}
+	\__rpg_tl_key:nnn {spell-card-header-family}{\l__rpg_spell_card_header_family_tl}{}
+	\__rpg_tl_key:nnn {spell-card-header-style}{\l__rpg_spell_card_header_style_tl}{}
+	\__rpg_tl_key:nnn {spell-card-body-family}{\l__rpg_spell_card_body_family_tl}{}
+	\__rpg_tl_key:nnn {spell-card-body-style}{\l__rpg_spell_card_body_style_tl}{}
+
+}
+\NewDocumentCommand{\RpgFontSpellCardTitle}{}
+  { \l__rpg_spell_card_title_family_tl \l__rpg_spell_card_title_style_tl}
+\NewDocumentCommand{\RpgFontSpellCardHeader}{}
+  { \l__rpg_spell_card_header_family_tl \l__rpg_spell_card_header_style_tl}
+\NewDocumentCommand{\RpgFontSpellCardBody}{}
+  { \l__rpg_spell_card_body_family_tl \l__rpg_spell_card_body_style_tl}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %Important!
@@ -111,6 +115,13 @@
 	footer-style		= {\color{pagegold}\scriptsize},
 	page-number-style	= {\color{pagegold}\scriptsize},
 	drop-cap-family		= {\Royal},
+	%%Spell card
+	spell-card-title-family = {\keplerserif},
+	spell-card-title-style = { \color{titlered}\large\bfseries},
+	spell-card-header-family = {\normalfont}, 
+	spell-card-header-style = {\normalfont \scshape \footnotesize}, 
+	spell-card-body-family = {\normalfont},
+	spell-card-body-style = {\footnotesize},
 }
 
 %%modify fonts if in handout mode
