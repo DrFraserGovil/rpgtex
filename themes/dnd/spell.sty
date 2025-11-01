@@ -1,19 +1,3 @@
-\tcbset{rpgcard/. append~style={
-	% enhanced,
-	
-	underlay={
-		\bool_if:NT \l__rpg_show_background_bool
-		{
-		\begin{tcbclipinterior}
-            \node[anchor=south,inner~sep=0pt]
-             at (interior.south) {%
-                \includegraphics[%
-					width=30cm,height=30cm
-                ]{\RpgPackagePath/themes/dnd/img/paper}};
-        \end{tcbclipinterior}
-        }},
-}
-}
 
 
 \int_new:N \l__rpg_dnd_spell_level_tl
@@ -47,16 +31,16 @@
 	}
 }
 
-\NewDocumentEnvironment{spellcard}{m m +b}
+\NewDocumentEnvironment{spellcard}{O{} m m +b}
 {
 	\setlength{\parindent}{0pt}
-    \keys_set:nn {rpg/dnd/spell}{#2}
-	\begin{RpgCard}[]
+    \keys_set:nn {rpg/dnd/spell}{#3}
+	\begin{RpgCard}[underlay=\RpgPackagePath/themes/dnd/img/paper,#1]
 		
 		{\centering
 		
 		{\scshape\scriptsize\__rpg_dnd_spell_header:nn {\l__rpg_dnd_spell_level_tl}{\l__rpg_dnd_spell_school_tl}}
-		{\\\Large\color{titlered}\mbox{#1}}
+		{\\\Large\color{titlered}\mbox{#2}}
 		
 		\vspace{-0.5em} \\
 
@@ -83,8 +67,8 @@
 		\vspace{0.5em}
 		\normalfont \footnotesize
 
-		#3
-
+		#4
+		
 
 		\str_if_empty:NF {\l__rpg_dnd_spell_source_tl}{
 		\vfill
@@ -122,9 +106,9 @@
 	% \par{\it \spellsource}
 }
 
-\NewDocumentEnvironment{RpgSpell}{m m}
+\NewDocumentEnvironment{RpgSpell}{O{} m m}
 {
-	\begin{RpgCardSwitch}{spellcard}{spelltext}{#1}{#2}
+	\begin{RpgCardSwitch}[#1]{spellcard}{spelltext}{#2}{#3}
 }{
 	\end{RpgCardSwitch}
 }

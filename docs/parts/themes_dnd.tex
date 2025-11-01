@@ -15,7 +15,7 @@
 	% 	\Blindtext
 	% \end{multicols}
 
-	\RpgSetCardMode{false}
+	\RpgUseCards{true}
 
 	\begin{RpgSpell}{Hocus Pocus}{
 		level = 1,
@@ -27,13 +27,22 @@
 
 	\end{RpgSpell}
 
-	\begin{RpgSpell}{Hocus Pocus 2}{
+	\begin{RpgSpell}[]{Hocus Pocus 2}{
 		% level = 1,
 		% school=Conjuration
-		casting-time={1 Reaction\footnote{Taken when you do a thing}}
+		casting-time={1 Reaction}
 	}
-		The body text of the spell
-		\Blindtext
+		The body text of the \cardbreak spell
+		% \Blindtext
+	\end{RpgSpell}
+	
+	\begin{RpgSpell}[width=8cm,under-img=\RpgPackagePath/themes/dnd/img/paper]{Hocus Pocus 3}{
+		% level = 1,
+		% school=Conjuration
+		casting-time={1 Reaction}
+	}
+		The body text of the \cardbreak spell
+		% \Blindtext
 	\end{RpgSpell}
 
 	Now I test \footnote{That I didn't damage anything}.
