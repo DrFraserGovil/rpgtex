@@ -1,10 +1,17 @@
-\ExplSyntaxOff
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Generate custom card-printouts
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \ExplSyntaxOn
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Manage card properties
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%We intercept some standard tcolorbox options so that we can check that they're allowed values
+%Also provide some aliases - color is more logical than colback!
+
+\input{core/lowlevel/card}
 
 \keys_define:nn {rpg / card}
 {
@@ -14,24 +21,49 @@
 	text-height .tl_set:N = {\l__card_text_height_tl},
 	color .tl_set:N = {\l__color_intercept_tl},
 	opacity .tl_set:N = {\l__opacity_intercept_tl},
-	hskip .tl_set:N = {\l__card_hskip_tl},
+	cardsep .tl_set:N = {\l__card_hskip_tl},
+	under-img .tl_set:N = {\l__card_background_tl},
+	underlay .tl_set:N = {\l__card_background_tl},
 }
 
-\tcbset{rpgcard/.style={}}
-\newtcolorbox{rpgcard}[1][]{
-  rpgcard,
-  #1
-}
-
-\msg_new:nnn { rpg } { card-dimensions}{~\\Dimension~error!\\The~#1~(#2)~cannot~be~larger~than~the~#3~(#4)}
-
+%% (Locally) add elements in to the rpgcard specification
 \NewDocumentCommand{\RpgSetCard}{m}{
+	%%intercept the known values
 	\keys_set_known:nnN {rpg/card}{#1}{\l__tmpa_tl}
-	\exp_args:Ne \tcbset
+	
+	%%insert the rest in a specific order to ensure the correct resolution (color overrides colback etc)
+	%%Rule out titles from being inserted (they break the card splitting rules)
+	
+	\exp_args:Nx \tcbset
     {
-        rpgcard/.append~style={ colback=\l__color_intercept_tl,opacityback=\l__opacity_intercept_tl,\l__tmpa_tl,width=\l__card_width_tl,height=\l__card_height_tl} % \l__tmpa_tl is fully expanded here
+        rpgcard/.append~style={\l__tmpa_tl, title={}, colback=\l__color_intercept_tl,opacityback=\l__opacity_intercept_tl,width=\l__card_width_tl,height=\l__card_height_tl
+		} % \l__tmpa_tl is fully expanded here
     }
 
+	\tl_if_empty:eF\l__card_background_tl
+	{
+		\tcbset
+		{
+			rpgcard/.append~style={	 
+				underlay={
+					\bool_if:NT \l__rpg_show_background_bool
+					{
+					\begin{tcbclipinterior}
+					    \node[anchor=south,inner~sep=0pt]
+					     at (interior.south) {%
+					        \includegraphics[%
+								width=30cm,height=30cm
+					        ]{\RpgPackagePath/themes/dnd/img/paper}};
+					\end{tcbclipinterior}
+					}
+				}
+			}
+		}
+	}
+
+
+	%%Dimension check! Even if these conditions met, not guaranteed to look good as there needs to be some buffer
+	%%But this should at least tell you when something really wrong has happened
 	\dim_compare:nT{\l__card_text_width_tl > \l__card_width_tl}
 	{
 		\msg_error:nneeee {rpg}{card-dimensions}{text~width}{\l__card_text_width_tl}{card~width}{\l__card_width_tl}
@@ -42,8 +74,10 @@
 	}
 
 }
+
+%%Delete all entries
 \NewDocumentCommand\RpgResetCard{}{
-	% \tcbset{rpgcard/.style={}}
+	\tcbset{rpgcard/.style={}}
 	\RpgSetCard{
 		
 		width=5.35cm,
@@ -61,96 +95,88 @@
 		% standard~jigsaw,             % Use internal spacing system
 		color=white,
 		% opacity=0,
-		hskip={5pt},
+		cardsep={5pt},
+		under-img={},
 	}
 }
 
+%%Force a reset to set the initial values in the global space
 \RpgResetCard{}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% The RpgCard environment
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% An environment which sets up a series of 'pages' of specified dimensions
+%The contents is automatically split amongst the cards as if they were really sub-pages.
 
-\RequirePackage{trimclip}
-
-
-% Define a unique marker
+% Define a unique marker for breaking cards
 \cs_new_protected:Npn \cardbreak {}
-\tl_new:N \g_rpgcard_font_state_tl
 
-\box_new:N \l_rpgcard_content_box % The main box to hold ALL content
-\box_new:N \l_rpgcard_chunk_box   % The box to hold one card's content
-
-
-\tl_new:N \l__rpgcard_footnote_tl
-
-\NewDocumentEnvironment{RpgCard}{o +b} % #1 is optional arg, #2 is body
+\NewDocumentEnvironment{RpgCard}{O{} +b} % #1 is optional arg, #2 is body
 {
+	%%Locally append the args to the card settings
+	\RpgSetCard{#1}
+
+	%%Configure \cardbreak to add a large space penalty, simulating a line break
+	%%Do this inside the environment so that it has no effect if the same text is 
+	%%rendered inside a RpgCardSwitch
+
 	\RenewDocumentCommand{\cardbreak}{}{
 		\par\penalty -10000 \vspace{0pt}
 	}
 
-
+	%%For reasons to do with the risks of multiple expansions (I think), it is not possible to 
+	%%guarantee insert multiple footnotes into a sequence (you get repeated elements)
+	%%Instead, we compromise: only one footnote (the last called) is allowed 
+	% \tl_gclear:N{\l__rpgcard_footnote_tl}
 	\RenewDocumentCommand{\footnote}{m}{
 		*\tl_gset:Nn{\l__rpgcard_footnote_tl}{*##1}
 	}
-	\tl_log:N{\l__rpgcard_footnote_tl}
 
+	%%We want to ensure the font state is consistent across card breaks
+	%%font_state saves the font value at the beginning of a card break, and reinserts it at the beginning
     \tl_gset:Nx  \g_rpgcard_font_state_tl {} % Reset font state
   
-    \vbox_set:Nn \l_rpgcard_content_box{
-        \hsize=\l__card_text_width_tl
-		\linewidth=\hsize
 
-		
-        #2
-		\l__rpgcard_footnote_tl
-    }
+	%% BOX CREATION
+	%% Insert the environment contents into a box (\l_rpgcard_content_box) of the specified height
+	%% Prepares it for measuring and splitting
+	 \__rpg_build_multi_card:Nnnn{\l_rpgcard_content_box}{\l__card_text_width_tl}{#2}{\l__rpgcard_footnote_tl}
 
-	\ignorespaces\noindent\leavevmode
-    % % % % 2. Start the iteration loop: while the box is not empty, keep splitting
+
+	\ignorespaces\noindent\leavevmode 			%So cards can go next to each other
+
+	%% Iterate over the content_box, taking out a chunk equal to the height and rendering it, until the box is empty
     \bool_do_until:nn { \box_if_empty_p:N \l_rpgcard_content_box }
     {
-        
-        % 3. SPLIT: Use \vsplit to take a vertical box of exactly 8.3cm height.
-        % The \splittopskip ensures the next chunk starts correctly.
-        \splittopskip=0pt
+        %% SPLIT THE BOX INTO A CHUNK
+      
+        \splittopskip=0pt   					%Ensures the next chunk starts correctly.
         \vbox_set:Nn \l_rpgcard_chunk_box 
         {
             \vsplit \l_rpgcard_content_box  to \l__card_text_height_tl
         }
-        % \hskip 0pt
-        % 4. Process the chunk (the inner card)
-		\hbox{
-			\tl_if_novalue:nTF{#1}
-			{
-				\begin{rpgcard}
-			}
-			{
-				\begin{rpgcard}[#1]
-			}
-            \g_rpgcard_font_state_tl
-           \hfil {\box_use:N \l_rpgcard_chunk_box}\hfil 
-            \tl_gset:Nx\g_rpgcard_font_state_tl{\the\font}
-        \end{rpgcard}
-		}
 
-		\bool_if:NF{\box_if_empty_p:N \l_rpgcard_content_box }
-		{
-			\hskip \l__card_hskip_tl
-		}
-		
+        \__rpg_single_card:nn{\l_rpgcard_chunk_box}{\l__card_hskip_tl}	
     }
-	% \par
 }
-{
-   \bool_set_false:N \l__rpg_in_card_env
+{ %%no closing args because we fully wrapped the environment
 }
 
-\bool_new:N \g__rpg_card_active_bool
 
 
-\NewDocumentCommand{\RpgSetCardMode}{m}{\__rpg_set_bool_from_text:Ne \g__rpg_card_active_bool{#1}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Card-switching environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%Change the value of card mode
+\NewDocumentCommand{\RpgUseCards}{m}{\__rpg_set_bool_from_text:Ne \g__rpg_card_active_bool{#1}}
+\NewDocumentCommand{\RpgToggleUseCards}{}{\bool_set_inverse:N \g__rpg_card_active_bool}
+
+%Renders text in one environment (#2) if 'card mode' active, otherwise uses a different environment (#4)
+%Allows the same text to be rendered in either plain text or in a card.
 \NewDocumentEnvironment{RpgCardSwitch}{o m o m}
 {
 	\bool_if:NTF\g__rpg_card_active_bool
@@ -184,3 +210,6 @@
 	}
 }
 
+%A clever little hack: so long as both environments take the same number of arguments, they will automatically be consumed:
+%\RpgCardSwitch[o1]{env1}[o2]{env2}{arg1}{arg2} expands to {env1}[o1}{arg1}{arg2} or {env2}[o2]{arg1}{arg2}
+%This allows arbitrary environment arguments to be passed, so long as both env1 and env2 use the same pattern

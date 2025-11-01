@@ -1,0 +1,56 @@
+\tcbset{rpgcard/.style={}}
+\newtcolorbox{rpgcard}[1][]{
+  rpgcard,
+  #1
+}
+
+\msg_new:nnn { rpg } { card-dimensions}{~\\Dimension~error!\\The~#1~(#2)~cannot~be~larger~than~the~#3~(#4)}
+
+
+\bool_new:N \g__rpg_card_active_bool %%used to toggle the cardswitch environment
+\tl_new:N \g_rpgcard_font_state_tl %%saves the font state in between cardbreaks
+
+\box_new:N \l_rpgcard_content_box % The main box to hold ALL content
+\box_new:N \l_rpgcard_chunk_box   % The box to hold one card's content
+\tl_new:N \l__rpgcard_footnote_tl % container for footnote
+
+
+\cs_new_protected:Npn \__rpg_build_multi_card:Nnnn#1#2#3#4
+{
+	\vbox_set:Nn #1{
+        \hsize=#2
+		\linewidth=\hsize
+
+		
+        #3
+		\tl_if_empty:eF{#4}
+		{
+			\vfil
+			\hrule
+			\vspace{0.5em}
+
+			#4
+		}
+    }
+}
+
+
+\cs_new_protected:Npn \__rpg_single_card:nn#1#2
+{
+	% PROCESS THE CHUNK AS ITS OWN CARD
+	\hbox{
+		\begin{rpgcard}
+			%%Insert the previous font state (or blank, if this is the first card)
+			\g_rpgcard_font_state_tl
+
+				%%box contents, centered within the card
+				\hfil {\box_use:N #1}\hfil 
+			
+			%%Save the current font state for the next iteration
+			\tl_gset:Nx\g_rpgcard_font_state_tl{\the\font}
+		\end{rpgcard}
+	}
+
+	%%Insert some blank space
+	\hskip #2
+}
