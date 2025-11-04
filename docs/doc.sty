@@ -11,25 +11,35 @@
   tabsize=1,
 }
 \usepackage{makecell}
+\usepackage{adjustbox}
+\geometry{
+left=3cm
+}
 \ExplSyntaxOn{}
 % Define a function to process the list of macros
 \cs_new_protected:Npn \__rpg_doc_macro_list:n #1
 {
-    % Split the argument #1 by commas and iterate over each item
-    \clist_map_inline:nn { #1 }
-    {
-        % This code runs for each item (#1) in the list
-        \tl_set:Nn \l_tmpa_tl { ##1 } % Store the item in a temp token list
-        \tl_trim_spaces:N \l_tmpa_tl % Remove any surrounding spaces
 
-        % Print the item using \verb, followed by \\ to force a newline.
-        \small \verb| ##1 | \\
-    }
+	\noindent\ignorespaces\begin{minipage}[t]{2.5cm}
+		\begin{flushright}
+			 \clist_map_inline:nn { #1 }
+			{
+				\maxsizebox{2.49cm}{3cm}{\small\verb|##1|} \\
+			}
+		\end{flushright}
+	\end{minipage}
 }
 
 \NewDocumentEnvironment{macrolist}{+b}{
-	\vspace{1em}
-	\noindent\begin{xltabular}{\linewidth}{rX}
+	% \vspace{1em}
+	\ignorespaces
+	\renewcommand{\arraystretch}{2}
+	\setlength\parindent{0pt}
+	\setlength\parskip{5pt}
+    % \leavevmode % Equivalent to a robust \noindent for initiating mode
+    % \hspace{-1.5cm}%
+	\setlength{\LTleft}{-2.9cm}
+	\begin{xltabular}{\dimexpr\linewidth+2.9cm\relax}{rX}
 		#1
     \end{xltabular}}{}
 
@@ -46,14 +56,14 @@
 
 \newcommand\DualExampleRender[1]
 		{
-			\noindent\begin{minipage}[t]{0.5\linewidth}
+			\noindent\begin{minipage}[t]{0.5\linewidth}\small 
 			\noindent\lstinputlisting{parts/examples/#1}
 			\end{minipage}\begin{minipage}[t]{0.5\linewidth}
 		\input{parts/examples/#1}
 		\end{minipage}
 		}
 
-\NewDocumentCommand{\RpgMacro}{s o m +m +m +m}{\vspace{2em}\makecell[rt]{  \__rpg_doc_macro_list:n { #3 }} & #4
+\NewDocumentCommand{\RpgMacro}{s o m +m +m +m}{\__rpg_doc_macro_list:n { #3 } & #4
 
 	\tl_if_novalue:nF{#2}
 	{
@@ -89,7 +99,7 @@
 		#1
     \end{xltabular}}{}
 
-	\NewDocumentCommand{\FontElement}{m +m +m}{\vspace{2em}\makecell[lt]{  \__rpg_doc_macro_list:n { #1 }} &
+	\NewDocumentCommand{\FontElement}{m +m +m}{\makecell[lt]{  \__rpg_doc_macro_list:n { #1 }} &
 
 	\makecell[lt]{  \__rpg_doc_macro_list:n { {#2-family},{#2-style} }}
 

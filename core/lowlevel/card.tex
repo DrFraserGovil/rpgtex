@@ -1,5 +1,5 @@
 \tcbset{rpgcard/.style={}}
-\newtcolorbox{rpgcard}[1][]{
+\newtcolorbox{__rpgcard}[1][]{
   rpgcard,
   #1
 }
@@ -39,7 +39,7 @@
 {
 	% PROCESS THE CHUNK AS ITS OWN CARD
 	\hbox{
-		\begin{rpgcard}
+		\begin{__rpgcard}
 			%%Insert the previous font state (or blank, if this is the first card)
 			\g_rpgcard_font_state_tl
 
@@ -48,7 +48,7 @@
 			
 			%%Save the current font state for the next iteration
 			\tl_gset:Nx\g_rpgcard_font_state_tl{\the\font}
-		\end{rpgcard}
+		\end{__rpgcard}
 	}
 
 	%%Insert some blank space

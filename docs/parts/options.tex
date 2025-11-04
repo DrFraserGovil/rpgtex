@@ -12,17 +12,21 @@
 		{
 			bg = <full / print / none>
 		}{
-			The value passed must be one of the three options (else an error is thrown). The three options change whether the `background paper' set by \cmdref{RpgSetPaper} appears in the document, or the footer decorations set by \cmdref{RpgSetFooterDecoration}.
+			The value passed must be one of the three options (else an error is thrown). The most obvious effect of these three options is to change whether the `background paper' set by \cmdref{RpgSetPaper} appears in the document, or the footer decorations set by \cmdref{RpgSetFooterDecoration}.
 
-			\begin{tabular}{rcc}
-				Command & Paper & Footer Decorations
-				\\
-				\texttt{full} & \cmark & \cmark
-				\\
-				\texttt{print} & \xmark & \cmark
-				\\
-				\texttt{none} & \xmark & \xmark
-			\end{tabular}
+			\begin{center}
+				\begin{tabular}{rcc}
+					Command & Paper & Footer Decorations
+					\\
+					\texttt{full} & \cmark & \cmark
+					\\
+					\texttt{print} & \xmark & \cmark
+					\\
+					\texttt{none} & \xmark & \xmark
+				\end{tabular}
+			\end{center}
+
+			This flag also changes the behavior of the rpgcard class \RpgPage[p]{S:cardClass}, and other environments may similarly change their colours or layouts in response to the values passed to this command. Internally these commands are responding specifically to the presence of the paper or the footer flags.
 		}
 		\RpgMacro{justified}{A flag which, if present, activates justified-text mode. Otherwise, defaults to left-aligned, `ragged right'.}
 		{}{}
