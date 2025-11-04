@@ -1,273 +1,346 @@
 \chapter{Environments}
-	\def\tcref{\forcelink{https://ctan.org/pkg/tcolorbox?lang=en}{tcolorbox}}
-	\newcommand\labelsection[1]
-	{
-		\section{#1}\label{S:#1}
-	}
+    \def\tcref{\forcelink{https://ctan.org/pkg/tcolorbox?lang=en}{tcolorbox}}
 
-	
-	\labelsection{Rpg Boxes}
+    
+    \labelsection{RpgCard}
 
-		\rpgtex{} defines three `colorbox' environments, which inherit from \tcref{}.
+        The RpgCard environment is designed to allow a writer to create a small, playing-card sized unit which is useful for handing out to players for game elements such as items, spells or abilities.
+        
+        The backend of the RpgCard is some of the most complex \LaTeX{} code in the package, but this makes it very powerful. We anticipate that users won't access RpgCard directly, but instead a wrapper such as RpgSpell \RpgPage[p]{S:RpgSpell Environment} -- however these serve only to format the text within the card environment in a specific way -- the Card itself remains flexible.
 
-		\begin{macrolist}
-			\RpgMacro*[RpgNarration]{RpgNarration,{{o}}}{A \tcref{} wrapper designed for text that is read aloud to players}{
-				\verb|\begin{RpgNarration}[color=<color>,<tcbox-options>]|
+        The main power of the RpgCard is the ability to automatically \textit{cardbreak}, splitting large internal elements across multiple cards. 
 
-				~~~~\verb|<text>|
-				
-				\verb|\end{RpgNarration}|
-			}{
-				RpgNarration does not (by default) set a title, using only `body text', which is typeset using the \verb|RpgFontNarration| font. The optional \verb|<tcbox-options>| argument can be a list of all the basic tcolorbox options (see that documentation). The \verb|color| argument is an alias for \verb|colback| (\verb|colbacktitle| is also set, but is ignored as the title is empty). Due to the order of processing, if both \verb|color| and \verb|colback| are set, the value of \verb|colback| is used.
+        \subsection{The Environment}
+            \RpgMacro*{RpgCard}{\param{\paramO}}{Splits the contents across a number of playing-card sized units}{
 
-				Themes may alter the appearance of the narration block using the tcb interface, calling \verb|\tcbset{rpgnarration /.append~style={...}}| to overwrite the existing instructions.
-			}
-			\RpgMacro*[RpgSidebar]{RpgSidebar,{{o m}}}{A decorated \tcref{} wrapper designed for information which is set outside the main text.}{
-				\verb|\begin{RpgSidebar}[color=<color>,<tcbox-options>]{<title>}|
+                \cmd{begin}\param{RpgCard}[<opts>]
 
-				~~~~\verb|<text>|
-				
-				\verb|\end{RpgSidebar}|
-			}{
-				RpgSidebar requires a title (using \verb|RpgFontSidebarTitle|) as well as the body text (\verb|RpgFontSidebarBody|). 	RpgSidebar is typically more highly decorated than RpgTip, and does not have the \verb|breakable| flag set. It is usually best to use one of the `float' options.
-				
-				The optional \verb|<tcbox-options>| argument can be a list of all the basic tcolorbox options (see that documentation). The \verb|color=x| argument is equivalent to calling both \verb|colback=x| and \verb|colbacktitle=x|. Due to the order of processing, if both \verb|color| and \verb|colback| are set, the value of \verb|colback| is used.
-		 
+            ~~~~~~	<contents>
 
-				Themes may alter the appearance of the sidebar using the tcb interface, calling \verb|\tcbset{rpgsidebar /.append~style={...}}| to overwrite the existing instructions.
-			}
-			\RpgMacro*[RpgTip]{RpgTip,{{o m}}}{A simple \tcref{} wrapper designed for information which is set outside the main text.}{
-				\verb|\begin{RpgTip}[color=<color>,<tcbox-options>]{<title>}|
+                \cmd{end}\param{RpgCard}
+            }{
+                Creates a card environment with a height and width defined either by \texttt{<opts>}, or the global variables. Text is automatically broken if it exceeds this height, creating multiple cards to hold the text.
 
-				~~~~\verb|<text>|
-				
-				\verb|\end{RpgTip}|
-			}{
-				RpgTip is similar to RpgSidebar, requiring a title (\verb|RpgFontTipTitle|) in addition to the body text (\verb|RpgFontTipBody|). However, it is generally simpler, enabling it to safely break over page boundaries. The optional \verb|<tcbox-options>| argument can be a list of all the basic tcolorbox options (see that documentation). The \verb|color=x| argument is equivalent to calling both \verb|colback=x| and \verb|colbacktitle=x|. Due to the order of processing, if both \verb|color| and \verb|colback| are set, the value of \verb|colback| is used.
+                The \texttt{<opts>} can contain any of the valid inputs to \cmd{RpgSetCard} (see below). Options passed to the environment take precedence to the global variables.
+            }
+        
+        \subsection{Helper Commands}
 
-				Themes may alter the appearance of the narration block using the tcb interface, calling \verb|\tcbset{rpgnarration /.append~style={...}}| to overwrite the existing instructions.
-			}
-		\end{macrolist}
+        \subsection{Examples}
 
-		
+\begin{ExampleBlock}[RpgCard,footnote]{Simple RpgCard}
+\begin{RpgCard}
+  \subsubsection{Text goes here}
+     It fits nicely into the card, wrapping over lines\footnote{We can also have a single footnote}.
+\end{RpgCard}
+\end{ExampleBlock}
 
-		\subsection{Which Colorbox To Use?}
+\begin{ExampleBlock}[RpgCard,footnote]{Large RpgCard}
+\begin{RpgCard}
+  {And if we add lots of text\footnote{Normally RpgCards stack side-by-side before breaking over lines -- here they've not got enough room, so it's vertically stacked.}}
+     
+  \blindtext
+\end{RpgCard}
+\end{ExampleBlock}
 
-			The choice between RpgSidebar and RpgTip is somewhat arbitrary -- although they have a mechanical difference by default (one being breakable, the other not) -- this can be overridden by themes. Instead, the intention is that they serve slightly different purposes:
+    \labelsection{RpgMap}
 
-			\begin{description}
-				\item[RpgSidebar] is used for `important information' -- key rules or summaries which readers \textit{should} pay attention to.
-				\item[RpgTip] is for `helpful additions' -- tips, tricks and trivia that are not necessary, but which might be useful, and are too big to fit into a footnote or parenthetical.   
-			\end{description}
-		\subsection{Colorbox Examples}
-		\DualExampleRender{narration1}
-	
+        The RpgMap environment makes it easy to create nested blocks, useful when needing to enumerate the contents of a map. The RpgMap environment uses a stacked counter system and dynamic labelling.
+        
+            
 
-	\labelsection{RpgCard}
+        \RpgMacro*{RpgMap}{RpgMap*, \param{{o}}}{Begins a dynamic-stacked environment for generating headed and labelled lists using the \cmd{RpgArea} object to provide entries. The starred version of the command is identical in function, but calls \cmd{section*} instead of \cmd{section} (and so on.), suppressing the map elements from the table of contents.}{
+            \bs{}begin\param{RpgMap}[<opts>]
 
-		The RpgCard environment is designed to allow a writer to create a small, playing-card sized unit which is useful for handing out to players for game elements such as items, spells or abilities.
-		
-		The backend of the RpgCard is some of the most complex \LaTeX{} code in the package, but this makes it very powerful. We anticipate that users won't access RpgCard directly, but instead a wrapper such as RpgSpell \RpgPage[p]{S:RpgSpell Environment} -- however these serve only to format the text within the card environment in a specific way -- the Card itself remains flexible.
+            ~~~<contents>
+            
+            \cmd{end}\param{RpgMap}				
+        }{
+            RpgMap uses the counter \texttt{RpgAreaDepth} to track how many Maps have been nested. A higher value of this counter results in `smaller' headings being used, beginning with \cmd{section} and progressing to \cmd{subparagraph}.
+            
+            The permitted options are:
+            \newcommand\mapopt[2]{\texttt{#1} &#2\\}
+            \begin{RpgTable}{lX}
+                Option & Effects \\
+                \mapopt{header-offset}{An offset added to RpgAreaDepth when determing the heading size to be used (an offset of 0 uses \cmd{section} for the top level map entires, an offset of 1 uses \cmd{subsection}, and so on).}
+                \mapopt{title}{If non-empty, places the contents in a section one size larger than \texttt{RpgAreaDepth+header-offset} (using \cmd{chapter} for the largest possible size). The title is only rendered at the top-level of the map (if RpgAreaDepth=1), otherwise it is ignored. Default value is blank.}
+                \mapopt{prefix}{A string which is automatically prefixed to the 'number string' of named \cmd{RpgArea} entries in the map. Default is blank.}
+                \mapopt{blank-prefix}{A string which is automatically prefixed to the `number string' of unnamed (blank) \cmd{RpgArea} entries in the map. Default is ``\texttt{Area~}''}
+                \mapopt{ref-prefix}{A string prefixed to all labels created by \cmd{RpgArea}, allowing disambiguation of references. Default is ``\texttt{Map:}''}
+            \end{RpgTable}
 
-		The main power of the RpgCard is the ability to automatically \textit{cardbreak}, splitting large internal elements across multiple cards. 
+            The variables set by options are persistent throughout the nesting - setting \texttt{ref-prefix} in one map will mean the same value persists in all encapsulated maps unless manually overridden. Changes do \textit{not} persist once the nesting is finished.
+            
+        }
+        \RpgMacro{RpgArea}{\param{{o m}}}{
+            Creates a formatted entry within the RpgMap environment. The appearance of the title depends on the map-depth and the current header-offset.
+        }{
+            \bs{}RpgArea[<manual-label>]\param{<area-name>}
+        }{
+            Creates a `header' depending on the value of \texttt{RpgCounter + headeroffset}:
+            \begin{enumerate}
+                \item section
+                \item subsection
+                \item subsubsection
+                \item paragraph
+            \end{enumerate}
+            If outside these values, uses \texttt{subparagraph}. The name of the section is preceeded by the `map counter', which is equal to the index within the current map, appended to the `map counter' of any parent maps. The formatting function \texttt{RpgMapLevelName} enables hierarchical labelling, such that the third area inside the second map of the first map would be given the counter value `1b-iii'.
+            
+            If the manual label is set, this is used as the label for this area; otherwise the automatic labelling is used (see below).
+        }
+        \RpgMacro*{RpgNestedArea}{{{o o m}}}
+        {
+            A wrapper environment for calling \cmd{RpgArea} and then immediately \cmd{begin\param{RpgMap}}, creating nested map areas in a single call.
+        }
+        {
+                \cmd{begin}\param{RpgNestedArea}[manual-label][<nested-opts>]\param{<area name>}
 
-		\subsection{The Environment}
-		\begin{macrolist}
-			\RpgMacro*{RpgCard,{{O{}}}}{}{}{}
-			% \Macro{\RpgSetCard, {{m}}}
-		\end{macrolist}
-		
-		\subsection{Helper Commands}
+                ~~~\ldots
 
-		\subsection{Examples}
-		% \begin{RpgCard}
-			
-		% 	\begin{RpgTable}[title=test]{lX}
-		% 		s & b
-		% 		\\
-		% 		1 & \Blindtext
-		% 	\end{RpgTable}
-		% \end{RpgCard}
+                \cmd{end}\param{RpgNestedArea}
 
-		% \begin{spell}{Hocus Pocus}{A test header}
-		% 	{1200ft}
-		% 	{1 year}
-		% 	{1 century}
-		% 	{VSM}
-		% 	{My mind}
+        }{
+            Note that since the RpgMap environment is invoked after the RpgArea is created, the options passed to \texttt{<nested-opts>} do not apply to the parent Area, which uses the Map options of its own parent.
+        }
+        
 
-		% 	A thing happens, and we all cheer!
-		% \end{spell}
+    \begin{ExampleBlock}{Example RpgMap}
+\begin{RpgMap*}[
+    header-offset=1,%start at subsection
+    title={Example Map}]
 
-	\labelsection{RpgMap}
+    \RpgArea{The Spooky Mansion} 
+        There are things here
 
-		The RpgMap environment makes it easy to create nested blocks, useful when needing to enumerate the contents of a map. The RpgMap environment uses a stacked counter system and dynamic labelling.
-		
-			
+    \begin{RpgMap}[
+        title={ignored-as-nested}
+        ]
+        \RpgArea{Entrance Hall}
+            Where you go to enter
+        \RpgArea{Kitchen}
+            Yum, food
+    \end{RpgMap}
 
-		\begin{macrolist}
-			\RpgMacro*[RpgMap]{RpgMap, RpgMap*, {{o}}}{Begins a dynamic-stacked environment for generating headed and labelled lists using the \verb|RpgArea| object to provide entries. The starred version of the command is identical in function, but calls \verb|\section*| instead of \verb|\section| (and so on.), suppressing the map elements from the table of contents.}{
-				\verb|\begin{RpgMap}[<opts>]|
+    \begin{RpgNestedArea}[][header-offset=2]
+        {The Creepy Grounds}
+        We set a header-offset for this nested block, so....
+        \RpgArea{The gardens}
+            Note that this is a paragraph, not a subsection
+         \begin{RpgNestedArea}{The stables}
+            Horses live(d) here.
+            
+            \RpgArea{Shire horse}
+                A very big boi, which still keeps the parent's header-offset
 
-				\verb|     <contents>|
-				
-				\verb|\end{RpgMap}|				
-			}{
-				RpgMap uses the counter \verb|RpgAreaDepth| to track how many Maps have been nested. A higher value of this counter results in `smaller' headings being used, beginning with \verb|\section| and progressing to \verb|\subparagraph|.
-				
-				The permitted options are:
-				\newcommand\mapopt[2]{\verb|#1| &#2\\}
-				\begin{RpgTable}{lX}
-					Option & Effects \\
-					\mapopt{header-offset}{An offset added to RpgAreaDepth when determing the heading size to be used (an offset of 0 uses \verb|section| for the top level map entires, an offset of 1 uses \verb|subsection|, and so on).}
-					\mapopt{title}{If non-empty, places the contents in a section one size larger than \verb|RpgAreaDepth+header-offset| (using \verb|chapter| for the largest possible size). The title is only rendered at the top-level of the map (if RpgAreaDepth=1), otherwise it is ignored. Default value is blank.}
-					\mapopt{prefix}{A string which is automatically prefixed to the 'number string' of named \verb|RpgArea| entries in the map. Default is blank.}
-					\mapopt{blank-prefix}{A string which is automatically prefixed to the `number string' of unnamed (blank) \verb|RpgArea| entries in the map. Default is ``\verb|Area~|''}
-					\mapopt{ref-prefix}{A string prefixed to all labels created by \verb|RpgArea|, allowing disambiguation of references. Default is ``\verb|Map:|''}
-				\end{RpgTable}
+            \RpgArea{Shetland pony}
+                And a tiny one too!
+         \end{RpgNestedArea}
+    \end{RpgNestedArea}
 
-				The variables set by options are persistent throughout the nesting - setting \verb|ref-prefix| in one map will mean the same value persists in all encapsulated maps unless manually overridden. Changes do \textit{not} persist once the nesting is finished.
+    \RpgArea{The Graveyard}
+        The additional offset-didn't persist; we're back to subsections again, and the next element will be a subsubsection.
 
-				
-			}
-		\RpgMacro{\RpgArea,{{o m}}}{
-			Creates a formatted entry within the RpgMap environment. The appearance of the title depends on the map-depth and the current header-offset.
-		}{
-			\RpgArea[<manual-label>]{<area-name>}
-		}{
-			Creates a `header' depending on the value of \verb|RpgCounter + headeroffset|:
-			\begin{enumerate}
-				\item section
-				\item subsection
-				\item subsubsection
-				\item paragraph
-			\end{enumerate}
-			If outside these values, uses \verb|subparagraph|. The name of the section is preceeded by the `map counter', which is equal to the index within the current map, appended to the `map counter' of any parent maps. The formatting function \verb|RpgMapLevelName| enables hierarchical labelling, such that the third area inside the second map of the first map would be given the counter value `1b-iii'.
-			
-			If the manual label is set, this is used as the label for this area; otherwise the automatic labelling is used (see below).
-		}
-		\RpgMacro*{RpgNestedArea,{{o o m}}}
-		{
-			A wrapper for calling \verb|RpgArea| and then immediately \verb|RpgMap|, creating nested map areas in a single call.
-		}
-		{
-			\verb|\begin{RpgMap}[<opts>]|
+        \begin{RpgMap}[
+            blank-prefix={Tomb~}
+            ]
+            \RpgArea{}
+                This is an unnamed area - it gets given a slightly different name
+            \RpgArea[tomb-ref]{}
+                I might want to refer to this later, even though it is unnamed.
+        \end{RpgMap}
+\end{RpgMap*}
 
-				\verb|     (...)|
+    \end{ExampleBlock}
+  
+    
+    \subsection{Map Labelling \& Referencing}
+        
+        Each RpgArea with a non-empty name automatically labels itself using the syntax	\texttt{ \bs{}label{<ref-prefix><area-name>}}. If a manual label was passed to the RpgArea, this is used instead (without the prefix), even if the RpgArea was not named. This is designed to provide disambiguation, as no automatic checks are performed for name collisions. 
 
-				\quad\verb|     \begin{RpgNestedArea}[area-label][<nested-opts>]{<area name>}|
+        It is then possible to call \cmd{ref} on this label\footnote{Though it won't give you anything interesting -- the returned value will be the cumulative number of RpgAreas in the document at that point} and \cmd{pageref} or \cmd{RpgPage} \RpgPage[p]{Macro:RpgPage}. However, we provide a more powerful referencing interface:
 
-				\quad\quad\verb|           (...)|
+        \RpgMacro{RpgMapRef}{\cmd{RpgMapRef*},\param{{m}}}{Returns the full name of the referenced area, including the map counter. The starred version returns only the map counter.}
+            {
+                \bs{}RpgMapRef\param{<label-name>}
+            }
+            {
+                The provided text is fully integrated with \texttt{hyerref}, and so they enable click-jumping to the referenced map area. 
+                
+                Using the example map provided above:
+                \begin{RpgTable}{XX}
+                    Example & Output \\
+                    \tabverbExample{\RpgMapRef{Map:Shire horse}}
+                    \tabverbExample{\RpgMapRef*{Map:Shire horse}}
+                    \tabverbExample{\RpgMapRef*{tomb-ref}}
+                \end{RpgTable}
+            }
+        \RpgMacro{RpgMapRefPage}{\cmd{RpgMapRefPage*},\param{{m}}}{Appends the page number of the referenced map area to a \cmd{RpgMapRef(*)} command}
+            {
+                \bs{}RpgMapRefPage\param{<label-name>}
+            }
+            {
+                Using the example map provided above:
+                    \begin{RpgTable}{XX}
+                        Example & Output \\
+                        \tabverbExample{\RpgMapRefPage{Map:Shire horse}}
+                        \tabverbExample{\RpgMapRefPage*{Map:Shire horse}}
+                        \tabverbExample{\RpgMapRefPage*{tomb-ref}}
+                    \end{RpgTable}
+            }
+        \RpgMacro{RpgShowMapRefs}{}{If called, all subsequent \cmd{RpgArea}s will print out a sub-heading listing their macro name.}
+            {}
+            {
+                It is not unheard of for a writer to lose track of the labelling name conventions - especially those which are autogenerated. This provides a useful debugging tool for those who don't want to go digging into the aux files.				
+            }
 
-				\quad\verb|     \end{RpgNestedArea}|		
+                
+    
+    \begin{ExampleBlock}{Example RpgMap with labelling.}
 
-				\verb|     (...)|
-				
-				\verb|\end{RpgMap}|		
-		}{
-			This syntax is identical to calling:
-
-			\quad\verb|     \RpgArea[area-label]{<area name>}|
-
-			\quad\quad\verb|           \begin{RpgMap}[<nested-opts>]|
-			
-			\quad	\quad\quad\verb|           (...)|
-
-			\quad\quad\verb|           \end{RpgMap}|
-
-			\quad\verb|     \end{RpgNestedArea}|	
-
-			Note that since the RpgMap environment is invoked after the RpgArea is created, the options passed to \verb|<nested-opts>| do not apply to the parent Area, which uses the Map options of its own parent.
-		}
-		\end{macrolist}
-
-		\DualExampleRender{map1}
-
-		\subsection{Map Labelling \& Referencing}
-		
-			Each RpgArea with a non-empty name automatically labels itself using the syntax	\verb| \label{<ref-prefix><area-name>}|. If a manual label was passed to the RpgArea, this is used instead (without the prefix), even if the RpgArea was not named. This is designed to provide disambiguation, as no automatic checks are performed for name collisions. 
-
-			It is then possible to call \verb|\ref| on this label\footnote{Though it won't give you anything interesting -- the returned value will be the cumulative number of RpgAreas in the document at that point} and \verb|\pageref| or \verb|\RpgPage| \RpgPage[p]{Macro:RpgPage}. However, we provide a more powerful referencing interface:
-
-			\begin{macrolist}
-				\RpgMacro{\RpgMapRef,\RpgMapRef*,{{m}}}{Returns the full name of the referenced area, including the map counter. The starred version returns only the map counter.}
-				{
-					\RpgMapRef{<label-name>}
-				}
-				{
-					The provided text is fully integrated with \verb|hyerref|, and so they enable click-jumping to the referenced map area. 
-					
-					Using the example map provided above:
-					\begin{RpgTable}{XX}
-						Example & Output \\
-						\tabverbExample{\RpgMapRef{Map:Shire horse}}
-						\tabverbExample{\RpgMapRef*{Map:Shire horse}}
-						\tabverbExample{\RpgMapRef*{tomb-ref}}
-					\end{RpgTable}
-				}
-			\RpgMacro{\RpgMapRefPage,\RpgMapRefPage*,{{m}}}{Appends the page number of the referenced map area to a \verb|RpgMapRef(*)| command}
-			{
-				\RpgMapRefPage{<label-name>}
-			}
-			{
-				Using the example map provided above:
-					\begin{RpgTable}{XX}
-						Example & Output \\
-						\tabverbExample{\RpgMapRefPage{Map:Shire horse}}
-						\tabverbExample{\RpgMapRefPage*{Map:Shire horse}}
-						\tabverbExample{\RpgMapRefPage*{tomb-ref}}
-					\end{RpgTable}
-			}
-			\RpgMacro{\RpgShowMapRefs}{If called, all subsequent \verb|RpgArea|s will print out a sub-heading listing their macro name.}
-			{}
-			{
-				It is not unheard of for a writer to lose track of the labelling name conventions - especially those which are autogenerated. This provides a useful debugging tool for those who don't want to go digging into the aux files.				
-			}
-			\end{macrolist}
-
-			
-			\DualExampleRender{map2}
-
-	\labelsection{RpgTable}
+\RpgShowMapRefs{}
+\begin{RpgMap*}[
+        header-offset=1,
+        title={Example Map}
+    ]
+    
+    \RpgArea{The Spooky Mansion} 
+        (\dots)%(skip for example!)    
+        \RpgArea{The Graveyard}
+            (\dots)%(skip for example!)
+            \begin{RpgMap}[
+                blank-prefix={Tomb~}
+                ]
+                \RpgArea{}
+        Note that this one is unlabelled.
+                \RpgArea[tomb-ref]{}
+                    (\dots)%(skip for example!)
+            \end{RpgMap}
+\end{RpgMap*}
+    \end{ExampleBlock}
 
 
+    \labelsection{RpgTable}
 
-		\begin{macrolist}
-			\RpgMacro*[RpgTable]{RpgTable,{{o m}}}{Begins an environment for creating visually appealing and consistent tables. }{
-				\verb|\begin{RpgTable}[<options>]{<column-specifications}|
+            \RpgMacro*{RpgTable}{\param{o m}}{Begins an environment for creating visually appealing and consistent tables. }{
+                \cmd{begin}\param{RpgTable}[<options>]\param{<column-specifications}
 
-				~~~~\verb|<table-contents>|
-				
-				\verb|\end{RpgTable}|
-			}{
-				RpgTable is a wrapper for the \forcelink{https://ctan.org/pkg/tabularx}{tabularx} (or \forcelink{https://ctan.org/pkg/xltabular}{xltabular} -- see \verb|breakable|) environment, and so accepts the standard set of column specifications:\{c,l,r,p{width},\@,\ldots{}\} and the extended set (i.e. X). It therefore acts almost identically to the standard tabular environment with a few stylistic differences.
-				\macrosection{Stylistic Changes}
-					The RpgTable environment makes the following changes:
-					\begin{enumerate}
-						\item \textbf{Title.} If the \verb|title| option is set, a title-heading is rendered above the tablular in the \verb|RpgFontTableTitle| font.
-						\item \textbf{Auto-headings.} The first row of the tabular environment is automatically rendered in the \verb|RpgFontTableHeader|, allowing for trivial header labels.
-						\item \textbf{Font Integration.} The main body of the table is rendered in \verb|RpgFontTableBody| font.
-						\item \textbf{Auto-colouring.} The rows alternate between being transparent and being set to the \verb|tablecolor| variable \RpgPage[p]{S:Colors}. This is powered by \verb|rowcolors|.
-					\end{enumerate}
-				\macrosection{Optional Arguments}
-				\begin{description}
-					\item[width=<dimexpr>] Fixes the width of the tabular environment to the value of this argument. Default value is the current \verb|\linewidth|.
-					\item[color=<color-name>] If set, uses this value instead of \verb|tablecolor| for the alternating coloration.
-					\item[title=<text>] Sets the text to be rendered as the title of the table. 
-					\item[breakable] If flag is present, renders using \verb|xltabular|, enabling the table to break over pages. \textbf{only available in 1-column mode (a fundamental limitation of xltabular).}
-					\item[noheader] If flag is present, suppresses the autoformatting of the title. The first row is instead rendered in the body formatting.
-				\end{description}
-				% The available options are as follows:
-			}
-		\end{macrolist}
-		\subsection{RpgTable Example}
+                ~~~~{<table-contents>}
+                
+                \cmd{end\param{RpgTable}}
+            }{
+                RpgTable is a wrapper for the \forcelink{https://ctan.org/pkg/tabularx}{tabularx} (or \forcelink{https://ctan.org/pkg/xltabular}{xltabular} -- see \texttt{breakable}) environment, and so accepts the standard set of column specifications:\{c,l,r,p{width},\@,\ldots{}\} and the extended set (i.e. X). It therefore acts almost identically to the standard tabular environment with a few stylistic differences.
+                \subsection{Stylistic Changes}
+                    The RpgTable environment makes the following changes:
+                    \begin{enumerate}
+                        \item \textbf{Title.} If the \texttt{title} option is set, a title-heading is rendered above the tablular in the font \cmd{RpgFontTableTitle}.
+                        \item \textbf{Auto-headings.} The first row of the tabular environment is automatically rendered in the font \cmd{RpgFontTableHeader}, allowing for trivial header labels.
+                        \item \textbf{Font Integration.} The main body of the table is rendered in \cmd{RpgFontTableBody}.
+                        \item \textbf{Auto-colouring.} The rows alternate between being transparent and being set to the \texttt{tablecolor} variable \RpgPage[p]{S:Colors}. This is powered by \texttt{rowcolors}.
+                    \end{enumerate}
+                \subsection{Optional Arguments}
+                \begin{description}
+                    \item[width=<dimexpr>] Fixes the width of the tabular environment to the value of this argument. Default value is the current \texttt{\bs{}linewidth}.
+                    \item[color=<color-name>] If set, uses this value instead of \texttt{tablecolor} for the alternating coloration.
+                    \item[title=<text>] Sets the text to be rendered as the title of the table. 
+                    \item[breakable] If flag is present, renders using \texttt{xltabular}, enabling the table to break over pages. \textbf{only available in 1-column mode (a fundamental limitation of xltabular).}
+                    \item[noheader] If flag is present, suppresses the autoformatting of the title. The first row is instead rendered in the body formatting.
+                \end{description}
+            }
+        \subsection{RpgTable Example}
 
-		This is the standard usage of the table, showing automatic formatting of the header rows and the word-wrapping abilities of the X-column:
+    
+            This is the standard usage of the table, showing automatic formatting of the header rows and the word-wrapping abilities of the X-column:
+\begin{ExampleBlock}{Standard RpgTable}
+\begin{RpgTable}[width=0.75\linewidth, color=green!30!white]{lX}
+    Header 1 & Header 2
+    \\
+    Text & Some text which fills up the space to 75\% of the line width then breaks
+    \\
+    Alternating & This row is transparent
+    \\
+    Colour & but this one is the colour we set in the header
+\end{RpgTable}
+\end{ExampleBlock}
+This example adds a title, but suppresses the header formatting:
+\begin{ExampleBlock}{Header-Suppressed RpgTable}
+\begin{RpgTable}[title={Test Table},noheader]{XlX}
+    Plain & Header & Text
+    \\
+    Now there's no & difference & between the header and the main
+    \\
+    body
+\end{RpgTable}
+\end{ExampleBlock}
+    
+    \labelsection{Text Boxes}
 
-		\DualExampleRender{table1}
+    	\rpgtex{} defines three `colorbox' environments, which inherit from \tcref{}. These provide a consistent way for a writer to highlight and differentiate blocks of text on the page.
 
-		This example adds a title, but suppresses the header formatting:
+    	\begin{RpgSidebar}{Which colorbox to use?}
+            
+    		The choice between RpgSidebar and RpgTip is somewhat arbitrary -- although they have a mechanical difference by default (one being breakable, the other not) -- this can be overridden by themes. Instead, the intention is that they serve slightly different purposes:
+            
+    		\begin{description}
+    			\item[RpgSidebar] is used for `important information' -- key rules or summaries which readers \textit{should} pay attention to.
+    			\item[RpgTip] is for `helpful additions' -- tips, tricks and trivia that are not necessary, but which might be useful, and are too big to fit into a footnote or parenthetical.   
+    		\end{description}
+    	\end{RpgSidebar}
 
-		\DualExampleRender{table2}
-		
+    	All of the boxes inherit the standard `tcb' style interface, and so tcolorbox options may be passed by the user to control their appearance.
+
+        \RpgMacro*{RpgNarration}{\param{{o}}}{A \tcref{} wrapper designed for text that is read aloud to players}{
+            \texttt{\bs{}begin\param{RpgNarration}[color=<color>,<tcbox-options>]}
+
+            ~~~~\texttt{<text>}
+            
+            \cmd{end\param{RpgNarration}}
+        }{
+            RpgNarration does not (by default) set a title, using only `body text', which is typeset using the \texttt{RpgFontNarration} font. The optional \texttt{<tcbox-options>} argument can be a list of all the basic tcolorbox options (see that documentation). The \texttt{color} argument is an alias for \texttt{colback} (\texttt{colbacktitle} is also set, but is ignored as the title is empty). Due to the order of processing, if both \texttt{color} and \texttt{colback} are set, the value of \texttt{colback} is used.
+
+            Themes may alter the appearance of the narration block using the tcb interface, calling \texttt{\bs{}tcbset\param{rpgnarration /.append~style={...}}} to overwrite the existing instructions.
+        }
+        \RpgMacro*{RpgSidebar}{\param{{o m}}}{A decorated \tcref{} wrapper designed for information which is set outside the main text.}{
+            \cmd{begin\param{RpgSidebar}[color=<color>,<tcbox-options>]\param{<title>}}
+
+            ~~~~{<text>}
+            
+            \cmd{end\param{RpgSidebar}}
+        }{
+            RpgSidebar requires a title (using \texttt{RpgFontSidebarTitle}) as well as the body text (\texttt{RpgFontSidebarBody}). 	RpgSidebar is typically more highly decorated than RpgTip, and does not have the \texttt{breakable} flag set. It is usually best to use one of the `float' options.
+            
+            The optional \texttt{<tcbox-options>} argument can be a list of all the basic tcolorbox options (see that documentation). The \texttt{color=x} argument is equivalent to calling both \texttt{colback=x} and \texttt{colbacktitle=x}. Due to the order of processing, if both \texttt{color} and \texttt{colback} are set, the value of \texttt{colback} is used.
+        
+
+            Themes may alter the appearance of the sidebar using the tcb interface, calling \texttt{\bs{}tcbset\param{rpgsidebar /.append~style={...}}} to overwrite the existing instructions.
+        }
+        \RpgMacro*{RpgTip}{\param{{o m}}}{A simple \tcref{} wrapper designed for information which is set outside the main text.}{
+            \cmd{begin\param{RpgTip}[color=<color>,<tcbox-options>]\param{<title>}}
+
+            ~~~~\texttt{<text>}
+            
+            \cmd{end\param{RpgTip}}
+        }{
+            RpgTip is similar to RpgSidebar, requiring a title (\texttt{RpgFontTipTitle}) in addition to the body text (\texttt{RpgFontTipBody}). However, it is generally simpler, enabling it to safely break over page boundaries. The optional \texttt{<tcbox-options>} argument can be a list of all the basic tcolorbox options (see that documentation). The \texttt{color=x} argument is equivalent to calling both \texttt{colback=x} and \texttt{colbacktitle=x}. Due to the order of processing, if both \texttt{color} and \texttt{colback} are set, the value of \texttt{colback} is used.
+
+            Themes may alter the appearance of the narration block using the tcb interface, calling \texttt{\bs{}tcbset\param{rpgnarration /.append~style={...}}} to overwrite the existing instructions.
+        }
+
+    
+        \begin{ExampleBlock}{Various Rpg Text Boxes}
+\begin{RpgNarration}[color=blue!30!white]
+This is text that you would read out loud to players, describing a scene. It will always be blue, even if the theme says otherwise -- because the option takes priority.
+\end{RpgNarration}
+
+\begin{RpgSidebar}{A Sidebar}
+This is an important block of text, that you should pay attention to.
+\end{RpgSidebar}
+
+\begin{RpgTip}{A Tip}
+This is some helpful - but not vital - text.
+\end{RpgTip}
+		\end{ExampleBlock}
+
+
+
+        
 

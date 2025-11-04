@@ -1,55 +1,207 @@
-\chapter{Package Options}
+\chapter{Options \& Variables}
+
+    \rpgtex{} defines many dozens to hundreds of variables, most with the (expl3) syntax \lMacro{rpg\_[x]}. Most of these are used in the internal functioning of the macros, however a number of them are useful for a designer to understand.
 
 
-	Whether the package is invoked directly, or through a class users have the option to pass options to it which change the behavior of the resulting document:
-	\begin{lstlisting}
-		\documentclass[<options>]{rpgbook/rpghandout}
-		\usepackage[<options>]{rpgtex}
-	\end{lstlisting}
-	The options are either in the form of key-value pairs which set internal values, or flags which activate behavior when present. The available options are:
-	\begin{macrolist}
-		\RpgMacro{bg}{Controls the presence of the `background paper' and footer decorations.}
-		{
-			bg = <full / print / none>
-		}{
-			The value passed must be one of the three options (else an error is thrown). The most obvious effect of these three options is to change whether the `background paper' set by \cmdref{RpgSetPaper} appears in the document, or the footer decorations set by \cmdref{RpgSetFooterDecoration}.
+    \section{Package Options}
+        Whether the package is invoked directly, or through a class users have the option to pass options to it which change the behavior of the resulting document:
+        \begin{Code}
+            \bs{documentclass}[<options>]{rpgbook/rpghandout}
 
-			\begin{center}
-				\begin{tabular}{rcc}
-					Command & Paper & Footer Decorations
-					\\
-					\texttt{full} & \cmark & \cmark
-					\\
-					\texttt{print} & \xmark & \cmark
-					\\
-					\texttt{none} & \xmark & \xmark
-				\end{tabular}
-			\end{center}
+            \bs{usepackage}[<options>]{rpgtex}
+        \end{Code}
+        The options are either in the form of key-value pairs which set internal values, or flags which activate behavior when present. The available options are:
+        
+        \RpgMacro*{bg}{}{Controls the presence of the `background paper' and footer decorations.}
+            {
+                bg = <full / print / none>
+            }{
+                The value passed must be one of the three options (else an error is thrown). The most obvious effect of these three options is to change whether the `background paper' set by \cmdref{RpgSetPaper} appears in the document, or the footer decorations set by \cmdref{RpgSetFooterDecoration}.
 
-			This flag also changes the behavior of the rpgcard class \RpgPage[p]{S:cardClass}, and other environments may similarly change their colours or layouts in response to the values passed to this command. Internally these commands are responding specifically to the presence of the paper or the footer flags.
-		}
-		\RpgMacro{justified}{A flag which, if present, activates justified-text mode. Otherwise, defaults to left-aligned, `ragged right'.}
-		{}{}
-		\RpgMacro{nomultitoc}{A flag which, if present, disabled the multi-column table of contents option}{}{}
-		\RpgMacro{theme}{The initial value passed to \cmdref{RpgSetTheme} when package initialization is finished.}{}{ 
-			The default value is \verb|default|, activating the Default Theme \RpgPage[p]{Theme:Default}.
-		}
-		\RpgMacro{themepath}{Calls \cmdref{RpgSetThemePath}, a directory holding multiple theme files used for auto-theme searches if a direct path not given}{}{
-			Default value is \verb|\RpgPackagePath/themes|, with the assumption that the theme `name' is stored in \verb|themes/name/name.cfg|.
-		}
-		\RpgMacro{size}{Forwards the contents on to the base-class if \verb|layout| is active, thereby setting the font size}
-		{
-			size = <font-size>pt
-		}
-		{
-			The allowed values depend on the class being used: the book class (on which rpgbook is based) for example, only accepts values in \{10pt,11pt,12pt\}. Other classes may accept different values.
-		}
-		\RpgMacro{columns}{Sets the number of columns the document is has}
-		{
-			columns = <1 / 2>
-		}
-		{
-			Internally this calls either onecolumn or twocolumn. More advanced column-settings would require the user manually using \verb|multicols|.
-		}
-		
-	\end{macrolist}
+                \begin{center}
+                    \begin{tabular}{rcc}
+                        Command & Paper & Footer Decorations
+                        \\
+                        \texttt{full} & \cmark & \cmark
+                        \\
+                        \texttt{print} & \xmark & \cmark
+                        \\
+                        \texttt{none} & \xmark & \xmark
+                    \end{tabular}
+                \end{center}
+
+                This flag also changes the behavior of the rpgcard class \RpgPage[p]{S:cardClass}, and other environments may similarly change their colours or layouts in response to the values passed to this command. Internally these commands are responding specifically to the presence of the paper or the footer flags.
+            }
+        \RpgMacro*{justified}{}{A flag which, if present, activates justified-text mode. Otherwise, defaults to left-aligned, `ragged right'.}{}{}
+        \RpgMacro*{nomultitoc}{}{A flag which, if present, disabled the multi-column table of contents option}{}{}
+        \RpgMacro*{size}{}{Sets the font size equal to the value, if allowed by the parent class.}
+            {
+                size = <font-size>pt
+            }
+            {
+                The allowed values depend on the class being used: the book class (on which rpgbook is based) for example, only accepts values in \{10pt,11pt,12pt\}. Other classes may accept different values.
+            }
+        \RpgMacro*{theme}{}{The initial value passed to \cmdref{RpgSetTheme} when package initialization is finished.}{}{ 
+            The default value is \texttt{default}, activating the Default Theme \RpgPage[p]{Theme:Default}.
+            }
+        \RpgMacro*{themepath}{}{Calls \cmdref{RpgSetThemePath}, a directory holding multiple theme files used for auto-theme searches if a direct path not given}{}{
+            Default value is \texttt{\bs{}RpgPackagePath/themes}, with the assumption that the theme `name' is stored in \texttt{themes/name/name.cfg}.
+            }
+        
+        \RpgMacro*{columns}{}{Sets the number of columns the document is has}
+            {
+                columns = <1 / 2>
+            }
+            {
+                Internally this calls either onecolumn or twocolumn. More advanced column-settings would require the user manually using \texttt{multicols}.
+            }
+            
+
+    \section{Colo(u)rs}\label{S:Colors}
+
+        \rpgtex{} by default defines a number of colors\footnote{Yes, I hate myself, but we're going with the code-based spelling.} which are used for different elements:
+        \begin{description}
+            \item[themecolor] A `basic color' which is (by default) equal to the following three colors:
+            \begin{enumerate}
+                \item \textbf{sidebarcolor} The background color of the \texttt{RpgSidebar} environment
+                \item \textbf{tablecolor} The background color of every other row in an \texttt{RpgTable} 
+                \item \textbf{tipcolor} The background color of the \texttt{RpgTip} environment 
+            \end{enumerate} 
+            \item[narrationcolor]  The background color of the \texttt{RpgTip} environment 
+            \item[contourinnercolor]  The default color of the inner text within a \texttt{RpgContour} command 
+            \item[contouroutercolor]  The default color of the external contour drawn around text within a \texttt{RpgContour} command.
+        \end{description}
+
+        Calling \texttt{\bs{}RpgSetThemeColor} \RpgPage[p]{Macro:RpgSetThemeColor} updates the value of \texttt{themecolor}, as well as the three `co-varying' colors. Other colors are modified simply using the xcolors interface:
+
+        \begin{Code}
+            \cmd{colorlet}\{narrationcolor\}\{html\}\{FFFFF\}
+        \end{Code}
+
+
+    \section{Command Line Interface}\label{S:CMD}
+
+        By default, \LaTeX{} does not have a `command line interface' which allows a user to modify the document from within the command line: changes to the document have to be placed inside the file, and then compiled. However, we found that -- particularly with the \textit{print} option (which suppresses background images on the paper, reducing ink requirements for printing), it was convenient to be able to compile the same document in either `normal' mode, or `print mode', without modifying the text.
+
+        To this end, we have provided a method for pseudo-`command line variables' to be inserted into the RpgOptions module. To do this, we exploit the fact that \TeX{} can read documents from an input stream, not just files.
+
+
+            \RpgMacro{RpgCMD}{}{Holds key-value pairs to be inserted into RptOptions after the standard parsing is run, ideal for command line modification.}
+            {
+                xelatex ``\bs{}def\bs{}RpgCMD{<rpg-options>} \bs{}input{<document>}''
+            }{
+                This will compile the \texttt{<document>}, with the contents of \texttt{RpgCMD} parsed as if they had been placed into \texttt{\bs{}documentclass[<rpg-options>]{rpgclass}} or when invoking the package: \texttt{\bs{}usepackage[rpg-options]{rpgtex}}.
+
+                Values passed to \texttt{RpgCMD} will override values passed to the package the standard way. 
+                
+                The \texttt{rpgtex} compiler which we have provided \RpgPage[p]{C:Compiler} performs this insertion by default for several predefined variables:
+
+                \begin{minipage}{0.3\linewidth}
+                    \begin{Code}
+                         \centering rpgtex document.tex -p
+                    \end{Code}
+                \end{minipage}~~aliases~~\begin{minipage}{0.6\linewidth}
+                        \begin{Code}
+                         \centering xelatex "\bs{}def\bs{}RpgCMD{bg=print} \bs{}input document.tex"
+                    \end{Code}
+                \end{minipage}
+
+                Thereby allowing the user to switch between \texttt{print} and \texttt{full} mode with a compiler switch.
+            }
+
+
+        
+
+        
+
+        
+    \labelsection{Fonts}
+
+    \rpgtex{} allows for a high degree of customisation of the fonts and typefaces used for the elements within a document.  Fonts can be changed either by the user directly, or (more commonly) by the theme. This is achieved through the \cmdref{RpgSetFont} command
+            
+        \begin{RpgSidebar}{Why didn't my font change?}
+            By default, \texttt{\bs{}RpgSetFont} doesn't change the actual fonts: it alters internal saved variables which a designer may then assign to a given element. That is, the font \texttt{\bs{}RpgFontSection} doesn't `hook in' to anything by itself; it only changes the font because most theme documents also call \texttt{\bs{}titleformat\{section\}\{\bs{}RpgFontSection\}....}, so the assigned value is utilized at the appropriate moment: if you assigned a font to the section, but (for whatever reason) had changed the \texttt{titleformat} command, the section font would not update.
+            
+            If you find that an element doesn't change font after updating the relevant \texttt{RpgFont}, check that it is actually being invoked -- and if not, invoke it manually. Once the command is in place, the font will change as expected.
+        \end{RpgSidebar}
+
+        \subsection{Font Elements}
+
+            \rpgtex{} provides 28 Font Commands by default (themes may provide more). These fonts are assigned to typesetting elements by the theme designer -- what we have intended to be the section font may, within a different theme, be used for a different element. 
+            
+            This seciton therefore outlines how we have used these elements in the provided themes, though other designers may use them for different purposes.
+            
+            \begin{RpgSidebar}{Family vs Style}
+                When defining the Font for an element, the interface allows one to specify both a \texttt{family} and a \texttt{style}. Formally speaking, \texttt{family} defines the \textbf{typeface} used by the associated element, whilst the \texttt{style} determines the options passed to that typeface (bold, italics, size etc.).
+
+                The distinction is largely irrelevant, as the construction of the final font object is often simply the concatenation of the two:
+                \begin{lstlisting}
+                    \def\RpgFontX
+                    {
+                        \l__rpg_x_family \l__rpg_x_style
+                    }
+                \end{lstlisting}
+                The separate definitions is therefore largely a matter of clarity and readability. It is generally safe to place commands that should be in family into the style key, as long as it doesn't conflict with other styling.
+                
+                \vspace{1em}
+                {\RpgFontSidebarTitle{} \noindent{} Font vs Implementation}
+                \vspace{1em}
+
+                We generally encourage designers to place all text visualisation within the relevant Font rather than elsewhere. If all subsections are going to be in red, then define \texttt{subsection-style=\color{red}}, rather than setting it within the titlesec specification (\texttt{\bs{}titleformat {\bs{}subection}{\bs{}RpgFontSubsection\color{red}}....}).
+
+                There will naturally be some exceptions to this: we found that the \texttt{RpgTitleFont} colour we wanted within \texttt{RpgDrawCover} diverged so strongly from that in \texttt{RpgSimpleTitle} that it made sense to define a special colour when rendering over a background image.
+            \end{RpgSidebar}
+
+            
+            
+            \begin{fontlist}
+                \FontElement{RpgFontBody}{main-body}{The main body text of the document, which \texttt{RpgSetFont} sets equal to \texttt{\bs{}normalfont}. 
+
+                Updating the fontsize here (i.e. using \texttt{\bs{}large}) can cause some counterintuitive results since it will \textit{only} update the body text, and not adjust the other elements relatively. Adjusting the font size for the entire document should be done in the documentclass declaration.
+                }
+                \FontElement{RpgFontTitle}{title}{The font used for \texttt{\bs{}@title} when \texttt{\bs{}maketitle} is called.}
+                \FontElement{RpgFontSubtitle}{subtitle}{The font used for the value of \texttt{\bs{}@subtitle} \RpgPage[p]{Macro:subtitle}, \texttt{\bs{}@author} and \texttt{\bs{}@date}  when \texttt{\bs{}maketitle} is called.}
+                \FontElement{RpgFontPart}{part}{The font used when \texttt{\bs{}part} is called.}
+                \FontElement{RpgFontTocPart}{toc-part}{The font used for a part in the table of contents}
+                \FontElement{RpgFontChapter}{chapter}{The font used when \texttt{\bs{}chapter} is called.}
+                \FontElement{RpgFontTocChapter}{toc-chapter}{The font used for a chapter in the table of contents}
+                \FontElement{RpgFontSection}{section}{The font used when \texttt{\bs{}section} is called.}
+                \FontElement{RpgFontTocSection}{toc-section}{The font used for a section in the table of contents}
+                \FontElement{RpgFontSubsection}{subsection}{The font used when \texttt{\bs{}subsection} is called.}
+                \FontElement{RpgFontSubsubsection}{subsubsection}{The font used when \texttt{\bs{}subsubsection} is called.}
+                \FontElement{RpgFontParagraph}{paragraph}{The font used when \texttt{\bs{}paragraph} is called.}
+                \FontElement{RpgFontSubparagraph}{subparagraph}{The font used when \texttt{\bs{}subparagraph} is called.}
+                \FontElement{RpgFontTableTitle}{table-title}{The font used for \texttt{<text>} if \texttt{\bs{}RpgTable} \RpgPage[p]{Macro:RpgTable} is called with the \texttt{title=<text>} option.}
+                \FontElement{RpgFontTableHeader}{table-header}{The font used for the first row of a \texttt{\bs{}RpgTable}.}
+                \FontElement{RpgFontTableBody}{table-body}{The font used for the text within an \texttt{\bs{}RpgTable} after the first row.}
+                \FontElement{RpgFontTipTitle}{tip-title}{The font used for the title of an \texttt{RpgTip} environment \RpgPage[p]{Macro:RpgTip}.}
+                \FontElement{RpgFontTipBody}{tip-body}{The font used for the body of an \texttt{RpgTip} environment \RpgPage[p]{Macro:RpgTip}.}
+                \FontElement{RpgFontSidebarTitle}{siderbar-title}{The font used for the title of an \texttt{RpgSidebar} environment \RpgPage[p]{Macro:RpgSidebar}.}
+                \FontElement{RpgFontSidebarBody}{sidebar-body}{The font used for the body of an \texttt{RpgSidebar} environment \RpgPage[p]{Macro:RpgSidebar}.}
+                \FontElement{RpgFontNarration}{narration}{The font used for all (since they have no title) of an \texttt{RpgNarration} environment \RpgPage[p]{Macro:RpgNarration}.}
+
+                \FontElement{RpgStatBlockTitle}{stat-block-title}{The font used for the title of a `statblock' environment - in the dnd theme this corresponds to the \texttt{monster} environment.}
+                \FontElement{RpgStatBlockSection}{stat-block-section}{The font used for sections within a `statblock' environment (should one be defined).}
+                \FontElement{RpgStatBlockBody}{stat-block-body}{The font used for text within a `statblock' environment (should one be defined).}
+                \FontElement{RpgFontFooter}{footer}{The font used for the footer text}
+                \FontElement{RpgFontPageNumber}{page-number}{The font used for the page number within the footer}
+                \FontElement{RpgFontDropCap}{drop-cap}{The font used for the large drop-cap letter created by a \texttt{RpgDropCap} (see below).}
+                \FontElement{RpgFontDropCapInternal}{drop-cap-internal}{The font used for the first line of text following the drop cap.}
+            \end{fontlist}
+        \subsection{Defining Fonts}
+
+            The arguments passed to the `style' can be any form of latex formatting (i.e. \texttt{\bs{}slshape\scriptsize\bfseries}, and so on). To update the typeface, however, you must define a font family:
+
+\begin{ExampleBlock}[RpgSetFont]{Font Example}
+\subsection{The Original Font}
+Here is some text
+
+\newfontfamily{\myfont}{Arial}
+\RpgSetFont{main-body-family=\myfont,
+   subsection-style=\slshape\Huge}
+
+\subsection{The New Font}
+And after the change is introduced
+\end{ExampleBlock}
+
+
