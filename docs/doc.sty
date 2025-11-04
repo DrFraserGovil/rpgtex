@@ -12,81 +12,214 @@
 }
 \usepackage{makecell}
 \usepackage{adjustbox}
-\geometry{
-left=3cm
-}
-\ExplSyntaxOn{}
-% Define a function to process the list of macros
-\cs_new_protected:Npn \__rpg_doc_macro_list:n #1
+
+
+\newcommand\labelsection[1]
 {
-
-	\noindent\ignorespaces\begin{minipage}[t]{2.5cm}
-		\begin{flushright}
-			 \clist_map_inline:nn { #1 }
-			{
-				\maxsizebox{2.49cm}{3cm}{\small\verb|##1|} \\
-			}
-		\end{flushright}
-	\end{minipage}
+	\section{#1}\label{S:#1}
 }
 
-\NewDocumentEnvironment{macrolist}{+b}{
-	% \vspace{1em}
-	\ignorespaces
-	\renewcommand{\arraystretch}{2}
-	\setlength\parindent{0pt}
-	\setlength\parskip{5pt}
-    % \leavevmode % Equivalent to a robust \noindent for initiating mode
-    % \hspace{-1.5cm}%
-	\setlength{\LTleft}{-2.9cm}
-	\begin{xltabular}{\dimexpr\linewidth+2.9cm\relax}{rX}
-		#1
-    \end{xltabular}}{}
+\ExplSyntaxOn{}
+\usepackage{lstautogobble}
+\newcommand\DualExampleRender[1]
+{
+	\noindent\begin{minipage}[t]{0.5\linewidth}\small 
+		\noindent\lstinputlisting{parts/examples/#1}
+	\end{minipage}\begin{minipage}[t]{0.5\linewidth}
+		\input{parts/examples/#1}
+	\end{minipage}
+	}
+	
+\tcbuselibrary{listings,hooks}
+\newtcblisting{ExampleBlock}[2][]{
 
-\NewDocumentCommand{\lMacroName}{m}{
+        listing~options={
+            language=TeX, % The correct, non-error-producing language
+            basicstyle=\ttfamily\small,
+            showstringspaces=false,
+            breaklines=true,
+            
+            % --- Styles ---
+            texcsstyle=*\color{blue}\bfseries, 
+            keywordstyle=\color{purple}\bfseries,
+			% keywordstyle=[1]\color{red}\bfseries,
+			% rpgstyle=\color{red}\bfseries,
+            commentstyle=\color{green!60!black}\itshape,
+            stringstyle=\color{red},
+            
+            % --- ExplSyntax Compliant Keyword Lists ---
+            % Spaces must be replaced with the tilde (~) character.
+           texcs={
+                documentclass, usepackage, input, section, subsection, 
+                tcbset, newcommand, newenvironment, 
+                ExplSyntaxOn, ExplSyntaxOff , newfontfamily,
+				document,
+                tikzpicture,
+                tcolorbox,
+                lstlisting,
+                newtcolorbox,
+				begin,end
+            },
+		
+			
+            keywords={
+                #1
+            },
+			% keywords[1]={
+			% 	RpgSetFont
+			% }
+        },
+        colback=gray!10,
+       boxrule=0.4pt,
+    	listing~side~text,
+
+    title=#2
+}
+\newtcblisting{ExampleStack}[2][]{
+
+        listing~options={
+            language=TeX, % The correct, non-error-producing language
+            basicstyle=\ttfamily\small,
+            showstringspaces=false,
+            breaklines=true,
+            
+            % --- Styles ---
+            texcsstyle=*\color{blue}\bfseries, 
+            keywordstyle=\color{purple}\bfseries,
+			% keywordstyle=[1]\color{red}\bfseries,
+			% rpgstyle=\color{red}\bfseries,
+            commentstyle=\color{green!60!black}\itshape,
+            stringstyle=\color{red},
+            
+            % --- ExplSyntax Compliant Keyword Lists ---
+            % Spaces must be replaced with the tilde (~) character.
+           texcs={
+                documentclass, usepackage, input, section, subsection, 
+                tcbset, newcommand, newenvironment, 
+                ExplSyntaxOn, ExplSyntaxOff , newfontfamily,
+				document,
+                tikzpicture,
+                tcolorbox,
+                lstlisting,
+                newtcolorbox,
+				begin,end
+            },
+		
+			
+            keywords={
+                #1
+            },
+			% keywords[1]={
+			% 	RpgSetFont
+			% }
+        },
+        colback=gray!10,
+       boxrule=0.4pt,
+    	% listing~side~text,
+
+    title=#2
+}
+\def\NoArgs{\{\}}
+
+\def\bs{\textbackslash}
+
+
+\NewDocumentCommand{\BeginMacroFormat}{}
+{
+	
+	\newgeometry
+	{
+		right   = .65in, % Left and right margins
+		left	= 3cm,
+		top       = .4in, % Top of text area to top of page
+		bottom    = .75in,  % Bottom of text area to bottom of page
+		footskip  = .3in, % Bottom of text area to bottom of footer text
+		columnsep = .25in, % Space between columns
+		}
+		\onecolumn
+}
+
+
+
+\NewDocumentCommand{\lMacro}{m}{
 	\texttt{\textbackslash\_\_#1}
 }
 
-\NewDocumentCommand{\macrosection}{m}
+
+\NewDocumentCommand{\cmd}{m}
 {
-\vspace{1em}\par\noindent
-	{\RpgFontSubsubsection{} #1}
-	\par\noindent
+	\texttt{\textbackslash#1}
+}
+\NewDocumentCommand{\param}{m}
+{
+	\{#1\}
+}
+\NewDocumentCommand{\paramO}{}
+{
+	O\param{}
+}
+\cs_new_protected:Npn \__rpg_doc_macro_list:nn #1#2
+{
+	\clist_map_inline:nn { #1, #2 }
+	{
+	\maxsizebox{2.49cm}{3cm}{\tt##1} \\
+	}
 }
 
-\newcommand\DualExampleRender[1]
+\NewDocumentEnvironment{Code}{O{}}
+{
+	\begin{tcolorbox}[colframe=white,colback=black!30!white,boxsep=0pt, left=2pt,right=2pt,  top=4pt,bottom=4pt,    sharp~corners ,#1]
+			\tt %\color{white} 
+}
+{
+	\end{tcolorbox}
+}
+
+
+
+
+\NewDocumentCommand{\RpgMacro}{s m +m +m +m +m}{
+
+	\hspace{-3.1cm}
+	\begin{tcolorbox}[
+		blanker,
+		breakable,
+		width=\linewidth,
+		overlay~unbroken~and~first={%
+		\node[inner~sep=0pt,outer~sep=0pt,text~width=3.1cm,
+		align=right,anchor=east,
+		below~right]
+		at ([xshift=-3.5cm]frame.north~west)
 		{
-			\noindent\begin{minipage}[t]{0.5\linewidth}\small 
-			\noindent\lstinputlisting{parts/examples/#1}
-			\end{minipage}\begin{minipage}[t]{0.5\linewidth}
-		\input{parts/examples/#1}
-		\end{minipage}
+			\__rpg_doc_macro_list:nn{\IfBooleanTF{#1}{{#2}}{\cmd{#2}}}{#3}
+		};}
+  ]
+		\IfBooleanTF{#1}
+		{
+			\label{#2}
+			\index{#2}
+		}
+		{
+			\label{Macro:#2}
+			\cmdidx{#2}	
+		}
+		#4
+
+		 \str_if_empty:nF{#5}
+		{
+			\begin{Code}#5\end{Code}
+		}
+		
+		\str_if_empty:nF{#6}
+		{
+			% \subsection{Details}
+			{#6}
 		}
 
-\NewDocumentCommand{\RpgMacro}{s o m +m +m +m}{\__rpg_doc_macro_list:n { #3 } & #4
+	\end{tcolorbox}
 
-	\tl_if_novalue:nF{#2}
-	{
-		\label{Macro:#2}
-		\cmdidx{#2}	
-	}
-	
-		
-	\str_if_empty:nF{#5}
-	{~
-		\macrosection{Syntax}
 
-		\IfBooleanTF{#1}
-		{#5}
-		{\verb|#5|}
-	}
 
-	\str_if_empty:nF{#6}
-	{
-	\macrosection{Details}
-	{#6}
-	}
-	\\
 }
 
 \NewDocumentEnvironment{fontlist}{+b}{
@@ -94,20 +227,27 @@ left=3cm
 	
     % \hspace{-1.5cm}
 	\let\__rpg_colsep:&
-	\noindent\begin{xltabular}{\linewidth}{llX}
-		Font~Element & Values & Usage \\
+	\noindent\begin{RpgTable}[breakable]{llX}
+		Font~Element & Components & Usage \\
 		#1
-    \end{xltabular}}{}
+    \end{RpgTable}}{}
 
-	\NewDocumentCommand{\FontElement}{m +m +m}{\makecell[lt]{  \__rpg_doc_macro_list:n { #1 }} &
+\NewDocumentCommand{\FontElement}{m +m +m}
+	{
+		\small\tt\cmd{#1}
 
-	\makecell[lt]{  \__rpg_doc_macro_list:n { {#2-family},{#2-style} }}
+		%%index
+		\tl_set:Nx \l_tmpa_tl { \str_range:nnn {#1} {8} {-1} }
+		\index{rpgfont@\texttt{\bs{}RpgFont...}!\texttt{\l_tmpa_tl}}
 
-	&
-
-	#3
-	\\
-}
+		% \lowercase{\def\temp{\m}}
+		% 	\expandafter\index\expandafter{\temp@\texttt{\textbackslash\m}}
+		&
+		\parbox[t]{4cm}{\tt {#2-family} \\ {#2-style} }
+		&
+		#3
+		\\
+	}
 
 
 \newcommand{\code}[1]{\texttt{(\detokenize{#1})}}
