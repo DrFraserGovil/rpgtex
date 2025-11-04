@@ -16,27 +16,6 @@
 \subtitle{A package for generating beautiful RPG documents}
 \author{Jack Fraser-Govil}
 
-\newcommand{\lindex}[1]{%
-  \lowercase{\def\temp{#1}}%
-  \expandafter\index\expandafter{\temp}%
-}
-\NewDocumentCommand{\cmdidx}{ o m }{
-	\foreach \m in {#2}
-	{
-		% \lindex{\texttt{\textbackslash{}\lowercase{\m}}@{\lowercase{\m}}}
-		\IfNoValueTF{#1}
-		{
-			 \lowercase{\def\temp{\m}}
-			\expandafter\index\expandafter{\temp@\texttt{\textbackslash\m}}
-		 }
-		 {
-			% \index{\m}
-			 \lowercase{\def\temp{\m}}
-			\expandafter\index\expandafter{#1!\temp@\texttt{\textbackslash\m}}
-		 }
-	}
-}
-
 
 \NewDocumentCommand{\cmdref}{m}{
 	\texttt{\textbackslash#1}~\RpgPage[p]{Macro:#1}

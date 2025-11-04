@@ -25,6 +25,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * Cleaned up the command line interface into a consistent terminology: `RpgCMD`, and set it to override document-provided commands
 
+* Overhauled the documentation internal structuring and formatting. 
+
 ### Bugfix
 
 * Fixed bug in dnd/diceformat which double-rendered the dice count

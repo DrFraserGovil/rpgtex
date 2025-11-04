@@ -13,6 +13,26 @@
 \usepackage{makecell}
 \usepackage{adjustbox}
 
+\newcommand{\lindex}[1]{%
+  \lowercase{\def\temp{#1}}%
+  \expandafter\index\expandafter{\temp}%
+}
+\NewDocumentCommand{\cmdidx}{ o m }{
+	\foreach \m in {#2}
+	{
+		% \lindex{\texttt{\textbackslash{}\lowercase{\m}}@{\lowercase{\m}}}
+		\IfNoValueTF{#1}
+		{
+			 \lowercase{\def\temp{\m}}
+			\expandafter\index\expandafter{\temp@\texttt{\textbackslash\m}}
+		 }
+		 {
+			% \index{\m}
+			 \lowercase{\def\temp{\m}}
+			\expandafter\index\expandafter{#1!\temp@\texttt{\textbackslash\m}}
+		 }
+	}
+}
 
 \newcommand\labelsection[1]
 {
@@ -69,56 +89,14 @@
 			% 	RpgSetFont
 			% }
         },
+		% colframe=gre,
         colback=gray!10,
-       boxrule=0.4pt,
+       boxrule=1pt,
     	listing~side~text,
 
     title=#2
 }
-\newtcblisting{ExampleStack}[2][]{
 
-        listing~options={
-            language=TeX, % The correct, non-error-producing language
-            basicstyle=\ttfamily\small,
-            showstringspaces=false,
-            breaklines=true,
-            
-            % --- Styles ---
-            texcsstyle=*\color{blue}\bfseries, 
-            keywordstyle=\color{purple}\bfseries,
-			% keywordstyle=[1]\color{red}\bfseries,
-			% rpgstyle=\color{red}\bfseries,
-            commentstyle=\color{green!60!black}\itshape,
-            stringstyle=\color{red},
-            
-            % --- ExplSyntax Compliant Keyword Lists ---
-            % Spaces must be replaced with the tilde (~) character.
-           texcs={
-                documentclass, usepackage, input, section, subsection, 
-                tcbset, newcommand, newenvironment, 
-                ExplSyntaxOn, ExplSyntaxOff , newfontfamily,
-				document,
-                tikzpicture,
-                tcolorbox,
-                lstlisting,
-                newtcolorbox,
-				begin,end
-            },
-		
-			
-            keywords={
-                #1
-            },
-			% keywords[1]={
-			% 	RpgSetFont
-			% }
-        },
-        colback=gray!10,
-       boxrule=0.4pt,
-    	% listing~side~text,
-
-    title=#2
-}
 \def\NoArgs{\{\}}
 
 \def\bs{\textbackslash}
@@ -168,7 +146,7 @@
 
 \NewDocumentEnvironment{Code}{O{}}
 {
-	\begin{tcolorbox}[colframe=white,colback=black!30!white,boxsep=0pt, left=2pt,right=2pt,  top=4pt,bottom=4pt,    sharp~corners ,#1]
+	\begin{tcolorbox}[colframe=gray!50,colback=black!10!white,boxsep=0pt, left=2pt,right=2pt,  top=5pt,bottom=4pt,    arc=1mm,#1]
 			\tt %\color{white} 
 }
 {
@@ -197,7 +175,7 @@
 		\IfBooleanTF{#1}
 		{
 			\label{#2}
-			\index{#2}
+			\index{\texttt{#2}}
 		}
 		{
 			\label{Macro:#2}
