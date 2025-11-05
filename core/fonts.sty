@@ -20,7 +20,7 @@
 \RequirePackage{lettrine} %%fancy drop cap
 \RequirePackage{Royal} %%Used for fancy drop caps
 \RequirePackage[auto]{contour} %%for outlining text
-
+\RequirePackage{relsize}
 
 \keys_define:nn { rpg / fonts }
   {
@@ -184,7 +184,11 @@
     drop-cap-style .value_required:n = true,
 	drop-cap-internal-style .tl_set:N = \l__rpg_drop_cap_internal_tl,
     drop-cap-internal-style .value_required:n = true,
-
+	%emphasis
+	emph-family .tl_set:N		=\l__rpg_emph_family_tl,
+	emph-family .value_required:n =true,
+	emph-style .tl_set:N		=\l__rpg_emph_style_tl,
+	emph-style .value_required:n =true,
   }
 
 
@@ -297,9 +301,24 @@
   \NewDocumentCommand{\RpgFontDropCapInternal}{}
   { \l__rpg_drop_cap_internal_tl }
 
+\NewDocumentCommand{\RpgFontEmphasis}{}
+{
+	\l__rpg_emph_family_tl \l__rpg_emph_style_tl
+}
+
+\RenewDocumentCommand{\emph}{m}
+{
+	{\RpgFontEmphasis #1}
+}
+\NewDocumentCommand{\key}{m}
+{
+	\emph{#1}
+}
+
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % % Drop Caps
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \renewcommand{\LettrineFontHook}
   { \l__rpg_drop_cap_family_tl \l__rpg_drop_cap_style_tl }
 
