@@ -19,9 +19,7 @@
 \RpgUseCoverPage{false}
 
  % Set page geometry
-\RequirePackage {geometry}.
-\geometry
-{
+\geometry{
 	hmargin   = .65in, % Left and right margins
 	top       = .4in, % Top of text area to top of page
 	bottom    = .75in,  % Bottom of text area to bottom of page

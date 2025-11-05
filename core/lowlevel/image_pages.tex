@@ -43,6 +43,11 @@
 %% Part pages implementation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%The original definition to be overwritten by the themes 
+\cs_new:Nn \l__rpg_draw_part_page:n
+{
+	\node at (current~page.center) {\parbox[t]{0.8\linewidth}{\centering \RpgFontPart Part~\thepart \\ #1}};
+}
 
 \let\__rpg_orig_part\part %save the original
 
@@ -77,7 +82,7 @@
 		#1
 	}
 	{
-		\RpgDrawPartPage{#2}
+		\l__rpg_draw_part_page:n{#2}
 	}
 }
 
@@ -89,7 +94,7 @@
 		\__add_part_contents:n {#1}
 	}
 	{
-		\RpgDrawPartPage{#1}
+		\l__rpg_draw_part_page:n{#1}
 	}
 }
 
@@ -98,17 +103,24 @@
 %% Title internal commands
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+%%The original definition to be overwritten by the themes 
 \let\__rpg_orig_title\maketitle
+
+\cs_new:Nn \l__rpg_draw_cover_page:{\__rpg_orig_title}
+
+\cs_new:Nn \l__rpg_simple_title:{\__rpg_orig_title}
+
 \bool_new:N \g__rpg_use_cover_page_bool
 
 \cs_new_protected:Nn \__cover_page:
 {
 	\str_if_empty:NTF{\@cover}
 	{
-		\__tikz_page:nn{}{\RpgDrawCover}
+		\__tikz_page:nn{}{\l__rpg_draw_cover_page:{}}
 	}
 	{
-		\__tikz_page_background:nnn{}{\@cover}{\RpgDrawCover}
+		\__tikz_page_background:nnn{}{\@cover}{\l__rpg_draw_cover_page:{}}
 	}
 }
 
@@ -120,6 +132,6 @@
 		\__cover_page:{}
 	}
 	{
-		\RpgSimpleTitle{}
+		\l__rpg_simple_title:{}
 	}
 }

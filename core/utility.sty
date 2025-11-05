@@ -7,11 +7,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Dice macro
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\DeclareDocumentCommand{ \RpgDiceFormat} {m m m}
+
+\cs_new:Nn \__rpg_dice_formatter:nnn{#1d#2#3}
+
+\DeclareDocumentCommand{ \RpgSetDiceFormat} {m}
 {
 	%Arguments: #1: Dice Number, #2: Dice Sides, #3: Modifier
 
-	%Declare the command here, wait for themes to override it. 
+	\cs_set:Nn  \__rpg_dice_formatter:nnn{#1}
 }
 
 \DeclareDocumentCommand { \RpgDice } { m }

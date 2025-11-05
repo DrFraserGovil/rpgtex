@@ -21,6 +21,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * RpgSpell in the dnd theme 
 
+* A more robust interface for 'function redefinitions' instead of relying on Renewing commands
+
+* Generalised section name-getters (RpgChapterName etc) to replace the hacky scifi-theme's redefinition of \chapter.
+
+* RpgFakeChapter to spoof chapters in for (i.e.) whole page images that want to show up on the table of contents
+
 ### Changed
 
 * Cleaned up the command line interface into a consistent terminology: `RpgCMD`, and set it to override document-provided commands

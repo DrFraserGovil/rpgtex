@@ -252,13 +252,17 @@
 			
 			The dnd implementation performs a more advanced operation, computing the average value of the roll, and formatting that first, to replicate the format used by monster stat blocks. 
 
-			\RenewDocumentCommand{\RpgDiceFormat}{m m m}{\DndTempDiceFormat{#1}{#2}{#3}}	
+			\RpgSetDiceFormat{
+				\DndTempDiceFormat{#1}{#2}{#3}
+			}
+
+				
 			\begin{RpgTable}{XX}
 				Example (with \texttt{\bs{}RpgSetTheme{dnd}}) & Output \\
 				\tabverbExample{\RpgDice{  1d6-2}}
 				\tabverbExample{\RpgDice{2D6 + 3*2^2}}
 				\tabverbExample{\RpgDice{1d16}}
-				\tabverbExample{\RpgDice{d8-3}}
+				\tabverbExample{\RpgDice{d8-3} (note the 1 appears!)}
 			\end{RpgTable}
 		}
 
@@ -340,6 +344,14 @@
 		}
 		
 \section{Utility Commands}
+
+	\RpgMacro{RpgFakeChapter}{\param{m}}{Mimics creating a new chapter with \cmd{chapter} (including adding in to the table of contents) without inserting a `chapter heading'}
+	{
+		\cmd{RpgFakeChapter}\param{fake-name}
+	}
+	{
+		The value of \texttt{fake-name} is passed to the table of contents as a `true' chapter, and an update to \cmd{chaptermark} updates the Section Names \RpgPage[p]{S:SectionNames}, and thus the footer appearance.
+	}
 
 	\RpgMacro{RpgOrdinal}{\param{{o m}}}
 		{

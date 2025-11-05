@@ -8,81 +8,22 @@
   % Remove Numbering (If you want Numbering set secnumdepth to the appropriate depth)
   \setcounter{secnumdepth}{0}
 
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % Section formatting
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % Part
 
-%   % Chapter
-%   \titleformat {\chapter}
-%     { \RpgFontChapter } % format
-%     { {\chaptertitlename\ \thechapter :} } % label
-%     { \wordsep } % sep
-%     {  } % before-code
+	\let\Chaptermark\chaptermark
+	\def\chaptermark#1{\def\RpgChapterName{#1}\Chaptermark{#1}}
+	\let\Sectionmark\sectionmark
+	\def\sectionmark#1{\def\RpgSectionName{#1}\Sectionmark{#1}}
+	\let\Subsectionmark\subsectionmark
+	\def\subsectionmark#1{\def\RpgSubsectionName{#1}\Subsectionmark{#1}}
+	\let\Subsubsectionmark\subsubsectionmark
+	\def\subsubsectionmark#1{\def\RpgSubsubsectionName{#1}\Subsubsectionmark{#1}}
+	
 
-%   \titlespacing* {\chapter}
-%     { 0pt }  % left
-%     { .3ex }  % before-sep
-%     { 2.8ex } % after-sep
-
-%   % Section
-%   \titleformat {\section}
-%     { \RpgFontSection } % format
-%     { \thesection } % label
-%     { 1em } % sep
-%     { \nopagebreak } % before-code
-
-%   \titlespacing* { \section }
-%     { 0pt } % left
-%     { 3ex plus .43ex minus .43ex } % before-sep
-%     { 0pt } % after-sep
-
-%   % Subsection
-%   \titleformat {\subsection}
-%     { \RpgFontSubsection } % format
-%     { \thesubsection } % label
-%     { 1em } % sep
-%     { \nopagebreak } % before-code
-
-%   \titlespacing*{ \subsection }
-%     { 0pt } % left
-%     { 1.4ex plus .47ex minus .47ex } % before-sep
-%     { 1.2ex } % after-sep
-
-%   % Subsubsection
-%   \titleformat {\subsubsection}
-%     { \RpgFontSubsubsection } % format
-%     { \thesubsubsection } % label
-%     { 1em } % sep
-%     { \nopagebreak } % before-code
-
-%   \titlespacing* { \subsubsection }
-%     { 0pt } % left
-%   { 2ex plus .67ex minus .67ex } % before-sep
-%     { .2ex } % after-sep
-
-%   % Paragraph
-%   \titleformat {\paragraph} [runin]
-%     { \RpgFontParagraph } % format
-%     { \theparagraph \quad } % label
-%     {0pt} % sep
-%     {}    % before-code
-%     [.~aa]   % after-code
-
-%   \titlespacing* {\paragraph}
-%     {0pt}      % left
-%     {\parskip} % before-sep
-%     {\wordsep} % after-sep
-
-%   % Subparagraph
-%   \titleformat {\subparagraph} [runin]
-%     { \RpgFontSubparagraph } % format
-%     { \thesubparagraph \quad } % label
-%     {0pt} % sep
-%     {}    % before-code
-%     [.~ aaa]   % after-code
-
-%   \titlespacing* {\subparagraph}
-%     {\parindent} % left
-%     {\parskip}   % before-sep
-%     {\wordsep}   % after-sep
+	
+	\NewDocumentCommand\RpgFakeChapter{m}
+	{
+		\phantomsection
+		\addcontentsline{toc}{chapter}{#1}
+		\chaptermark{#1}
+	}
+\ExplSyntaxOff

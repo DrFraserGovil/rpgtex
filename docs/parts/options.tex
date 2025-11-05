@@ -77,6 +77,33 @@
 	\begin{Code}
 		\cmd{colorlet}\{narrationcolor\}\{html\}\{FFFFF\}
 	\end{Code}
+\section{Section Names}\label{S:SectionNames}
+
+	Since many themes customise their appearance beyond the simple use of \texttt{mark}s (such as \texttt{chaptermark}), we have provided direct access to the current name of the chapter, section, subsection and subsection:
+
+	\RpgMacro{RpgChapterName}{}{The name given to the last \cmd{chapter} or \cmd{chapter*} command, or set by calling \cmd{chaptermark}}{}{}
+	\RpgMacro{RpgSectionName}{}{The name given to last \cmd{section} or \cmd{section*} command, or set by calling \cmd{sectionmark}}{}{}
+	\RpgMacro{RpgSubsectionName}{}{The name given to the last \cmd{subsection} or \cmd{chapter*} command, or set by calling \cmd{sectionmark}}{}{}
+	\RpgMacro{RpgSubsubsectionName}{}{The name given to the last \cmd{subsubsection} or \cmd{subsubsection*} command, or set by calling \cmd{subsection}}{}{}
+
+	These names can also be `spoofed' by manually calling a \cmd{mark} (such as \cmd{chaptermark} etc.), and we also provide the \cmdref{RpgFakeChapter} command.
+
+\begin{ExampleBlock}{Section Names}
+   We are in Chapter `\RpgChapterName{}', section `\RpgSectionName{}'.
+
+   \subsubsection{An example subsubsection}
+
+   Now I am in `\RpgSubsubsectionName{}'
+
+   \chaptermark{Spoofed Chapter}
+   
+   I believe I am in a \RpgChapterName{}, though no chapter was actually called. 
+   
+   \chaptermark{Options \& Variables} %%put it back to the real value!
+
+\end{ExampleBlock}
+
+
 
 
 \section{Command Line Interface}\label{S:CMD}

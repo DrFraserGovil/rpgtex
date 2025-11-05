@@ -25,11 +25,12 @@
 	}
 }
 
-%%The original definition to be overwritten by the themes 
-\NewDocumentCommand\RpgDrawPartPage{m}
+
+\NewDocumentCommand{\RpgSetPartPage}{+m}
 {
-	\node at (current~page.center) {\parbox[t]{0.8\linewidth}{\centering \RpgFontPart Part~\thepart \\ #1}};
+	\cs_set:Nn \l__rpg_draw_part_page:n{#1}
 }
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Title pages (with images)
@@ -54,10 +55,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%Used for books, similar ot part page, draws the contents of this macro over the top of the background image specified by \@cover
-\NewDocumentCommand\RpgDrawCover{}{}
+\NewDocumentCommand\RpgSetCover{+m}
+{
+	\cs_set:Nn \l__rpg_draw_cover_page:{#1}
+}
 
 %%%Used for articles, a lightweight, text-only title. Not rendered within a tikzpicture.
-\NewDocumentCommand\RpgSimpleTitle{}{\__rpg_orig_title}
+\NewDocumentCommand\RpgSetSimpleTitle{+m}
+{
+	\cs_set:Nn \l__rpg_simple_title:{#1}
+}
 
 %%Switching command used by classes to choose to use a full-page drawn title, or a simple text title
 
