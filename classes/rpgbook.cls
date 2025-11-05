@@ -11,7 +11,7 @@
 \tl_set:Nn \g__rpg_base_class_tl { extbook }
 
 \input {core/rpgoptions.clo}
-\LoadClass[oneside] { \g__rpg_base_class_tl }
+\LoadClass{ \g__rpg_base_class_tl }
 
 
 

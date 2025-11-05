@@ -13,15 +13,14 @@
 \bool_new:N \l__rpg_justified_bool
 \bool_new:N \l__rpg_multitoc_bool
 \bool_new:N \l__rpg_layout_bool
-\bool_new:N \l__rpg_no_deprecated_code_bool
+\bool_new:N \l__rpg_oneside_bool
 \tl_new:N \l__rpg_font_size_tl
 \tl_new:N \l__rpg_cols_tl
 \bool_new:N \l__rpg_openright_bool
-
+\bool_set_false:N \l__rpg_oneside_bool
 \bool_set_false:N \l__rpg_openright_bool
 \bool_set_true:N \l__rpg_multitoc_bool
 \bool_set_eq:NN \l__rpg_layout_bool \c__rpg_isclass_bool
-
 \RequirePackage{core/theme_engine} %%need this for theme path switching
 
 
@@ -91,7 +90,11 @@
       },
     openright .value_forbidden:n = false,
 
-	themepath .code:n 	={\RpgSetThemePath{#1}},
+	%set oneside forcibly
+	oneside .code:n = {\bool_set_true:N \l__rpg_oneside_bool},
+	oneside .value_forbidden:n = true,
+
+	themepath .code:n 	={\RpgSetThemeP4ath{#1}},
 	themepath .value_required:n = true,
   }
 
@@ -121,6 +124,10 @@
 	}
 	{
 		\PassOptionsToClass{ openany }{\g__rpg_base_class_tl }
+	}
+	\bool_if:NT \l__rpg_oneside_bool
+	{
+		\PassOptionsToClass{ oneside }{\g__rpg_base_class_tl }
 	}
 }
 
