@@ -7,13 +7,15 @@
 \bool_new:N \c__rpg_isclass_bool
 \bool_set_true:N \c__rpg_isclass_bool
 \tl_new:N \g__rpg_base_class_tl
-\tl_set:Nn \g__rpg_base_class_tl { article }
+\tl_set:Nn \g__rpg_base_class_tl { extarticle }
 
 \input {core/rpgoptions.clo}
 \LoadClass { \g__rpg_base_class_tl }
 
 
 \RequirePackage{rpg}
+
+\input{core/abstract}%load the handout-unique redefinition of abstract
 
 %set the flag so that it uses the simple title
 \RpgUseCoverPage{false}
@@ -30,3 +32,4 @@
     \setlength {\parindent}            {1em}
     \setlength {\RaggedRightRightskip} {0pt plus 1em}
     \setlength {\RaggedRightParindent} {\parindent}
+

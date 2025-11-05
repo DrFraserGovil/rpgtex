@@ -2,13 +2,13 @@
 %%It activates the rpg geometry, and overloads title pages and part pages to the theme-determined options
 
 \RequirePackage {expl3}
-\ProvidesExplClass{rpgbook}{2025/10/09} {0.0.0} { Template for RPG material }
+\ProvidesExplClass{rpgbook}{2025/10/09} {0.0.0} { Book Template for RPG material }
 
 
 \bool_new:N \c__rpg_isclass_bool
 \bool_set_true:N \c__rpg_isclass_bool
 \tl_new:N \g__rpg_base_class_tl
-\tl_set:Nn \g__rpg_base_class_tl { book }
+\tl_set:Nn \g__rpg_base_class_tl { extbook }
 
 \input {core/rpgoptions.clo}
 \LoadClass[oneside] { \g__rpg_base_class_tl }

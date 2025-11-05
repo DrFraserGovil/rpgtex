@@ -3,12 +3,12 @@
     \rpgtex{} defines many dozens to hundreds of variables, most with the (expl3) syntax \lMacro{rpg\_[x]}. Most of these are used in the internal functioning of the macros, however a number of them are useful for a designer to understand.
 
 
-\section{Package Options}
+\section{Package Options}\label{S:PackageOptions}
 	Whether the package is invoked directly, or through a class users have the option to pass options to it which change the behavior of the resulting document:
 	\begin{Code}
-		\bs{documentclass}[<options>]{rpgbook/rpghandout}
+		\bs{documentclass}[<options>]\param{rpgbook/rpghandout}
 
-		\bs{usepackage}[<options>]{rpgtex}
+		\bs{usepackage}[<options>]\param{rpgtex}
 	\end{Code}
 	The options are either in the form of key-value pairs which set internal values, or flags which activate behavior when present. The available options are:
 	
@@ -39,7 +39,7 @@
 			size = <font-size>pt
 		}
 		{
-			The allowed values depend on the class being used: the book class (on which rpgbook is based) for example, only accepts values in \{10pt,11pt,12pt\}. Other classes may accept different values.
+			The allowed values depend on the class being used (see the class section, beginning on \RpgPage{S:bookClass}).
 		}
 	\RpgMacro*{theme}{}{The initial value passed to \cmdref{RpgSetTheme} when package initialization is finished.}{}{ 
 		The default value is \texttt{default}, activating the Default Theme \RpgPage[p]{Theme:Default}.
@@ -80,6 +80,10 @@
 \section{Section Names}\label{S:SectionNames}
 
 	Since many themes customise their appearance beyond the simple use of \texttt{mark}s (such as \texttt{chaptermark}), we have provided direct access to the current name of the chapter, section, subsection and subsection:
+
+	\begin{RpgSidebar}{Layout Only}
+		These commands rely on redefining common commands, and therefore are only loaded when in layout mode (i.e. by rpgbook). 
+	\end{RpgSidebar}
 
 	\RpgMacro{RpgChapterName}{}{The name given to the last \cmd{chapter} or \cmd{chapter*} command, or set by calling \cmd{chaptermark}}{}{}
 	\RpgMacro{RpgSectionName}{}{The name given to last \cmd{section} or \cmd{section*} command, or set by calling \cmd{sectionmark}}{}{}
