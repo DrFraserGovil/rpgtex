@@ -156,7 +156,7 @@
 		\IfBooleanTF{#1}
 		{
 			\label{#2}
-			\index{\texttt{#2}}
+			\lcaseidx{#2}
 		}
 		{
 			\label{Macro:#2}
@@ -197,7 +197,7 @@
 
 		%%index
 		\tl_set:Nx \l_tmpa_tl { \str_range:nnn {#1} {8} {-1} }
-		\index{rpgfont@\texttt{\bs{}RpgFont...}!\texttt{\l_tmpa_tl}}
+		\index{rpgfont@\texttt{RpgFont...}!\texttt{\l_tmpa_tl}}
 
 		% \lowercase{\def\temp{\m}}
 		% 	\expandafter\index\expandafter{\temp@\texttt{\textbackslash\m}}

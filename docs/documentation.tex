@@ -20,6 +20,10 @@
   \lowercase{\def\temp{#1}}%
   \expandafter\index\expandafter{\temp}%
 }
+\NewDocumentCommand{\lcaseidx}{m}{
+	\lowercase{\def\temp{#1}}
+	\expandafter\index\expandafter{\temp@\texttt{#1}}
+}
 \NewDocumentCommand{\cmdidx}{ o m }{
 	\foreach \m in {#2}
 	{
@@ -27,12 +31,12 @@
 		\IfNoValueTF{#1}
 		{
 			 \lowercase{\def\temp{\m}}
-			\expandafter\index\expandafter{\temp@\texttt{\textbackslash\m}}
+			\expandafter\index\expandafter{\temp@\texttt{\m}}
 		 }
 		 {
 			% \index{\m}
 			 \lowercase{\def\temp{\m}}
-			\expandafter\index\expandafter{#1!\temp@\texttt{\textbackslash\m}}
+			\expandafter\index\expandafter{#1!\temp@\texttt{\m}}
 		 }
 	}
 }
@@ -80,14 +84,14 @@
 		\input{parts/options.tex}
 		\input{parts/commands.tex}
 		\input{parts/environments.tex}
-	% \part{rpgtex Classes}
-	% 	\input{parts/class_book.tex}
-	% 	\input{parts/class_handout.tex}
-	% 	\input{parts/class_card.tex}
-	% \part{Themes}
-	% 	\input{parts/themes_default.tex}
-	% 	\input{parts/themes_dnd.tex}
-	% 	\input{parts/themes_scifi.tex}
+	\part{rpgtex Classes}
+		\input{parts/class_book.tex}
+		\input{parts/class_handout.tex}
+		\input{parts/class_card.tex}
+	\part{Themes}
+		\input{parts/themes_default.tex}
+		\input{parts/themes_dnd.tex}
+		\input{parts/themes_scifi.tex}
 
 	\RpgSetTheme{default}
 	\printindex
