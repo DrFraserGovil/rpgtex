@@ -128,6 +128,17 @@
     narration-family .value_required:n = true,
     narration-style .tl_set:N         = \l__rpg_narration_style_tl,
     narration-style .value_required:n = true,
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Abstract
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	abstract-title-family .tl_set:N         = \l__rpg_abstract_title_family_tl,
+	abstract-title-family .value_required:n = true,
+	abstract-title-style .tl_set:N         = \l__rpg_abstract_title_style_tl,
+	abstract-title-style .value_required:n = true,
+	abstract-body-family .tl_set:N         = \l__rpg_abstract_body_family_tl,
+	abstract-body-family .value_required:n = true,
+	abstract-body-style .tl_set:N         = \l__rpg_abstract_body_style_tl,
+	abstract-body-style .value_required:n = true,
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Table of Contents
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -298,13 +309,16 @@
 \NewDocumentCommand{\RpgFontDropCap}{}
   { \l__rpg_drop_cap_family_tl \l__rpg_drop_cap_style_tl }
 
-  \NewDocumentCommand{\RpgFontDropCapInternal}{}
+\NewDocumentCommand{\RpgFontDropCapInternal}{}
   { \l__rpg_drop_cap_internal_tl }
 
 \NewDocumentCommand{\RpgFontEmphasis}{}
-{
-	\l__rpg_emph_family_tl \l__rpg_emph_style_tl
-}
+	{\l__rpg_emph_family_tl \l__rpg_emph_style_tl}
+
+\NewDocumentCommand{\RpgFontAbstractTitle}{}
+	{\l__rpg_abstract_title_family_tl \l__rpg_abstract_title_style_tl}
+\NewDocumentCommand{\RpgFontAbstractBody}{}
+	{\l__rpg_abstract_body_family_tl \l__rpg_abstract_body_style_tl}
 
 \RenewDocumentCommand{\emph}{m}
 {

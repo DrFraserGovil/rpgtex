@@ -1,0 +1,37 @@
+	
+%% Redefines the abstract environment so that it behaves the same way in both twocol and onecol modes
+
+\ExplSyntaxOn
+\RequirePackage{cuted} %for split
+
+
+\RenewDocumentEnvironment{abstract}{O{Abstract} +b}
+{
+	%put the contents into a box	
+	\def\contents{
+		\centering %center the box in the page
+		\parbox[t]{0.7\linewidth}{
+	
+		\tl_if_blank:eF{#1}{{\centering \RpgFontAbstractTitle{} #1\par}}
+		
+				{\RpgFontAbstractBody{} #2}}
+	}
+
+	%%now do some fiddling to get the gaps consistent
+	\def\gap{15pt}
+	\setlength{\stripsep}{\gap}
+	\str_case:Nn \l__rpg_cols_tl
+	{
+		{onecolumn}{\vspace{\gap}\contents\\[\gap] } %%if in on col mode, just put the box into the page
+		{twocolumn}{\begin{strip}\contents\end{strip}} %% if in twocol, wrap it in a split
+	}
+}{}
+
+%%Simple redefinition with a different default value
+\NewDocumentEnvironment{summary}{O{Summary}}
+{
+	\begin{abstract}[#1]
+}
+{
+	\end{abstract}
+}

@@ -1,1 +1,73 @@
 \chapter{rpgbook Class}\label{S:bookClass}
+
+	The rpgbook class is designed for writing long form documents such as rulebooks and sourcebooks for RPGs - cases where you need to be able to organise things into parts and chapters!
+	
+		
+	\section*{Features}
+
+		\subsection{Inherited Class}
+
+			The rpgbook class inherits from \forcelink{https://ctan.org/pkg/extsizes}{the extbook class}. This is an extension to the basic \texttt{book} class to allow more fontsizes to be accepted. Otherwise it behaves near-identically to the standard book class.
+
+			% \begin{RpgTip}{A known quirk}
+			% 	The only notable deviation between \texttt{book} and \texttt{extbook} that I have found is that even with \texttt{openany} mode active, \texttt{extbook} will still add a blank page after every \cmd{part} call. This problem has been reported by \forcelink{https://latex.org/forum/viewtopic.php?t=24722}{others for a decade}, but has not been fixed. 
+
+			% 	However, since rpgbook will almost always will be using custom part pages (via \cmdref{RpgSetPartPage}) this is of minimal concern.
+			% \end{RpgTip}
+
+			The full list of sizes which extbook can accept (and thus allowed inputs for the \texttt{size} option \RpgPage[p]{size}) is ``eight, nine, ten, eleven, twelve, fourteen, seventeen and twenty points''.
+
+			\subsubsection{Special Commands}
+
+				rpgbook inherits the following notable commands from the book class, which are not available in other classes:
+
+				\RpgMacro{frontmatter}{\param{}}{Activates `preliminary formatting' for the introductory sections}{}{
+					The initial formatting mimics formatting found in forewords and other miscellaneous text before the `main body' begins:
+					\begin{enumerate}
+						\item Chapters are un-numbered (as if called with \cmd{chapter*}), despite being entered into the table of contents.
+						\item Page numbers are changed to lowercase roman (i, ii, etc.)
+					\end{enumerate}
+				}
+				\RpgMacro{mainmatter}{\param{}}{Disables the special formatting.}{}{The `main matter' is the bulk of the text, and the expected formatting the user requests. 
+				
+					When mainmatter is called, the page number is reset back to 1 -- this may cause the PDF page counter to differ from those which appear in the footer. The values reported by \cmd{pageref} and \cmd{RpgPage} refer to the `footer page numbers', not the PDF page numebrs.
+				}
+
+				\RpgMacro{backmatter}{\param{}}{Activates `appendix formatting'}{}
+				{
+					Appendix formatting does not change the page numbering, but disables the chapter numbering as in the \texttt{frontmatter}
+				}
+			
+		\subsection{Options}
+
+			The rpgbook interacts with all of the options detailed on \RpgPage{S:PackageOptions}. Note that there is no `forwarding' to the underlying class and that there is a slightly different syntax for, i.e., setting the global font size. 
+
+		\subsection{Geometry}
+
+			The default geometry for an rpgbook is:
+			\begin{RpgTable}{ll}
+				Element & Size
+				\\
+				Left and right margin & 0.65in
+				\\
+				Top margin & 0.4in
+				\\
+				Bottom margin (from main text to page bottom) & 0.75in
+				\\
+				Bottom margin (from main text to top of footer area) & 0.3in 
+				\\
+				Gap between columns in twocolumn mode & 0.25in
+			\end{RpgTable}
+		\subsection{Interactions}
+
+			\begin{itemize}
+				\item RPG books set \cmdref{RpgUseCoverPage} to true
+				\item The extbook provides the \texttt{part} and \texttt{chapter} 
+				\item The \texttt{layout} mode is activated
+				\begin{enumerate}
+					\item Unless print mode is active, the page background will use the image set by \cmdref{RpgSetPaper}
+					\item Calling \cmd{RpgSetTheme} clears the page (so that the old theme may complete)
+				\end{enumerate}
+				\item A table of contents is available and formatted using the ToC-fonts
+			\end{itemize}
+
