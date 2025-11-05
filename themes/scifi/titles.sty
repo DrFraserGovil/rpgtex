@@ -2,7 +2,7 @@
 \renewcommand{\thepart}{\arabic{part}}
 \ExplSyntaxOff
 
-\RenewDocumentCommand\RpgDrawPartPage{m}
+\RpgSetPartPage
 {
     % Add a semi-transparent black overlay for text visibility
 	\fill [white, opacity=0.3] ($(current  page.center)+(-4cm,-4cm)$) rectangle ($(current  page.center)+(4cm,4cm)$) ;
@@ -17,7 +17,7 @@
 		\RpgContour[outer=white!50!titleblue,inner=titleblue,style=\RpgFontPart\Huge]{{#1}}}};
 }
 
-\RenewDocumentCommand{\RpgDrawCover}{}
+\RpgSetCover
 {
 	\node[text width=0.8\paperwidth, anchor=north] at ($(current page.north)+(0,-3cm)$) {\centering\RpgContour[outer=titleblue,inner=white,style=
 	\RpgFontTitle]{\@title}};

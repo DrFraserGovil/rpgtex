@@ -8,37 +8,5 @@
     {} % filler-page-format
     [  \addvspace{.1cm } \titleline{ \color{black} \titlerule[1pt] } ] % below-code
 
-%% redefine the chapter macro so that it also saves the chapter names
 
-\tl_new:N \l__rpg_current_chapter_tl
-\newcommand \CurrentRpgChapter
-{
-    \tl_use:N \l__rpg_current_chapter_tl
-}
-
- \cs_if_exist:NT \chapter
-    {
-        % CRITICAL STEP: We only need to alias the base command.
-        \let \oldchapter \chapter
-        \RenewDocumentCommand \chapter { s o m }
-        {
-
-            \IfBooleanTF #1 % If \chapter* was used
-            {
-                % Call the original starred version: \oldchapter*{#3}
-                \oldchapter* { #3 }
-            }
-            {
-                % Not starred (\chapter or \chapter[...]): Check for optional argument (#2)
-                \IfValueTF { #2 }
-                {
-                    \oldchapter [ #2 ] { #3 }
-                }
-                {
-                    \oldchapter { #3 }
-                }
-            }
-			\tl_set:Nn \l__rpg_current_chapter_tl { #3 }
-        }
-    }
 \ExplSyntaxOff

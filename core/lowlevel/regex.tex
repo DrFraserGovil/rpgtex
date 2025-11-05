@@ -28,7 +28,8 @@
 		
 
           % --- Pass everything to the formatter ---
-          \RpgDiceFormat{ \l__dice_number_tl }     % #1: Number/Dice Count (can be empty = 1)
+          \__rpg_dice_formatter:nnn
+		  				{ \l__dice_number_tl }     % #1: Number/Dice Count (can be empty = 1)
             			{ \l__dice_sides_tl }      % #2: Size of dice
             			{ \fp_compare:nNnT { \fp_use:N \l_tmpa_fp } { > } { 0 }{+}\fp_use:N \l_tmpa_fp} % #3 final computed modifier (with + if positive)
         }

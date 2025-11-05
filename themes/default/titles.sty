@@ -1,5 +1,5 @@
 \ExplSyntaxOff %%turn off to simplify formatting
-\RenewDocumentCommand\RpgDrawPartPage{m}
+\RpgSetPartPage
 {
     \fill [white, opacity=0.5] (current page.south west) rectangle (current page.north east);
 
@@ -17,8 +17,7 @@
 
 }
 
-\RenewDocumentCommand\RpgDrawCover{}
-{
+\RpgSetCover{
 
     %Add a semi-transparent black overlay for text visibility
     \fill [white, opacity=0.5] (current page.south west) rectangle (current page.north east);
@@ -45,7 +44,7 @@
 }
 
 \ExplSyntaxOn %%turn on for if statement
-\RenewDocumentCommand{\RpgSimpleTitle}{}{
+\RpgSetSimpleTitle{
 	\def\contents{
 		\begin{center}
 			\RpgFontTitle 
