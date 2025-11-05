@@ -31,7 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * Added the abstract/summary environment to the rpghandout & associated fonts
 
-
+* Added a oneside interface (inspired by the fact that the documentation needs it)
 
 ### Changed
 

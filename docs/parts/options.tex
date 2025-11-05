@@ -32,8 +32,18 @@
 
 			This flag also changes the behavior of the rpgcard class \RpgPage[p]{S:cardClass}, and other environments may similarly change their colours or layouts in response to the values passed to this command. Internally these commands are responding specifically to the presence of the paper or the footer flags.
 		}
+		
+	\RpgMacro*{columns}{}{Sets the number of columns the document is has}
+		{
+			columns = <1 / 2>
+		}
+		{
+			Internally this calls either onecolumn or twocolumn. More advanced column-settings would require the user manually using \texttt{multicols}.
+		}
+            
 	\RpgMacro*{justified}{}{A flag which, if present, activates justified-text mode. Otherwise, defaults to left-aligned, `ragged right'.}{}{}
 	\RpgMacro*{nomultitoc}{}{A flag which, if present, disabled the multi-column table of contents option}{}{}
+	\RpgMacro*{oneside}{}{Forces the document into oneside mode. Disables alternating footers but allows consistent asymmetric margins (such as in this document, where the left margin is larger to accommodate macro names)}{}{}
 	\RpgMacro*{size}{}{Sets the font size equal to the value, if allowed by the parent class.}
 		{
 			size = <font-size>pt
@@ -47,15 +57,7 @@
 	\RpgMacro*{themepath}{}{Calls \cmdref{RpgSetThemePath}, a directory holding multiple theme files used for auto-theme searches if a direct path not given}{}{
 		Default value is \texttt{\bs{}RpgPackagePath/themes}, with the assumption that the theme `name' is stored in \texttt{themes/name/name.cfg}.
 		}
-	
-	\RpgMacro*{columns}{}{Sets the number of columns the document is has}
-		{
-			columns = <1 / 2>
-		}
-		{
-			Internally this calls either onecolumn or twocolumn. More advanced column-settings would require the user manually using \texttt{multicols}.
-		}
-            
+
 
 \section{Colo(u)rs}\label{S:Colors}
 
