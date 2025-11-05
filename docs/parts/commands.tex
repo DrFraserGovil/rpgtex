@@ -145,7 +145,20 @@
 
 \section{Fonts \& Decorative Text}
 	% In addition to the fundamental typeface alterations \rpgtex{} includes a number of commands to turn text into decorative elements.
-		\RpgMacro{RpgContour}{\param{\param\paramO{} m}}
+		\RpgMacro{emph}{\param{m},\cmd{key},\param{m}}{Uses the \texttt{RpgFontEmphasis} font to emphasise text.\cmdidx{key}}
+		{
+			\cmd{emph}\param{text}
+
+			\cmd{key}\param{text}
+		}
+		{
+			The \cmd{emph} command is usually a `context aware' emphasis command: equal to \cmd{textit} normally, \cmd{textbf} when the surrounding text is italics etc. 
+
+			However, for RPGs, it is convenient to be able to identify \emph{keywords} in a consistent fashion. The \cmd{emph} command has therefore been redefined to use the \texttt{RpgFontEmphasis} font which can be configured to give a desired `keyword formatting'.
+			
+			The command \cmd{key} has also been provided, as a direct alias for \cmd{emph}.
+		}
+		\RpgMacro{RpgContour}{\param{\paramO{} m}}
 			{	
 				Renders text with a \RpgContour[inner=red,outer=black]{contour effect}. The color and style are set through key/value pairs.
 			}
@@ -177,7 +190,7 @@
 				\end{RpgTable}
 				For robustness, we therefore recommend that all stylisation be applied through the \texttt{style} command, which is applied to each tokenised element, and therefore guaranteed to work as expected.
 			}
-		\RpgMacro{RpgDropCap}{\param{\paramO{}, m m}}
+		\RpgMacro{RpgDropCap}{\param{\paramO{} m m}}
 			{	
 				Creates a decorative `drop cap' letter to begin a new chapter with, and modifies the following text.
 			}

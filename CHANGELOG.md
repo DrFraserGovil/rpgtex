@@ -27,6 +27,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 * RpgFakeChapter to spoof chapters in for (i.e.) whole page images that want to show up on the table of contents
 
+* An emphasis font/hook
+
+
+
 ### Changed
 
 * Cleaned up the command line interface into a consistent terminology: `RpgCMD`, and set it to override document-provided commands
