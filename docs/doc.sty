@@ -235,4 +235,33 @@
 			\l_tmp_mean_tl{}~(#1 d#2
 			\fp_compare:nNnTF { #3 } { = } { 0 }{}{#3})
 	}
+
+
+\tl_new:N \l_mypackage_F_code_tl
+\tl_set:Nn \l_mypackage_F_code_tl
+{
+    \fbox{\color{gray} \itshape Default~Implementation:}~#1~|~#2~|~#3
+}
+
+% 2. Define the public interface command F{m m m}
+\NewDocumentCommand{\F}{mmm}
+{
+    % The command F simply executes the code stored in the tl variable.
+    % \tl_set:Nn ensures the arguments #1, #2, #3 are available to the code in the tl.
+    \tl_set:Nn \l_mypackage_F_code_tl { \l_mypackage_F_code_tl }
+    \tl_set:Nn \l_mypackage_F_code_tl { #1 }
+    \tl_set:Nn \l_mypackage_F_code_tl { #2 }
+    \tl_set:Nn \l_mypackage_F_code_tl { #3 }
+    
+    % Execute the stored code with the three arguments
+    \l_mypackage_F_code_tl
+}
+
+% 3. Define the theme override function (for themes to call)
+\NewDocumentCommand{\SetupFCode}{m}
+{
+    % This command allows the theme designer to completely replace the code
+    \tl_set:Nn \l_mypackage_F_code_tl {#1}
+}
+
 	\ExplSyntaxOff{}
