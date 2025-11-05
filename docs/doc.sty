@@ -13,26 +13,6 @@
 \usepackage{makecell}
 \usepackage{adjustbox}
 
-\newcommand{\lindex}[1]{%
-  \lowercase{\def\temp{#1}}%
-  \expandafter\index\expandafter{\temp}%
-}
-\NewDocumentCommand{\cmdidx}{ o m }{
-	\foreach \m in {#2}
-	{
-		% \lindex{\texttt{\textbackslash{}\lowercase{\m}}@{\lowercase{\m}}}
-		\IfNoValueTF{#1}
-		{
-			 \lowercase{\def\temp{\m}}
-			\expandafter\index\expandafter{\temp@\texttt{\textbackslash\m}}
-		 }
-		 {
-			% \index{\m}
-			 \lowercase{\def\temp{\m}}
-			\expandafter\index\expandafter{#1!\temp@\texttt{\textbackslash\m}}
-		 }
-	}
-}
 
 \newcommand\labelsection[1]
 {
@@ -50,6 +30,7 @@
 	\end{minipage}
 	}
 	
+\definecolor {backred}{HTML}{802020}
 \tcbuselibrary{listings,hooks}
 \newtcblisting{ExampleBlock}[2][]{
 
@@ -89,7 +70,7 @@
 			% 	RpgSetFont
 			% }
         },
-		% colframe=gre,
+		colframe=backred,
         colback=gray!10,
        boxrule=1pt,
     	listing~side~text,
