@@ -1,7 +1,9 @@
 # RPG LaTeX Template
 
-<!-- [![Latest release](https://img.shields.io/github/release/rpgtex/DND-5e-LaTeX-Template/all.svg)](https://github.com/rpgtex/DND-5e-LaTeX-Template/releases/latest)
-[![Build Status](https://img.shields.io/circleci/project/github/rpgtex/DND-5e-LaTeX-Template/master.svg?style=flat)](https://circleci.com/gh/rpgtex/DND-5e-LaTeX-Template) -->
+[![GitHub Release](https://img.shields.io/github/release/DrFraserGovil/rpgtex/all)](https://github.com/DrFraserGovil/rpgtex/releases/latest) 
+[![Documentation](https://img.shields.io/badge/Documentation-blue.svg)](https://raw.githubusercontent.com/DrFraserGovil/rpgtex/main/docs/documentation.pdf) 
+[![History](https://img.shields.io/badge/History-yellow.svg)](https://github.com/DrFraserGovil/rpgtex/blob/main/CHANGELOG.md)
+[![Roadmap](https://img.shields.io/badge/Planned_Features-darkgreen.svg)](https://github.com/DrFraserGovil/rpgtex/blob/main/ROADMAP.md)
 
 This is a LaTeX template for typesetting documents for Roleplaying Games of all types. `rpgtex` consists of a central 'core' which defines a number of useful commands and classes and an interface by which 'themes' may be loaded to modify the visual appearance -- we provide three basic themes (default, dnd and scifi).
 
