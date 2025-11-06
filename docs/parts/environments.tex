@@ -27,10 +27,59 @@
 					Key & Values & Effect
 					\\
 					\kve{width}{dimexpr}{The outer width of the RPG card}
-					\kve{text-width}{dimexpr}{The width of the text block}
+					\kve{hmargin}{dimexpr}{The horizontal margin between the card boundary and the inner text}
+					\kve{height}{dimexpr}{The outer height of the RPG card}
+					\kve{vmargin}{dimexpr}{The vertical margin between the card boundary and the inner text}
+					\kve{cardsep}{dimexpr}{The horizontal space inserted after a card is finished}
+					\kve{color}{color specifier}{The background color of the image. Replaces \textit{tcb/colback}}
+					\kve{opacity}{[0-1]}{The opacity of the background of the image. Replaces \textit{tcb/opacityback}}
+					\kve{under-img}{img/path}{An image to be used as the background of the card. Clipped to the card background so no overspill occurs.}
+					\kve{underlay}{img/path}{An alias for under-img, which replaces \textit{tcb/underlay} to prevent premature tikz expansion.}
 				\end{RpgTable}
+
+				The formatting of RpgCard otherwise follows that of a \tcref{}, and all other tcb options can be passed in as normal. However, since the title-frame causes issues with the height calculations, RpgCards cannot use the tcb title interface: any attempt to set a title will fail. We provide two aliases, \texttt{color} and \texttt{opacity}, to make setting the usual values, \texttt{colback} and \texttt{opacityback}, less verbose and obtuse.
+
                 Options passed to the environment take precedence to the global variables.
-            }
+
+			
+
+				}
+				\begin{figure}
+				\begin{center}
+					\begin{tikzpicture}
+			
+						\node[anchor=south west,inner sep=0pt,outer sep=0pt] at (0,0) {
+			
+						\begin{RpgCard}[hmargin=0.5cm,vmargin=0.5cm]
+	
+							\noindent\ignorespaces\footnotesize 
+	
+							top left \hfill top right
+	
+							
+							\vfill
+							\tiny \lipsum[1]
+	
+							\vfill
+							
+							bottom left \hfill bottom right
+	
+						\end{RpgCard}\ignorespaces
+						};
+						\fill[white,opacity=0.6] (0,0) rectangle (5.35,8.8);
+						% \draw(0.5,0.5) rectangle (4.85,8.3);
+						% \draw[red,<->,thick] (0.7,0.5)-- node[right,rotate=90,anchor=north]{text height}++(0,7.8cm);
+						\draw[red,<->,thick] (0.7,0)-- node[fill=white,right,rotate=90,anchor=north]{height}++(0,8.8cm);
+						\draw[red,<->,thick] (1.4,0)-- node[right]{vmargin}++(0,0.5cm);
+						\draw[red,<->,thick] (1.4,8.3)-- node[right]{vmargin}++(0,0.5cm);
+	
+						\draw[green!70!black,<->,thick] (0.5,2)--node[below]{width}++(4.35,0);
+						\draw[green!70!black,<->,thick] (0,2.4)--node[below,rotate=90,anchor=east]{hmargin}++(0.5,0);
+						\draw[green!70!black,<->,thick] (4.85,2.4)--node[below,rotate=90,anchor=east]{hmargin}++(0.5,0);
+					\end{tikzpicture}
+				\end{center}
+				\caption{The dimensions of an RpgCard}
+			\end{figure}
                 
     \subsection{Helper Commands}
 		
@@ -39,10 +88,25 @@
 			\cmd{RpgSetCard}\param{<key/values>}
 		}
 		{
-			The \texttt{<opts>} can contain any of the valid inputs to the \texttt{RpgCard} environment: this acts to set them as global default values. 
+			The \texttt{<opts>} can contain any of the valid inputs to the \texttt{RpgCard} environment: this acts to set them as global default values, but any locally set values will override them.
 		}
 
-		
+		\RpgMacro{RpgResetCard}{\param{}}{Resets changes made to card parameters back to the defalt value.}{}{}
+		% \RpgMacro{}
+\newpage
+		\RpgMacro{cardbreak}{\param{}}{Analogous to \cmd{pagebreak}, forces a card to break at the specified location.}
+		{
+			<before-text>
+
+			\cmd{cardbreak}
+			
+			<after-text>
+		}
+		{
+			The command inserts an infinite, but hidden, vertical space penalty, causing the card to break at its location, as if it had been `filled up'.
+
+			\cmd{cardbreak} is any empty function outside of the \texttt{RpgCard} environment, so it will have no effect on RpgCardSwitch environments.
+		}
     \subsection{Examples}
 
  \begin{ExampleBlock}[RpgCard,footnote]{Simple RpgCard}
@@ -59,6 +123,7 @@
  \blindtext
  \end{RpgCard}
  \end{ExampleBlock}
+
 
 \labelsection{RpgMap}
 
