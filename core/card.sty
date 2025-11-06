@@ -13,18 +13,22 @@
 
 \input{core/lowlevel/card}
 
-\keys_define:nn {rpg / card}
+
+\__rpg_add_tl_keys:Nn {rpg/card}
 {
-	width .tl_set:N = {\l__card_width_tl},
-	height .tl_set:N = {\l__card_height_tl},
-	text-width .tl_set:N = {\l__card_text_width_tl},
-	text-height .tl_set:N = {\l__card_text_height_tl},
-	color .tl_set:N = {\l__color_intercept_tl},
-	opacity .tl_set:N = {\l__opacity_intercept_tl},
-	cardsep .tl_set:N = {\l__card_hskip_tl},
-	under-img .tl_set:N = {\l__card_background_tl},
-	underlay .tl_set:N = {\l__card_background_tl},
+	%dimensions
+	\__rpg_tl_key:nnn {width}{\l__card_width_tl}{8.8cm}
+	\__rpg_tl_key:nnn {height}{\l__card_height_tl}{5.35cm}
+	\__rpg_tl_key:nnn {hmargin}{\l__card_hmargin_tl}{0.3cm}
+	\__rpg_tl_key:nnn {vmargin}{\l__card_vmargin_tl}{0.3cm}
+	\__rpg_tl_key:nnn {cardsep}{\l__card_hskip_tl}{0.1cm}
+	%%appearance
+	\__rpg_tl_key:nnn {color}{\l__color_intercept_tl}{white}
+	\__rpg_tl_key:nnn {opacity}{\l__opacity_intercept_tl}{1}
+	\__rpg_tl_key:nnn {underlay}{\l__card_background_tl}{}
+	\__rpg_tl_key:nnn {under-img}{\l__card_background_tl}{}	
 }
+
 
 %% (Locally) add elements in to the rpgcard specification
 \NewDocumentCommand{\RpgSetCard}{m}{
@@ -61,16 +65,28 @@
 		}
 	}
 
-
-	%%Dimension check! Even if these conditions met, not guaranteed to look good as there needs to be some buffer
-	%%But this should at least tell you when something really wrong has happened
-	\dim_compare:nT{\l__card_text_width_tl > \l__card_width_tl}
+	% Now set the text widths from the box widths and the margins
+	\tl_set:Nn \l__card_text_width_tl
 	{
-		\msg_error:nneeee {rpg}{card-dimensions}{text~width}{\l__card_text_width_tl}{card~width}{\l__card_width_tl}
+		\dim_eval:n{
+			\l__card_width_tl - (\l__card_hmargin_tl * 2)
+		}
 	}
-	\dim_compare:nT{\l__card_text_height_tl > \l__card_height_tl}
+	\tl_set:Nn \l__card_text_height_tl
 	{
-		\msg_error:nneeee {rpg}{card-dimensions}{text~height}{\l__card_text_height_tl}{card~height}{\l__card_height_tl}
+		\dim_eval:n{
+			\l__card_height_tl - (\l__card_vmargin_tl * 2)
+		}
+	}
+	
+	%%Dimension check! Check the heights didn't go negative
+	\dim_compare:nT{\l__card_text_width_tl <= 0pt}
+	{
+		\msg_error:nneeee {rpg}{card-dimensions}{hmargin}{\l__card_hmargin_tl}{\dim_eval:n{\l__card_width_tl /2}}{width}
+	}
+	\dim_compare:nT{\l__card_text_height_tl <= 0pt}
+	{
+		\msg_error:nneeee {rpg}{card-dimensions}{vmargin}{\l__card_vmargin_tl}{\dim_eval:n{\l__card_height_tl /2}}{height}
 	}
 
 }
@@ -82,19 +98,14 @@
 		
 		width=5.35cm,
 		height=8.8cm,
-		text-width=4.5cm,
-		text-height=8.4cm,
 		% % % Appearance
 		colframe=black,         % Border color
 		arc=1mm,                % Rounded corners (card-like)
 		% % % Layout and padding
-		% left~skip=0pt, right~skip=0pt, % Ensure it fits naturally
 		boxsep=0pt,                  % No extra space around the box
 		% % % Default background
 		enhanced~jigsaw,
-		% standard~jigsaw,             % Use internal spacing system
 		color=white,
-		% opacity=0,
 		cardsep={5pt},
 		under-img={},
 	}

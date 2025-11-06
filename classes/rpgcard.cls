@@ -33,7 +33,7 @@
 
 % \input {rpgcore.def}
 % %%custom card stuff
-\RpgSetCardMode{true}
+\RpgUseCards{true}
 
 
 
