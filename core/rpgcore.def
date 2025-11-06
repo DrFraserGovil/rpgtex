@@ -78,6 +78,7 @@
 \RequirePackage {core/table}      % tables
 \RequirePackage {core/titles}
 \RequirePackage {core/headerdecorations}     % fancy headers and footers
+\RequirePackage{core/switchenv}
 \RequirePackage{core/card}
 %
  % %% packages which do nothing but alter geometry/page settings, and so are ignored if the header layout setting is not active
