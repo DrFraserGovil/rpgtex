@@ -5,9 +5,19 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Documentation
+
+* Spun documentation off into its own branch, to formalise that its a separate task than development
+
+* Moved CHANGELOG into the docs folder where it belongs
+
+* Created the ROADMAP document as a formalised 'to do list'
+
 ## 0.3.1 (2025-11-06)
 
-* Restructured the README to provide some nice backgrounds
+* Restructured the README to provide some nice backgrounds (released so that links would work as expected)
 
 ## 0.3.0 (2025-11-06)
 
