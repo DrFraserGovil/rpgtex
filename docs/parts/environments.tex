@@ -13,7 +13,7 @@
     \subsection{The Environment}
         \RpgMacro*{RpgCard}{\param{\paramO}}{Splits the contents across a number of playing-card sized units}{
             
-                \cmd{begin}\param{RpgCard}[<opts>]
+                \cmd{begin}\param{RpgCard}[<key-value-opts>]
 
                 ~~~~~~<contents>
 
@@ -21,7 +21,15 @@
             }{
                 Creates a card environment with a height and width defined either by \texttt{<opts>}, or the global variables. Text is automatically broken if it exceeds this height, creating multiple cards to hold the text.
 
-                The \texttt{<opts>} can contain any of the valid inputs to \cmd{RpgSetCard} (see below). Options passed to the environment take precedence to the global variables.
+				The available options are:
+				\newcommand\kve[3]{\texttt{#1} & #2 & #3\\}
+				\begin{RpgTable}{llX}
+					Key & Values & Effect
+					\\
+					\kve{width}{dimexpr}{The outer width of the RPG card}
+					\kve{text-width}{dimexpr}{The width of the text block}
+				\end{RpgTable}
+                Options passed to the environment take precedence to the global variables.
             }
                 
     \subsection{Helper Commands}
@@ -31,9 +39,10 @@
 			\cmd{RpgSetCard}\param{<key/values>}
 		}
 		{
-			
+			The \texttt{<opts>} can contain any of the valid inputs to the \texttt{RpgCard} environment: this acts to set them as global default values. 
 		}
 
+		
     \subsection{Examples}
 
  \begin{ExampleBlock}[RpgCard,footnote]{Simple RpgCard}
