@@ -1,4 +1,4 @@
-\chapter{Switchable Environments}
+\chapter{Switchable Environments}\label{S:SwitchEnv}
 
 	Often it is convenient to be able to toggle between two different environments depending on an external flag. In the context of an RPG this might be for a number of reasons: having a player version and a GM version, or having a screen-readable version versus a printable one. 
 
@@ -10,4 +10,42 @@
 		An itemize and an enumerate are `similar': an itemize and a figure are not.
 	\end{RpgSidebar}
 
-	% \section{RpgSwitchable }
+	\labelsection{RpgSwitchEnv}
+	\RpgMacro*{RpgSwitchEnv}{\param{m o m o m}}
+		{
+			Acts as one of two similar environments based on the value of an input key.
+		}{
+			\cmd{begin}\param{RpgSwitchEnv}\param{<key>}[opt-1]\param{env-1}[opt-2]\param{env-2}
+
+			~~<contents>
+
+			\cmd{end}\param{RpgSwitchEnv}
+		}{
+			The \texttt{key} is an input token (a string) which should be in the global \textit{switch-registry} (see below). If the value associated with the key in the registry is false, then the environment acts as \texttt{env-1} (with optional arguments \texttt{[opt-1]}), whilst if the switch is true, the environment acts as \texttt{env-2[opt-2]}.
+
+			Due to the way that token expansion works, it is possible to pass \textit{additional} arguments to this environment:
+			\begin{Code}
+				\cmd{begin}\param{RpgSwitchEnv}\param{<key>}[opt-1]\param{env-1}[opt-2]\param{env-2}\param{arg1}\param{arg2}
+			\end{Code}
+			Formally speaking, \texttt{arg1} and \texttt{arg2} are a part of the body of the environment; however if both env-1 and env-2 are expecting two arguments, then the token expansion captures them. It is also possible to use a shared optional argument, instead of the unique arguments:
+			\begin{Code}
+				\cmd{begin}\param{RpgSwitchEnv}\param{<key>}\param{env-1}\param{env-2}[shared-opt]
+			\end{Code}
+			If however, the environments are not similar, and take different numbers of arguments then any excess arguments are inserted into the body of the environment, which can cause unexpected behaviour.
+
+			An error is thrown if \texttt{key} does not exist in the global registry.
+		}
+		\RpgMacro{RpgSetSwitch}{\param{m m}}
+			{Change the value of a \textit{switch}, and therefore the behaviour of the associated RpgSwitchEnv}{\cmd{RpgSetSwitch}\param{<key>}\param{<value>}}
+			{
+				Sets the value of the \texttt{key} in the \textit{switch-registry} to \texttt{{value}}, which must be a 'bool-ish' text string\footnote{That is, either \param{true,True,1} or \param{false,False,0}}. If the entry does not exist in the registry, it is created.
+
+				After the key is set, all subsequent \texttt{RpgSwitchEnv} calls which use that key will have their behaviour altered to match the new key.
+			}
+	\labelsection{RpgSecret}
+
+
+
+	\labelsection{RpgItem}
+
+	\labelsection{RpgAbility}
