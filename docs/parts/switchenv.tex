@@ -1,51 +1,111 @@
 \chapter{Switchable Environments}\label{S:SwitchEnv}
 
-	Often it is convenient to be able to toggle between two different environments depending on an external flag. In the context of an RPG this might be for a number of reasons: having a player version and a GM version, or having a screen-readable version versus a printable one. 
+    Often it is convenient to be able to toggle between two different environments depending on an external flag. In the context of an RPG this might be for a number of reasons: having a player version and a GM version, or having a screen-readable version versus a printable one. 
 
-	Whilst it is obviously possible to build an environment which performs the switching for you, we provide a generic interface for switching between \textit{similar environments}.
+    Whilst it is obviously possible to build an environment which performs the switching for you, we provide a generic interface for switching between \textit{similar environments}.
 
-	\begin{RpgSidebar}{'Similar' Environments}
-		It is important to note that this system only works for switching between environments which are `similar', insofar as they permit the same number and order of arguments, and interpret their contents similarly.
+    \begin{RpgSidebar}{'Similar' Environments}
+        It is important to note that this system only works for switching between environments which are `similar', insofar as they permit the same number and order of arguments, and interpret their contents similarly.
 
-		An itemize and an enumerate are `similar': an itemize and a figure are not.
-	\end{RpgSidebar}
+        An itemize and an enumerate are `similar': an itemize and a figure are not.
+    \end{RpgSidebar}
 
-	\labelsection{RpgSwitchEnv}
-	\RpgMacro*{RpgSwitchEnv}{\param{m o m o m}}
-		{
-			Acts as one of two similar environments based on the value of an input key.
-		}{
-			\cmd{begin}\param{RpgSwitchEnv}\param{<key>}[opt-1]\param{env-1}[opt-2]\param{env-2}
+    The overall goal of the RpgSwitchEnv is to reduce the amount of duplication that an author has to do to get the same text in multiple different forms. The system was originally designed for the \texttt{RpgCard} environment, to enable the same text to be written 'in the book' and 'on the card' with minimal duplication. 
 
-			~~<contents>
+    \labelsection{RpgSwitchEnv}
+    \RpgMacro*{RpgSwitchEnv}{\param{m o m o m}}
+        {
+            Acts as one of two similar environments based on the value of an input key.
+        }{
+            \cmd{begin}\param{RpgSwitchEnv}\param{<key>}[opt-1]\param{env-1}[opt-2]\param{env-2}
 
-			\cmd{end}\param{RpgSwitchEnv}
-		}{
-			The \texttt{key} is an input token (a string) which should be in the global \textit{switch-registry} (see below). If the value associated with the key in the registry is false, then the environment acts as \texttt{env-1} (with optional arguments \texttt{[opt-1]}), whilst if the switch is true, the environment acts as \texttt{env-2[opt-2]}.
+            ~~<contents>
 
-			Due to the way that token expansion works, it is possible to pass \textit{additional} arguments to this environment:
-			\begin{Code}
-				\cmd{begin}\param{RpgSwitchEnv}\param{<key>}[opt-1]\param{env-1}[opt-2]\param{env-2}\param{arg1}\param{arg2}
-			\end{Code}
-			Formally speaking, \texttt{arg1} and \texttt{arg2} are a part of the body of the environment; however if both env-1 and env-2 are expecting two arguments, then the token expansion captures them. It is also possible to use a shared optional argument, instead of the unique arguments:
-			\begin{Code}
-				\cmd{begin}\param{RpgSwitchEnv}\param{<key>}\param{env-1}\param{env-2}[shared-opt]
-			\end{Code}
-			If however, the environments are not similar, and take different numbers of arguments then any excess arguments are inserted into the body of the environment, which can cause unexpected behaviour.
+            \cmd{end}\param{RpgSwitchEnv}
+        }{
+            The \texttt{key} is an input token (a string) which should be in the global \textit{switch-registry} (see below). If the value associated with the key in the registry is false, then the environment acts as \texttt{env-1} (with optional arguments \texttt{[opt-1]}), whilst if the switch is true, the environment acts as \texttt{env-2[opt-2]}.
 
-			An error is thrown if \texttt{key} does not exist in the global registry.
-		}
-		\RpgMacro{RpgSetSwitch}{\param{m m}}
-			{Change the value of a \textit{switch}, and therefore the behaviour of the associated RpgSwitchEnv}{\cmd{RpgSetSwitch}\param{<key>}\param{<value>}}
-			{
-				Sets the value of the \texttt{key} in the \textit{switch-registry} to \texttt{{value}}, which must be a 'bool-ish' text string\footnote{That is, either \param{true,True,1} or \param{false,False,0}}. If the entry does not exist in the registry, it is created.
+            Due to the way that token expansion works, it is possible to pass \textit{additional} arguments to this environment:
+            \begin{Code}
+                \cmd{begin}\param{RpgSwitchEnv}\param{<key>}[opt-1]\param{env-1}[opt-2]\param{env-2}\param{arg1}\param{arg2}
+            \end{Code}
+            Formally speaking, \texttt{arg1} and \texttt{arg2} are a part of the body of the environment; however if both env-1 and env-2 are expecting two arguments, then the token expansion captures them. It is also possible to use a shared optional argument, instead of the unique arguments:
+            \begin{Code}
+                \cmd{begin}\param{RpgSwitchEnv}\param{<key>}\param{env-1}\param{env-2}[shared-opt]
+            \end{Code}
+            If however, the environments are not similar, and take different numbers of arguments then any excess arguments are inserted into the body of the environment, which can cause unexpected behaviour.
 
-				After the key is set, all subsequent \texttt{RpgSwitchEnv} calls which use that key will have their behaviour altered to match the new key.
-			}
-	\labelsection{RpgSecret}
+            An error is thrown if \texttt{key} does not exist in the global registry.
+        }
+        \RpgMacro{RpgSetSwitch}{\param{m m}}
+            {Change the value of a \textit{switch}, and therefore the behaviour of the associated RpgSwitchEnv}{\cmd{RpgSetSwitch}\param{<key>}\param{<value>}}
+            {
+                Sets the value of the \texttt{key} in the \textit{switch-registry} to \texttt{{value}}, which must be a 'bool-ish' text string\footnote{That is, either \param{true,True,1} or \param{false,False,0}}. If the entry does not exist in the registry, it is created.
+
+                After the key is set, all subsequent \texttt{RpgSwitchEnv} calls which use that key will have their behaviour altered to match the new key.
+            }
+        \RpgMacro{RpgSetAllSwitches}{\param{m}}
+            {
+                 As with \cmd{RpgSetSwitch}, but iterates over all keys in the registry, and assigns the all the same \texttt{value}.
+            }{}{}
+% \begin{figure}
+\begin{ExampleBlock}[RpgSwitchEnv]{Example Switching Environment}
+  \def\exampleSwitch{
+      \begin{RpgSwitchEnv}{test}{enumerate} [leftmargin=1cm]{itemize}
+        \item item 1
+        \item item 2
+        \item orangutans
+      \end{RpgSwitchEnv}
+  }
+  Changing the switch makes the same contents appear differently:
+
+  \RpgSetSwitch{test}{true}
+  \exampleSwitch{}
+
+  \RpgSetSwitch{test}{false}
+  \exampleSwitch{}
+
+  %%Now repeat, but move the optional arg to the end as a 'hanging argument' 
+
+  \def\exampleSwitch{
+      \begin{RpgSwitchEnv}{test}{enumerate} {itemize}[leftmargin=1cm]
+        \item item 1
+        \item item 2
+        \item orangutans
+      \end{RpgSwitchEnv}
+  }
+   Both environments should now be indented:
+  \RpgSetSwitch{test}{true}
+  \exampleSwitch{}
+
+  \RpgSetSwitch{test}{false}
+  \exampleSwitch{}
+\end{ExampleBlock}
+% \end{figure}
+    \labelsection{RpgSecret}
+
+        The RpgSecret environment is use to conditionally hide information; this allows a Game Master\footnote{Or whatever your system calls this role!} to use the same text for their own notes as they would for players, but wall off some parts of it as 'not for their eyes'.
+
+        \RpgMacro*{RpgSecret}{\paramO}{
+            A switchable environment associated with the key \texttt{ShowSecrets}. When this key is true, the body of the environment is rendered; otherwise it is hidden. 
+            }{
+                \cmd{begin}\param{RpgSecret}[<player-text>]
+
+                ~~~<GM-text>
+
+                \cmd{end}{RpgSecret}
+            }{
+                If the \texttt{ShowSecrets} switch has been set to false, then the optional argument \texttt<player-text> is inserted as plain text with nothing to suggest it was not originally plain text. 
+
+                If the switch is true, then the GM text is rendered 
+            }
+        \RpgMacro{RpgShowSecrets}{\param{m}}{An alias for \cmd{RpgSetSwitch\param{ShowSecrets}\param{input}}}{}{}
 
 
+        
 
-	\labelsection{RpgItem}
 
-	\labelsection{RpgAbility}
+        
+    \labelsection{RpgItem}
+
+    \labelsection{RpgAbility}
