@@ -5,7 +5,27 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## 0.4.0 (2025-08-11)
+
+### Core Functionality
+
+* Automatic configuration added, removing the need for `configure`
+
+    * rpglatex now auto-injects the RpgPackagePath definition directly
+
+    * As a fallback, rpglatex can use `write18` to dispatch a system call (if `--shell-escape` enabled), writing its own `rpg-config.cfg` file. The documentation now explains this and there's a very verbose error message walking users through how to enable automatic configuration.
+
+
+### New Environments
+
+
+* **RpgSwitchEnv**: Formalised the RpgCardSwitch into a robust switch-based interface
+
+* **RpgSecret**: A method for toggle text in and out of being visible, and giving the GM both the real text and the 'lie'
+
+* **RpgItem**: A robust interface for items, both as plain text and as RpgCard elements
+
+    * Implemented the dnd implementation of the RpgItem
 
 ### Documentation
 
@@ -14,6 +34,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 * Moved CHANGELOG into the docs folder where it belongs
 
 * Created the ROADMAP document as a formalised 'to do list'
+
+* Rejigged the ordering of things to better enforce a 'user' vs 'designer' paradigm split
 
 ## 0.3.1 (2025-11-06)
 
