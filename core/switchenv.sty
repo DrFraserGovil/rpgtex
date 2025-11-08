@@ -10,6 +10,7 @@
 \prop_new:N \g__rpg_switch_prop
 
 
+
 \NewDocumentCommand{\RpgSetSwitch}{m m}{
 
 	\prop_gput:Nnx \g__rpg_switch_prop{#1}{\__rpg_bool_from_text:e{#2}}
@@ -22,7 +23,7 @@
 	}
 }
 
-
+\msg_new:nnn {rpg}{bad-switch}{Cannot~load~SwitchEnv~with~key~'#1':~key~not~in~registry}
 \cs_new_protected:Npn \__if_switch:nnn#1#2#3
 {
 	\prop_if_in:NnTF \g__rpg_switch_prop {#1}
@@ -31,13 +32,22 @@
         \tl_set:Nf \l_tmpa_tl { \prop_item:Nn \g__rpg_switch_prop {#1} }
     }
     {
-        % If key does NOT exist, use the safe false fallback
-        \tl_set:Nn \l_tmpa_tl { \c_false_bool }
+		\msg_error:nnn {rpg}{bad-switch}{#1}
     }
 	
 	\exp_args:Ne \bool_if:NTF { \l_tmpa_tl } {#2} {#3}
 }
 
+\cs_new_protected:Npn \__rpg_begin_env:nn#1#2
+{
+	\tl_if_empty:eTF{#2}
+	{
+		\begin{#1}
+	}
+	{
+		\begin{#1}[#2]
+	}
+}
 
 %Renders text in one environment (#3) if 'card mode' active, otherwise uses a different environment (#5)
 %Allows the same text to be rendered in either plain text or in a card.
@@ -49,30 +59,17 @@
 	\__if_switch:nnn{#1}
 	{
 		\tl_gset:Ne \g_rpg_env_choice{#3}
-		\tl_set:Ne\l_rpg_opts{#2}
-
+		\__rpg_begin_env:nn{#3}{#2}
 	}
 	{
 		\tl_gset:Ne \g_rpg_env_choice{#5}
-		\tl_set:Ne\l_rpg_opts{#4}
+		\__rpg_begin_env:nn{#5}{#4}
 	}
 
-	\tl_if_empty:eTF{\l_rpg_opts}
-	{
-		\begin{\g_rpg_env_choice}
-	}
-	{
-		%%have to do this in stages, because we want to save \begin, but fully expand the opts.
-		\tl_set:Nn \l_tmpa{ \begin{\g_rpg_env_choice}}
-		\tl_set:Ne \l_tmpb {[\l_rpg_opts]}
-		\tl_concat:NNN\l_rpg_begin_cmd\l_tmpa\l_tmpb
 
-		%%actually execute the begin
-		\exp_args:Ne \l_rpg_begin_cmd{}
-	}
 }
 {
-	\end{\g_rpg_env_choice}
+	\exp_args:Ne\end{\g_rpg_env_choice}
 }
 
 %A clever little hack: so long as both environments take the same number of arguments, they will automatically be consumed:
@@ -81,4 +78,5 @@
 
 %%now load in the child environments
 \input{core/environments/secret.sty}
+\input{core/environments/item.sty}
 \ExplSyntaxOff
