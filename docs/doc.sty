@@ -78,6 +78,27 @@
     title=#2
 }
 
+\newtcblisting{BashBlock}{
+
+        listing~options={
+            language=bash, % The correct, non-error-producing language
+            showstringspaces=false,
+            breaklines=true,
+        },
+		colframe=backred,
+        colback=gray!10,
+       boxrule=1pt,
+    	listing~only,
+		colframe=gray!50,colback=black!10!white,
+		 left=2pt,right=2pt, 
+		  top=1pt,bottom=1pt,    arc=1mm,enhanced,
+		  title=bash,
+		  attach~boxed~title~to~top~left=
+{yshift=-\tcboxedtitleheight/2},
+boxed~title~style={size=small,colback=gray!80}
+
+}
+
 \def\NoArgs{\{\}}
 
 \def\bs{\textbackslash}

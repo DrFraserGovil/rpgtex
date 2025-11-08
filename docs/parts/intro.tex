@@ -1,3 +1,4 @@
+\BeginMacroFormat{}
 \chapter{Installation \& Usage}
 
 	\section{Getting \rpgtex}
@@ -9,37 +10,39 @@
 
 			The simplest way to use \rpgtex{} is to install it on the \texttt{texmf} path, where the compiler can automatically find it:
 
-			\begin{lstlisting}
+			\begin{BashBlock}
+mkdir -p "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex" %make sure the directory exists
 git clone https://github.com/DrFraserGovil/rpgtex.git "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
-			\end{lstlisting}
-
+			\end{BashBlock}
+			
 			This will clone the repository into your\LaTeX{} path.
 
 		\subsection{Indirect Installation}
 
 			If you want to tinker with \rpgtex{} -- such as by creating a new theme -- it is helpful to have it in a more accessible location. Clone the repository into a location of your choice:
 
-			\begin{lstlisting}
+			\begin{BashBlock}
 git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
-			\end{lstlisting}
+			\end{BashBlock}
 
 			You then have two options to make the package visible to the compiler:
 
 			\subsubsection{Use TEXINPUTS}
 
 			Setting the environment variable \texttt{TEXINPUTS} allows the compiler access:
-				\begin{lstlisting}
-	TEXINPUTS=~/your/rpgtex/directory/::
-				\end{lstlisting}
+				\begin{BashBlock}
+TEXINPUTS=~/your/rpgtex/directory/::
+				\end{BashBlock}
 				(Or similar commands, depending on your shell -- in \texttt{fish} you would call \texttt{set TEXINPUTS dir}).
 
 			\subsubsection{Use Symlinks}
 
 			You can symlink the install location to the texmf directory, allowing the compiler to act as if you had performed the texmf installation:
 
-			\begin{lstlisting}
-				ln -sf ~/your/rpgtex/directory "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
-			\end{lstlisting}
+			\begin{BashBlock}
+mkdir -p "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex" 
+ln -sf ~/your/rpgtex/directory "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
+			\end{BashBlock}
 
 		\subsection{Overleaf (Not recommended!)}
 
@@ -48,23 +51,35 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 			\begin{enumerate}
 				\item  Download this GitHub repository as a ZIP archive using the Clone or download link above.
     			\item On Overleaf, click the New Project button and select Upload Project. Upload the ZIP archive you downloaded from this repository.
-				\item Manually create the file \texttt{rpg-config.cfg} with the contents ``\texttt{\edef\RpgPackagePath{../}}''. This replaces the configuration step described below.
+				\item Manually create the file \texttt{rpg-config.cfg} with the contents ``\cmd{edef}\cmd{RpgPackagePath}\param{../}''. This replaces the configuration step described below.
 			\end{enumerate}
 
 
 	\section{Configuring \rpgtex{}}\label{S:Configuration}
 
-		Wherever one installs \rpgtex{} from, it is vital that it is properly configured. From within the \rpgtex{}-root directory, call:
 
-		\begin{lstlisting}
-			./configure
-		\end{lstlisting}
-		Or -- if one is (reasonably!) wary about running arbitrary executables -- manually create the relevant file:
-		\begin{lstlisting}
-			cd <rpgtex root directory>
-			cmd="\edef\RpgPackagePath{$(pwd)}"
-			echo $cmd >> core/rpg-config.cfg
-		\end{lstlisting}
+		Because \rpgtex{} comes packaged with some resources (namely some fonts) for which \TeX{} does not support relative-pathfinding, it is necessary to provide \rpgtex{} with a value for the \cmd{RpgPackagePath}.
+		
+		\RpgMacro{RpgPackagePath}{}{A variable holding the absolute path to the root directory of the rpgtex install location.}{}{
+			We provide a number of different ways to set this variable:
+			\begin{enumerate}
+				\item The provided \texttt{rpglatex} compiler automatically inserts a definition based on a \texttt{kpsewhich}, using the Command Line Interface \RpgPage[p]{S:CMD}.
+				\item If the variable does not exist, the \rpgtex{} engine itself tries the following
+				\begin{enumerate}
+					\item Searches for the file \texttt{core/rpg-config.cfg}, which (hopefully) contains a definition\footnote{In the form of \cmd{edef}\cmd{RpgPackagePath}\param{path/to/package}}, and \cmd{inserts} it.
+					\item If no file is found, \rpgtex{} used the \cmd{write18} utility to dispatch its own calls to \cmd{kpsewhich} and build a config file in the expected location. This requires the compiler be run with \texttt{--shell-escape} active
+					\item If this doesn't work, the compiler exits, and suggests that the user manually creates the config file:
+					\begin{Code}
+						cd <rpgtex root directory>
+
+						cmd="\cmd{edef}\cmd{RpgPackagePath}\param{\$(pwd)}"
+						
+						echo \$cmd >> core/rpg-config.cfg
+					\end{Code}
+				\end{enumerate}
+			\end{enumerate}
+			The extra configuration steps need only be run once -- once the config file exists, the package will be able to configure itself.
+			}
 
 		\begin{RpgTip}{Why is configuration necessary?}
 			\TeX{} is generally set up so that when a file calls \texttt{include} or \texttt{input} it is possible to use filepaths relative to the package itself. \texttt{rpg.sty} can call \texttt{\cmd{input}{core/font.sty}} and it will know to first check for the file relative to rpg.sty; even if the package resides within the texmf path and the user has no idea where \texttt{rpgroot/rpg.sty}, or \texttt{rpgroot/core/font.sty}, are.
@@ -81,22 +96,16 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 			The Configuration step is the most portable and easiest-to-use of these options.
 		\end{RpgTip}
 
-		Without a \texttt{core/rpg-config.cfg} file, any document which includes \rpgtex{} will fail to compile.
-	\newpage
-
 	\section{Package \& Class Usage}
 
+		 
 		\rpgtex{} can be used either as a standalone package, or as part of a number of classes
 
 		\subsection{Standalone Package}
 			The standalone package can be used directly by including the \rpgtex{} package:
 			\begin{lstlisting}
 				\documentclass{arbitrary-class}
-
 				\usepackage[options]{rpgtex}
-
-				\begin{document}
-				....
 			\end{lstlisting}
 
 			This will load only the core commands into the document, and (unless called explicitly) no themes will be imported. Using the package in this way does not activate any of the commands which change the overall geometry, background or headers of the document.
@@ -114,7 +123,7 @@ git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
 	
 
 		
-\BeginMacroFormat{}
+
 		
 	\section{Compiling rpgtex Documents}\label{C:Compiler}
 
