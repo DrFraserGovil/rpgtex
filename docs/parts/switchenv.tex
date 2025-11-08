@@ -93,39 +93,136 @@
 
     \labelsection{RpgItem}
         
-		Many RPGs have a system of `items' and equipment that a player may possess and use. It is useful to be able to both describe the item as it might appear in the source book, but also render it in a playing-card style unit \RpgPage[p]{S:Card} for a player to use. 
+        Many RPGs have a system of `items' and equipment that a player may possess and use. It is useful to be able to both describe the item as it might appear in the source book, but also render it in a playing-card style unit \RpgPage[p]{S:Card} for a player to use. 
 
-		The RpgCard is associated with the UseCard switch; when true the text is rendered in a card, when false, as plain text.
+        The RpgCard is associated with the UseItemCard switch; when true the text is rendered in a card, when false, as plain text.
 
-		\begin{RpgSidebar}{Highly Theme Dependent}
-			This is documentation for the generic \texttt{RpgItem} interface for those wishing to customise their own.  It is expected that individual themes significantly extend the functionality. 
+        \begin{RpgSidebar}{Highly Theme Dependent}
+            This is documentation for the generic \texttt{RpgItem} interface for those wishing to customise their own.  It is expected that individual themes significantly extend the functionality. 
+            
+            Documentation for the specific implementations can be found elsewhere:
+            \begin{description}
+                \item[default:] \RpgPage{S:DefaultItem}
+                \item[dnd:]	\RpgPage{S:DndItem}
+                \item[scifi:]   \RpgPage{S:ScifiItem}
+            \end{description} 
+        \end{RpgSidebar}
+
+        \RpgMacro*{RpgItem}{\param{\paramO{} m \paramO{}}}{A switchable environment associated with the UseItemCard switch. When true, places the contents in a \texttt{RpgCard} \RpgPage[p]{RpgCard}, when false, renders as plain text.}{
+            \cmd{begin}\param{RpgItem}[<card-opts>]\param{<Item-name>}[<item-key/values>]
+                
+            ~~<item-body>
+
+            \cmd{end}\param{RpgItem}
+        }{
+            The optional \texttt{card-opts} argument is passed to the \texttt{RpgCard} (if active), and controls the size and appearance of the card. The \texttt{item-name} is the name which will (generally) appear at the top of the item. 
+
+            The \texttt{key/value} arguments are a kv-list of options. By default, only a single option is present:
+            \begin{RpgTable}[noheader]{llX}
+                \kve{image}{path/to/image}{Inserts the chosen image into the \textbf{card environment only}; between the item name and the body text.}
+            \end{RpgTable}
+
+            The customisation options (see below) allow a designer to add in additional keys, which they can then use to add a specific format to the item. Consult the individual theme documentation for implementation specific details.
+        }
+        
+        \RpgMacro{RpgUseItemCards}{\param{m}}{An alias for \cmd{RpgSetSwitch\param{UseItemCard}\param{input}}}{}{}
+        
+
+\begin{ExampleBlock}{RpgItem}
+
+ \def\testItem{
+ \begin{RpgItem}[color=red, opacity=0.4] {Joyeuse} 
+    [image=example/img/joyeuse]
+
+    The legendary Sword of Charlemagne; this weapon is known as the `joybringer' and the `Jewelled Blade'. It grants you +13 on heroism rolls. 
+ \end{RpgItem}}
+ \RpgUseItemCards{false} %plain text first
+\testItem{} 
+
+ \RpgUseItemCards{true} %now the card
+\testItem{} 
+\end{ExampleBlock}
+
+	\subsection{Customizing Items}
+
+		We provide three key functions which allow a designer to completely change the appearance of an item card
+
+		\RpgMacro{RpgAddItemProperty}{\param{m v m}}
+			{}{
+				\cmd{RpgAddItemProperty}\param{new-key}\param{\cmd{destination}}\param{default-value}
+			}{Creates a new entry in the \texttt{rpg/item} key-value parser, which stores the value passed by the user in the chosen destination macro. If the key is not present in the RpgItem \texttt{key-value} argument, the default value is assigned instead.
 			
-			Documentation for the specific implementations can be found elsewhere:
-			\begin{description}
-				\item[default:] \RpgPage{S:DefaultItem}
-				\item[dnd:]	\RpgPage{S:DndItem}
-				\item[scifi:]   \RpgPage{S:ScifiItem}
-			\end{description} 
-		\end{RpgSidebar}
+			This allows a designer to request the user provide structured information, which they can then place as they choose.
+			}
+		
+		\begin{RpgTip}{More Complex Key/Value behaviour}
+			\cmd{RpgAddItemProperty} is a wrapper around the usual expl3 key interface, \cmd{keys\_define\param{rpg/item}}, automatically creating \cmd{tl\_set} commands (and a few others). For more complex key/value pairs, such as choices, toggles etc., a designer may manually edit the \texttt{rpg/item} registry.
+		\end{RpgTip}
+		\RpgMacro{RpgSetItemCardFormat}{\param{+m}}
+			{A \COSS{}, with the resulting control sequence being used as the body of a \texttt{RpgCard} call when \cmd{RpgUseItemCards} has been set to true.}{
+				\cmd{RpgSetItemCardFormat}\{
+					\%\#1 = Card name, \#2 = Card body
+				~~<card-description>
 
-		\RpgMacro*{RpgItem}{\param{\paramO{} m m}}{A switchable environment associated with the ShowCard switch. When true, places the contents in a \texttt{RpgCard} \RpgPage[p]{RpgCard}, when false, renders as plain text.}{
-			\cmd{begin}\param{RpgItem}[<card-opts>]\param{<Item-name>}\param{<item-key/values>}
-				
-			~~<item-body>
+				\}
+			}{
+				As can be seen, the CoSS only takes two arguments; however by constructing a customised \cmd{RpgAddItemProperty} interface, the designer can add additional elements around the item body, and therefore have an arbitrary amount of information passed from the user -- see the examples below.
+			}
+		\RpgMacro{RpgSetItemTextFormat}{\param{+m}}	{A \COSS{}, with the resulting control sequence being used as the output of \texttt{RpgItem}, when \cmd{RpgUseItemCards} has been set to false.}
+			{
+				\cmd{RpgSetItemTextFormat}\{
+					\%\#1 = Card name, \#2 = Card body
+				~~<card-description>
 
-			\cmd{end}\param{RpgItem}
-		}{
-			The optional \texttt{card-opts} argument is passed to the \texttt{RpgCard} (if active), and controls the size and appearance of the card. The \texttt{item-name} is the name which will (generally) appear at the top of the item. 
+				\}
+			}{
+				As can be seen, the CoSS only takes two arguments; however by constructing a customised \cmd{RpgAddItemProperty} interface, the designer can add additional elements around the item body, and therefore have an arbitrary amount of information passed from the user -- see the examples below.
+			}
+		
 
-			The \texttt{key/value} arguments are a kv-list of options. By default, only a single option is present:
-			\begin{RpgTable}[noheader]{llX}
-				\kve{image}{path/to/image}{Inserts the chosen image into the \textbf{card environment only}; between the item name and the body text.}
-			\end{RpgTable}
+\begin{ExampleBlock}{Customised RpgItem}
+ \RpgAddItemProperty{tagline} {\RpgItemTagline}{}
+ \RpgAddItemProperty{weight} {\RpgItemWeight}{0kg}
+ \RpgAddItemProperty{value} {\RpgItemValue}{\euro{}0}
 
-			The customisation options (see below) allow a designer to add in additional keys, which they can then use to add a specific format to the item. Consult the individual theme documentation for implementation specific details.
-		}
+ \def\testItem{
+ \begin{RpgItem}[color=red, opacity=0.4] {Joyeuse} 
+  [image=example/img/joyeuse,
+  tagline={The Sword Jewellous},
+  weight=1kg,
+  value=\euro{}1 billion]
+  The legendary Sword of Charlemagne; this weapon is known as the `joybringer' and the `Jewelled Blade'. It grants you +13 on heroism rolls. 
+ \end{RpgItem}}
 
-		\subsection{Customizing Items}
+ %plain text first
+ \RpgUseItemCards{false} 
+ %%set the plaintext format
+ \RpgSetItemTextFormat{
+ \subsection{#1\hfill{}\RpgItemValue{}}
+ \hrule{}
+ \textit{\RpgItemTagline (\RpgItemWeight)}\par
+ #2
+ }
+\testItem{} 
+
+\vspace{1cm}
+
+%now the card
+ \RpgUseItemCards{true} 
+ %%set the card format
+ \RpgSetItemCardFormat{
+  \begin{center}
+    {\RpgFontSubsection #1}
+    
+      \includegraphics[width=0.8\linewidth, height=2cm]{\RpgItemImage}
+    
+    {\scshape \RpgItemTagline}
+  \end{center}
+ \vfill{}
+ #2
+ \vfill{}
+ \RpgItemValue{} \hfill{} \RpgItemWeight{}
+ }
+\testItem{} 
+\end{ExampleBlock}
     \labelsection{RpgAbility}
-        \Blindtext
-        \Blindtext
