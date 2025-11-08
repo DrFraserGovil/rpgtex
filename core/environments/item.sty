@@ -1,0 +1,43 @@
+
+\ExplSyntaxOn
+
+\cs_new:Npn \__rpg_item_card_format:nn#1#2{\subsection{#1} #2}
+\cs_new:Npn \__rpg_item_text_format:nn#1#2{\subsection{#1} #2}
+
+\NewDocumentEnvironment{__RpgItemCard}{O{} m +b}{
+    \begin{RpgCard}[#1]
+
+        \__rpg_item_card_format:nn{#2}{#3}
+        
+}{
+    \end{RpgCard}
+}
+
+\NewDocumentCommand{\RpgAddItemProperty}{m m m}{
+    \__rpg_insert_tl_key:xene{rpg/item}{#1}{#2}{#3}   
+}
+
+\NewDocumentEnvironment{__RpgItemText}{m +b}{
+    \__rpg_item_text_format:nn{#1}{#2}
+}{}
+
+\NewDocumentCommand{\RpgSetItemCardFormat}{+m}{
+    \cs_set:Nn \__rpg_item_card_format:nn{#1}
+}
+\NewDocumentCommand{\RpgSetItemTextFormat}{+m}{
+    \cs_set:Nn  \__rpg_item_text_format:nn{#1}
+}
+
+\NewDocumentCommand{\RpgUseItemCards}{m}{
+    \RpgSetSwitch{UseItemCard}{#1}
+}
+\RpgUseItemCards{false}
+\NewDocumentEnvironment{RpgItem}{O{} m O{}}{
+    \keys_set:nn{rpg/item}{#3}
+    \begin{RpgSwitchEnv}{UseItemCard}[#1]{__RpgItemCard}{__RpgItemText}{#2}
+}{
+            
+    \end{RpgSwitchEnv}
+}
+
+\ExplSyntaxOff

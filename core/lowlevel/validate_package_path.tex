@@ -1,0 +1,49 @@
+
+\ExplSyntaxOn
+\cs_new_protected:Npn \__rpg_validate_configuration:
+{
+
+	\cs_if_exist:NTF\RpgPackagePath
+	{
+		\wlog{RpgPackagePath~set~by~external~means}
+	}
+	{
+		\wlog{RpgPackagePath~not~set.~Attempting~to~locate~myself}
+		\file_if_exist:nTF { core/rpg-config.cfg }
+		{
+			\wlog{rpg-config~file~located.~Extracting~RpgPackagePath.}
+			\file_input:n { core/rpg-config.cfg }
+		}
+		{
+			\wlog{rpg-config~not~found.~Attempting~to~construct~with~external~call.}
+			%%attempt to construct the rpgconfig file from within tikz. 
+			%Relies on the fact that it is being called by rpg.sty, which is at the root of the project directory!
+			\immediate\write18{echo~"\\\\edef\\\\RpgPackagePath{"$(pwd)"}" > core/rpg-config.cfg}
+			\file_if_exist:nTF{core/rpg-config.cfg}
+			{
+				\wlog{rpg-config~successfully~¬created.~Extracting~RpgPackagePath}
+				\input{core/rpg-config.cfg}
+			}
+			{
+				\msg_new:nnnn { rpgtex } { missing-font-config }
+				{
+					Configuration~file~was~not~found.
+					\\
+					rpgtex~needs~to~know~its~root~location~to~load~fonts
+					\\
+					You~can~configure~package~in~one~of~these~ways:
+					\\\\
+					1.~Compile~with~rpglatex~compiler~(inserts~kpsewhich~command~automatically)
+					\\\\
+					2.~Run~configuration~script~`configure'~in~rpgtex~root~directory
+					\\\\
+					3.~Manually~create~file~`[rpgtexroot]/core/rpg-config.cfg'~with~contents:\\
+					\unexpanded{\edef}\{\unexpanded{\RpgPackagePath}\}\{absolute / path~/to/rpgtex/root\}
+					\\\\
+					4.~Run~compiler~with~--shell-execute~enabled~(latex~auto-generates~configuration)
+				}{}	
+				\msg_error:nnn { rpgtex } { missing-font-config } {  }
+			}
+		}
+	}
+}

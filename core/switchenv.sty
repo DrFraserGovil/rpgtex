@@ -1,0 +1,82 @@
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Card-switching environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Change the value of card mode
+% \NewDocumentCommand{\RpgUseCards}{m}{\__rpg_set_bool_from_text:Ne \g__rpg_card_active_bool{#1}}
+% \NewDocumentCommand{\RpgToggleUseCards}{}{\bool_set_inverse:N \g__rpg_card_active_bool}
+\ExplSyntaxOn
+\prop_new:N \g__rpg_switch_prop
+
+
+
+\NewDocumentCommand{\RpgSetSwitch}{m m}{
+
+	\prop_gput:Nnx \g__rpg_switch_prop{#1}{\__rpg_bool_from_text:e{#2}}
+}
+\NewDocumentCommand{\RpgSetAllSwitches}{m}{
+
+	\prop_map_inline:Nn \g__rpg_switch_prop
+    {
+		\prop_gput:Nnx \g__rpg_switch_prop { ##1 } { \__rpg_bool_from_text:e{#1}}
+	}
+}
+
+\msg_new:nnn {rpg}{bad-switch}{Cannot~load~SwitchEnv~with~key~'#1':~key~not~in~registry}
+\cs_new_protected:Npn \__if_switch:nnn#1#2#3
+{
+	\prop_if_in:NnTF \g__rpg_switch_prop {#1}
+    {
+        % If key exists, retrieve the stored value (the boolean control sequence)
+        \tl_set:Nf \l_tmpa_tl { \prop_item:Nn \g__rpg_switch_prop {#1} }
+    }
+    {
+		\msg_error:nnn {rpg}{bad-switch}{#1}
+    }
+	
+	\exp_args:Ne \bool_if:NTF { \l_tmpa_tl } {#2} {#3}
+}
+
+\cs_new_protected:Npn \__rpg_begin_env:nn#1#2
+{
+	\tl_if_empty:eTF{#2}
+	{
+		\begin{#1}
+	}
+	{
+		\begin{#1}[#2]
+	}
+}
+
+%Renders text in one environment (#3) if 'card mode' active, otherwise uses a different environment (#5)
+%Allows the same text to be rendered in either plain text or in a card.
+\NewDocumentEnvironment{RpgSwitchEnv}{m O{} m O{} m}
+{
+	%#1 = switch name, #2 = env1 optional args, #3 = env1 definition, #4 = env2 optional args, #5 = env2 definition
+
+
+	\__if_switch:nnn{#1}
+	{
+		\tl_gset:Ne \g_rpg_env_choice{#3}
+		\__rpg_begin_env:nn{#3}{#2}
+	}
+	{
+		\tl_gset:Ne \g_rpg_env_choice{#5}
+		\__rpg_begin_env:nn{#5}{#4}
+	}
+
+
+}
+{
+	\exp_args:Ne\end{\g_rpg_env_choice}
+}
+
+%A clever little hack: so long as both environments take the same number of arguments, they will automatically be consumed:
+%\RpgSwitchEnvironment[o1]{env1}[o2]{env2}{arg1}{arg2} expands to {env1}[o1}{arg1}{arg2} or {env2}[o2]{arg1}{arg2}
+%This allows arbitrary environment arguments to be passed, so long as both env1 and env2 use the same pattern
+
+%%now load in the child environments
+\input{core/environments/secret.sty}
+\input{core/environments/item.sty}
+\ExplSyntaxOff

@@ -7,25 +7,9 @@
 
 \ExplSyntaxOn
 
-
-
-  \file_if_exist:nTF { core/rpg-config.cfg }
-      {
-        % T (True) branch: File exists!
-        % Load the file's content
-        \file_input:n { core/rpg-config.cfg }
-      }
-      {
-		\msg_new:nnnn { rpgtex } { missing-font-config }
-		{
-			Configuration~file~was~not~found.
-			Please~ensure~you~have~run~the~external~'configure'~script~
-			in~the~root~directory~of~the~rpgtex~project.
-		}{}
-
-
-        \msg_error:nnn { rpgtex } { missing-font-config } {  }
-      }
+%%Do I know where I am?
+\input{core/lowlevel/validate_package_path}
+\__rpg_validate_configuration:
 
 %Am I loaded by a class?
 \cs_if_exist:NTF \c__rpg_isclass_bool

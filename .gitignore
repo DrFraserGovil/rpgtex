@@ -6,6 +6,7 @@
 *.log
 *.synctex.gz
 *.toc
+*.vscode/
 
 *.build*
 core/rpg-config.cfg

@@ -4,249 +4,184 @@
 \chapter{Commands \& Macros}
 \def\COSS{\hyperref[S:ThemeCommands]{\textcolor{blue!40!black}{{CoSS Function}}}}
 
-    Several commands in this documentation are described as \textbf{Theme Commands}. These are commands that the user is \textit{not expected to call}, but which are executed by the internal engine in the process of rendering the page, or as a result of other commands that the user has called. 
 
-    \begin{center}
-    \large \textbf{A user who wishes to simply write documents using an unmodified \rpgtex{} need only concern themselves with the User-Facing Commands}. 
-    \end{center}
-    On the other hand, these Theme Commands have been designed to provide a convenient interface for creating custom Themes -- and so their documentation allows for designers to create powerful and flexible themes from within \rpgtex{}. 
-    
-\begin{RpgSidebar}{CoSS Functions}\label{S:ThemeCommands}
+\section{Title \& Part Pages}
+    \RpgMacro{cover}{\param{m},\cmd{@cover}}
+		{
+			Saves an image path to the variable \texttt{\bs{}@cover}, automatically used by \texttt{\bs{}maketitle} as the background image.
+		}{
+			\bs{}cover\{path/to/cover\} 
+		}{
+			If \cmdref{RpgUseCoverPage} has been set to true, then the image at this path will be used as a full-page image in the background of the page created by \texttt{maketitle}.
 
-		A quirk of some of some of Theme Commands is that they require accessing arguments which were not passed to them. These are \emph{Control Sequence Setters (CoSS)}: functions which do not execute commands, but instead save them to be executed later. 
+			The default value is empty (\texttt{\bs{}cover\param{}}), which draws no image.
+		}
+	\RpgMacro{maketitle}{\param{}}
+		{	
+			When called, creates theme-defined title pages using a custom format.
+		}{
+			\bs{}title\{A title\}
 
-		For example:
-		\begin{Code}
-			\cmd{RpgSetControlSequence}\{\\
-				This is a (\#1)-argument command, but I am using (\#2), and even (\#3) arguments! 
-			\\\}
-		\end{Code}
+			\bs{}subtitle\{The subtitle\} \%optional
 
-		These CoSS functions do not execute the control sequence, but save it to an intermediary value. The backend of the package looks something like:
-		\begin{Code}
-			\bs{}NewDocumentCommand\param{\bs{}RpgSetControlSequence}\param{+m}\{\\
-				\bs{}cs\_set:Nn \bs{}\_\_rpg\_control\_sequence:nnn\param{\#1}
-			\\\}
-		\end{Code}
-		That is, the contents of the CoSS are saved into an expl3 control sequence -- and in this case, one with three arguments (\texttt{nnn}). When another internal function comes to execute \texttt{\_\_rpg\_control\_sequence:nnn}, the text will render as:
-		\begin{Code}
-			\texttt{\bs{}\_\_rpg\_control\_sequence:nnn\param{3}{\param{2}}\param{1}}
-			\\
-			This is a (3)-argument command, but I am using (2), and even (1) arguments! 
-		\end{Code}
-		When working with CoSS functions it is vital to check the documentation to see which arguments are available, as it may not be obvious from the setter's syntax.
-\end{RpgSidebar}
+			\bs{}cover\{path/to/cover\} \%optional
 
-\section{Title Pages}
-    \subsection{User-Facing Commands}
-        \RpgMacro{maketitle}{\param{}}
-            {	
-                When called, creates theme-defined title pages using a custom format.
-            }{
-                \bs{}title\{A title\}
+			\bs{}author\{Dr. W. Riter\} \%optional
 
-                \bs{}subtitle\{The subtitle\} \%optional
+			~
 
-                \bs{}cover\{path/to/cover\} \%optional
+			\bs{}begin\{document\}
 
-                \bs{}author\{Dr. W. Riter\} \%optional
+			~~\bs{}maketitle{}
+			
+			~~(\ldots)
+		}{
+			\cmd{maketitle} has been completely defined, so commands such as \texttt{titlepage} won't work as expected. Instead, the appearance of the title page (or title header) are set by the theme, or user calls to either \cmdref{RpgSetCover} or \cmdref{RpgSetSimpleTitle}. Which of the two title `modes' is active is controlled by \cmd{RpgUseCoverPage}.
 
-                ~
+			If \texttt{RpgUseCoverPage} has been set to true, then the image stored in \texttt{\bs{}{@}cover} (if there is one) is automatically used as a full-page background image. This is independent of the drawing commands, and occurs before that function is called -- all subsequent drawing occurs over the top of the cover image.
+		}
+	
+	\RpgMacro{part}{\cmd{part*},\param{{o m}}}
+		{
+			Defines a wrapper around the standard \texttt{part} command that allows for tikz-based custom page formatting
+		}
+		{
+			\bs{}part(*)[<image>]\param{<part-name>}
+		}
+		{
+			There are three distinct behaviours that can be exhibited, depending on the presence or absence of the \texttt{*}, and the presence and value of \texttt{<image>}.
 
-                \bs{}begin\{document\}
+			\begin{RpgTable}{XX}
+				Command & Behaviour
+				\\
+				\parbox[t]{6cm}{\cmd{part*\param{partname}} \\ \cmd{part*[<any text>]\param{partname}} \\ \cmd{part[none]\param{partname}}} & Uses original \cmd{part} command defined by underlying class. 
+				\\
+				\cmd{part{partname}} & Calls the \cmd{RpgSetPartPage} control sequence on a blank background.
+				\\
+				\parbox[t]{6cm}{\cmd{part[path/to/image]\param{partname}}|} & Places the corresponding image as a full-page background, and then calls the \cmd{RpgSetPartPage} drawing command.
+			\end{RpgTable}
+			The `drawing command' is a control sequence set by \cmdref{RpgSetPartPage}, which defines a series of tikz functions to place the part title according to the theme specifications. 
+		}
+	\RpgMacro{RpgUseCoverPage}{\param{{m}}}
+		{
+			If true, \cmd{maketitle} creates a title page to populate, else the title is rendered as an article-like heading.
+		}{
+			\cmd{RpgUseCoverPage}\param{true/false}
+		}
+		{
+			When true, \cmd{maketitle} attempts to use \cmd{@cover} and then calls \cmdref{RpgSetCover}. If false, it calls \cmdref{RpgSetSimpleTitle}.
+		}
+	\RpgMacro{subtitle}{\param{{m}},\cmd{@subtitle}}
+		{
+			Saves a string to the variable \cmd{@subtitle}. Themes may use this when defining their \cmd{RpgSetCover} and \cmd{RpgSimpleTitle}.
+			\cmdidx{{"@}subtitle}
+		}
+		{
+			\bs{}subtitle\param{<string>}
+		}
+		{
+			This command has no effect on its own (unlike \cmd{cover} which is automatically included in the background).
 
-                ~~\bs{}maketitle{}
-                
-                ~~(\ldots)
-            }{
-                Calls the control sequences set by either \texttt{\bs{}RpgSetCover} or \texttt{\bs{}RpgSetSimpleTitle} depending on the value passed to \texttt{\bs{}RpgUseCoverPage}.
-
-                If \texttt{RpgUseCoverPage} has been set to true (usually by a class such as \texttt{rpgbook.cls}), then the image stored in \texttt{\bs{}{@}cover} (if there is one) is automatically used as a full-page background image. This is independent of the drawing commands, and occurs before that function is called -- all subsequent drawing occurs over the top of the cover image.
-            }
-        \RpgMacro{cover}{\param{m},\cmd{@cover}}
-            {
-                Saves an image path to the variable \texttt{\bs{}@cover}, automatically used by \texttt{\bs{}maketitle} as the background image.
-            }{
-                \bs{}cover\{path/to/cover\} 
-            }{
-                If \cmdref{RpgUseCoverPage} has been set to true, then the image at this path will be used as a full-page image in the background of the page created by \texttt{maketitle}.
-
-                The default value is empty (\texttt{\bs{}cover\param{}}), which draws no image.
-            }
-
-
-        \RpgMacro{subtitle}{\param{{m}},\cmd{@subtitle}}
-            {
-                Saves a string to the variable \cmd{@subtitle}. Themes may use this when defining their \cmd{RpgSetCover} and \cmd{RpgSimpleTitle}.
-                \cmdidx{{"@}subtitle}
-            }
-            {
-                \bs{}subtitle\param{<string>}
-            }
-            {
-                This command has no effect on its own (unlike \cmd{cover} which is automatically included in the background).
-
-                The default value is empty (\cmd{subtitle\param{}}).
-            }
-    \subsection{Theme Commands}
-        
-        \RpgMacro{RpgSetCover}{\param{{+m}}}
-            {
-                Assign the Tikz code for drawing a custom cover page over the top of the \cmd{@cover}-image.
-            }{
-                \bs{}RpgSetCover
-                \\\{
-                \\	~~<custom-tikz-code>
-                \\\}
-            }
-            {
-                 This is a \COSS{}, with the resulting control sequences being used when \cmd{maketitle} is called (and \cmd{RpgUseCoverPage{true}} has been set), allowing the designer to determine where to place the text on the page, and what embellishments accompany it. The stored sequence is called from within an existing tikz environment with the \texttt{remember,overlay} options active, allowing for page coordinates (i.e. current page.north) to be used.
-
-                The custom tikz code does not permit any arguments, but the contents of \cmd{@title}, \cmd{@subtitle}, \cmd{@author} and \cmd{@date} are accessible.
-
-                If a \cmd{@cover} has been defined, this command is executed after the image is placed, drawing on top of it.
-            }
-        \RpgMacro{RpgSetSimpleTitle}{\param{{+m}}}
-            {
-                Assigns the code for typesetting a `header' title - a simple text-only title at the top of the page.
-            }{
-                \bs{}RpgSetSimpleTitle
-                \\\{
-                \\	~~<custom-code>
-                \\\}
-            }
-            {
-                 This is a \COSS{}, with the resulting control sequences being used when \cmd{maketitle} is called (and \cmd{RpgUseCoverPage} has been set to false), allowing the designer to determine how to structure the text which makes up the `simple' title.
-
-                The Simple Title is configured so that, in a twocolumn document, it occupies the full page width; calling \texttt{centering} with the simple title therefore centers the text above both columns. 
-            }
-        \RpgMacro{RpgUseCoverPage}{\param{{m}}}
-            {
-                If true, \cmd{maketitle} creates a title page to populate, else the title is rendered as a heading.
-            }{
-                \cmd{RpgUseCoverPage}\param{true/false}
-            }
-            {
-                When true, \cmd{maketitle} attempts to use \cmd{@cover} and then calls \cmdref{RpgSetCover}. If false, it calls \cmdref{RpgSimpleTitle}.
-            }
-\section{Part Pages}
-        \RpgMacro{part}{\cmd{part*},\param{{o m}}}
-            {
-                Defines a wrapper around the standard \texttt{part} command that allows for tikz-based custom page formatting
-            }
-            {
-                \bs{}part(*)[<image>]\param{<part-name>}
-            }
-            {
-                There are three distinct behaviours that can be exhibited, depending on the presence or absence of the \texttt{*}, and the presence and value of \texttt{<image>}.
-
-                \begin{RpgTable}{XX}
-                    Command & Behaviour
-                    \\
-                    \parbox[t]{6cm}{\cmd{part*\param{partname}} \\ \cmd{part*[<any text>]\param{partname}} \\ \cmd{part[none]\param{partname}}} & Uses original \cmd{part} command defined by underlying class. 
-                    \\
-                    \cmd{part{partname}} & Calls the \cmd{RpgSetPartPage} control sequence on a blank background.
-                    \\
-                    \parbox[t]{6cm}{\cmd{part[path/to/image]\param{partname}}|} & Places the corresponding image as a full-page background, and then calls the part=page drawing command.
-                \end{RpgTable}
-                The `drawing command' is a control sequence set by \cmdref{RpgSetPartPage}, which defines a series of tikz functions to place the part title according to the theme specifications. 
-            }
-        
-        \RpgMacro{RpgSetPartPage}{\param{{+m}}}{Assign the Tikz code for drawing a custom part page when activated by \cmdref{part}. 
-            }
-            {
-                \bs{}RpgSetPartPage
-                \\\{
-                \\	~~\% \#1 = part name
-                \\	~~<custom-tikz-code>
-                \\\}
-            }
-            {
-                 This is a \COSS{}, with the resulting control sequences being used when \cmd{part} is called, allowing the designed to determine where to place the part name on the page, and what embellishments accompany it. The stored sequency is called from within an existing tikz environment with the \texttt{remember,overlay} options active, allowing for page coordinates (i.e. current page.north) to be used.
-
-                The command can take one argument (\#1), which is equal to the name of the part. The current part counter can be accessed via \cmd{thepart}.
-                
-                The \cmd{part} command draws a background image (if on is provided), with the contents of this command rendered on top.
-            }
-        
-
+			The default value is empty (\cmd{subtitle\param{}}).
+		}
 
 \section{Fonts \& Decorative Text}
     % In addition to the fundamental typeface alterations \rpgtex{} includes a number of commands to turn text into decorative elements.
-        \RpgMacro{emph}{\param{m},\cmd{key},\param{m}}{Uses the \texttt{RpgFontEmphasis} font to emphasise text.\cmdidx{key}}
-        {
-            \cmd{emph}\param{text}
+	\RpgMacro{emph}{\param{m},\cmd{key},\param{m}}{Uses the \texttt{RpgFontEmphasis} font to emphasise text.\cmdidx{key}}
+		{
+			\cmd{emph}\param{text}
 
-            \cmd{key}\param{text}
-        }
-        {
-            The \cmd{emph} command is usually a `context aware' emphasis command: equal to \cmd{textit} normally, \cmd{textbf} when the surrounding text is italics etc. 
+			\cmd{key}\param{text}
+		}
+		{
+			The \cmd{emph} command is usually a `context aware' emphasis command: equal to \cmd{textit} normally, \cmd{textbf} when the surrounding text is italics etc. 
 
-            However, for RPGs, it is convenient to be able to identify \emph{keywords} in a consistent fashion. The \cmd{emph} command has therefore been redefined to use the \texttt{RpgFontEmphasis} font which can be configured to give a desired `keyword formatting'.
-            
-            The command \cmd{key} has also been provided, as a direct alias for \cmd{emph}.
-        }
-        \RpgMacro{RpgContour}{\param{\paramO{} m}}
-            {	
-                Renders text with a \RpgContour[inner=red,outer=black]{contour effect}. The color and style are set through key/value pairs.
-            }
-            {
-                \bs{}RpgContour[inner=<color>,outer=<color>,style=<code>]\param{<text>}
-            }
-            {
-                The \texttt{style} command is applied to the text, whilst the optional \texttt{inner} and \texttt{outer} commands set the base text colour and the external contour color respectively. If the colors are not set, the default values are the \texttt{contourinnercolor} and \texttt{contouroutercolor} values defined by the theme \RpgPage[p]{S:Colors}.
-                
-                The contour does not automatically linebreak, but can be controlled manually with a \texttt{\newline} command (not \texttt{\\} or \texttt{\textbackslash{}par})
-                
-                \begin{RpgTable}{lX}
-                    Example & Output \\
-                    \tabverbExample{\RpgContour[inner=red,outer=black]{example}}
-                    \tabverbExample{\RpgContour[style=\Huge\it]{example}}
-                    \tabverbExample{\RpgContour[]{multi\newline line\newline example}}
-                \end{RpgTable}					
-                ~\subsection{Quirks}
+			However, for RPGs, it is convenient to be able to identify \emph{keywords} in a consistent fashion. The \cmd{emph} command has therefore been redefined to use the \texttt{RpgFontEmphasis} font which can be configured to give a desired `keyword formatting'.
+			
+			The command \cmd{key} has also been provided, as a direct alias for \cmd{emph}.
+		}
+	\RpgMacro{RpgContour}{\param{\paramO{} m}}
+		{	
+			Renders text with a \RpgContour[inner=red,outer=black]{contour effect}. The color and style are set through key/value pairs.
+		}
+		{
+			\bs{}RpgContour[inner=<color>,outer=<color>,style=<code>]\param{<text>}
+		}
+		{
+			The \texttt{style} command is applied to the text, whilst the optional \texttt{inner} and \texttt{outer} commands set the base text colour and the external contour color respectively. If the colors are not set, the default values are the \texttt{contourinnercolor} and \texttt{contouroutercolor} values defined by the theme \RpgPage[p]{S:Colors}.
+			
+			The contour does not automatically linebreak, but can be controlled manually with a \texttt{\newline} command (not \texttt{\\} or \texttt{\textbackslash{}par})
+			
+			\begin{RpgTable}{lX}
+				Example & Output \\
+				\tabverbExample{\RpgContour[inner=red,outer=black]{example}}
+				\tabverbExample{\RpgContour[style=\Huge\it]{example}}
+				\tabverbExample{\RpgContour[]{multi\newline line\newline example}}
+			\end{RpgTable}					
+			~\subsection{Quirks}
 
-                Due to the tokenisation required for the line-splitting and space-preservation, the text inside the contour can exhibit some quirks if stylisation is applied within the \texttt{<text>} argument. 
+			Due to the tokenisation required for the line-splitting and space-preservation, the text inside the contour can exhibit some quirks if stylisation is applied within the \texttt{<text>} argument. 
 
-                Unbraced commands (such as \texttt{\it} or \texttt{\footnotesize}) will only apply to the first word in the text. Braced commands \textit{can} work, but will cause a compilation error if a \texttt{\newline} is included. 
+			Unbraced commands (such as \texttt{\it} or \texttt{\footnotesize}) will only apply to the first word in the text. Braced commands \textit{can} work, but will cause a compilation error if a \texttt{\newline} is included. 
 
-                
-                \begin{RpgTable}{lX}
-                    \footnotesize\tabverbExample{\RpgContour[]{\Huge\it only first word changes}}
-                    \footnotesize\tabverbExample{\RpgContour[]{\textit{all words change}}}
-                    \footnotesize\texttt{\bs{}RpgContour[]{\bs{}textit\param{all word \bs{}newline change}}} & (fails to compile)
-                \end{RpgTable}
-                For robustness, we therefore recommend that all stylisation be applied through the \texttt{style} command, which is applied to each tokenised element, and therefore guaranteed to work as expected.
-            }
-        \RpgMacro{RpgDropCap}{\param{\paramO{} m m}}
-            {	
-                Creates a decorative `drop cap' letter to begin a new chapter with, and modifies the following text.
-            }
-            {
-                    \bs{}RpgDropCap[<lettrine-args>]{<letter>}{<text>}
-            }{
-                This command uses \forcelink{https://texdoc.org/serve/lettrine/0}{the lettrine package} and the \forcelink{https://ctan.org/pkg/magaz?lang=en}{magaz} package to create an easy-to-use environment in which the first letter is enlarged (and stylised in the \texttt{RpgFontDropCap} font). The second argument formats \textit{up to the first line} of text in the \texttt{RpgFontDropCapInternal} font (usually a simple \texttt{scshape} command).
+			
+			\begin{RpgTable}{lX}
+				\footnotesize\tabverbExample{\RpgContour[]{\Huge\it only first word changes}}
+				\footnotesize\tabverbExample{\RpgContour[]{\textit{all words change}}}
+				\footnotesize\texttt{\bs{}RpgContour[]{\bs{}textit\param{all word \bs{}newline change}}} & (fails to compile)
+			\end{RpgTable}
+			For robustness, we therefore recommend that all stylisation be applied through the \texttt{style} command, which is applied to each tokenised element, and therefore guaranteed to work as expected.
+		}
+	\RpgMacro{RpgDropCap}{\param{\paramO{} m m}}
+		{	
+			Creates a decorative `drop cap' letter to begin a new chapter with, and modifies the following text.
+		}
+		{
+				\bs{}RpgDropCap[<lettrine-args>]{<letter>}{<text>}
+		}{
+			This command uses \forcelink{https://texdoc.org/serve/lettrine/0}{the lettrine package} and the \forcelink{https://ctan.org/pkg/magaz?lang=en}{magaz} package to create an easy-to-use environment in which the first letter is enlarged (and stylised in the \texttt{RpgFontDropCap} font). The second argument formats \textit{up to the first line} of text in the \texttt{RpgFontDropCapInternal} font (usually a simple \texttt{scshape} command).
 
-                This command can be a little fragile -- lettrine does not usually play well with the `FirstLine' command provided by magaz -- and we've used a few workarounds to allow both linebreaking, and the formatting of only the first line of text. There may need to be a small amount of manual calibration, but it is better than the default.					
+			This command can be a little fragile -- lettrine does not usually play well with the `FirstLine' command provided by magaz -- and we've used a few workarounds to allow both linebreaking, and the formatting of only the first line of text. There may need to be a small amount of manual calibration, but it is better than the default.					
 
-            }
+		}
  \begin{ExampleBlock}[RpgDropCap]{RpgDropCap}
  \raggedright \RpgDropCap{T}{he example: this text runs over the first line, and then revert back to the normal font. It almost works! However, because it's wrapped in a text box, it goes slightly over the edges.}
  \end{ExampleBlock}
-        \RpgMacro{RpgSetFont}{\param{{m}}}
-            {
-                Saves new font values and styles to the internal RpgFont[X] variables, which are then available for themes to use.			
-            }
-            {
-                \bs{}RpgSetFont{<key-value-pairs>}
-            }{
-                See \RpgPage{S:Fonts} for documentation of the available font families. The values changed by this command are local, and so persist only within a local group.
-            }
+        
 
+    
 
-\section{Dice Commands}
-    Dice are a mainstay of RPGs, and so it is important to have a standard way to report and simplify their expressions. We provide an interface for a standard `dice + modifier' expression.
-    \RpgMacro{RpgDice}{\param{{m}}}
+\section{Theme Commands}
+
+   
+    
+    \RpgMacro{RpgSetTheme}{\param{{m}}}
+        {
+            Activates a chosen theme.
+        }
+        {\bs{}RpgSetTheme\param{<theme-name>}}
+        {
+            Searches for the file \texttt{<theme-path>/<theme-name>/<theme-name>.cfg}, and inputs it. If this is a properly configured theme file, then it activates the chosen theme given the current global parameters. If the file does not exist, throws an error.
+
+            If   \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, the command automatically inserts \texttt{\bs{}clearpage}, as required to ensure the old headers are not overwritten by the new theme.
+
+            \texttt{<theme-path>} is modified via \cmdref{RpgSetThemePath}.
+        }
+
+    
+    \RpgMacro{RpgSetThemePath}{\param{{m}}}
+        {
+            Changes the value of the theme path searched for by \cmd{RpgSetTheme}
+        }
+        {
+            \bs{}RpgSetThemePath\param{<path-name>}
+        }
+        {
+            Updates an internal variable to be equal to the input value; does not check if the theme path is valid or not. Useful if you wish to create a new theme outside of the \texttt{rpgtex} file structure.
+        }
+        
+\section{Utility Commands}
+ 	 \RpgMacro{RpgDice}{\param{{m}}}
         {
             Evaluates expressions of the form $n\mathrm{d}x \pm m$, and outputs using a theme-dependent layout.
         }
@@ -276,135 +211,8 @@
                 \texttt{\bs{}RpgDice\param{2*1d6}}, \texttt{\bs{}RpgDice\param{1 d6}}, \texttt{\bs{}RpgDice\param{3d 6 +3}} & (Fails to compile)
             \end{RpgTable}
         
-            % \cmd{RpgDice} is neat, but not necessarily impressive by itself. The true power of the expression is that it calls the control sequence set by \cmd{RpgSetDiceFormat} to perform the output formatting (after performing the regular expression parsing), allowing designers to customise their dice formatting.
+            \cmd{RpgDice} is neat, but not necessarily impressive by itself. The true power of the expression is that it calls the control sequence set by \cmdref{RpgSetDiceFormat} to perform the output formatting (after performing the regular expression parsing), allowing designers to customise their dice formatting.
         }
-
-    \RpgMacro{RpgSetDiceFormat}{\param{{+m}}}
-        {Sets the typesetting of the RpgDice command
-        }
-        {
-            % \bs{}RpgDiceFormat\param{<dice-count>}\param{<dice-size>}\param{<added bonus>}
-            \bs{}RpgSetDiceFormat
-            \\\{
-            \\	~~\% \#1 = dice count ~~\#2 = dice size ~~ \#3 = added bonus
-            \\	~~<custom-code>
-            \\\}
-        }
-        {
-             This is a \COSS{}, with the resulting control sequences allowing theme designers to determine how \cmd{RpgDice} is rendered. The default option is:
-            \cmd{RpgSetDiceFormat\param{\#1d\#2 \#3}}, such that \cmd{RpgDice\param{ndx + a + b}} gives ``ndx + c'', where c is the numerical value of a+b, with an additional check to see if \texttt{\#3} is equal to 0 (to avoid `1d6 + 0'). 
-            
-            The dnd implementation performs a more advanced operation, computing the average value of the roll, and formatting that first, to replicate the format used by monster stat blocks. 
-
-            \RpgSetDiceFormat{
-                \DndTempDiceFormat{#1}{#2}{#3}
-            }
-
-   
-        }
-
-\begin{ExampleBlock}{RpgDice Formatting: The D\&D Format}
- Before: \begin{itemize}
-  \item \RpgDice{2d8 + 3}
-  \item \RpgDice{d8}
- \end{itemize}
- \ExplSyntaxOn %%Activate expl3 programming
- \RpgSetDiceFormat{ % #1: Dice Number, #2: Dice Sides, #3: Modifier
-  %%Set dX -> 1dX
-  \tl_set:Nn \l__temp_dice{\tl_if_blank:VTF {#1}{1}{#1}}
-  %%Compute the average result
-  \tl_set:Nn \l_tmp_mean_tl { \fp_eval:n {
-   floor ( \tl_use:N{\l__temp_dice} * ( #2 + 1 ) / 2 ) + (#3)
-   }}
-  %typeset the result
-  \l_tmp_mean_tl{}~(\l__temp_dice d#2
-  \fp_compare:nNnTF { #3 } { = } { 0 }{}{#3})
- }
- \ExplSyntaxOff
- After \begin{itemize}
-  \item \RpgDice{2d8 + 3}
-  \item \RpgDice{d8}
- \end{itemize}
-\end{ExampleBlock}
-
-\section{Theme Commands}
-
-    \RpgMacro{RpgLayoutOnly}{\param{{m}}}
-        {	
-            Executes the contents of the command if \texttt{layout} mode is active.
-        }
-        {
-            \bs{}RpgLayoutOnly\param{<content-to-execute>}
-        }
-        {
-            If the internal value \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, then \texttt{content-to-execute} is run, otherwise it is ignored.
-
-            This command is primarily used by theme developers and document class files to conditionally load or activate modules based on whether the package was loaded via a document class (layout mode active) or directly via \texttt{\bs{}usepackage\param{rpgtex}}.
-        }
-    \RpgMacro{RpgSetFooterDecoration}{\param{{o m}}}{Configures an image to be displayed along the bottom of a page as a `footer scroll'.}
-        {
-            \bs{}RpgSetFooterDecortation[<opts>]\param{path/to/img}
-        }
-        {
-            When placed within a footer, (i.e. with fancypage), places the image in a node with parameters:
-            
-            \texttt{\textbackslash{}node[inner sep=0pt,anchor=south,nearly opaque] at (current page.south) \{\textbackslash{}includegraphics[width=\textbackslash{}paperwidth]\{path/to/img\}\};}
-
-            If the package option \texttt{bg=none} has been passed, then the image is suppressed.
-
-            The following options modify that code as follows:
-            \begin{description}
-                \item[reverse] adds \texttt{xscale=-1} to the node arguments, reversing the image (useful for right/left page differences)
-                \item[tikz-insert={code}] inserts the code within the tikz environment after the footer scroll. This is not suppressed with \texttt{bg=none} and can be used to place chaptermarks / page numbers more precisely than the standard interface allows.
-                \item[height=<dimexpr>] adds \texttt{height=dimexpr} to the includegraphics arguments
-                \item[keepaspectratio] adds \texttt{keepaspectratio} to the includegraphics arguments    
-            \end{description}
-        }
-    \RpgMacro{RpgSetPaper}{\param{}}
-        {Sets a background image to be used as the `paper' image.}
-        {
-            \bs{}RpgSetPaper\param{path/to/image}
-        }
-        {
-            If \texttt{layout} mode is active, then this configures \rpgtex{} to use the image as the `background image' of every page with \texttt{fancy, plain} or \texttt{clear} pagestyle. This allows for custom `paper textures' to be loaded in in the background. 
-
-            The pagestyle \texttt{clear} is equal to \texttt{empty}, with the exception of the page texture.
-        }
-    \RpgMacro{RpgSetTheme}{\param{{m}}}
-        {
-            Activates a chosen theme.
-        }
-        {\bs{}RpgSetTheme\param{<theme-name>}}
-        {
-            Searches for the file \texttt{<theme-path>/<theme-name>/<theme-name>.cfg}, and inputs it. If this is a properly configured theme file, then it activates the chosen theme given the current global parameters. If the file does not exist, throws an error.
-
-            If   \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, the command automatically inserts \texttt{\bs{}clearpage}, as required to ensure the old headers are not overwritten by the new theme.
-
-            \texttt{<theme-path>} is modified via \cmdref{RpgSetThemePath}.
-        }
-
-    \RpgMacro{RpgSetThemeColor}{\param{{m}}}
-        {
-            Sets the \texttt{themecolor}, and simultaneously updates the co-varying colors \RpgPage[p]{S:Colors}.
-        }{
-            \bs{}RpgSetThemeColor\param{color-name}
-        }{
-            If \texttt{color-name} specifies a valid color, then the value of \texttt{themecolor} is updated, as well as a number of other colors (\texttt{tipcolor}, \texttt{sidebarcolor} and \texttt{tablecolor}) which are set to be equal to the themecolor by default.
-
-            Of the rpg-provided colors, only \texttt{narrationcolor} is unaffected by this command.
-        }
-    \RpgMacro{RpgSetThemePath}{\param{{m}}}
-        {
-            Changes the value of the theme path searched for by \cmd{RpgSetTheme}
-        }
-        {
-            \bs{}RpgSetThemePath\param{<path-name>}
-        }
-        {
-            Updates an internal variable to be equal to the input value; does not check if the theme path is valid or not. Useful if you wish to create a new theme outside of the \texttt{rpgtex} file structure.
-        }
-        
-\section{Utility Commands}
 
     \RpgMacro{RpgFakeChapter}{\param{m}}{Mimics creating a new chapter with \cmd{chapter} (including adding in to the table of contents) without inserting a `chapter heading'}
     {
@@ -434,7 +242,7 @@
             \end{RpgTable}
             {\it Note that due to a lack of brace-capturing, it is not possible to chain multiple commands.}.
         }
-    \RpgMacro{RpgPage}{\param{{O{t} m}}}
+    \RpgMacro{RpgPage}{\param{{O\param{t} m}}}
         {
             Outputs the current page reference for a label, with an option to enclose it in specific brackets or parentheses.
         }

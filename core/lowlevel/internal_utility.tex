@@ -19,6 +19,22 @@
 	}
 }
 
+\cs_new_protected:Npn \__rpg_bool_from_text:e#1{
+	\str_case:nnF {#1}
+	{
+		{true} {\c_true_bool}
+		{True} {\c_true_bool}
+		{1} {\c_true_bool}
+		{false} {\c_false_bool}
+		{False} {\c_false_bool}
+		{0} {\c_false_bool}
+	}
+	{
+		\msg_error:nnxx { rpg } { bad_bool } {}{#1}
+	}
+}
+
+
 \cs_new_protected:Npn \__rpg_insert_tl_key:xene #1#2#3#4
 {
 	\exp_args:Ne\keys_define:nn{#1}{

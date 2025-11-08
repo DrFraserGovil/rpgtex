@@ -1,11 +1,13 @@
 
 
-\documentclass[theme=default,justified,a4paper,oneside]{rpgbook}
+\documentclass[theme=default,justified,oneside,colums=1]{rpgbook}
 
 \usepackage{doc}
 \usepackage{blindtext}
-\usepackage{imakeidx}
+\usepackage{splitidx} %use rather than imakeidx because it gets hyperrefs right!
 \usepackage{pifont}
+
+\usepackage[official]{eurosym} %%used for the euro in item examle
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
 \makeindex
@@ -16,6 +18,8 @@
 \title{The rpgtex Package}
 \subtitle{A package for generating beautiful RPG documents}
 \author{Jack Fraser-Govil}
+
+
 
 \newcommand{\lindex}[1]{%
   \lowercase{\def\temp{#1}}%
@@ -63,8 +67,9 @@
 			\justifying{}
 
 			\RpgDropCap{W}{elcome to the \rpgtex{} package}. This \LaTeX{} package is designed to allow users to flexibly typeset documents associated with Role Playing Games such as \textit{Dungeons \& Dragons} -- and many more besides. This packages defines a central engine: \texttt{rpgcore} which define a number of useful functions and classes, and a flexible set of \texttt{themes} which control how those commands are rendered in the final document.
-
 			\vspace{2cm}
+
+
 			\subsection*{Attribution \& License}
 
 			This package would not have been possible without the team who developed \forcelink{https://github.com/rpgtex/DND-5e-LaTeX-Template/tree/dev}{its predecessor, the `DND 5e LateX Template'}. That code was released under an MIT license, the text of which can be found in the LICENSE file. \texttt{rpgtex} is released under the same license.
@@ -72,7 +77,7 @@
 		\end{center}
 
 		\vfill{}
-		\twocolumn{}
+		% \twocolumn{}
 
 	\tableofcontents
 
@@ -84,10 +89,13 @@
 	
 	
 	
-	\part{rpgtex Core}
+	\part{rpgtex For Users}
 		\input{parts/options.tex}
 		\input{parts/commands.tex}
 		\input{parts/environments.tex}
+	\part{rpgtex For Designers}
+	\input{parts/designer_commands.tex}
+	\input{parts/switchenv.tex}
 	\part{rpgtex Classes}
 		\input{parts/class_book.tex}
 		\input{parts/class_handout.tex}
@@ -96,6 +104,7 @@
 		\input{parts/themes_default.tex}
 		\input{parts/themes_dnd.tex}
 		\input{parts/themes_scifi.tex}
+
 
 	\RpgSetTheme{default}
 	\printindex

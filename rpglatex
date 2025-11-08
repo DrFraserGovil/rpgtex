@@ -106,6 +106,34 @@ def argprint(args,message):
 	if not args.quiet: print(message)
 	
 
+###Replaces the need for the manual configuration step by auto-injecting the package directory into document
+def locatePackageDirectory():
+	package_name = "rpg.sty"
+	command = ['kpsewhich',"-subdir=rpgtex", package_name]
+	try:
+		result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            check=False  # Do not raise an exception if kpsewhich returns non-zero (i.e., not found)
+        )
+		# The path is in stdout, but includes a newline
+		full_path = result.stdout.strip()
+		if result.returncode == 0 and full_path:
+
+			# 3. Extract the directory path
+			return f" \\def\\RpgPackagePath{{{os.path.dirname(full_path)}}}"
+		else:
+			print(f"   Error: Package '{package_name}' not found by kpsewhich")
+			print(f"   Running without auto-injection. You may see error messages.")
+			return None
+	except FileNotFoundError:
+		print("\n--- ERROR --- The 'kpsewhich' command was not found.")
+		print("Please ensure TeX Live or MiKTeX is installed and configured in your system's PATH.")
+		sys.exit(1)
+	except Exception as e:
+		print(f"An unexpected error occurred: {e}")
+		sys.exit(1)
 
 def code_injection(args):
 	
@@ -116,6 +144,9 @@ def code_injection(args):
 	additional_code = f"\\def\\RpgCMD{{bg={val}}}"
 	#other code
 
+	packageDir =  locatePackageDirectory()
+	if packageDir is not None:
+		additional_code += packageDir
 
 	#then insert the desired code
 	additional_code += f" \\input"

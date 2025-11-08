@@ -1,0 +1,203 @@
+\chapter{Designer Commands}
+
+	
+
+	The following are commands that the user is \textit{not expected to call}, but which are executed by the internal engine in the process of rendering the page, or as a result of other commands that the user has called. 
+
+	\begin{center}
+		\bfseries \large
+		The `average user' may safely ignore this section.
+	\end{center}
+	
+	On the other hand, these Theme Commands have been designed to provide a convenient interface for creating and manipulating the underlying Themes -- and so their documentation allows for designers - and the more adventurous users - to create powerful and flexible themes from within \rpgtex{}. 
+    
+
+
+	\begin{RpgSidebar}{CoSS Functions}\label{S:ThemeCommands}
+
+			A quirk of some of some of Theme Commands is that they require accessing arguments which were not passed to them. These are \emph{Control Sequence Setters (CoSS)}: functions which do not execute commands, but instead save them to be executed later. 
+
+			For example:
+			\begin{Code}
+				\cmd{RpgSetControlSequence}\{\\
+					This is a (\#1)-argument command, but I am using (\#2), and even (\#3) arguments! 
+				\\\}
+			\end{Code}
+
+			These CoSS functions do not execute the control sequence, but save it to an intermediary value. The backend of the package looks something like:
+			\begin{Code}
+				\bs{}NewDocumentCommand\param{\bs{}RpgSetControlSequence}\param{+m}\{\\
+					\bs{}cs\_set:Nn \bs{}\_\_rpg\_control\_sequence:nnn\param{\#1}
+				\\\}
+			\end{Code}
+			That is, the contents of the CoSS are saved into an expl3 control sequence -- and in this case, one with three arguments (\texttt{nnn}). When another internal function comes to execute \texttt{\_\_rpg\_control\_sequence:nnn}, the text will render as:
+			\begin{Code}
+				\texttt{\bs{}\_\_rpg\_control\_sequence:nnn\param{3}{\param{2}}\param{1}}
+				\\
+				This is a (3)-argument command, but I am using (2), and even (1) arguments! 
+			\end{Code}
+			When working with CoSS functions it is vital to check the documentation to see which arguments are available, as it may not be obvious from the setter's syntax.
+	\end{RpgSidebar}
+
+	\section{Title \& Part Pages}
+		\RpgMacro{RpgSetCover}{\param{{+m}}}
+            {
+                Assign the Tikz code for drawing a custom cover page over the top of the \cmd{@cover}-image.
+            }{
+                \bs{}RpgSetCover
+                \\\{
+                \\	~~<custom-tikz-code>
+                \\\}
+            }
+            {
+                 This is a \COSS{}, with the resulting control sequences being used when \cmd{maketitle} is called (and \cmd{RpgUseCoverPage{true}} has been set), allowing the designer to determine where to place the text on the page, and what embellishments accompany it. The stored sequence is called from within an existing tikz environment with the \texttt{remember,overlay} options active, allowing for page coordinates (i.e. current page.north) to be used.
+
+                The custom tikz code does not permit any arguments, but the contents of \cmd{@title}, \cmd{@subtitle}, \cmd{@author} and \cmd{@date} are accessible.
+
+                If a \cmd{@cover} has been defined, this command is executed after the image is placed, drawing on top of it.
+            }
+        \RpgMacro{RpgSetSimpleTitle}{\param{{+m}}}
+            {
+                Assigns the code for typesetting a `header' title - a simple text-only title at the top of the page.
+            }{
+                \bs{}RpgSetSimpleTitle
+                \\\{
+                \\	~~<custom-code>
+                \\\}
+            }
+            {
+                 This is a \COSS{}, with the resulting control sequences being used when \cmd{maketitle} is called (and \cmd{RpgUseCoverPage} has been set to false), allowing the designer to determine how to structure the text which makes up the `simple' title.
+
+                The Simple Title is configured so that, in a twocolumn document, it occupies the full page width; calling \texttt{centering} with the simple title therefore centers the text above both columns. 
+            }
+       
+		\RpgMacro{RpgSetPartPage}{\param{{+m}}}{Assign the Tikz code for drawing a custom part page when activated by \cmdref{part}. }
+            {
+                \bs{}RpgSetPartPage
+                \\\{
+                \\	~~\% \#1 = part name
+                \\	~~<custom-tikz-code>
+                \\\}
+            }
+            {
+                 This is a \COSS{}, with the resulting control sequences being used when \cmd{part} is called, allowing the designed to determine where to place the part name on the page, and what embellishments accompany it. The stored sequency is called from within an existing tikz environment with the \texttt{remember,overlay} options active, allowing for page coordinates (i.e. current page.north) to be used.
+
+                The command can take one argument (\#1), which is equal to the name of the part. The current part counter can be accessed via \cmd{thepart}.
+                
+                The \cmd{part} command draws a background image (if on is provided), with the contents of this command rendered on top.
+            }
+	\section{Page Appearance}
+		\RpgMacro{RpgSetFooterDecoration}{\param{{o m}}}{Configures an image to be displayed along the bottom of a page as a `footer scroll'.}
+        {
+			\cmd{fancyfoot}[LE] \% the footer for left-even pages
+
+			\{
+            
+			~~\cmd{RpgSetFooterDecortation}[<opts>]\param{path/to/img}
+			
+			\}
+        }
+        {
+            When placed within a footer, (i.e. with fancypage), places the image in a node with parameters:
+            
+            \texttt{\textbackslash{}node[inner sep=0pt,anchor=south,nearly opaque] at (current page.south) \{\textbackslash{}includegraphics[width=\textbackslash{}paperwidth]\{path/to/img\}\};}
+
+            If the package option \texttt{bg=none} has been passed, then the image is suppressed.
+
+            The following options modify that code as follows:
+            \begin{description}
+                \item[reverse] adds \texttt{xscale=-1} to the node arguments, reversing the image (useful for right/left page differences)
+                \item[tikz-insert={code}] inserts the code within the tikz environment after the footer scroll. This is not suppressed with \texttt{bg=none} and can be used to place chaptermarks / page numbers more precisely than the standard interface allows.
+                \item[height=<dimexpr>] adds \texttt{height=dimexpr} to the includegraphics arguments
+                \item[keepaspectratio] adds \texttt{keepaspectratio} to the includegraphics arguments    
+            \end{description}
+        }
+    \RpgMacro{RpgSetPaper}{\param{}}
+        {Sets a background image to be used as the `paper' image.}
+        {
+            \bs{}RpgSetPaper\param{path/to/image}
+        }
+        {
+            If \texttt{layout} mode is active, then this configures \rpgtex{} to use the image as the `background image' of every page with \texttt{fancy, plain} or \texttt{clear} pagestyle. This allows for custom `paper textures' to be loaded in in the background. 
+
+            The pagestyle \texttt{clear} is equal to \texttt{empty}, with the exception of the page texture.
+        }
+		\RpgMacro{RpgSetThemeColor}{\param{{m}}}
+        {
+            Sets the \texttt{themecolor}, and simultaneously updates the co-varying colors \RpgPage[p]{S:Colors}.
+        }{
+            \bs{}RpgSetThemeColor\param{color-name}
+        }{
+            If \texttt{color-name} specifies a valid color, then the value of \texttt{themecolor} is updated, as well as a number of other colors (\texttt{tipcolor}, \texttt{sidebarcolor} and \texttt{tablecolor}) which are set to be equal to the themecolor by default.
+
+            Of the rpg-provided colors, only \texttt{narrationcolor} is unaffected by this command.
+        }
+	\section{Other}
+		\RpgMacro{RpgSetFont}{\param{{m}}}
+            {
+                Saves new font values and styles to the internal RpgFont[X] variables, which are then available for themes to use.			
+            }
+            {
+                \bs{}RpgSetFont{<key-value-pairs>}
+            }{
+                See \RpgPage{S:Fonts} for documentation of the available font families. The values changed by this command are local, and so persist only within a local group.
+            }
+\RpgMacro{RpgSetDiceFormat}{\param{{+m}}}
+        {Sets the typesetting of the RpgDice command
+        }
+        {
+            % \bs{}RpgDiceFormat\param{<dice-count>}\param{<dice-size>}\param{<added bonus>}
+            \bs{}RpgSetDiceFormat
+            \\\{
+            \\	~~\% \#1 = dice count ~~\#2 = dice size ~~ \#3 = added bonus
+            \\	~~<custom-code>
+            \\\}
+        }
+        {
+             This is a \COSS{}, with the resulting control sequences allowing theme designers to determine how \cmd{RpgDice} is rendered. The default option is:
+            \cmd{RpgSetDiceFormat\param{\#1d\#2 \#3}}, such that \cmd{RpgDice\param{ndx + a + b}} gives ``ndx + c'', where c is the numerical value of a+b, with an additional check to see if \texttt{\#3} is equal to 0 (to avoid `1d6 + 0'). 
+            
+            The dnd implementation performs a more advanced operation, computing the average value of the roll, and formatting that first, to replicate the format used by monster stat blocks. 
+
+            \RpgSetDiceFormat{
+                \DndTempDiceFormat{#1}{#2}{#3}
+            }
+
+   
+        }
+
+\begin{ExampleBlock}{RpgDice Formatting: The D\&D Format}
+ Before: \begin{itemize}
+  \item \RpgDice{2d8 + 3}
+  \item \RpgDice{d8}
+ \end{itemize}
+ \ExplSyntaxOn %%Activate expl3 programming
+ \RpgSetDiceFormat{ % #1: Dice Number, #2: Dice Sides, #3: Modifier
+  %%Set dX -> 1dX
+  \tl_set:Nn \l__temp_dice{\tl_if_blank:VTF {#1}{1}{#1}}
+  %%Compute the average result
+  \tl_set:Nn \l_tmp_mean_tl { \fp_eval:n {
+   floor ( \tl_use:N{\l__temp_dice} * ( #2 + 1 ) / 2 ) + (#3)
+   }}
+  %typeset the result
+  \l_tmp_mean_tl{}~(\l__temp_dice d#2
+  \fp_compare:nNnTF { #3 } { = } { 0 }{}{#3})
+ }
+ \ExplSyntaxOff
+ After \begin{itemize}
+  \item \RpgDice{2d8 + 3}
+  \item \RpgDice{d8}
+ \end{itemize}
+\end{ExampleBlock}
+ \RpgMacro{RpgLayoutOnly}{\param{{m}}}
+        {	
+            Executes the contents of the command if \texttt{layout} mode is active.
+        }
+        {
+            \bs{}RpgLayoutOnly\param{<content-to-execute>}
+        }
+        {
+            If the internal value \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, then \texttt{content-to-execute} is run, otherwise it is ignored.
+
+            This command is primarily used by theme developers and document class files to conditionally load or activate modules based on whether the package was loaded via a document class (layout mode active) or directly via \texttt{\bs{}usepackage\param{rpgtex}}.
+        }
