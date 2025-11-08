@@ -4,7 +4,7 @@
 
 \usepackage{doc}
 \usepackage{blindtext}
-\usepackage{imakeidx}
+\usepackage{splitidx} %use rather than imakeidx because it gets hyperrefs right!
 \usepackage{pifont}
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
@@ -91,11 +91,10 @@
 		\input{parts/options.tex}
 		\input{parts/commands.tex}
 		\input{parts/environments.tex}
-		
 		\input{parts/card.tex}
 	\part{rpgtex For Designers}
-		\input{parts/designer_commands.tex}
-		\input{parts/switchenv.tex}
+	\input{parts/designer_commands.tex}
+	\input{parts/switchenv.tex}
 	\part{rpgtex Classes}
 		\input{parts/class_book.tex}
 		\input{parts/class_handout.tex}

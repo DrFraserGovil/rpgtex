@@ -177,6 +177,87 @@
   \end{RpgMap*}
  \end{ExampleBlock}
 
+    \labelsection{RpgSecret}
+
+        The RpgSecret environment uses the RpgSwitchEnv system \RpgPage[p]{S:SwitchEnv} to conditionally hide information; this allows a Game Master\footnote{Or whatever your system calls this role!} to use the same text for their own notes as they would for players, but wall off some parts of it as 'not for their eyes'. 
+
+	\RpgMacro*{RpgSecret}{\param{\paramO m} }{
+		A switchable environment \RpgPage[p]{S:SwitchEnv} associated with the switch \texttt{ShowSecrets}. When this key is true, the body of the environment is rendered; otherwise it is hidden. 
+		}{
+			\cmd{begin}\param{RpgSecret}[<opts>]\param{<player-text>}
+
+			~~~<GM-text>
+
+			\cmd{end}{RpgSecret}
+		}{
+			If the \texttt{ShowSecrets} switch has been set to false, then the \texttt<player-text> is inserted as plain text with nothing to suggest there's additional text being withheld.
+
+			If the switch is true, then the GM text is rendered in a highlighted box, informing the reader that this information is considered secret. If player text was present, this is also shown, and highlighted as the 'publicly available' knowledge.
+
+			The optional arguments take the form of key value pairs:
+			\begin{RpgTable}{llX}
+				Key & Values & Effect
+				\\
+				\kve{title-secret}{string}{Sets the name above the `secret' text (if shown). Default value `Secret Text' }
+				\kve{title-public}{string}{Sets the name above the `player' text (if secret text is shown, and player text present). Default value is `Normal Text'}
+				\kve{color}{color specifier}{Sets the outline color of the `secret box' rendered when the key is set to true.}
+			\end{RpgTable}
+		}
+	{
+	\RpgMacro{RpgShowSecrets}{\param{m}}{An alias for \cmd{RpgSetSwitch\param{ShowSecrets}\param{input}}}{}{}
+	}
+
+	        \begin{figure}[H]
+        \def\fmt{\color{gray!60}\small}
+\def\lorumIpsumOne{{\fmt{}Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit,
+ vestibulum ut, placerat ac, adipiscing vitae, felis. Curabitur dictum gravida mauris. }}
+ \def\lorumIpsumTwo{{\fmt{}Nam arcu libero, nonummy eget,
+consectetuer id, vulputate a, magna. Donec vehicula augue eu neque.
+Pellentesque habitant morbi tristique senectus et netus et malesuada
+fames ac turpis egestas. }}
+\def\lorumIpsumThree{{\fmt{}Mauris ut leo. Cras viverra metus rhoncus
+sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu
+tellus sit amet tortor gravida placerat. Integer sapien est, iaculis in,
+pretium quis, viverra ac, nunc. }}
+\begin{ExampleBlock}[false,RpgSecret,RpgSetSwitch]{RpgSecrets (in hide-mode)}
+ %%hide the juicy gossip
+ \RpgSetSwitch{ShowSecrets}{false}
+ 
+ \lorumIpsumOne%Snippets of standard lorum ipsum
+ \begin{RpgSecret}{}
+   The players don't know it yet, but all this pseudo-latin text is a hint that devils are involved!  
+ \end{RpgSecret}
+  \lorumIpsumTwo{}
+  \begin{RpgSecret}{
+    Logos kykloforia, thelxis kai ethos, tyrannis kai epilysis. Aei thera plaka, kyrios meion egestas, anagkas proin eira kai thera.
+    }
+   
+    This bit of text is noteworthy - it's been added in after the fact
+ \end{RpgSecret}
+  \lorumIpsumThree
+\end{ExampleBlock}
+        
+\begin{ExampleBlock}[true,RpgSecret,RpgShowSecrets]{RpgSecrets (in show-mode)}
+ %%exactly the same as above -- but reveal the secrets!
+ \RpgShowSecrets{true} 
+ \lorumIpsumOne
+
+ \begin{RpgSecret}{}
+     The players don't know it yet, but all this pseudo-latin text is a hint that devils are involved! 
+ \end{RpgSecret}
+
+  \lorumIpsumTwo{}
+
+  \begin{RpgSecret}{Logos kykloforia, thelxis kai ethos, tyrannis kai epilysis. Aei thera plaka, kyrios meion egestas, anagkas proin eira kai thera.}
+
+     This bit of text is noteworthy - it's been added in after the fact
+ \end{RpgSecret}
+
+  \lorumIpsumThree{}
+\end{ExampleBlock}
+\end{figure}
+
+
 
 \labelsection{RpgTable}
 
