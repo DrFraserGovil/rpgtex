@@ -505,3 +505,35 @@ pretium quis, viverra ac, nunc. }}
     \end{ExampleBlock}
 
 
+\section{RpgItem, RpgSpell, RpgFeat (etc.)}
+
+	The prior documented environments have almost entirely been \textit{rules agnostic}. That is, they have primarily been typesetting aids which could equally be used for notes on a whimsical high fantasy game, or a gritty futuristic scifi game -- all the theme did was change the appearance of the individual elements. 
+	
+	Some elements, however, are strongly tied not only to an aesthetic theme, but also to the rules of an individual system: a statblock for a Pathfinder monster not only looks wholly different to a hostile Traveller alien, but has different components and arguments.
+	
+	To this end, we have provided a powerful and flexible interface to allow a designer to create and customise environments. This is the subject of Chapter \ref{S:Forge}, and makes it somewhat difficult to robustly document the features - as they change behaviour depending on the theme that is being used! When using these functions, always consult the theme-specific documentation.
+
+	By default, all of these environments have the same behaviour (except where noted otherwise)
+
+	\RpgMacro*{Rpg[X]}{\param{\paramO{} m \paramO}}{A card-switching environment which renders the text either in normal text, or as an \envref{RpgCard} }
+	{
+		\cmd{begin}\param{Rpg[X]}[<card-opts>]\param{<name>}[<cmd-opts>] \% replace [X] with `Item/Feat/Spell'
+
+		\ldots
+	}{
+		All environments following this pattern are based off the Switched-Environment system \RpgPage[p]{S:SwitchEnv}, allowing them to render the same text either in normal (`text') mode, or in card-mode, depending on the value set by the user. The optional \texttt{card-opts} parameter is passed as the optional parameter to the RpgCard environment, allowing the user to customise the card's appearance.
+
+		The \texttt{name} parameter defines the object and will (usually) appear in a title/subtitle/subsubtitle. 
+
+		The main flexibility of the system is delivered through the \texttt{<cmd-opts>} argument, which accepts key/value pairs. The keys are determined by the theme (there are none by default), and define rules-based interactions (a D\&D theme might add an `armour-class' key, whilst a Forged in the Dark theme might add `tier'. Consult the theme-documentation for the present definition of the keys.
+	}{}
+
+	\RpgMacro{Rpg[X]ShowCard}{\param{m}}{Sets the card mode for all Rpg[X] environments}{
+		\cmd{Rpg[X]ShowCard\param{true/false}}
+	}{
+		If set to true, the contents of the specified environment will be rendered in card-mode, or text-mode if false.
+	}
+
+	
+	
+
