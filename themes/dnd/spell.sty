@@ -1,3 +1,6 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Internal key processing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 \int_new:N \l__rpg_dnd_spell_level_tl
@@ -6,7 +9,6 @@
 	level .code:n ={\int_set:Nn{\l__rpg_dnd_spell_level_tl}{#1}},
 	level .initial:n = 0,
 }
-
 \__rpg_add_tl_keys:Nn {rpg/dnd/spell}
 {
 	\__rpg_tl_key:nnn {school}{\l__rpg_dnd_spell_school_tl}{}
@@ -37,10 +39,10 @@
 	{\centering
 		
 		{
-			\RpgFontSpellCardHeader\scriptsize
+			\RpgFontCardHeader\scriptsize
 			\__rpg_dnd_spell_header:nn {\l__rpg_dnd_spell_level_tl}{\l__rpg_dnd_spell_school_tl}
 		}
-		{\\\RpgFontSpellCardTitle\color{titlered}\mbox{#1}}
+		{\\\RpgFontCardTitle\color{titlered}\mbox{#1}}
 		
 		\vspace{-0.5em} \\
 
@@ -49,7 +51,7 @@
 		\vspace{-0.25em}
 
 		
-		{\RpgFontSpellCardHeader
+		{\RpgFontCardHeader
 		\begin{tabularx}{\linewidth}{YY}
 			% \centering
 			\color{titlered}Casting~time & \color{titlered}Range
@@ -73,11 +75,10 @@
 		}
 }
 
-\NewDocumentEnvironment{spellcard}{O{} m m +b}
+\NewDocumentEnvironment{__SpellCard}{O{} m +b}
 {
 	\setlength{\parindent}{0pt}
-    \keys_set:nn {rpg/dnd/spell}{#3}
-	\begin{RpgCard}[underlay=\RpgPackagePath/themes/dnd/img/paper,#1]
+	\begin{RpgCard}[#1,opacity=0.4]
 		
 		\FormatSpellHeading{#2}
 		
@@ -86,9 +87,9 @@
 		\\ 
 		\vspace{0.5em}
 		
-		\RpgFontSpellCardBody
+		\RpgFontCardBody
 
-		#4
+		#3
 		
 		\AddSpellSource{}
 		
@@ -96,9 +97,8 @@
 	\end{RpgCard}
 }
 
-\NewDocumentEnvironment{spelltext}{m m}
+\NewDocumentEnvironment{__SpellText}{m}
 {
-	\keys_set:nn {rpg/dnd/spell}{#2}
 	\subsection{#1}
 	
 	\textit{\__rpg_dnd_spell_header:nn {\l__rpg_dnd_spell_level_tl}{\l__rpg_dnd_spell_school_tl}}
@@ -121,9 +121,11 @@
 	% \par{\it \spellsource}
 }
 
+
 \NewDocumentEnvironment{RpgSpell}{O{} m m}
 {
-	\begin{RpgCardSwitch}[#1]{spellcard}{spelltext}{#2}{#3}
+	\keys_set:nn {rpg/dnd/spell}{#3}
+	\begin{RpgSwitchEnv}{UseSpellCard}[#1]{__SpellCard}{__SpellText}{#2}
 }{
-	\end{RpgCardSwitch}
+	\end{RpgSwitchEnv}
 }
