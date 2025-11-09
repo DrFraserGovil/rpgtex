@@ -125,7 +125,7 @@
             The customisation options (see below) allow a designer to add in additional keys, which they can then use to add a specific format to the item. Consult the individual theme documentation for implementation specific details.
         }
         
-        \RpgMacro{RpgUseItemCards}{\param{m}}{An alias for \cmd{RpgSetSwitch\param{UseItemCard}\param{input}}}{}{}
+        \RpgMacro{RpgItemShowCard}{\param{m}}{An alias for \cmd{RpgSetSwitch\param{UseItemCard}\param{input}}}{}{}
         
 
 \begin{ExampleBlock}{RpgItem}
@@ -136,10 +136,10 @@
 
     The legendary Sword of Charlemagne; this weapon is known as the `joybringer' and the `Jewelled Blade'. It grants you +13 on heroism rolls. 
  \end{RpgItem}}
- \RpgUseItemCards{false} %plain text first
+ \RpgItemShowCard{false} %plain text first
 \testItem{} 
 
- \RpgUseItemCards{true} %now the card
+ \RpgItemShowCard{true} %now the card
 \testItem{} 
 \end{ExampleBlock}
 
@@ -147,43 +147,43 @@
 
 		We provide three key functions which allow a designer to completely change the appearance of an item card
 
-		\RpgMacro{RpgAddItemProperty}{\param{m v m}}
+		\RpgMacro{RpgItemAddProperty}{\param{m v m}}
 			{}{
-				\cmd{RpgAddItemProperty}\param{new-key}\param{\cmd{destination}}\param{default-value}
+				\cmd{RpgItemAddProperty}\param{new-key}\param{\cmd{destination}}\param{default-value}
 			}{Creates a new entry in the \texttt{rpg/item} key-value parser, which stores the value passed by the user in the chosen destination macro. If the key is not present in the RpgItem \texttt{key-value} argument, the default value is assigned instead.
 			
 			This allows a designer to request the user provide structured information, which they can then place as they choose.
 			}
 		
 		\begin{RpgTip}{More Complex Key/Value behaviour}
-			\cmd{RpgAddItemProperty} is a wrapper around the usual expl3 key interface, \cmd{keys\_define\param{rpg/item}}, automatically creating \cmd{tl\_set} commands (and a few others). For more complex key/value pairs, such as choices, toggles etc., a designer may manually edit the \texttt{rpg/item} registry.
+			\cmd{RpgItemAddProperty} is a wrapper around the usual expl3 key interface, \cmd{keys\_define\param{rpg/item}}, automatically creating \cmd{tl\_set} commands (and a few others). For more complex key/value pairs, such as choices, toggles etc., a designer may manually edit the \texttt{rpg/item} registry.
 		\end{RpgTip}
-		\RpgMacro{RpgSetItemCardFormat}{\param{+m}}
-			{A \COSS{}, with the resulting control sequence being used as the body of a \texttt{RpgCard} call when \cmd{RpgUseItemCards} has been set to true.}{
-				\cmd{RpgSetItemCardFormat}\{
+		\RpgMacro{RpgItemCardFormat}{\param{+m}}
+			{A \COSS{}, with the resulting control sequence being used as the body of a \texttt{RpgCard} call when \cmd{RpgItemShowCard} has been set to true.}{
+				\cmd{RpgItemCardFormat}\{
 					\%\#1 = Card name, \#2 = Card body
 				~~<card-description>
 
 				\}
 			}{
-				As can be seen, the CoSS only takes two arguments; however by constructing a customised \cmd{RpgAddItemProperty} interface, the designer can add additional elements around the item body, and therefore have an arbitrary amount of information passed from the user -- see the examples below.
+				As can be seen, the CoSS only takes two arguments; however by constructing a customised \cmd{RpgItemAddProperty} interface, the designer can add additional elements around the item body, and therefore have an arbitrary amount of information passed from the user -- see the examples below.
 			}
-		\RpgMacro{RpgSetItemTextFormat}{\param{+m}}	{A \COSS{}, with the resulting control sequence being used as the output of \texttt{RpgItem}, when \cmd{RpgUseItemCards} has been set to false.}
+		\RpgMacro{RpgItemTextFormat}{\param{+m}}	{A \COSS{}, with the resulting control sequence being used as the output of \texttt{RpgItem}, when \cmd{RpgItemShowCard} has been set to false.}
 			{
-				\cmd{RpgSetItemTextFormat}\{
+				\cmd{RpgItemTextFormat}\{
 					\%\#1 = Card name, \#2 = Card body
 				~~<card-description>
 
 				\}
 			}{
-				As can be seen, the CoSS only takes two arguments; however by constructing a customised \cmd{RpgAddItemProperty} interface, the designer can add additional elements around the item body, and therefore have an arbitrary amount of information passed from the user -- see the examples below.
+				As can be seen, the CoSS only takes two arguments; however by constructing a customised \cmd{RpgItemAddProperty} interface, the designer can add additional elements around the item body, and therefore have an arbitrary amount of information passed from the user -- see the examples below.
 			}
 		
 
 \begin{ExampleBlock}{Customised RpgItem}
- \RpgAddItemProperty{tagline} {\RpgItemTagline}{}
- \RpgAddItemProperty{weight} {\RpgItemWeight}{0kg}
- \RpgAddItemProperty{value} {\RpgItemValue}{\euro{}0}
+ \RpgItemAddProperty{tagline} {\RpgItemTagline}{}
+ \RpgItemAddProperty{weight} {\RpgItemWeight}{0kg}
+ \RpgItemAddProperty{value} {\RpgItemValue}{\euro{}0}
 
  \def\testItem{
  \begin{RpgItem}[color=red, opacity=0.4] {Joyeuse} 
@@ -195,9 +195,9 @@
  \end{RpgItem}}
 
  %plain text first
- \RpgUseItemCards{false} 
+ \RpgItemShowCard{false} 
  %%set the plaintext format
- \RpgSetItemTextFormat{
+ \RpgItemTextFormat{
  \subsection{#1\hfill{}\RpgItemValue{}}
  \hrule{}
  \textit{\RpgItemTagline (\RpgItemWeight)}\par
@@ -208,9 +208,9 @@
 \vspace{1cm}
 
 %now the card
- \RpgUseItemCards{true} 
+ \RpgItemShowCard{true} 
  %%set the card format
- \RpgSetItemCardFormat{
+ \RpgItemCardFormat{
   \begin{center}
     {\RpgFontSubsection #1}
     
