@@ -73,13 +73,15 @@
 \RequirePackage {core/fonts}	    % font definitions
 
 % % % Main modules in alphabetical order
-\RequirePackage {core/colorboxes}    % inline tip, narration and sidebar boxes
-\RequirePackage {core/map}   % section styling and special section headers
-\RequirePackage {core/table}      % tables
-\RequirePackage {core/titles}
 \RequirePackage {core/headerdecorations}     % fancy headers and footers
-\RequirePackage{core/switchenv}
-\RequirePackage{core/card}
+\RequirePackage {core/titles}
+\RequirePackage {core/environments/colorboxes}    % inline tip, narration and sidebar boxes
+\RequirePackage {core/environments/map}   % section styling and special section headers
+\RequirePackage {core/environments/table}      % tables
+\RequirePackage{core/environments/switchenv}
+\RequirePackage{core/environments/secret}
+\RequirePackage{core/environments/card}
+\RequirePackage{core/environments/cardbuilder}
 %
  % %% packages which do nothing but alter geometry/page settings, and so are ignored if the header layout setting is not active
 \RpgLayoutOnly{

@@ -12,65 +12,75 @@
 \newlength\tempwidth
 
 
-\RpgItemSetCardFormat{
+\RpgItemCardFormat{
+    {\setlength\parindent{0pt}
+    % \setlength\parskip{5pt}
+    \tl_if_blank:eF{\RpgItemRarity}
     {
-	% 	\setlength\parindent{0pt}
-    % \setlength\parskip{1pt plus 1pt minus 1pt}
-    % \tl_if_blank:eF{\RpgItemRarity}
-    % {
-    %     \tl_concat:NNN{\RpgItemRarity}{\RpgItemRarity}{~}
-    % }
+        \tl_concat:NNN{\RpgItemRarity}{\RpgItemRarity}{~}
+    }
     
-    % \tl_concat:NNN\RpgItemDescription{\RpgItemRarity}{\RpgItemType}
-    % \tl_if_blank:eF{\RpgItemDescription}
-    % {
-    %     {\hfil{} {\small\scshape \RpgItemDescription} \hfil{}}
+    \tl_concat:NNN\RpgItemDescription{\RpgItemRarity}{\RpgItemType}
+    \tl_if_blank:eF{\RpgItemDescription}
+    {
+        {\hfil{} {\small\scshape \RpgItemDescription} \hfil{}}
 
-    %     \newline
-    % }
+        \newline
+    }
 
-    % {\setlength\topsep{0pt}\begin{center}
+    {\setlength\topsep{0pt}\begin{center}
         
 
-    %     \noindent\begin{tikzpicture}
+        \noindent\begin{tikzpicture}
             
-    %             % \begin{scope}[yshift=-0.1cm]
-    %             \def\makeText{
-    %                 \node at (0,0) {\adjustbox{keepaspectratio,max~width=0.85\linewidth,gstore~width=\tempwidth}{\RpgFontSubsection #1}};
-    %             }
-    %             %%initial render to get size
-    %             \makeText{}
+                % \begin{scope}[yshift=-0.1cm]
+                \def\makeText{
+                    \node at (0,0) {\adjustbox{keepaspectratio,max~width=0.85\linewidth,gstore~width=\tempwidth}{\RpgFontSubsection #1}};
+                }
+                %%initial render to get size
+                \makeText{}
 
-    %             % \def\w{{\the\dimexpr\tempwidth+0.2cm\relax}}
-    %             \setlength\tempwidth{\dimexpr0.5\tempwidth+0.2cm\relax}
-    %             \def\w{\the\tempwidth}
-    %             \def\h{0.45cm}
-    %             \def\drop{0.15cm}
-    %             \def\sindent{0.3cm}
-    %             \def\sw{{(\sindent+0.2cm)}}
-    %             \def\indent{0.25cm}
-    %             \draw[thick,rounded~corners=1pt,fill=white] ({\w-\sindent},{\h-\drop})--++(\sw,0)--++({-\indent},-\h)--++({\indent},-\h)--++({-\sw},0)--cycle;
+                % \def\w{{\the\dimexpr\tempwidth+0.2cm\relax}}
+                \setlength\tempwidth{\dimexpr0.5\tempwidth+0.2cm\relax}
+                \def\w{\the\tempwidth}
+                \def\h{0.45cm}
+                \def\drop{0.15cm}
+                \def\sindent{0.3cm}
+                \def\sw{{(\sindent+0.2cm)}}
+                \def\indent{0.25cm}
+                \draw[thick,rounded~corners=1pt,fill=white] ({\w-\sindent},{\h-\drop})--++(\sw,0)--++({-\indent},-\h)--++({\indent},-\h)--++({-\sw},0)--cycle;
                 
-    %             \draw[thick,rounded~corners=1pt,fill=white] ({-\w+\sindent},{\h-\drop})--++(-\sw,0)--++({\indent},-\h)--++({-\indent},-\h)--++({\sw},0)--cycle;
+                \draw[thick,rounded~corners=1pt,fill=white] ({-\w+\sindent},{\h-\drop})--++(-\sw,0)--++({\indent},-\h)--++({-\indent},-\h)--++({\sw},0)--cycle;
 
-    %             \draw[thick,fill=gray!30,rounded~corners=1pt] (-\w,-\h)--++(\sindent,-\drop)--++(0,1.3*\drop)--++({2*(\w-\sindent)},0)--++
-    %             (0,-1.3*\drop)--++(\sindent,\drop)--cycle;
+                \draw[thick,fill=gray!30,rounded~corners=1pt] (-\w,-\h)--++(\sindent,-\drop)--++(0,1.3*\drop)--++({2*(\w-\sindent)},0)--++
+                (0,-1.3*\drop)--++(\sindent,\drop)--cycle;
 
-    %             \draw[thick,fill=white] (-\w,\h)--(\w,\h) to[out=250, in=110] (\w, -\h)--({\w},-\h) -- ({{-\w},-\h}) to[out=70,in=290] cycle;
+                \draw[thick,fill=white] (-\w,\h)--(\w,\h) to[out=250, in=110] (\w, -\h)--({\w},-\h) -- ({{-\w},-\h}) to[out=70,in=290] cycle;
                 
-    %             %%second time to render on top
-    %             \makeText{}
-    %             % \end{scope}
-    %     \end{tikzpicture}
+                %%second time to render on top
+                \makeText{}
+                % \end{scope}
+        \end{tikzpicture}
         
-    % \end{center}}
+    \end{center}}
     
-    % \vspace{0.4cm}
+    \vspace{0.4cm}
     
-    % \tl_if_blank:eF{\RpgItemImage}
-    % {
-    %     {\hfil \includegraphics[width=\linewidth,height=3cm,keepaspectratio=true]{\RpgItemImage}\hfil}
-    % }\newline
-  \ignorespaces #2 \par
+    \tl_if_blank:eF{\RpgItemImage}
+    {
+        {\hfil \includegraphics[width=\linewidth,height=3cm,keepaspectratio=true]{\RpgItemImage}\hfil}\par\noindent
+    }
+
+
+     \footnotesize
+    \str_compare:eNeF{\RpgAttunement}{=}{none}
+        {
+           \textit{Requires~attunement~\RpgAttunement} \par
+        }
+
+    % \vfill{} 
+
+   #2
+%    \vfill
     }
 }

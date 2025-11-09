@@ -1,0 +1,68 @@
+
+\ExplSyntaxOn
+
+
+\NewDocumentCommand{\RpgCreateNewCardFormat}{m O{O{} m O{}} m m}
+{
+	%%%%Initialise the hooks to the internal formatters
+		\cs_new:cpn {__#1_card_format:nn}{-No-Format-Set-For-#1-Card-}
+		\cs_new:cpn {__#1_text_format:nn}{-No-Format-Set-For-#1-Text-}
+
+		\cs_new:cpn {#1CardFormat} ##1
+		{
+			\cs_set:cn {__#1_card_format:nn} {##1}
+		}
+		\cs_new:cpn {#1TextFormat} ##1
+		{
+			\cs_set:cn {__#1_text_format:nn} {##1}
+		}
+	%%Define default formatter values
+		\use:c{#1CardFormat}{\subsection{##1} ##2\par \vfill}
+		\use:c{#1TextFormat}{\subsection{##1} ##2\par}
+
+	%%Define the attribute list
+		\cs_new:cpn {#1AddProperty} ##1##2##3
+		{
+			\__rpg_insert_tl_key:xene{rpg/card/#4}{##1}{##2}{##3}   
+		}
+
+
+	%%Individual environments
+	\NewDocumentEnvironment{__#1Card}{O{} m +b}
+	{
+		\begin{RpgCard}[##1]
+			\use:c{__#1_card_format:nn}{##2}{##3}
+	}
+	{
+		\end{RpgCard}
+	}
+	\NewDocumentEnvironment{__#1Text}{m +b}
+	{
+		\use:c{__#1_text_format:nn}{##1}{##2}
+	}{}
+
+	
+		%%Define the switch setter
+		\cs_new:cpn {#1ShowCard} ##1
+		{
+		\RpgSetSwitch{#3}{##1} 
+		}
+		\RpgSetSwitch{#3}{false}
+
+	%%Now define the actual switchenv wrapper
+	\NewDocumentEnvironment{#1}{#2}
+	{
+		 \keys_set:nn{rpg/card/#4}{##3}
+		\begin{RpgSwitchEnv}{#3}[##1]{__#1Card}{__#1Text}{##2}
+	}{
+		\end{RpgSwitchEnv}
+	}
+
+	
+}
+
+\RpgCreateNewCardFormat{RpgItem}[O{opacity=0.2} m O{}]{UseItemCard}{item}
+
+\RpgCreateNewCardFormat{RpgSpell}[O{} m m]{UseSpellCard}{spell}
+
+\ExplSyntaxOff
