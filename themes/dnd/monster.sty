@@ -12,7 +12,7 @@
 	enhanced,
 	before~skip      = 12pt plus 3pt minus 3pt,
 	boxrule          = 2pt,
-	breakable,
+	% breakable,
 	parbox           = false,
 	boxsep           = 2pt,
 	toptitle         = 8pt,
@@ -576,7 +576,7 @@
 	{
 		\group_begin:
 		\seq_set_from_clist:Nn \l_tmpa_seq {#1}
-		\seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n { \emph {##1} } }
+		\seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n { \it {##1} } }
 		\seq_use:Nn \l_tmpb_seq { ,~ }
 		\group_end:
 	}

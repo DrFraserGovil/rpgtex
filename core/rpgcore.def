@@ -81,7 +81,7 @@
 \RequirePackage{core/environments/switchenv}
 \RequirePackage{core/environments/secret}
 \RequirePackage{core/environments/card}
-\RequirePackage{core/environments/cardbuilder}
+\RequirePackage{core/environments/featureforge}
 %
  % %% packages which do nothing but alter geometry/page settings, and so are ignored if the header layout setting is not active
 \RpgLayoutOnly{
