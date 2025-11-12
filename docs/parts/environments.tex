@@ -9,74 +9,74 @@
 
     The main power of the RpgCard is the ability to automatically \textit{cardbreak}, splitting large internal elements across multiple cards. 
 
-	\RpgMacro*{RpgCard}{\param{\paramO}}{Splits the contents across a number of playing-card sized units}{
-		
-			\cmd{begin}\param{RpgCard}[<key-value-opts>]
+    \RpgMacro*{RpgCard}{\param{\paramO}}{Splits the contents across a number of playing-card sized units}{
+        
+            \cmd{begin}\param{RpgCard}[<key-value-opts>]
 
-			~~~~~~<contents>
+            ~~~~~~<contents>
 
-			\cmd{end}\param{RpgCard}
-		}{
-			Creates a card environment with a height and width defined either by \texttt{<opts>}, or the global variables. Text is automatically broken if it exceeds this height, creating multiple cards to hold the text.
+            \cmd{end}\param{RpgCard}
+        }{
+            Creates a card environment with a height and width defined either by \texttt{<opts>}, or the global variables. Text is automatically broken if it exceeds this height, creating multiple cards to hold the text.
 
-			The available options are:
-			% \newcommand\kve[3]{\texttt{#1} & #2 & #3\\}
-			\begin{RpgTable}{llX}
-				Key & Values & Effect
-				\\
-				\kve{width}{dimexpr}{The outer width of the RPG card}
-				\kve{hmargin}{dimexpr}{The horizontal margin between the card boundary and the inner text}
-				\kve{height}{dimexpr}{The outer height of the RPG card}
-				\kve{vmargin}{dimexpr}{The vertical margin between the card boundary and the inner text}
-				\kve{cardsep}{dimexpr}{The horizontal space inserted after a card is finished}
-				\kve{color}{color specifier}{The background color of the image. Replaces \textit{tcb/colback}}
-				\kve{opacity}{[0-1]}{The opacity of the background of the image. Replaces \textit{tcb/opacityback}}
-				\kve{under-img}{img/path}{An image to be used as the background of the card. Clipped to the card background so no overspill occurs.}
-				\kve{underlay}{img/path}{An alias for under-img, which replaces \textit{tcb/underlay} to prevent premature tikz expansion.}
-			\end{RpgTable}
+            The available options are:
+            % \newcommand\kve[3]{\texttt{#1} & #2 & #3\\}
+            \begin{RpgTable}{llX}
+                Key & Values & Effect
+                \\
+                \kve{width}{dimexpr}{The outer width of the RPG card}
+                \kve{hmargin}{dimexpr}{The horizontal margin between the card boundary and the inner text}
+                \kve{height}{dimexpr}{The outer height of the RPG card}
+                \kve{vmargin}{dimexpr}{The vertical margin between the card boundary and the inner text}
+                \kve{cardsep}{dimexpr}{The horizontal space inserted after a card is finished}
+                \kve{color}{color specifier}{The background color of the image. Replaces \textit{tcb/colback}}
+                \kve{opacity}{[0-1]}{The opacity of the background of the image. Replaces \textit{tcb/opacityback}}
+                \kve{under-img}{img/path}{An image to be used as the background of the card. Clipped to the card background so no overspill occurs.}
+                \kve{underlay}{img/path}{An alias for under-img, which replaces \textit{tcb/underlay} to prevent premature tikz expansion.}
+            \end{RpgTable}
 
-			The formatting of RpgCard otherwise follows that of a \tcref{}, and all other tcb options can be passed in as normal. However, since the title-frame causes issues with the height calculations, RpgCards cannot use the tcb title interface: any attempt to set a title will fail. We provide two aliases, \texttt{color} and \texttt{opacity}, to make setting the usual values, \texttt{colback} and \texttt{opacityback}, less verbose and obtuse.
+            The formatting of RpgCard otherwise follows that of a \tcref{}, and all other tcb options can be passed in as normal. However, since the title-frame causes issues with the height calculations, RpgCards cannot use the tcb title interface: any attempt to set a title will fail. We provide two aliases, \texttt{color} and \texttt{opacity}, to make setting the usual values, \texttt{colback} and \texttt{opacityback}, less verbose and obtuse.
 
-			Options passed to the environment take precedence to the global variables.
+            Options passed to the environment take precedence to the global variables.
 
-			Note that the RpgCard also temporarily redefines the \cmd{footnote} command (see \cmd{footnote} below).
+            Note that the RpgCard also temporarily redefines the \cmd{footnote} command (see \cmd{footnote} below).
 
-			}
-			
-	\RpgMacro{cardbreak}{\param{}}{Analogous to \cmd{pagebreak}, forces a card to break at the specified location.}
-		{
-			<before-text>
+            }
+            
+    \RpgMacro{cardbreak}{\param{}}{Analogous to \cmd{pagebreak}, forces a card to break at the specified location.}
+        {
+            <before-text>
 
-			\cmd{cardbreak}
-			
-			<after-text>
-		}
-		{
-			The command inserts an infinite, but hidden, vertical space penalty, causing the card to break at its location, as if it had been `filled up'.
+            \cmd{cardbreak}
+            
+            <after-text>
+        }
+        {
+            The command inserts an infinite, but hidden, vertical space penalty, causing the card to break at its location, as if it had been `filled up'.
 
-			\cmd{cardbreak} is any empty function outside of the \texttt{RpgCard} environment, so it will have no effect on RpgCardSwitch environments.
-		}
-	\RpgMacro{footnote}{\param{m}}{A redefinition of the standard footnote to account for the quirks of an RpgCard}
-		{
-			<before-text>\cmd{footnote}\param{foottext}<after-text>
-		}
-		{
-			Due to the multiple processing passes required to ensure that the RpgCard contents fit inside the relevant space, and since footnotes must fit within that space, we had a great deal of difficulty getting footnotes to work as expected (despite them nominally functioning in a tcolorbox).
+            \cmd{cardbreak} is any empty function outside of the \texttt{RpgCard} environment, so it will have no effect on RpgCardSwitch environments.
+        }
+    \RpgMacro{footnote}{\param{m}}{A redefinition of the standard footnote to account for the quirks of an RpgCard}
+        {
+            <before-text>\cmd{footnote}\param{foottext}<after-text>
+        }
+        {
+            Due to the multiple processing passes required to ensure that the RpgCard contents fit inside the relevant space, and since footnotes must fit within that space, we had a great deal of difficulty getting footnotes to work as expected (despite them nominally functioning in a tcolorbox).
 
-			The compromise is that \textbf{only a single footnote can appear in a card}, and the standard \cmd{footnote} command is redefined for the duration of the environment. If multiple footnotes are present, only the final one (in order of execution) will appear. The footnote appears at the bottom of the final card, separated from the main text by a \cmd{hrule}. 
+            The compromise is that \textbf{only a single footnote can appear in a card}, and the standard \cmd{footnote} command is redefined for the duration of the environment. If multiple footnotes are present, only the final one (in order of execution) will appear. The footnote appears at the bottom of the final card, separated from the main text by a \cmd{hrule}. 
 
-			An RpgCard-footnote does not increment the global footnote counter.
-		}
-	\RpgMacro{RpgSetCard}{\param{m}}{Sets the card parameters as global values for all subsequent cards}
-		{
-			\cmd{RpgSetCard}\param{<key/values>}
-		}
-		{
-			The \texttt{<opts>} can contain any of the valid inputs to the \texttt{RpgCard} environment: this acts to set them as global default values, but any locally set values will override them.
-		}
+            An RpgCard-footnote does not increment the global footnote counter.
+        }
+    \RpgMacro{RpgSetCard}{\param{m}}{Sets the card parameters as global values for all subsequent cards}
+        {
+            \cmd{RpgSetCard}\param{<key/values>}
+        }
+        {
+            The \texttt{<opts>} can contain any of the valid inputs to the \texttt{RpgCard} environment: this acts to set them as global default values, but any locally set values will override them.
+        }
 
-	\RpgMacro{RpgResetCard}{\param{}}{Resets changes made to card parameters back to the defalt value.}{}{}
-	
+    \RpgMacro{RpgResetCard}{\param{}}{Resets changes made to card parameters back to the defalt value.}{}{}
+    
     \colorlet{ForestGreen}{green!70!black}
 \begin{figure}
   \begin{ExampleBlock}[RpgCard,footnote]{Simple RpgCard}
@@ -295,31 +295,31 @@
 
         The RpgSecret environment uses the RpgSwitchEnv system \RpgPage[p]{S:SwitchEnv} to conditionally hide information; this allows a Game Master\footnote{Or whatever your system calls this role!} to use the same text for their own notes as they would for players, but wall off some parts of it as 'not for their eyes'. 
 
-	\RpgMacro*{RpgSecret}{\param{\paramO m} }{
-		A switchable environment \RpgPage[p]{S:SwitchEnv} associated with the switch \texttt{ShowSecrets}. When this key is true, the body of the environment is rendered; otherwise it is hidden. 
-		}{
-			\cmd{begin}\param{RpgSecret}[<opts>]\param{<player-text>}
+    \RpgMacro*{RpgSecret}{\param{\paramO m} }{
+        A switchable environment \RpgPage[p]{S:SwitchEnv} associated with the switch \texttt{ShowSecrets}. When this key is true, the body of the environment is rendered; otherwise it is hidden. 
+        }{
+            \cmd{begin}\param{RpgSecret}[<opts>]\param{<player-text>}
 
-			~~~<GM-text>
+            ~~~<GM-text>
 
-			\cmd{end}{RpgSecret}
-		}{
-			If the \texttt{ShowSecrets} switch has been set to false, then the \texttt<player-text> is inserted as plain text with nothing to suggest there's additional text being withheld.
+            \cmd{end}{RpgSecret}
+        }{
+            If the \texttt{ShowSecrets} switch has been set to false, then the \texttt<player-text> is inserted as plain text with nothing to suggest there's additional text being withheld.
 
-			If the switch is true, then the GM text is rendered in a highlighted box, informing the reader that this information is considered secret. If player text was present, this is also shown, and highlighted as the 'publicly available' knowledge.
+            If the switch is true, then the GM text is rendered in a highlighted box, informing the reader that this information is considered secret. If player text was present, this is also shown, and highlighted as the 'publicly available' knowledge.
 
-			The optional arguments take the form of key value pairs:
-			\begin{RpgTable}{llX}
-				Key & Values & Effect
-				\\
-				\kve{title-secret}{string}{Sets the name above the `secret' text (if shown). Default value `Secret Text' }
-				\kve{title-public}{string}{Sets the name above the `player' text (if secret text is shown, and player text present). Default value is `Normal Text'}
-				\kve{color}{color specifier}{Sets the outline color of the `secret box' rendered when the key is set to true.}
-			\end{RpgTable}
-		}
-	{
-	\RpgMacro{RpgShowSecrets}{\param{m}}{An alias for \cmd{RpgSetSwitch\param{ShowSecrets}\param{input}}}{}{}
-	}
+            The optional arguments take the form of key value pairs:
+            \begin{RpgTable}{llX}
+                Key & Values & Effect
+                \\
+                \kve{title-secret}{string}{Sets the name above the `secret' text (if shown). Default value `Secret Text' }
+                \kve{title-public}{string}{Sets the name above the `player' text (if secret text is shown, and player text present). Default value is `Normal Text'}
+                \kve{color}{color specifier}{Sets the outline color of the `secret box' rendered when the key is set to true.}
+            \end{RpgTable}
+        }
+    {
+    \RpgMacro{RpgShowSecrets}{\param{m}}{An alias for \cmd{RpgSetSwitch\param{ShowSecrets}\param{input}}}{}{}
+    }
 
         \def\fmt{\color{gray!60}\small}
 \def\lorumIpsumOne{{\fmt{}Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit,
@@ -507,33 +507,63 @@ pretium quis, viverra ac, nunc. }}
 
 \section{RpgItem, RpgSpell, RpgFeat (etc.)}
 
-	The prior documented environments have almost entirely been \textit{rules agnostic}. That is, they have primarily been typesetting aids which could equally be used for notes on a whimsical high fantasy game, or a gritty futuristic scifi game -- all the theme did was change the appearance of the individual elements. 
-	
-	Some elements, however, are strongly tied not only to an aesthetic theme, but also to the rules of an individual system: a statblock for a Pathfinder monster not only looks wholly different to a hostile Traveller alien, but has different components and arguments.
-	
-	To this end, we have provided a powerful and flexible interface to allow a designer to create and customise environments. This is the subject of Chapter \ref{S:Forge}, and makes it somewhat difficult to robustly document the features - as they change behaviour depending on the theme that is being used! When using these functions, always consult the theme-specific documentation.
+    The prior documented environments have almost entirely been \textit{rules agnostic}. That is, they have primarily been typesetting aids which could equally be used for notes on a whimsical high fantasy game, or a gritty futuristic scifi game -- all the theme did was change the appearance of the individual elements. 
+    
+    Some elements, however, are strongly tied not only to an aesthetic theme, but also to the rules of an individual system: a statblock for a Pathfinder monster not only looks wholly different to a hostile Traveller alien, but has different components and arguments.
+    
+    To this end, we have provided a powerful and flexible interface to allow a designer to create and customise environments. This is the subject of Chapter \ref{S:Forge}, and makes it somewhat difficult to robustly document the features - as they change behaviour depending on the theme that is being used! When using these functions, always consult the theme-specific documentation.
 
-	By default, all of these environments have the same behaviour (except where noted otherwise)
+    By default, all of these environments have the same behaviour (except where noted otherwise)
 
-	\RpgMacro*{Rpg[X]}{\param{\paramO{} m \paramO}}{A card-switching environment which renders the text either in normal text, or as an \envref{RpgCard} }
-	{
-		\cmd{begin}\param{Rpg[X]}[<card-opts>]\param{<name>}[<cmd-opts>] \% replace [X] with `Item/Feat/Spell'
+    \RpgMacro*{Rpg[X]}{\param{\paramO{} m \paramO}}{A card-switching environment which renders the text either in normal text, or as an \envref{RpgCard} }
+    {
+        \cmd{begin}\param{Rpg[X]}[<card-opts>]\param{<name>}[<cmd-opts>] \% replace [X] with `Item/Feat/Spell'
 
-		\ldots
-	}{
-		All environments following this pattern are based off the Switched-Environment system \RpgPage[p]{S:SwitchEnv}, allowing them to render the same text either in normal (`text') mode, or in card-mode, depending on the value set by the user. The optional \texttt{card-opts} parameter is passed as the optional parameter to the RpgCard environment, allowing the user to customise the card's appearance.
+        \ldots
+    }{
+        All environments following this pattern are based off the Switched-Environment system \RpgPage[p]{S:SwitchEnv}, allowing them to render the same text either in normal (`text') mode, or in card-mode, depending on the value set by the user. The optional \texttt{card-opts} parameter is passed as the optional parameter to the RpgCard environment, allowing the user to customise the card's appearance.
 
-		The \texttt{name} parameter defines the object and will (usually) appear in a title/subtitle/subsubtitle. 
+        The \texttt{name} parameter defines the object and will (usually) appear in a title/subtitle/subsubtitle. 
 
-		The main flexibility of the system is delivered through the \texttt{<cmd-opts>} argument, which accepts key/value pairs. The keys are determined by the theme (there are none by default), and define rules-based interactions (a D\&D theme might add an `armour-class' key, whilst a Forged in the Dark theme might add `tier'. Consult the theme-documentation for the present definition of the keys.
-	}{}
+        The main flexibility of the system is delivered through the \texttt{<cmd-opts>} argument, which accepts key/value pairs. The keys are determined by the theme (there are none by default), and define rules-based interactions (a D\&D theme might add an `armour-class' key, whilst a Forged in the Dark theme might add `tier'. Consult the theme-documentation for the present definition of the keys.
+    }{}
 
-	\RpgMacro{Rpg[X]ShowCard}{\param{m}}{Sets the card mode for all Rpg[X] environments}{
-		\cmd{Rpg[X]ShowCard\param{true/false}}
-	}{
-		If set to true, the contents of the specified environment will be rendered in card-mode, or text-mode if false.
-	}
+    \RpgMacro{Rpg[X]ShowCard}{\param{m}}{Sets the card mode for all Rpg[X] environments}{
+        \cmd{Rpg[X]ShowCard\param{true/false}}
+    }{
+        If set to true, the contents of the specified environment will be rendered in card-mode, or text-mode if false.
+    }
 
-	
-	
+    \RpgMacro{getkey}{\param{m}}{Inserts the value passed to \texttt{key} in the \texttt{cmd-opts} args of the current [X]-environment}
+        {
+            \cmd{begin}\param{Rpg[X]}\param{Test Object}[key1=value,key2=value]
+    
+            \{
+
+            ~~The value of key1 is \cmd{getkey}\param{key1}
+
+            \}
+        }
+        {
+            The writer may then reference the parameters of the object they are creating from within the body text of the environment, preventing duplication of information. 
+
+            Note that this is \textit{not} a general feature of expl3-keys, and is an additional feature which is temporarily defined during the body of the environment. It is only able to retrieve key values from those added into the Parameter Registry \RpgPage[p]{S:ParameterRegistry}. 
+        }
+    
+    
+        
+        \begin{ExampleBlock}{Feature Forge Example}
+    \RpgMakeFeature{TestObject}{TestCard}{test}
+    \ExplSyntaxOn
+    \TestObjectAddProperty{test-key}{\l__test_key}{default}
+            |\ExplSyntaxOff
+    \begin{TestObject}{An Example}
+        This is the body text, I can see that my key is `\getkey{test-key}'
+    \end{TestObject}
+
+    \TestObjectShowCard{true}
+    \begin{TestObject}{An Example}[test-key=virtue]
+        This is the body text, I can see that my key is `\getkey{test-key}'
+    \end{TestObject}
+        \end{ExampleBlock}
 
