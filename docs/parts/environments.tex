@@ -507,15 +507,44 @@ pretium quis, viverra ac, nunc. }}
 
 \section{RpgItem, RpgSpell, RpgFeat (etc.)}
 
-    The prior documented environments have almost entirely been \textit{rules agnostic}. That is, they have primarily been typesetting aids which could equally be used for notes on a whimsical high fantasy game, or a gritty futuristic scifi game -- all the theme did was change the appearance of the individual elements. 
+    The prior documented environments have almost entirely been \textit{rules agnostic}. That is, they have primarily been typesetting aids which could equally be used for notes on a whimsical, rules-lite game about squirrels in a forest, or a crunchy, table-heavy futuristic scifi game -- all the theme did was change the appearance of the individual elements. 
     
     Some elements, however, are strongly tied not only to an aesthetic theme, but also to the rules of an individual system: a statblock for a Pathfinder monster not only looks wholly different to a hostile Traveller alien, but has different components and arguments.
     
     To this end, we have provided a powerful and flexible interface to allow a designer to create and customise environments. This is the subject of Chapter \ref{S:Forge}, and makes it somewhat difficult to robustly document the features - as they change behaviour depending on the theme that is being used! When using these functions, always consult the theme-specific documentation.
 
+    
+
+\begin{RpgSidebar}{Advanced Usage}
+    The functions listed below are the `basic interface' for the FeatureForge system; designed for those who are happy to use the format that a theme designer has set up for them. 
+
+    Those wishing to have a more fine-grained control over the appearance of the objects should consult the full documentation on page \RpgPage[p]{S:Forge}.
+\end{RpgSidebar}
+
     By default, all of these environments have the same behaviour (except where noted otherwise)
 
-    \RpgMacro*{Rpg[X]}{\param{\paramO{} m \paramO}}{A card-switching environment which renders the text either in normal text, or as an \envref{RpgCard} }
+        
+        \begin{ExampleBlock}[TestObject]{Feature Forge Example}
+%% Test object does not exist before this moment.
+%%See FeatureForge for documentation
+\RpgMakeFeature{TestObject}{TestCard}{test}
+\TestObjectAddProperty{test-key} {\testKeyValue} {default}
+
+
+%card mode defaults to false, so get plain text output:
+\begin{TestObject}{An Example}
+    This is the body text, I can see that my key is `\getkey{test-key}'
+\end{TestObject}
+
+%%Then activate the card mode (and change the test-key value)
+\TestObjectShowCard{true}
+\begin{TestObject} {An Example} [test-key=alacrity]
+    This is the body text, I can see that my key is `\getkey{test-key}'
+\end{TestObject}
+        \end{ExampleBlock}
+
+
+    \RpgMacro*{Rpg[X]}{{RpgItem},{RpgSpell},{RpgFeat},\param{\paramO{} m \paramO}}{A card-switching environment which renders the text either in normal text, or as an \envref{RpgCard} }
     {
         \cmd{begin}\param{Rpg[X]}[<card-opts>]\param{<name>}[<cmd-opts>] \% replace [X] with `Item/Feat/Spell'
 
@@ -544,26 +573,12 @@ pretium quis, viverra ac, nunc. }}
 
             \}
         }
-        {
-            The writer may then reference the parameters of the object they are creating from within the body text of the environment, preventing duplication of information. 
+        {\label{S:getkey1}
+            % The writer may then reference the parameters of the object they are creating from within the body text of the environment, preventing duplication of information. 
+            % 
+            Recovers the value passed to the key (after any post-processing performed by the environment). This allows the user to access the key-values, as well as allowing them to be inserted into the expected formatting, without having to duplicate the information.
 
-            Note that this is \textit{not} a general feature of expl3-keys, and is an additional feature which is temporarily defined during the body of the environment. It is only able to retrieve key values from those added into the Parameter Registry \RpgPage[p]{S:ParameterRegistry}. 
+            See \RpgPage{S:getkey2} for more details.
         }
     
     
-        
-        \begin{ExampleBlock}{Feature Forge Example}
-    \RpgMakeFeature{TestObject}{TestCard}{test}
-    \ExplSyntaxOn
-    \TestObjectAddProperty{test-key}{\l__test_key}{default}
-            |\ExplSyntaxOff
-    \begin{TestObject}{An Example}
-        This is the body text, I can see that my key is `\getkey{test-key}'
-    \end{TestObject}
-
-    \TestObjectShowCard{true}
-    \begin{TestObject}{An Example}[test-key=virtue]
-        This is the body text, I can see that my key is `\getkey{test-key}'
-    \end{TestObject}
-        \end{ExampleBlock}
-

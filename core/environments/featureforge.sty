@@ -28,7 +28,7 @@
 		\prop_new:c  {#1_property_list}
 		\cs_new:cpn {#1AddProperty} ##1##2##3
 		{
-			\__rpg_insert_tl_key:xene{rpg/card/#4}{##1}{##2}{##3}   
+			\__rpg_insert_tl_key:xene{rpg/forge/#4}{##1}{##2}{##3}   
 			\prop_put:cnn{#1_property_list}{##1}{##2}
 		}
 
@@ -59,7 +59,7 @@
 	
 	\NewDocumentEnvironment{#1}{#2}
 	{
-		 \keys_set:nn{rpg/card/#4}{##3}
+		 \keys_set:nn{rpg/forge/#4}{##3}
 		
 		\RenewDocumentCommand{\getkey}{m}{
 			\prop_item:cn{#1_property_list}{####1}

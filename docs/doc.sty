@@ -78,7 +78,7 @@
     title=#2
 }
 
-\newtcblisting{BashBlock}{
+\newtcblisting{BashBlock}[1][bash]{
 
         listing~options={
             language=bash, % The correct, non-error-producing language
@@ -92,7 +92,7 @@
 		colframe=gray!50,colback=black!10!white,
 		 left=2pt,right=2pt, 
 		  top=1pt,bottom=1pt,    arc=1mm,enhanced,
-		  title=bash,
+		  title=#1,
 		  attach~boxed~title~to~top~left=
 {yshift=-\tcboxedtitleheight/2},
 boxed~title~style={size=small,colback=gray!80}
@@ -155,8 +155,19 @@ boxed~title~style={size=small,colback=gray!80}
 	\end{tcolorbox}
 }
 
-
-
+\usepackage{amsmath}
+\NewDocumentCommand{\RpgSubMacro}{s m +m +m +m +m}
+{
+	\hspace{0.15\linewidth}\begin{minipage}{0.85\linewidth}
+	\IfBooleanTF{#1}
+	{
+		\RpgMacro*{#2}{#3}{#4}{#5}{#6}
+	}
+	{
+		\RpgMacro{#2}{#3}{#4}{#5}{#6}
+	}
+	\end{minipage}
+}
 
 \NewDocumentCommand{\RpgMacro}{s m +m +m +m +m}{
 
