@@ -19,14 +19,19 @@
  
 	\__write_table_title:n {\l__rpg_table_header_tl}
   
-	\bool_if:NTF {\l__rpg_table_breakable_bool}
+	\bool_if:NTF {\l__rpg_table_simple_bool}
 	{
-		\__render_table:nnn {xltabular}{#2}{#3}	
+		\__simple_table:nn {#2}{#3}	
 	}
 	{
-		\__render_table:nnn {tabularx}{#2}{#3}
+		\bool_if:NTF {\l__rpg_table_breakable_bool}
+		{
+			\__fancy_table:nnn {xltabular}{#2}{#3}	
+		}
+		{
+			\__fancy_table:nnn {tabularx}{#2}{#3}
+		}
 	}
-
 }
 {
   \vspace { 9pt plus 3pt minus 3pt }

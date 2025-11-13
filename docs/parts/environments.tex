@@ -232,7 +232,7 @@
 
         It is then possible to call \cmd{ref} on this label\footnote{Though it won't give you anything interesting -- the returned value will be the cumulative number of RpgAreas in the document at that point} and \cmd{pageref} or \cmd{RpgPage} \RpgPage[p]{Macro:RpgPage}. However, we provide a more powerful referencing interface:
 
-        \RpgMacro{RpgMapRef}{\cmd{RpgMapRef*},\param{{m}}}{Returns the full name of the referenced area, including the map counter. The starred version returns only the map counter.}
+        \RpgMacro[RpgMap!Ref]{RpgMapRef}{\cmd{RpgMapRef*},\param{{m}}}{Returns the full name of the referenced area, including the map counter. The starred version returns only the map counter.}
             {
                 \bs{}RpgMapRef\param{<label-name>}
             }
@@ -247,7 +247,7 @@
                     \tabverbExample{\RpgMapRef*{tomb-ref}}
                 \end{RpgTable}
             }
-        \RpgMacro{RpgMapRefPage}{\cmd{RpgMapRefPage*},\param{{m}}}{Appends the page number of the referenced map area to a \cmd{RpgMapRef(*)} command}
+        \RpgMacro[RpgMap!RefPage]{RpgMapRefPage}{\cmd{RpgMapRefPage*},\param{{m}}}{Appends the page number of the referenced map area to a \cmd{RpgMapRef(*)} command}
             {
                 \bs{}RpgMapRefPage\param{<label-name>}
             }
@@ -399,6 +399,7 @@ pretium quis, viverra ac, nunc. }}
             \item[color=<color-name>] If set, uses this value instead of \texttt{tablecolor} for the alternating coloration.
             \item[title=<text>] Sets the text to be rendered as the title of the table. 
             \item[breakable] If flag is present, renders using \texttt{xltabular}, enabling the table to break over pages. \textbf{only available in 1-column mode (a fundamental limitation of xltabular).}
+            \item[simple] If flag is present, renders using a simple \texttt{tabular} (ignoring breakable flag). Useful if not using X-columns, and not wanting to specify a length of the table. 
             \item[noheader] If flag is present, suppresses the autoformatting of the title. The first row is instead rendered in the body formatting.
         \end{description}
     }
@@ -544,7 +545,7 @@ pretium quis, viverra ac, nunc. }}
         \end{ExampleBlock}
 
 
-    \RpgMacro*{Rpg[X]}{{RpgItem},{RpgSpell},{RpgFeat},\param{\paramO{} m \paramO}}{A card-switching environment which renders the text either in normal text, or as an \envref{RpgCard} }
+    \RpgMacro*[RpgItem,RpgSpell,RpgFeat]{Rpg[X]}{{RpgItem},{RpgSpell},{RpgFeat},\param{\paramO{} m \paramO}}{A card-switching environment which renders the text either in normal text, or as an \envref{RpgCard} }
     {
         \cmd{begin}\param{Rpg[X]}[<card-opts>]\param{<name>}[<cmd-opts>] \% replace [X] with `Item/Feat/Spell'
 
@@ -554,15 +555,16 @@ pretium quis, viverra ac, nunc. }}
 
         The \texttt{name} parameter defines the object and will (usually) appear in a title/subtitle/subsubtitle. 
 
-        The main flexibility of the system is delivered through the \texttt{<cmd-opts>} argument, which accepts key/value pairs. The keys are determined by the theme (there are none by default), and define rules-based interactions (a D\&D theme might add an `armour-class' key, whilst a Forged in the Dark theme might add `tier'. Consult the theme-documentation for the present definition of the keys.
+        The main flexibility of the system is delivered through the \texttt{<cmd-opts>} argument, which accepts key/value pairs. The keys are determined by the theme (there are none by default), and define rules-based interactions (a D\&D theme might add an `armour-class' key, whilst a Forged in the Dark theme might add `tier'). Consult the theme-documentation for the present definition of the keys.
     }{}
 
-    \RpgMacro{Rpg[X]ShowCard}{\param{m}}{Sets the card mode for all Rpg[X] environments}{
+	%has to be outside environment for some reason
+    \RpgMacro[RpgItem!ShowCard,RpgSpell!ShowCard,RpgFeat!ShowCard]{Rpg[X]ShowCard}{\param{m}}{Sets the card mode for all Rpg[X] environments. }{
         \cmd{Rpg[X]ShowCard\param{true/false}}
     }{
         If set to true, the contents of the specified environment will be rendered in card-mode, or text-mode if false.
     }
-
+	
     \RpgMacro{getkey}{\param{m}}{Inserts the value passed to \texttt{key} in the \texttt{cmd-opts} args of the current [X]-environment}
         {
             \cmd{begin}\param{Rpg[X]}\param{Test Object}[key1=value,key2=value]

@@ -142,12 +142,12 @@
             }{
                 See \RpgPage{S:Fonts} for documentation of the available font families. The values changed by this command are local, and so persist only within a local group.
             }
-\RpgMacro{RpgSetDiceFormat}{\param{{+m}}}
+\RpgMacro[RpgDice!SetFormat]{RpgDiceSetFormat}{\param{{+m}}}
         {Sets the typesetting of the RpgDice command
         }
         {
             % \bs{}RpgDiceFormat\param{<dice-count>}\param{<dice-size>}\param{<added bonus>}
-            \bs{}RpgSetDiceFormat
+            \bs{}RpgDiceSetFormat
             \\\{
             \\	~~\% \#1 = dice count ~~\#2 = dice size ~~ \#3 = added bonus
             \\	~~<custom-code>
@@ -155,11 +155,11 @@
         }
         {
              This is a \COSS{}, with the resulting control sequences allowing theme designers to determine how \cmd{RpgDice} is rendered. The default option is:
-            \cmd{RpgSetDiceFormat\param{\#1d\#2 \#3}}, such that \cmd{RpgDice\param{ndx + a + b}} gives ``ndx + c'', where c is the numerical value of a+b, with an additional check to see if \texttt{\#3} is equal to 0 (to avoid `1d6 + 0'). 
+            \cmd{RpgDiceSetFormat\param{\#1d\#2 \#3}}, such that \cmd{RpgDice\param{ndx + a + b}} gives ``ndx + c'', where c is the numerical value of a+b, with an additional check to see if \texttt{\#3} is equal to 0 (to avoid `1d6 + 0'). 
             
             The dnd implementation performs a more advanced operation, computing the average value of the roll, and formatting that first, to replicate the format used by monster stat blocks. 
 
-            \RpgSetDiceFormat{
+            \RpgDiceSetFormat{
                 \DndTempDiceFormat{#1}{#2}{#3}
             }
 
@@ -172,7 +172,7 @@
   \item \RpgDice{d8}
  \end{itemize}
  \ExplSyntaxOn %%Activate expl3 programming
- \RpgSetDiceFormat{ % #1: Dice Number, #2: Dice Sides, #3: Modifier
+ \RpgDiceSetFormat{ % #1: Dice Number, #2: Dice Sides, #3: Modifier
   %%Set dX -> 1dX
   \tl_set:Nn \l__temp_dice{\tl_if_blank:VTF {#1}{1}{#1}}
   %%Compute the average result

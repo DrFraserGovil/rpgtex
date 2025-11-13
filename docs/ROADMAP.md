@@ -20,6 +20,7 @@ Features which *must* be added before the next major release
 Features which would improve the package
 
 * RpgClocks
+* RpgStat card-mode for d&d.
 * Character sheet interface/class
 * Encounter tables / random tables / dice tables
 * Full page images / landscape support

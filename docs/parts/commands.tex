@@ -74,7 +74,7 @@
 	\RpgMacro{subtitle}{\param{{m}},\cmd{@subtitle}}
 		{
 			Saves a string to the variable \cmd{@subtitle}. Themes may use this when defining their \cmd{RpgSetCover} and \cmd{RpgSimpleTitle}.
-			\cmdidx{{"@}subtitle}
+			\index{{"@}subtitle}
 		}
 		{
 			\bs{}subtitle\param{<string>}
@@ -87,7 +87,7 @@
 
 \section{Fonts \& Decorative Text}
     % In addition to the fundamental typeface alterations \rpgtex{} includes a number of commands to turn text into decorative elements.
-	\RpgMacro{emph}{\param{m},\cmd{key},\param{m}}{Uses the \texttt{RpgFontEmphasis} font to emphasise text.\cmdidx{key}}
+	\RpgMacro{emph}{\param{m},\cmd{key},\param{m}}{Uses the \texttt{RpgFontEmphasis} font to emphasise text.\index{key}}
 		{
 			\cmd{emph}\param{text}
 
@@ -211,7 +211,7 @@
                 \texttt{\bs{}RpgDice\param{2*1d6}}, \texttt{\bs{}RpgDice\param{1 d6}}, \texttt{\bs{}RpgDice\param{3d 6 +3}} & (Fails to compile)
             \end{RpgTable}
         
-            \cmd{RpgDice} is neat, but not necessarily impressive by itself. The true power of the expression is that it calls the control sequence set by \cmdref{RpgSetDiceFormat} to perform the output formatting (after performing the regular expression parsing), allowing designers to customise their dice formatting.
+            \cmd{RpgDice} is neat, but not necessarily impressive by itself. The true power of the expression is that it calls the control sequence set by \cmdref{RpgDiceSetFormat} to perform the output formatting (after performing the regular expression parsing), allowing designers to customise their dice formatting.
         }
 
     \RpgMacro{RpgFakeChapter}{\param{m}}{Mimics creating a new chapter with \cmd{chapter} (including adding in to the table of contents) without inserting a `chapter heading'}

@@ -13,8 +13,8 @@
         \stepcounter{makefeature}
         \subsection{Step \arabic{makefeature}: #1}
     }
-
-    \RpgMacro{RpgMakeFeature}{\param{m \paramO{} m m}}{
+	\index{RpgMakeFeature|see {FeatureForge}}
+    \RpgMacro[FeatureForge!RpgMakeFeature]{RpgMakeFeature}{\param{m \paramO{} m m}}{
         Creates a new environment with the specified name. The environment is switchable between card and text mode, and has a number of hooks to customise its appearance and input key values.
         }{
         \cmd{RpgMakeFeature}\param{EnvName}[environment-signature]\param{switch-name}\param{key-library-name}
@@ -29,9 +29,9 @@
             \newcommand\titem[1]{\item[\texttt{#1}]}
             \begin{description}
                 \titem{EnvName} The main environment - for example, \texttt{RpgSpell}, \texttt{RpgItem} etc.
-                \titem{\cmd{[EnvName]ShowCard}} A function which toggles the environment between \texttt{card-mode} (using \envref{RpgCard}) and \texttt{mode} (the default).
-                \titem{\cmd[EnvName]CardFormat} Used to configure the appearance of the environment whilst in card-mode
-                \titem{\cmd[EnvName]TextFormat} Used to configure the appearance of the environment while in text-mode
+                \titem{\cmd{[EnvName]ShowCard}} A function which toggles the environment between \texttt{card-mode} (using \envref{RpgCard}) and \texttt{text-mode} (the default).
+                \titem{\cmd[EnvName]CardFormat} A \COSS{} to configure the appearance of the environment whilst in card-mode
+                \titem{\cmd[EnvName]TextFormat} A \COSS{} configure the appearance of the environment while in text-mode
                 \titem{\cmd{[EnvName]AddProperty}} Used to add a key into the key-value pair argument accepted by the main \texttt{EnvName} environment. 
             \end{description}
 
@@ -51,7 +51,7 @@
 
                
                 \begin{Code}
-                    \cmd{RpgFooAddProperty}\param{description}\param{\cmd{}descriptString}\param{foo-bar}
+                    \cmd{RpgFooAddProperty}\param{description}\param{\cmd{}descriptString}\param{A basic foo}
                 \end{Code}
                 \item Write the formatting functions to determine where the title, the main body text, and the values of the keys are placed, and any formatting that is applied to them.
             
@@ -119,7 +119,7 @@ I can sneakily access the key value: `\getkey{description}'
 
 %%Then activate the card mode (and change the test-key value)
 \RpgFooShowCard{true}
-\begin{RpgFoo}{An Example}
+\begin{RpgFoo}{An Example}[description=An advanced foo]
 This is the body text. 
 
 I can sneakily access the key value: `\getkey{description}'
@@ -134,7 +134,7 @@ I can sneakily access the key value: `\getkey{description}'
 
     \featuresection{Create Main Environment}
             
-            \RpgMacro*{EnvName}{(varies)}{The main environment created by the FeatureForge system, through a call to \cmd{RpgMakeFeature}.  The name of the argument (`\texttt{EnvName}') is the first argument to the constructor function, and serves as the `root' of the names of most of the co-created functions and environments. 
+            \RpgMacro*[]{EnvName}{(varies)}{The main environment created by the FeatureForge system, through a call to \cmd{RpgMakeFeature}.  The name of the argument (`\texttt{EnvName}') is the first argument to the constructor function, and serves as the `root' of the names of most of the co-created functions and environments. 
             }{
                 \cmd{begin}\param{EnvName}[card-opts]\param{<name>}[key-opts]
 
@@ -154,7 +154,7 @@ I can sneakily access the key value: `\getkey{description}'
                 
                 \item Defines a \COSS{} to set the value of  \cmd{\_\_[EnvName]\_text\_format:nn}
                 
-                \RpgMacro{[EnvName]TextFormat}{\param{+m}}{Defines the body of the \texttt{EnvName} environment when in text-mode.}
+                \RpgMacro[]{[EnvName]TextFormat}{\param{+m}}{Defines the body of the \texttt{EnvName} environment when in text-mode.\FFidx{TextFormat}}
                 {
                     \cmd{[EnvName]TextFormat}\{
                         
@@ -174,7 +174,7 @@ I can sneakily access the key value: `\getkey{description}'
                 
                 \item Defines a \COSS{} to set the value of  \cmd{\_\_[EnvName]\_card\_format:nn}
                 
-                \RpgMacro{[EnvName]CardFormat}{\param{+m}}{Defines the body of the \texttt{EnvName} environment when in text-mode.}
+                \RpgMacro[]{[EnvName]CardFormat}{\param{+m}}{Defines the body of the \texttt{EnvName} environment when in text-mode.\FFidx{CardFormat}}
                 {
                     \cmd{[EnvName]CardFormat}\{
                         
@@ -193,7 +193,7 @@ I can sneakily access the key value: `\getkey{description}'
         
         This can be used with the default switch interface, but we also provide a wrapper which performs this for the user:
         
-        \RpgMacro{[EnvName]ShowCard}{\param{m}}{Sets the switch associated with the card equal to the value provided.}{
+        \RpgMacro[FeatureForge!ShowCard]{[EnvName]ShowCard}{\param{m}}{Sets the switch associated with the card equal to the value provided.\FFidx{ShowCard}}{
             \cmd{[EnvName]ShowCard}\param{true/false}~~~~equivalent to~~~~\cmd{RpgSetSwitch}\param{<switch-name>}\param{true/false}
         }
         {
@@ -208,8 +208,8 @@ I can sneakily access the key value: `\getkey{description}'
             This key list is used to parse the values of \texttt{<key-opts>}, the final argument to the EnvName argument each time that it is used.
             \item Creates a \forcelink{https://texdoc.org/serve/interface3/0\#page=228}{property list}, with name \texttt{[EnvName]\_property\_list}. 
             \item Defines a wrapper function for adding simple items into the registry
-            \RpgMacro{[EnvName]AddProperty}{\param{m m +m}}{
-                Adds the specified key in to the key-list. When the key is passed to \texttt{EnvName}, it is saved as a \forcelink{https://texdoc.org/serve/interface3/0\#page=122}{token list}
+            \RpgMacro[]{[EnvName]AddProperty}{\param{m m +m}}{
+                Adds the specified key in to the key-list. When the key is passed to \texttt{EnvName}, it is saved as a \forcelink{https://texdoc.org/serve/interface3/0\#page=122}{token list}. \FFidx{AddProperty}
             }
             {
                 \cmd{[EnvName]AddProperty}\param{key-name}\param{\cmd{macro-name}}\param{default-value}
