@@ -10,7 +10,7 @@
   {
 	header-offset 	.tl_set:N 			= \l__rpg_manual_level_tl,
 	header-offset	.value_required:n 	= true,
-	header-offset	.initial:n			= 0, 
+	header-offset	.initial:n			= 1, 
 	title	.tl_set:N			= \l__rpg_map_title_tl,
 	title	.value_required:n	= true,
 	title	.initial:n			={},
@@ -25,10 +25,11 @@
 	ref-prefix	.initial:n	= {Map:},
   }
 
-
-\NewDocumentEnvironment{RpgMap}{o}
+\bool_new:N \l__rpg_in_map_environment
+\NewDocumentEnvironment{RpgMap}{O{}}
 {
-	\group_begin:   
+	\group_begin:  
+	\bool_set_true:N \l__rpg_in_map_environment
 	\__rpg_construct_parent_prefix:
 
 	\IfNoValueF{#1}
@@ -37,7 +38,7 @@
 
 		\int_compare:nT { \value{RpgAreaDepth} = 1 }
 		{
-			\str_if_empty:nF \l__rpg_map_title_tl
+			\tl_if_empty:eF \l__rpg_map_title_tl
 			{
 				\__rpg_render_heading_level:nf {\l__rpg_manual_level_tl{}}{\l__rpg_map_title_tl} 
 			}
@@ -46,6 +47,7 @@
 }
 {
 	\__rpg_end_map_block:
+	\bool_set_false:N \l__rpg_in_map_environment
 	\group_end:
 }
 
@@ -61,9 +63,13 @@
 	\group_end:
 }
 
-
+\msg_new:nnn{rpg}{not-in-map}{Cannot~create~an~Area~without~an~RpgMap.}
 \NewDocumentCommand{\RpgArea}{o m}
 {
+	\bool_if:NF\l__rpg_in_map_environment
+	{
+		\msg_error:nn{rpg}{not-in-map}
+	}
 	\IfNoValueF{#1}
 	{
 		\bool_set_true:N \l__use_label
@@ -75,13 +81,16 @@
 	\__rpg_map_construct_title:n {#2}
 
 	\bool_set_false:N \l__use_label
+
+	%%Chceck if called as an environment, if so, activate subenvironment
+	\str_compare:eNeT{\@currenvir}{=}{RpgArea}
+	{
+		\begin{RpgMap}
+	}
 }
 
-\NewDocumentEnvironment{RpgNestedArea}{o o m}{
-	\RpgArea[#1]{#3}
-
-	\begin{RpgMap}[#2]
-}{\end{RpgMap}}
+%% Spoof in an end-environment command to end the subenvironment
+\NewDocumentCommand{\endRpgArea}{}{\end{RpgMap}}
 
 
 \tl_new:N \l__inserted_code

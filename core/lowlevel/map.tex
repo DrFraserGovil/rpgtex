@@ -25,10 +25,9 @@
 
 \cs_new_protected:Npn \__rpg_render_heading_level:nf #1#2
 {
-
 	\str_case_e:nnF {\fp_eval:n{#1}}
 	{
-		{0} {\let\rpgtmpsec\chapter}
+		{0} {q \def\rpgtmpsec\chapter}
 		{1} {\let\rpgtmpsec\section }
 		{2} {\let\rpgtmpsec\subsection }
 		{3} {\let\rpgtmpsec\subsubsection }
@@ -37,7 +36,6 @@
 	{
 		\let\rpgtmpsec\subparagraph
 	}
-	% \rpgtmpsec{#2}
 	\__rpg_auto_star:nN {\l__rpg_map_starred_bool}{\rpgtmpsec}{#2}
 }
 

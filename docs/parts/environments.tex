@@ -146,11 +146,24 @@
         The variables set by options are persistent throughout the nesting - setting \texttt{ref-prefix} in one map will mean the same value persists in all encapsulated maps unless manually overridden. Changes do \textit{not} persist once the nesting is finished.
 
     }
-    \RpgMacro{RpgArea}{\param{{o m}}}{
+    \RpgMacro{RpgArea}{RpgArea, \param{{o m}}}{
             Creates a formatted entry within the RpgMap environment. The appearance of the title depends on the map-depth and the current header-offset.
         }{
             \bs{}RpgArea[<manual-label>]\param{<area-name>}
+
+            ~
+
+            Or
+
+            ~
+
+             \cmd{begin}\param{RpgArea}[manual-label]\param{<area name>}
+
+            ~~~\ldots <nested-contents>
+
+            \cmd{end}\param{RpgArea}
         }{
+            \subsubsection{As a Command}
             Creates a `header' depending on the value of \texttt{RpgCounter + headeroffset}:
             \begin{enumerate}
                 \item section
@@ -161,65 +174,61 @@
             If outside these values, uses \texttt{subparagraph}. The name of the section is preceeded by the `map counter', which is equal to the index within the current map, appended to the `map counter' of any parent maps. The formatting function \texttt{RpgMapLevelName} enables hierarchical labelling, such that the third area inside the second map of the first map would be given the counter value `1b-iii'.
 
             If the manual label is set, this is used as the label for this area; otherwise the automatic labelling is used (see below).
+
+            \subsubsection{As an Environment}
+
+             When called as an environment, the body-contents of the environment are wrapping the environment body in a nested \cmd{begin\param{RpgMap}} environment. This makes using RpgMap as an environment functionally equivalent to the following code:
+
+             \begin{minipage}[t]{0.48\linewidth}
+             \begin{Code}
+                 \cmd{begin}\param{RpgArea}[label] \param{<area-name>}
+
+                 ~<map-contents>
+
+                 \cmd{end}\param{RpgArea}
+             \end{Code}
+            \end{minipage}\hspace{0.04\linewidth}\begin{minipage}[t]{0.48\linewidth}
+             \begin{Code}
+                 \cmd{RpgArea}[label]\param{<area-name>}
+
+                 \cmd{begin}\param{RpgMap}
+                 
+                 ~<map-contents>
+
+                 \cmd{end}\param{RpgMap}
+             \end{Code}
+            \end{minipage}
     }
-    \RpgMacro*{RpgNestedArea}{{{o o m}}}
-        {
-            A wrapper environment for calling \cmd{RpgArea} and then immediately \cmd{begin\param{RpgMap}}, creating nested map areas in a single call.
-        }
-        {
-            \cmd{begin}\param{RpgNestedArea}[manual-label][<nested-opts>]\param{<area name>}
 
-            ~~~\ldots
 
-            \cmd{end}\param{RpgNestedArea}
-        }{
-            Note that since the RpgMap environment is invoked after the RpgArea is created, the options passed to \texttt{<nested-opts>} do not apply to the parent Area, which uses the Map options of its own parent.
-        }
-                
- \begin{figure*}
- \begin{ExampleBlock}[RpgMap,RpgArea,RpgNestedArea]{Example RpgMap}
+ \begin{figure*}[!t]
+ \begin{ExampleBlock}[RpgMap,RpgArea,RpgArea]{Example RpgMap}
  \begin{RpgMap*}[
   header-offset=1,%start at subsection
   title={Example Map}]
-  
   \RpgArea{The Spooky Mansion} 
-     There are things here
-  
+     In this room, we can manually created a nested `RpgMap':
   \begin{RpgMap}[
-     title={ignored-as-nested}
-     ]
+        title={ignored-as-nested}]
      \RpgArea{Entrance Hall}
-         Where you go to enter
-     \RpgArea{Kitchen}
-         Yum, food
+     \RpgArea{} An unnamed room
   \end{RpgMap}
-  
-  \begin{RpgNestedArea}[][header-offset=2]
-     {The Creepy Grounds}
-     We set a header-offset for this nested block, so....
+  \begin{RpgArea}{The Creepy Grounds}
+     The Grounds are an environment rather than a command, so these will be nested:
      \RpgArea{The gardens}
-         Note that this is a paragraph, not a subsection
-     \begin{RpgNestedArea}{The stables}
-         Horses live(d) here.
-     
+     \begin{RpgArea}{The stables}
+         Areas can be artbirarily nested.
          \RpgArea{Shire horse}
-             A very big boi, which still keeps the parent's header-offset
- 
          \RpgArea{Shetland pony}
-             And a tiny one too!
-     \end{RpgNestedArea}
-  \end{RpgNestedArea}
-  
+         \end{RpgArea}
+    \end{RpgArea}
   \RpgArea{The Graveyard}
-     The additional offset-didn't persist; we're back to subsections again, and the next element will be a subsubsection.
- 
-     \begin{RpgMap}[
-         blank-prefix={Tomb~}
-         ]
-         \RpgArea{}
-             This is an unnamed area - it gets given a slightly different name
-         \RpgArea[tomb-ref]{}
-             I might want to refer to this later, even though it is unnamed.
+    \begin{RpgMap}[
+      blank-prefix={Tomb~}] %change prefix
+      \RpgArea{}
+        This is an unnamed area - it gets given a slightly different name
+      \RpgArea[tomb-ref]{}
+        We can refer to this later, even though it is unnamed.
      \end{RpgMap}
  \end{RpgMap*}
  \end{ExampleBlock}
