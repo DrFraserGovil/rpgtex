@@ -17,10 +17,10 @@
 
 \RequirePackage{rpg}
 
-\RpgUseCoverPage{true}
+\RpgSetTitleMode{cover}
 
  % Set page geometry.
-  \RequirePackage {geometry}
+\RequirePackage {geometry}
 \geometry
 	{
 	hmargin   = .65in, % Left and right margins

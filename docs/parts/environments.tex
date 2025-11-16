@@ -67,15 +67,15 @@
 
             An RpgCard-footnote does not increment the global footnote counter.
         }
-    \RpgMacro{RpgSetCard}{\param{m}}{Sets the card parameters as global values for all subsequent cards}
+    \RpgMacro[RpgCard!Set]{RpgCardSet}{\param{m}}{Sets the card parameters as global values for all subsequent cards}
         {
-            \cmd{RpgSetCard}\param{<key/values>}
+            \cmd{RpgCardSet}\param{<key/values>}
         }
         {
             The \texttt{<opts>} can contain any of the valid inputs to the \texttt{RpgCard} environment: this acts to set them as global default values, but any locally set values will override them.
         }
 
-    \RpgMacro{RpgResetCard}{\param{}}{Resets changes made to card parameters back to the defalt value.}{}{}
+    \RpgMacro[RpgCard!Reset]{RpgCard!Reset}{\param{}}{Resets changes made to card parameters back to the defalt value.}{}{}
     
     \colorlet{ForestGreen}{green!70!black}
 \begin{figure}
@@ -340,7 +340,9 @@
             \end{RpgTable}
         }
     {
-    \RpgMacro{RpgShowSecrets}{\param{m}}{An alias for \cmd{RpgSetSwitch\param{ShowSecrets}\param{input}}}{}{}
+    \RpgMacro[RpgSecret!Visible]{RpgSecretVisible}{\param{m}}{An alias for \cmd{RpgSwitch\param{ShowSecrets}\param{input}}}{}{
+        % If the value is set to \texttt{true}, 
+    }
     }
 
         \def\fmt{\color{gray!60}\small}
@@ -356,9 +358,9 @@ tellus sit amet tortor gravida placerat. Integer sapien est, iaculis in,
 pretium quis, viverra ac, nunc. }}
 \begin{figure}[H]
 
- \begin{ExampleBlock}[false,RpgSecret,RpgSetSwitch]{RpgSecrets (in hide-mode)}
+ \begin{ExampleBlock}[false,RpgSecret,RpgSwitch]{RpgSecrets (in hide-mode)}
   %%hide the juicy gossip
-  \RpgSetSwitch{ShowSecrets}{false}
+  \RpgSwitch{ShowSecrets}{false}
   
   \lorumIpsumOne%Snippets of standard lorum ipsum
   \begin{RpgSecret}{}
@@ -377,7 +379,7 @@ pretium quis, viverra ac, nunc. }}
 \begin{figure}[H]
  \begin{ExampleBlock}[true,RpgSecret,RpgShowSecrets]{RpgSecrets (in show-mode)}
   %%exactly the same as above -- but reveal the secrets!
-  \RpgShowSecrets{true} 
+  \RpgSecretVisible{true} 
   \lorumIpsumOne
  
   \begin{RpgSecret}{}

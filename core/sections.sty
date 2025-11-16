@@ -8,7 +8,10 @@
   % Remove Numbering (If you want Numbering set secnumdepth to the appropriate depth)
   \setcounter{secnumdepth}{0}
 
-
+	\def\__ChapterName{~}
+	\def\__SectionName{~}
+	\def\__SubsectionName{~}
+	\def\__SubsubsectionName{~}
 	\let\Chaptermark\chaptermark
 	\def\chaptermark#1{\def\__ChapterName{#1}\Chaptermark{#1}}
 	\let\Sectionmark\sectionmark

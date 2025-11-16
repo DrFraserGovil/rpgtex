@@ -27,7 +27,7 @@
 {
 	\str_case_e:nnF {\fp_eval:n{#1}}
 	{
-		{0} {q \def\rpgtmpsec\chapter}
+		{0} {\let\rpgtmpsec\chapter}
 		{1} {\let\rpgtmpsec\section }
 		{2} {\let\rpgtmpsec\subsection }
 		{3} {\let\rpgtmpsec\subsubsection }

@@ -51,9 +51,9 @@
 		%%Define the switch setter
 		\cs_new:cpn {#1ShowCard} ##1
 		{
-		\RpgSetSwitch{#3}{##1} 
+		\RpgSwitch{#3}{##1} 
 		}
-		\RpgSetSwitch{#3}{false}
+		\RpgSwitch{#3}{false}
 
 	%%Now define the actual switchenv wrapper
 	

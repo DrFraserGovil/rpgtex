@@ -189,17 +189,17 @@ I can sneakily access the key value: `\getkey{description}'
             \end{enumerate}
     \featuresection{Create Text/Card Switch \& Wrapper Function}
 
-        Defines a new Switch (see \cmdref{RpgSetSwitch}), with a name equal to \texttt{switch-name}, the second mandatory argument passed to the environment. This does not check if the switch already exists, so it is possible to have multiple environments triggering from the same switch. 
+        Defines a new Switch (see \cmdref{RpgSwitch}), with a name equal to \texttt{switch-name}, the second mandatory argument passed to the environment. This does not check if the switch already exists, so it is possible to have multiple environments triggering from the same switch. 
         
         This can be used with the default switch interface, but we also provide a wrapper which performs this for the user:
         
         \RpgMacro[FeatureForge!ShowCard]{[EnvName]ShowCard}{\param{m}}{Sets the switch associated with the card equal to the value provided.\FFidx{ShowCard}}{
-            \cmd{[EnvName]ShowCard}\param{true/false}~~~~equivalent to~~~~\cmd{RpgSetSwitch}\param{<switch-name>}\param{true/false}
+            \cmd{[EnvName]ShowCard}\param{true/false}~~~~equivalent to~~~~\cmd{RpgSwitch}\param{<switch-name>}\param{true/false}
         }
         {
             If true, the internal \envref{S:SwitchEnv} sets the environment into `card mode' (and hence uses the format set by \cmd{[EnvName]CardFormat}). If false, it enters `text mode' (using the \cmd{[EnvName]TextFormat}-set formatter).
 
-            See \cmdref{RpgSetSwitch} for more information.
+            See \cmdref{RpgSwitch} for more information.
         }
     \featuresection{Create Parameter Registry}\label{S:ParameterRegistry}
         \begin{enumerate}
@@ -322,7 +322,7 @@ I can sneakily access the key value: `\getkey{description}'
         \end{RpgSidebar}
 
         
-        \RpgMacro*{RpgSwitchEnv}{\param{m o m o m}}
+        \RpgMacro*[RpgSwitch!Env]{RpgSwitchEnv}{\param{m o m o m}}
             {
                 Acts as one of two similar environments based on the value of an input key.
             }{
@@ -349,17 +349,14 @@ I can sneakily access the key value: `\getkey{description}'
 
                 An error is thrown if \texttt{key} does not exist in the global registry.
             }
-            \RpgMacro{RpgSetSwitch}{\param{m m}}
-                {Change the value of a \textit{switch}, and therefore the behaviour of the associated RpgSwitchEnv}{\cmd{RpgSetSwitch}\param{<key>}\param{<value>}}
+            \RpgMacro[RpgSwitch!(command)]{RpgSwitch}{\param{m m}}
+                {Change the value of a \textit{switch}, and therefore the behaviour of the associated RpgSwitchEnv}{\cmd{RpgSwitch}\param{<key>}\param{<value>}}
                 {
                     Sets the value of the \texttt{key} in the \textit{switch-registry} to \texttt{{value}}, which must be a 'bool-ish' text string\footnote{That is, either \param{true,True,1} or \param{false,False,0}}. If the entry does not exist in the registry, it is created.
 
                     After the key is set, all subsequent \texttt{RpgSwitchEnv} calls which use that key will have their behaviour altered to match the new key.
                 }
-            \RpgMacro{RpgSetAllSwitches}{\param{m}}
-                {
-                    As with \cmd{RpgSetSwitch}, but iterates over all keys in the registry, and assigns the all the same \texttt{value}.
-                }{}{}
+           
 % \begin{figure}
 \begin{ExampleBlock}[RpgSwitchEnv]{Example Switching Environment}
   \def\exampleSwitch{
@@ -371,10 +368,10 @@ I can sneakily access the key value: `\getkey{description}'
   }
   Changing the switch makes the same contents appear differently:
 
-  \RpgSetSwitch{test}{true}
+  \RpgSwitch{test}{true}
   \exampleSwitch{}
 
-  \RpgSetSwitch{test}{false}
+  \RpgSwitch{test}{false}
   \exampleSwitch{}
 
   %%Now repeat, but move the optional arg to the end as a 'hanging argument' 
@@ -387,10 +384,10 @@ I can sneakily access the key value: `\getkey{description}'
       \end{RpgSwitchEnv}
   }
    Both environments should now be indented:
-  \RpgSetSwitch{test}{true}
+  \RpgSwitch{test}{true}
   \exampleSwitch{}
 
-  \RpgSetSwitch{test}{false}
+  \RpgSwitch{test}{false}
   \exampleSwitch{}
 \end{ExampleBlock}
 % \end{figure}
@@ -433,7 +430,7 @@ I can sneakily access the key value: `\getkey{description}'
 % 			The customisation options (see below) allow a designer to add in additional keys, which they can then use to add a specific format to the item. Consult the individual theme documentation for implementation specific details.
 % 		}
         
-% 		\RpgMacro{RpgItemShowCard}{\param{m}}{An alias for \cmd{RpgSetSwitch\param{UseItemCard}\param{input}}}{}{}
+% 		\RpgMacro{RpgItemShowCard}{\param{m}}{An alias for \cmd{RpgSwitch\param{UseItemCard}\param{input}}}{}{}
         
 
 % \begin{ExampleBlock}{RpgItem}

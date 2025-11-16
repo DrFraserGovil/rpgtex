@@ -18,7 +18,7 @@
 \input{core/abstract}%load the handout-unique redefinition of abstract
 
 %set the flag so that it uses the simple title
-\RpgUseCoverPage{false}
+\RpgSetTitleMode{header}
 
  % Set page geometry
 \geometry{

@@ -31,7 +31,7 @@
 
 
 %% (Locally) add elements in to the rpgcard specification
-\NewDocumentCommand{\RpgSetCard}{m}{
+\NewDocumentCommand{\RpgCardSet}{m}{
 	%%intercept the known values
 	\keys_set_known:nnN {rpg/card}{#1}{\l__tmpa_tl}
 	
@@ -92,9 +92,9 @@
 }
 
 %%Delete all entries
-\NewDocumentCommand\RpgResetCard{}{
+\NewDocumentCommand\RpgCardReset{}{
 	\tcbset{rpgcard/.style={}}
-	\RpgSetCard{
+	\RpgCardSet{
 		
 		width=5.35cm,
 		height=8.8cm,
@@ -114,7 +114,7 @@
 }
 
 %%Force a reset to set the initial values in the global space
-\RpgResetCard{}
+\RpgCardReset{}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -130,7 +130,7 @@
 \NewDocumentEnvironment{RpgCard}{O{} +b} % #1 is optional arg, #2 is body
 {
 	%%Locally append the args to the card settings
-	\RpgSetCard{#1}
+	\RpgCardSet{#1}
 
 	%%Configure \cardbreak to add a large space penalty, simulating a line break
 	%%Do this inside the environment so that it has no effect if the same text is 

@@ -29,7 +29,7 @@
 \RequirePackage{rpg}
 
 \RpgSetPaper{}
-\RpgUseCoverPage{false}
+\RpgSetTitleMode{header}
 
 % \input {rpgcore.def}
 % %%custom card stuff
