@@ -25,13 +25,13 @@
 	ref-prefix	.initial:n	= {Map:},
   }
 
-\bool_new:N \l__rpg_in_map_environment
+
+\ProvideDocumentCommand{\area}{}{\msg_error:nn{rpg}{mapless-area}}
 \NewDocumentEnvironment{RpgMap}{O{}}
 {
 	\group_begin:  
-	\bool_set_true:N \l__rpg_in_map_environment
 	\__rpg_construct_parent_prefix:
-
+	\RenewDocumentCommand{\area}{O{} o}{\__RpgArea{##1}[##2]}
 	\IfNoValueF{#1}
 	{
 		\keys_set:nn { rpg / areas } {#1}
@@ -47,7 +47,6 @@
 }
 {
 	\__rpg_end_map_block:
-	\bool_set_false:N \l__rpg_in_map_environment
 	\group_end:
 }
 
@@ -64,33 +63,29 @@
 }
 
 \msg_new:nnn{rpg}{not-in-map}{Cannot~create~an~Area~without~an~RpgMap.}
-\NewDocumentCommand{\RpgArea}{o m}
+\NewDocumentCommand{\__RpgArea}{m o}
 {
-	\bool_if:NF\l__rpg_in_map_environment
-	{
-		\msg_error:nn{rpg}{not-in-map}
-	}
-	\IfNoValueF{#1}
+	\IfNoValueF{#2}
 	{
 		\bool_set_true:N \l__use_label
-		\tl_set:Ne \l__label{#1}
+		\tl_set:Ne \l__label{#2}
 	}
 
 	\__rpg_map_increment_counter:
 	
-	\__rpg_map_construct_title:n {#2}
+	\__rpg_map_construct_title:n {#1}
 
 	\bool_set_false:N \l__use_label
 
 	%%Chceck if called as an environment, if so, activate subenvironment
-	\str_compare:eNeT{\@currenvir}{=}{RpgArea}
+	\str_compare:eNeT{\@currenvir}{=}{area}
 	{
 		\begin{RpgMap}
 	}
 }
 
 %% Spoof in an end-environment command to end the subenvironment
-\NewDocumentCommand{\endRpgArea}{}{\end{RpgMap}}
+\NewDocumentCommand{\endarea}{}{\end{RpgMap}}
 
 
 \tl_new:N \l__inserted_code
@@ -106,11 +101,10 @@
 
 \NewDocumentCommand{\RpgMapRefPage}{s m}
 {
-	
 	\IfBooleanTF{#1}{\RpgMapRef*{#2}~(\RpgPage{#2})}{\tl_set:Nn{\l__inserted_code}{,~\RpgPage{#2}}\RpgMapRef{#2}}
 }
 
-\NewDocumentCommand{\RpgShowMapRefs}{}
+\NewDocumentCommand{\RpgMapShowRefs}{}
 {
 	\bool_set_true:N \l__rpg_emergency_show_labels_bool
 }

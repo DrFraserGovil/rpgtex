@@ -119,16 +119,16 @@
 
 \labelsection{RpgMap}
 
-    The RpgMap environment makes it easy to create nested blocks, useful when needing to enumerate the contents of a map. The RpgMap environment uses a stacked counter system and dynamic labelling.
+    The RpgMap environment is similar to the standard itemize/ description/ enumerate environments, providing a structured way to list elements in an arbitrarily nested fashion. The main difference from the standard list environments are that \texttt{RpgMap} (and \cmd{area}, the analogue to \cmd{item}) provide a more elaborate labelling system, useful when needing to enumerate the contents of a map. 
 
-    \RpgMacro*{RpgMap}{RpgMap*, \param{{o}}}{Begins a dynamic-stacked environment for generating headed and labelled lists using the \cmd{RpgArea} object to provide entries. }{
+    \RpgMacro*{RpgMap}{RpgMap*, \param{{o}}}{Begins a nestable map-list environment and enables the \cmd{area} command for adding entries to the map.}{
         \bs{}begin\param{RpgMap}[<opts>]
 
         ~~~<contents>
 
         \cmd{end}\param{RpgMap}				
     }{
-        The starred version of the command is identical in function, but calls \cmd{section*} instead of \cmd{section} (and so on.), suppressing the map elements from the table of contents. 
+        The starred version of the command is identical in function, with the exception that \cmd{area} calls \cmd{section*} instead of \cmd{section} (and so on.), suppressing the map elements from the table of contents. 
         
         RpgMap uses the counter \texttt{RpgAreaDepth} to track how many Maps have been nested. A higher value of this counter results in `smaller' headings being used, beginning with \cmd{section} and progressing to \cmd{subparagraph}.
 
@@ -146,10 +146,10 @@
         The variables set by options are persistent throughout the nesting - setting \texttt{ref-prefix} in one map will mean the same value persists in all encapsulated maps unless manually overridden. Changes do \textit{not} persist once the nesting is finished.
 
     }
-    \RpgMacro{RpgArea}{RpgArea, \param{{o m}}}{
-            Creates a formatted entry within the RpgMap environment. The appearance of the title depends on the map-depth and the current header-offset.
-        }{
-            \bs{}RpgArea[<manual-label>]\param{<area-name>}
+    \RpgMacro[RpgMap!area]{area}{area, \param{\paramO \paramO}}
+        {Adds an area entry into the current RpgMap. The appearance of the entry depends on the current map depth.\index{area|see {RpgMap, area}} }
+        {
+              \cmd{area}[area-name][<manual-label>]
 
             ~
 
@@ -157,103 +157,123 @@
 
             ~
 
-             \cmd{begin}\param{RpgArea}[manual-label]\param{<area name>}
+             \cmd{begin}\param{area}[area-name][manual-label]
 
             ~~~\ldots <nested-contents>
 
-            \cmd{end}\param{RpgArea}
+            \cmd{end}\param{area}
         }{
-            \subsubsection{As a Command}
-            Creates a `header' depending on the value of \texttt{RpgCounter + headeroffset}:
-            \begin{enumerate}
-                \item section
-                \item subsection
-                \item subsubsection
-                \item paragraph
-            \end{enumerate}
-            If outside these values, uses \texttt{subparagraph}. The name of the section is preceeded by the `map counter', which is equal to the index within the current map, appended to the `map counter' of any parent maps. The formatting function \texttt{RpgMapLevelName} enables hierarchical labelling, such that the third area inside the second map of the first map would be given the counter value `1b-iii'.
+            Can be called either as a command (\cmd{area}), or as an environment (\cmd{begin\param{area}}), with slightly differing behaviours.
 
-            If the manual label is set, this is used as the label for this area; otherwise the automatic labelling is used (see below).
+            \subsection{As a Command}
+                 \begin{RpgTip}{Design Intent}
+                    When called as a command, \cmd{area} is designed to act similarly to an \cmd{item} call inside a \texttt{description} environment, providing a familiar interface.
+                \end{RpgTip}
+                Inserts a `header block' with the following properties:
+                \begin{enumerate}
+                    \item Block is wrapped in a \cmd{chapter},\cmd{section}, \cmd{subsection} (etc.) depending on the number of nested \texttt{RpgMap} environments and the \texttt{header-offset}.
+                    \item The header text is one of the following:
+                    \begin{enumerate}
+                        \item \texttt{<prefix> <counter>. <area-name>} if the first optional argument is a non-empty string.
+                        \item \texttt{<blank-prefix> <counter>} if an \texttt{area-name} was not provided.
+                    \end{enumerate}
+                    \texttt{prefix} and \texttt{blank-prefix} are arguments passed to the parent RpgMap.
+                    \item The heading is automatically labelled using the following syntax:
+                    \begin{enumerate}
+                        \item If a \texttt{manual-label} argument was provided, this is used as the label; \cmd{label\param{manual-label}}.
+                        \item If none was provided, and \texttt{area-name} is non-empty, then the label is set as \cmd{label\param{<ref-prefix><area-name}}.
+                        \texttt{ref-prefix} is a property of the parent RpgMap, with the default value being \texttt{Map:}.
+                    \end{enumerate}
+                    \item Text following the \cmd{area} is rendered as normal text with no modifications.
+                \end{enumerate} 
+               
+            \subsection{As an Environment}
 
-            \subsubsection{As an Environment}
+                Fig. \ref{F:MapNesting} shows that is possible to nest maps within an \cmd{area} by first adding an area, and then creating a map. We also provide an interface to do this automatically, if \texttt{area} is called as an environment.
 
-             When called as an environment, the body-contents of the environment are wrapping the environment body in a nested \cmd{begin\param{RpgMap}} environment. This makes using RpgMap as an environment functionally equivalent to the following code:
+                The syntax and arguments remain identical to the command version, but the body of an \texttt{area} environment acts as if it was wrapped in a nested \texttt{RpgMap} call.
+                
+                The following blocks of code are therefore identical in functionality:
+                
+                \begin{minipage}[t]{0.48\linewidth}
+                \begin{Code}
+                    \cmd{begin}\param{area}[name][label] 
 
-             \begin{minipage}[t]{0.48\linewidth}
-             \begin{Code}
-                 \cmd{begin}\param{RpgArea}[label] \param{<area-name>}
+                    ~<map-contents>
 
-                 ~<map-contents>
+                    \cmd{end}\param{area}
+                \end{Code}
+                \end{minipage}\hspace{0.04\linewidth}\begin{minipage}[t]{0.48\linewidth}
+                \begin{Code}
+                    \cmd{area}[name][label]
 
-                 \cmd{end}\param{RpgArea}
-             \end{Code}
-            \end{minipage}\hspace{0.04\linewidth}\begin{minipage}[t]{0.48\linewidth}
-             \begin{Code}
-                 \cmd{RpgArea}[label]\param{<area-name>}
+                    \cmd{begin}\param{RpgMap}
+                    
+                    ~<map-contents>
 
-                 \cmd{begin}\param{RpgMap}
-                 
-                 ~<map-contents>
+                    \cmd{end}\param{RpgMap}
+                \end{Code}
+                \end{minipage}
 
-                 \cmd{end}\param{RpgMap}
-             \end{Code}
-            \end{minipage}
-    }
+                This is demonstrated in Fig. \ref{F:MapAreaNesting}. 
 
+                It is not possible to pass additional options to the internal \texttt{RpgMap} call when using the area environment; if the user wishes to vary the commands at different depths, they must use an explicit \texttt{RpgMap} environment. 
+        }
+        \begin{figure}[t]
+        \begin{ExampleBlock}[RpgMap,area]{RpgMap with manual nesting}
+\begin{RpgMap}
+    \area[Test Zone]
+    A description
+    \begin{RpgMap}
+        \area[Sub Zone]
+        A sub-description
+        \begin{RpgMap}
+            \area[Arbitrary nested zone]
+            (we can keep nesting)
+        \end{RpgMap}
+    \end{RpgMap}
+    \area A nameless zone
+\end{RpgMap}
+        \end{ExampleBlock}\
+        \caption{An example of RpgMap with area-nesting}\label{F:MapNesting}
+        \end{figure}
 
- \begin{figure*}[!t]
- \begin{ExampleBlock}[RpgMap,RpgArea,RpgArea]{Example RpgMap}
- \begin{RpgMap*}[
-  header-offset=1,%start at subsection
-  title={Example Map}]
-  \RpgArea{The Spooky Mansion} 
-     In this room, we can manually created a nested `RpgMap':
-  \begin{RpgMap}[
-        title={ignored-as-nested}]
-     \RpgArea{Entrance Hall}
-     \RpgArea{} An unnamed room
-  \end{RpgMap}
-  \begin{RpgArea}{The Creepy Grounds}
-     The Grounds are an environment rather than a command, so these will be nested:
-     \RpgArea{The gardens}
-     \begin{RpgArea}{The stables}
-         Areas can be artbirarily nested.
-         \RpgArea{Shire horse}
-         \RpgArea{Shetland pony}
-         \end{RpgArea}
-    \end{RpgArea}
-  \RpgArea{The Graveyard}
-    \begin{RpgMap}[
-      blank-prefix={Tomb~}] %change prefix
-      \RpgArea{}
-        This is an unnamed area - it gets given a slightly different name
-      \RpgArea[tomb-ref]{}
-        We can refer to this later, even though it is unnamed.
-     \end{RpgMap}
- \end{RpgMap*}
- \end{ExampleBlock}
- \end{figure*}
- 
+         \begin{figure}[!b]
+        \begin{ExampleBlock}[area,RpgMap]{RpgMap with manual nesting}
+\begin{RpgMap}
+    \begin{area}[Test Zone]
+    A description
+        \begin{area}[Sub Zone]
+            A sub-description
+            \area[Arbitrary nested zone]
+                (we can keep nesting)
+        \end{area}
+    \end{area}
+    \area[][nameless-ref] A nameless zone
+\end{RpgMap}
+        \end{ExampleBlock}\
+        \caption{An example of RpgMap with area-nesting}\label{F:MapAreaNesting}
+        \end{figure}
 
     \subsection{Map Labelling \& Referencing}
                     
-        Each RpgArea with a non-empty name automatically labels itself using the syntax	\texttt{ \bs{}label{<ref-prefix><area-name>}}. If a manual label was passed to the RpgArea, this is used instead (without the prefix), even if the RpgArea was not named. This is designed to provide disambiguation, as no automatic checks are performed for name collisions. 
+        Each \texttt{area} with a non-empty name automatically labels itself using the syntax	\texttt{ \bs{}label\param{<ref-prefix><area-name>}}. If a manual label was passed to the area, this is used instead (without the prefix), even if the area was not named. This is designed to provide disambiguation, as no automatic checks are performed for name collisions. 
 
-        It is then possible to call \cmd{ref} on this label\footnote{Though it won't give you anything interesting -- the returned value will be the cumulative number of RpgAreas in the document at that point} and \cmd{pageref} or \cmd{RpgPage} \RpgPage[p]{Macro:RpgPage}. However, we provide a more powerful referencing interface:
+        It is then possible to call \cmd{ref} on this label\footnote{Though it won't give you anything interesting -- the returned value will be the cumulative number of areas in the document at that point} and \cmd{pageref} or \cmd{RpgPage} \RpgPage[p]{Macro:RpgPage}. However, we provide a more powerful referencing interface:
 
-        \RpgMacro[RpgMap!Ref]{RpgMapRef}{\cmd{RpgMapRef*},\param{{m}}}{Returns the full name of the referenced area, including the map counter. The starred version returns only the map counter.}
+    \RpgMacro[RpgMap!Ref]{RpgMapRef}{\cmd{RpgMapRef*},\param{{m}}}{Returns the full name of the referenced area, including the customised map counter. The starred version returns only the map counter.}
             {
                 \bs{}RpgMapRef\param{<label-name>}
             }
             {
-                The provided text is fully integrated with \texttt{hyerref}, and so they enable click-jumping to the referenced map area. 
+                The provided text is fully integrated with \texttt{hyperref}, and so they enable click-jumping to the referenced map area. 
                 
                 Using the example map provided above:
                 \begin{RpgTable}{XX}
                     Example & Output \\
-                    \tabverbExample{\RpgMapRef{Map:Shire horse}}
-                    \tabverbExample{\RpgMapRef*{Map:Shire horse}}
-                    \tabverbExample{\RpgMapRef*{tomb-ref}}
+                    \tabverbExample{\RpgMapRef{Map:Test Zone}}
+                    \tabverbExample{\RpgMapRef*{Map:Sub Zone}}
+                    \tabverbExample{\RpgMapRef{nameless-ref}}
                 \end{RpgTable}
             }
         \RpgMacro[RpgMap!RefPage]{RpgMapRefPage}{\cmd{RpgMapRefPage*},\param{{m}}}{Appends the page number of the referenced map area to a \cmd{RpgMapRef(*)} command}
@@ -262,14 +282,14 @@
             }
             {
                 Using the example map provided above:
-                \begin{RpgTable}{XX}
+                 \begin{RpgTable}{XX}
                     Example & Output \\
-                    \tabverbExample{\RpgMapRefPage{Map:Shire horse}}
-                    \tabverbExample{\RpgMapRefPage*{Map:Shire horse}}
-                    \tabverbExample{\RpgMapRefPage*{tomb-ref}}
+                    \tabverbExample{\RpgMapRef{Map:Test Zone}}
+                    \tabverbExample{\RpgMapRef*{Map:Sub Zone}}
+                    \tabverbExample{\RpgMapRef{nameless-ref}}
                 \end{RpgTable}
             }
-        \RpgMacro{RpgShowMapRefs}{}{If called, all subsequent \cmd{RpgArea}s will print out a sub-heading listing their macro name.}
+        \RpgMacro[RpgMap!ShowRefs]{RpgMapShowRefs}{}{If called, all subsequent \cmd{area}s will print out a sub-heading listing their macro name.}
         {}
         {
             It is not unheard of for a writer to lose track of the labelling name conventions - especially those which are autogenerated. This provides a useful debugging tool for those who don't want to go digging into the aux files.				
@@ -277,27 +297,20 @@
 
                                                 
 
- \begin{ExampleBlock}[RpgShowMapRefs,tomb-ref]{Example RpgMap with labelling.}
+ \begin{ExampleBlock}[RpgMapShowRefs,tomb-ref]{Example RpgMap with labelling.}
  
-  \RpgShowMapRefs{}
-  \begin{RpgMap*}[
-      header-offset=1,
-      title={Example Map}
-   ]
-   
-   \RpgArea{The Spooky Mansion} 
-      (\dots)%(skip for example!)    
-      \RpgArea{The Graveyard}
-          (\dots)%(skip for example!)
-          \begin{RpgMap}[
-                  blank-prefix={Tomb~}
-              ]
-              \RpgArea{}
-              Unlabelled area.
-              \RpgArea[tomb-ref]{}
-                  (\dots)%(skip for example!)
-          \end{RpgMap}
-  \end{RpgMap*}
+  \RpgMapShowRefs{}
+   \begin{RpgMap}
+    \begin{area}[Test Zone]
+    A description
+        \begin{area}[Sub Zone]
+            A sub-description
+            \area[Arbitrary nested zone]
+                (we can keep nesting)
+        \end{area}
+    \end{area}
+    \area[][nameless-ref] A nameless zone
+\end{RpgMap}
  \end{ExampleBlock}
 
     \labelsection{RpgSecret}
