@@ -87,23 +87,31 @@
 		These commands rely on redefining common commands, and therefore are only loaded when in layout mode (i.e. by rpgbook). 
 	\end{RpgSidebar}
 
-	\RpgMacro{RpgChapterName}{}{The name given to the last \cmd{chapter} or \cmd{chapter*} command, or set by calling \cmd{chaptermark}}{}{}
-	\RpgMacro{RpgSectionName}{}{The name given to last \cmd{section} or \cmd{section*} command, or set by calling \cmd{sectionmark}}{}{}
-	\RpgMacro{RpgSubsectionName}{}{The name given to the last \cmd{subsection} or \cmd{chapter*} command, or set by calling \cmd{sectionmark}}{}{}
-	\RpgMacro{RpgSubsubsectionName}{}{The name given to the last \cmd{subsubsection} or \cmd{subsubsection*} command, or set by calling \cmd{subsection}}{}{}
+	% \RpgMacro{RpgChapterName}{}{The name given to the last \cmd{chapter} or \cmd{chapter*} command, or set by calling \cmd{chaptermark}}{}{}
+	% \RpgMacro{RpgSectionName}{}{The name given to last \cmd{section} or \cmd{section*} command, or set by calling \cmd{sectionmark}}{}{}
+	% \RpgMacro{RpgSubsectionName}{}{The name given to the last \cmd{subsection} or \cmd{chapter*} command, or set by calling \cmd{sectionmark}}{}{}
+	% \RpgMacro{RpgSubsubsectionName}{}{The name given to the last \cmd{subsubsection} or \cmd{subsubsection*} command, or set by calling \cmd{subsection}}{}{}
 
-	These names can also be `spoofed' by manually calling a \cmd{mark} (such as \cmd{chaptermark} etc.), and we also provide the \cmdref{RpgFakeChapter} command.
+	\RpgMacro{RpgGetName}{\param{m}}{Returns the name given to the last section matching the input command}
+	{
+		\cmd{RpgGetName}{chapter/section/subsection/subsubsection}
+	}
+	{
+		If the input value is the name of a vaild section, returns the previous name given to that kind of section.
+
+		These names can also be `spoofed' by manually calling a \cmd{mark} (such as \cmd{chaptermark} etc.), and we also provide the \cmdref{RpgFakeChapter} command.
+	}
 
 \begin{ExampleBlock}{Section Names}
-   We are in Chapter `\RpgChapterName{}', section `\RpgSectionName{}'.
+   We are in Chapter `\RpgGetName{chapter}', section `\RpgGetName{section}'.
 
    \subsubsection{An example subsubsection}
 
-   Now I am in `\RpgSubsubsectionName{}'
+   Now I am in `\RpgGetName{subsubsection}'
 
    \chaptermark{Spoofed Chapter}
    
-   I believe I am in a \RpgChapterName{}, though no chapter was actually called. 
+   I believe I am in a \RpgGetName{chapter}, though no chapter was actually called. 
    
    \chaptermark{Options \& Variables} %%put it back to the real value!
 
