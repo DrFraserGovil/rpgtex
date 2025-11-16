@@ -55,21 +55,29 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%Used for books, similar ot part page, draws the contents of this macro over the top of the background image specified by \@cover
-\NewDocumentCommand\RpgSetCover{+m}
+\NewDocumentCommand\RpgSetTitleCover{+m}
 {
 	\cs_set:Nn \l__rpg_draw_cover_page:{#1}
 }
 
 %%%Used for articles, a lightweight, text-only title. Not rendered within a tikzpicture.
-\NewDocumentCommand\RpgSetSimpleTitle{+m}
+\NewDocumentCommand\RpgSetTitleHeader{+m}
 {
 	\cs_set:Nn \l__rpg_simple_title:{#1}
 }
 
 %%Switching command used by classes to choose to use a full-page drawn title, or a simple text title
 
-\NewDocumentCommand{\RpgUseCoverPage}{m}{
-	\__rpg_set_bool_from_text:Ne {\g__rpg_use_cover_page_bool}{#1}
+\NewDocumentCommand{\RpgSetTitleMode}{m}{
+	\str_case:enF{#1}
+	{
+		{cover} {\bool_set_true:N \g__rpg_use_cover_page_bool}
+		{header} {\bool_set_false:N \g__rpg_use_cover_page_bool}
+	}
+	{
+		\msg_new:nnn{rpg}{bad-cover-set}{Title~mode~input~must~be~(header/cover),~not~'#1'}
+		\msg_error:nnn{rpg}{bad-cover-set}{#1}
+	}
 }
 
 \ExplSyntaxOff

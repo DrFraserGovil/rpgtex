@@ -1,371 +1,185 @@
 \ExplSyntaxOn
 
-\sys_if_engine_pdftex:T
-{
-  % Spit out a warning if wrong compiler used
-  \msg_new:nnn { rpg } { wrong-compiler }{#1}
-  \msg_error:nnx { rpg } { wrong-compiler }
-    {
-		 rpgtex~requires~compilation~with~xelatex~or~luatex
-    }
-}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Font definitions
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \RequirePackage{fontspec} %%for xelatex fontss
 \RequirePackage[T1]{fontenc}
 \RequirePackage{lettrine} %%fancy drop cap
 \RequirePackage{Royal} %%Used for fancy drop caps
 \RequirePackage[auto]{contour} %%for outlining text
-\RequirePackage{relsize}
+\RequirePackage{relsize} %%used for bigger/smaller
 
-\keys_define:nn { rpg / fonts }
-  {
-	%%%% Main body font
-	main-body-family .tl_set:N = \l__rpg_main_body_family_tl,
-	main-body-family .value_required:n = true,
-	main-body-style .tl_set:N = \l__rpg_main_body_style_tl,
-	main-body-style .value_required:n = true,
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Sectioning commands
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	% Title
-    title-family .tl_set:N         = \l__rpg_title_family_tl,
-    title-family .value_required:n = true,
-    title-style .tl_set:N         = \l__rpg_title_style_tl,
-    title-style .value_required:n = true,
-	% Subtitle
-    subtitle-family .tl_set:N         = \l__rpg_subtitle_family_tl,
-    subtitle-family .value_required:n = true,
-    subtitle-style .tl_set:N         = \l__rpg_subtitle_style_tl,
-    subtitle-style .value_required:n = true,
-	% Part
-    part-family .tl_set:N         = \l__rpg_part_family_tl,
-    part-family .value_required:n = true,
-    part-style .tl_set:N         = \l__rpg_part_style_tl,
-    part-style .value_required:n = true,
-    % Chapter
-    chapter-family .tl_set:N         = \l__rpg_chapter_family_tl,
-    chapter-family .value_required:n = true,
-    chapter-style .tl_set:N         = \l__rpg_chapter_style_tl,
-    chapter-style .value_required:n = true,
-    % Section
-    section-family .tl_set:N         = \l__rpg_section_family_tl,
-    section-family .value_required:n = true,
-    section-style .tl_set:N         = \l__rpg_section_style_tl,
-    section-style .value_required:n = true,
-    % Subsection
-    subsection-family .tl_set:N         = \l__rpg_subsection_family_tl,
-    subsection-family .value_required:n = true,
-    subsection-style .tl_set:N         = \l__rpg_subsection_style_tl,
-    subsection-style .value_required:n = true,
-    % subsubsection
-    subsubsection-family .tl_set:N         = \l__rpg_subsubsection_family_tl,
-    subsubsection-family .value_required:n = true,
-    subsubsection-style .tl_set:N         = \l__rpg_subsubsection_style_tl,
-    subsubsection-style .value_required:n = true,
-    % paragraph
-    paragraph-family .tl_set:N         = \l__rpg_paragraph_family_tl,
-    paragraph-family .value_required:n = true,
-    paragraph-style .tl_set:N         = \l__rpg_paragraph_style_tl,
-    paragraph-style .value_required:n = true,
-    % subparagraph
-    subparagraph-family .tl_set:N         = \l__rpg_subparagraph_family_tl,
-    subparagraph-family .value_required:n = true,
-    subparagraph-style .tl_set:N         = \l__rpg_subparagraph_style_tl,
-    subparagraph-style .value_required:n = true,
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Tables
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Table title
-    table-title-family .tl_set:N         = \l__rpg_table_title_family_tl,
-    table-title-family .value_required:n = true,
-    table-title-style .tl_set:N         = \l__rpg_table_title_style_tl,
-    table-title-style .value_required:n = true,
-    % Table header
-    table-header-family .tl_set:N         = \l__rpg_table_header_family_tl,
-    table-header-family .value_required:n = true,
-    table-header-style .tl_set:N         = \l__rpg_table_header_style_tl,
-    table-header-style .value_required:n = true,
-    % Table body
-    table-body-family .tl_set:N         = \l__rpg_table_body_family_tl,
-    table-body-family .value_required:n = true,
-    table-body-style .tl_set:N         = \l__rpg_table_body_style_tl,
-    table-body-style .value_required:n = true,
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Tip boxes
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Tip title
-    tip-title-family .tl_set:N         = \l__rpg_tip_title_family_tl,
-    tip-title-family .value_required:n = true,
-    tip-title-style .tl_set:N         = \l__rpg_tip_title_style_tl,
-    tip-title-style .value_required:n = true,
-    % Tip body
-    tip-body-family .tl_set:N         = \l__rpg_tip_body_family_tl,
-    tip-body-family .value_required:n = true,
-    tip-body-style .tl_set:N         = \l__rpg_tip_body_style_tl,
-    tip-body-style .value_required:n = true,
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Sidebars
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Sidebar title
-    sidebar-title-family .tl_set:N         = \l__rpg_sidebar_title_family_tl,
-    sidebar-title-family .value_required:n = true,
-    sidebar-title-style .tl_set:N         = \l__rpg_sidebar_title_style_tl,
-    sidebar-title-style .value_required:n = true,
-    % Sidebar body
-    sidebar-body-family .tl_set:N         = \l__rpg_sidebar_body_family_tl,
-    sidebar-body-family .value_required:n = true,
-    sidebar-body-style .tl_set:N         = \l__rpg_sidebar_body_style_tl,
-    sidebar-body-style .value_required:n = true,
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Read-aloud boxes
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    narration-family .tl_set:N         = \l__rpg_narration_family_tl,
-    narration-family .value_required:n = true,
-    narration-style .tl_set:N         = \l__rpg_narration_style_tl,
-    narration-style .value_required:n = true,
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Abstract
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	abstract-title-family .tl_set:N         = \l__rpg_abstract_title_family_tl,
-	abstract-title-family .value_required:n = true,
-	abstract-title-style .tl_set:N         = \l__rpg_abstract_title_style_tl,
-	abstract-title-style .value_required:n = true,
-	abstract-body-family .tl_set:N         = \l__rpg_abstract_body_family_tl,
-	abstract-body-family .value_required:n = true,
-	abstract-body-style .tl_set:N         = \l__rpg_abstract_body_style_tl,
-	abstract-body-style .value_required:n = true,
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Table of Contents
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Part
-    toc-part-family .tl_set:N         = \l__rpg_toc_part_family_tl,
-    toc-part-family .value_required:n = true,
-    toc-part-style .tl_set:N         = \l__rpg_toc_part_style_tl,
-    toc-part-style .value_required:n = true,
-    % Chapter
-    toc-chapter-family .tl_set:N         = \l__rpg_toc_chapter_family_tl,
-    toc-chapter-family .value_required:n = true,
-    toc-chapter-style .tl_set:N         = \l__rpg_toc_chapter_style_tl,
-    toc-chapter-style .value_required:n = true,
-    % Section
-    toc-section-family .tl_set:N         = \l__rpg_toc_section_family_tl,
-    toc-section-family .value_required:n = true,
-    toc-section-style .tl_set:N         = \l__rpg_toc_section_style_tl,
-    toc-section-style .value_required:n = true,
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Stat blocks
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Stat block title
-    stat-block-title-family .tl_set:N         = \l__rpg_stat_block_title_family_tl,
-    stat-block-title-family .value_required:n = true,
-    stat-block-title-style .tl_set:N         = \l__rpg_stat_block_title_style_tl,
-    stat-block-title-style .value_required:n = true,
-    % Stat block body
-    stat-block-body-family .tl_set:N         = \l__rpg_stat_block_body_family_tl,
-    stat-block-body-family .value_required:n = true,
-    stat-block-body-style .tl_set:N         = \l__rpg_stat_block_body_style_tl,
-    stat-block-body-style .value_required:n = true,
-    % Stat block section
-    stat-block-section-family .tl_set:N         = \l__rpg_stat_block_section_family_tl,
-    stat-block-section-family .value_required:n = true,
-    stat-block-section-style .tl_set:N         = \l__rpg_stat_block_section_style_tl,
-    stat-block-section-style .value_required:n = true,
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Miscellaneous
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % Footer
-    footer-family .tl_set:N         = \l__rpg_footer_family_tl,
-    footer-family .value_required:n = true,
-    footer-style .tl_set:N         = \l__rpg_footer_style_tl,
-    footer-style .value_required:n = true,
-    % Page number
-    page-number-family .tl_set:N         = \l__rpg_page_number_family_tl,
-    page-number-family .value_required:n = true,
-    page-number-style .tl_set:N         = \l__rpg_page_number_style_tl,
-    page-number-style .value_required:n = true,
-    % Drop caps
-    drop-cap-family .tl_set:N         = \l__rpg_drop_cap_family_tl,
-    drop-cap-family .value_required:n = true,
-    drop-cap-style .tl_set:N         = \l__rpg_drop_cap_style_tl,
-    drop-cap-style .value_required:n = true,
-	drop-cap-internal-style .tl_set:N = \l__rpg_drop_cap_internal_tl,
-    drop-cap-internal-style .value_required:n = true,
-	%emphasis
-	emph-family .tl_set:N		=\l__rpg_emph_family_tl,
-	emph-family .value_required:n =true,
-	emph-style .tl_set:N		=\l__rpg_emph_style_tl,
-	emph-style .value_required:n =true,
-  }
-
-
-\NewDocumentCommand { \RpgSetFont } { m }
-  {
-    \keys_set:nn { rpg / fonts } { #1 }
-	\renewcommand\normalfont\RpgFontBody
-	\renewcommand{\FirstLineFont}{\RpgFontDropCapInternal}
-	\normalfont
-  }
-
-\AtBeginDocument{
-	\normalfont	
-}
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % Font access functions combine the selected family and style
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\RpgFontBody}{}
+\sys_if_engine_pdftex:T
 {
-	\l__rpg_main_body_family_tl \l__rpg_main_body_style_tl
+  % Spit out a warning if wrong compiler used
+  \msg_new:nnn { rpg } { wrong-compiler }{#1}
+  \msg_error:nnx { rpg } { wrong-compiler }
+	{
+		 rpgtex~requires~compilation~with~xelatex~or~luatex
+	}
 }
 
-% % Sectioning commands
-\NewDocumentCommand{\RpgFontTitle}{}
-  { \l__rpg_title_family_tl \l__rpg_title_style_tl}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Automatic font generation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\NewDocumentCommand{\RpgFontSubTitle}{}
-  { \l__rpg_subtitle_family_tl \l__rpg_subtitle_style_tl}
+	%%This function allows a user to enter a font specification into the registry with a single line of code
+	%%It can then be modified with RpgSetFont and accessed using the assigned name
+	%%Note that we explicitly do not provide any default values: that's a job for the theme.
 
-  \NewDocumentCommand{\RpgFontPart}{}
-  { \l__rpg_part_family_tl \l__rpg_part_style_tl}
+	\NewDocumentCommand{\RpgCreateFont}{m m}
+	{
+		%%Add entries into the registry
+		%%Dynamically creates cs-sequences
+		\exp_args:Ne\keys_define:nn{rpg/fonts}
+		{
+			#2-family .tl_set:c = l__#2_family,
+			#2-family .value_required:n = true,
+			#2-family .initial:n = {},
+			#2-style .tl_set:c = l__#2_style,
+			#2-style .value_required:n = true,
+			#2-style .initial:n = {},
+		}
 
-\NewDocumentCommand{\RpgFontChapter}{}
-  { \l__rpg_chapter_family_tl \l__rpg_chapter_style_tl }
+		%%Create the font-access command from the provided name
+		\NewDocumentCommand{#1}{}{
+			\use:c {l__#2_family} \use:c{l__#2_style}
+		}
+	}
 
-\NewDocumentCommand{\RpgFontSection}{}
-  { \l__rpg_section_family_tl \l__rpg_section_style_tl }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Available font elements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\NewDocumentCommand{\RpgFontSubsection}{}
-  { \l__rpg_subsection_family_tl \l__rpg_subsection_style_tl }
+	%%%%%%%%%%%%
+	%%Main body
+	%%%%%%%%%%%%
+	\RpgCreateFont{\RpgFontBody}{main-body}
+	\RpgCreateFont{\RpgFontEmphasis}{emph}
 
-\NewDocumentCommand{\RpgFontSubsubsection}{}
-  { \l__rpg_subsubsection_family_tl \l__rpg_subsubsection_style_tl }
+	%%%%%%%%%%%%
+	%%Sections
+	%%%%%%%%%%%%
+	\RpgCreateFont{\RpgFontTitle}{title}
+	\RpgCreateFont{\RpgFontSubTitle}{subtitle}
+	\RpgCreateFont{\RpgFontPart}{part}
+	\RpgCreateFont{\RpgFontChapter}{chapter}
+	\RpgCreateFont{\RpgFontSection}{section}
+	\RpgCreateFont{\RpgFontSubsection}{subsection}
+	\RpgCreateFont{\RpgFontSubsubsection}{subsubsection}
+	\RpgCreateFont{\RpgFontParagraph}{paragraph}
+	\RpgCreateFont{\RpgFontSubparagraph}{subparagraph}
 
-\NewDocumentCommand{\RpgFontParagraph}{}
-  { \l__rpg_paragraph_family_tl \l__rpg_paragraph_style_tl }
+	%%%%%%%%%%%%
+	%%Environments
+	%%%%%%%%%%%%
+	\RpgCreateFont{\RpgFontTableTitle}{table-title}
+	\RpgCreateFont{\RpgFontTableHeader}{table-header}
+	\RpgCreateFont{\RpgFontTableBody}{table-body}
+	\RpgCreateFont{\RpgFontTipTitle}{tip-title}
+	\RpgCreateFont{\RpgFontTipBody}{tip-body}
+	\RpgCreateFont{\RpgFontSidebarTitle}{sidebar-title}
+	\RpgCreateFont{\RpgFontSidebarBody}{sidebar-body}
+	\RpgCreateFont{\RpgFontNarration}{narration}
+	\RpgCreateFont{\RpgFontAbstractTitle}{abstract-title}
+	\RpgCreateFont{\RpgFontAbstractBody}{abstract-body}
+	\RpgCreateFont{\RpgFontSecretTitle}{secret-title}
 
-\NewDocumentCommand{\RpgFontSubparagraph}{}
-  { \l__rpg_subparagraph_family_tl \l__rpg_subparagraph_style_tl }
+	%%%%%%%%%%%%
+	%%Cards
+	%%%%%%%%%%%%
+	\RpgCreateFont{\RpgFontCardTitle}{card-title}
+	\RpgCreateFont{\RpgFontCardHeader}{card-header}
+	\RpgCreateFont{\RpgFontCardBody}{card-body}
 
-% % Tables
-\NewDocumentCommand{\RpgFontTableTitle}{}
-  { \l__rpg_table_title_family_tl \l__rpg_table_title_style_tl }
+	%%%%%%%%%%%%
+	%%TOC
+	%%%%%%%%%%%%
+	\RpgCreateFont{\RpgFontTocPart}{toc-part}
+	\RpgCreateFont{\RpgFontTocChapter}{toc-chapter}
+	\RpgCreateFont{\RpgFontTocSection}{toc-section}
 
-\NewDocumentCommand{\RpgFontTableHeader}{}
-  { \l__rpg_table_header_family_tl \l__rpg_table_header_style_tl }
+	%%%%%%%%%%%%
+	%%Statblocks
+	%%%%%%%%%%%%
+	\RpgCreateFont{\RpgFontStatBlockTitle}{stat-block-title}
+	\RpgCreateFont{\RpgFontStatBlockBody}{stat-block-body}
+	\RpgCreateFont{\RpgFontStatBlockSection}{stat-block-section}
 
-\NewDocumentCommand{\RpgFontTableBody}{}
-  { \l__rpg_table_body_family_tl \l__rpg_table_body_style_tl }
+	%%%%%%%%%%%%
+	%%Decoration
+	%%%%%%%%%%%%
+	\RpgCreateFont{\RpgFontFooter}{footer}
+	\RpgCreateFont{\RpgFontPageNumber}{page-number}
+	\RpgCreateFont{\RpgFontDropCap}{drop-cap}
+	\RpgCreateFont{\RpgFontDropCapFirstLine}{drop-cap-first-line}
 
-% Tip boxes
-\NewDocumentCommand{\RpgFontTipTitle}{}
-  { \l__rpg_tip_title_family_tl \l__rpg_tip_title_style_tl }
+	
 
-\NewDocumentCommand{\RpgFontTipBody}{}
-  { \l__rpg_tip_body_family_tl \l__rpg_tip_body_style_tl }
 
-% Sidebars
-\NewDocumentCommand{\RpgFontSidebarTitle}{}
-  { \l__rpg_sidebar_title_family_tl \l__rpg_sidebar_title_style_tl }
 
-\NewDocumentCommand{\RpgFontSidebarBody}{}
-  { \l__rpg_sidebar_body_family_tl \l__rpg_sidebar_body_style_tl }
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %Set font values
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\NewDocumentCommand { \RpgSetFont } { m }
+	{
+		\keys_set:nn { rpg / fonts } { #1 }
+		\renewcommand\normalfont\RpgFontBody
+		\renewcommand{\FirstLineFont}{\RpgFontDropCapFirstLine}
+		\normalfont
+	}
 
-% Read-aloud boxes
-\NewDocumentCommand{\RpgFontNarration}{}
-  { \l__rpg_narration_family_tl \l__rpg_narration_style_tl }
+	%ensure the assigned normalfont is loaded when document begins
+	\AtBeginDocument{
+		\normalfont	
+	}	
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %Keywords & Emphasis
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Table of Contents
-\NewDocumentCommand{\RpgFontTocPart}{}
-  { \l__rpg_toc_part_family_tl \l__rpg_toc_part_style_tl}
-
-\NewDocumentCommand{\RpgFontTocChapter}{}
-  { \l__rpg_toc_chapter_family_tl \l__rpg_toc_chapter_style_tl}
-
-\NewDocumentCommand{\RpgFontTocSection}{}
-  { \l__rpg_toc_section_family_tl \l__rpg_toc_section_style_tl}
-
-% Stat blocks
-\NewDocumentCommand{\RpgFontStatBlockTitle}{}
-  { \l__rpg_stat_block_title_family_tl \l__rpg_stat_block_title_style_tl }
-
-\NewDocumentCommand{\RpgFontStatBlockBody}{}
-  { \l__rpg_stat_block_body_family_tl \l__rpg_stat_block_body_style_tl }
-
-\NewDocumentCommand{\RpgFontStatBlockSection}{}
-  { \l__rpg_stat_block_section_family_tl \l__rpg_stat_block_section_style_tl }
-
-% Miscellaneous
-\NewDocumentCommand{\RpgFontFooter}{}
-  { \l__rpg_footer_family_tl \l__rpg_footer_style_tl }
-
-\NewDocumentCommand{\RpgFontPageNumber}{}
-  { \l__rpg_page_number_family_tl \l__rpg_page_number_style_tl }
-
-\NewDocumentCommand{\RpgFontDropCap}{}
-  { \l__rpg_drop_cap_family_tl \l__rpg_drop_cap_style_tl }
-
-\NewDocumentCommand{\RpgFontDropCapInternal}{}
-  { \l__rpg_drop_cap_internal_tl }
-
-\NewDocumentCommand{\RpgFontEmphasis}{}
-	{\l__rpg_emph_family_tl \l__rpg_emph_style_tl}
-
-\NewDocumentCommand{\RpgFontAbstractTitle}{}
-	{\l__rpg_abstract_title_family_tl \l__rpg_abstract_title_style_tl}
-\NewDocumentCommand{\RpgFontAbstractBody}{}
-	{\l__rpg_abstract_body_family_tl \l__rpg_abstract_body_style_tl}
-
-\RenewDocumentCommand{\emph}{m}
-{
-	{\RpgFontEmphasis #1}
-}
-\NewDocumentCommand{\key}{m}
-{
-	\emph{#1}
-}
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % Drop Caps
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\renewcommand{\LettrineFontHook}
-  { \l__rpg_drop_cap_family_tl \l__rpg_drop_cap_style_tl }
-
-% Usage: rpgDropCapLine[<lettrine options>]{<first letter>}{<small caps line>}
-%    It takes trial and error to get the 2nd argument to align with
-%    the linebreak. See the lettrine package for options.
-\RequirePackage{magaz}
-\NewDocumentCommand{\RpgDropCap}{ O{} m m }
-  {
-    \lettrine[
-        lines   = 4,
-        depth   = 0,
-        findent = \l__rpg_space_dim,
-        nindent = 0pt,
-        #1
-      ]
-      {#2}{}
-    %   {\RpgFontDropCapInternal #3}
-	\FirstLine{#3}
-  }
+	\RenewDocumentCommand{\emph}{m}
+	{
+		{\RpgFontEmphasis #1}
+	}
+	\NewDocumentCommand{\key}{m}
+	{
+		\emph{#1}
+	}
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% % Contour that can break across lines. Can accept \newline to force a break.
+% % RpgDropCap
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  \input{core/lowlevel/contour.tex}
+	\renewcommand{\LettrineFontHook} %feed the desired font into the lettrine pipeline
+	{ \RpgFontDropCap}
 
-  \NewDocumentCommand{\RpgContour}{O{} m}
-  {
-	\group_begin:
-	\keys_set:nn {rpg/contour}{#1}
-    
-	\exp_args:Nf \__rpg_contour_split_lines:n {#2}
+	% Usage: rpgDropCapLine[<lettrine options>]{<first letter>}{<small caps line>}
+	%    It takes trial and error to get the 2nd argument to align with
+	%    the linebreak. See the lettrine package for options.
+	\RequirePackage{magaz}
+	\NewDocumentCommand{\RpgDropCap}{ O{} m m }
+	{
+		\lettrine[
+			lines   = 4,
+			depth   = 0,
+			findent = \l__rpg_space_dim,
+			nindent = 0pt,
+			#1
+		]
+		{#2}{}
+		\FirstLine{#3}
+	}
 
-    \group_end:
-  }
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % RpgContour 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% decoration that can break across lines. Can accept \newline to force a break.
+	\input{core/lowlevel/contour.tex} %%It's gross so I've put the expl3 in a lowlevel
+
+	\NewDocumentCommand{\RpgContour}{O{} m}
+	{
+		\group_begin:
+		\keys_set:nn {rpg/contour}{#1}
+		
+		\exp_args:Nf \__rpg_contour_split_lines:n {#2}
+
+		\group_end:
+	}

@@ -1,9 +1,9 @@
 
-\RpgAddItemProperty{description}{\RpgItemDescription}{}
-\RpgAddItemProperty{image}{\RpgItemImage}{}
-\RpgAddItemProperty{type}{\RpgItemType}{}
-\RpgAddItemProperty{rarity}{\RpgItemRarity}{}
-\RpgAddItemProperty{requires-attunement}{\RpgAttunement}{none}
+\RpgItemAddProperty{description}{\RpgItemDescription}{}
+\RpgItemAddProperty{image}{\RpgItemImage}{}
+\RpgItemAddProperty{type}{\RpgItemType}{}
+\RpgItemAddProperty{rarity}{\RpgItemRarity}{}
+\RpgItemAddProperty{requires-attunement}{\RpgAttunement}{none}
 
 \keys_define:nn{rpg/item}
 {
@@ -12,9 +12,9 @@
 \newlength\tempwidth
 
 
-\RpgSetItemCardFormat{
+\RpgItemCardFormat{
     {\setlength\parindent{0pt}
-    \setlength\parskip{5pt}
+    % \setlength\parskip{5pt}
     \tl_if_blank:eF{\RpgItemRarity}
     {
         \tl_concat:NNN{\RpgItemRarity}{\RpgItemRarity}{~}
@@ -27,11 +27,11 @@
 
         \newline
     }
-
+	\vspace{-0.4cm}
     {\setlength\topsep{0pt}\begin{center}
         
 
-        \noindent\begin{tikzpicture}[remember~picture,overlay]
+        \noindent\begin{tikzpicture}
             
                 % \begin{scope}[yshift=-0.1cm]
                 \def\makeText{
@@ -64,7 +64,7 @@
         
     \end{center}}
     
-    \vspace{0.4cm}
+    % \vspace{0.4cm}
     
     \tl_if_blank:eF{\RpgItemImage}
     {
@@ -81,5 +81,6 @@
     % \vfill{} 
 
    #2
+%    \vfill
     }
 }

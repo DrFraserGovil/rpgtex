@@ -1,23 +1,14 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Internal key processing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\int_new:N \l__rpg_dnd_spell_level_tl
-\keys_define:nn {rpg/dnd/spell}
-{
-	level .code:n ={\int_set:Nn{\l__rpg_dnd_spell_level_tl}{#1}},
-	level .initial:n = 0,
-}
-
-\__rpg_add_tl_keys:Nn {rpg/dnd/spell}
-{
-	\__rpg_tl_key:nnn {school}{\l__rpg_dnd_spell_school_tl}{}
-	\__rpg_tl_key:nnn {casting-time}{\l__rpg_dnd_spell_casting_time_tl}{1~action}
-	\__rpg_tl_key:nnn {range}{\l__rpg_dnd_spell_range_tl}{self}
-	\__rpg_tl_key:nnn {components}{\l__rpg_dnd_spell_components_tl}{VSM}
-	\__rpg_tl_key:nnn {duration}{\l__rpg_dnd_spell_duration_tl}{Instantaneous}
-	\__rpg_tl_key:nnn {source}{\l__rpg_dnd_spell_source_tl}{}
-
-}
-
+\RpgSpellAddProperty{school}{\l_SpellSchool}{}
+\RpgSpellAddProperty{level}{\l__rpg_dnd_spell_level_tl}{0}
+\RpgSpellAddProperty{casting-time}{\l__rpg_dnd_spell_casting_time_tl}{1~action}
+\RpgSpellAddProperty{range}{\l__rpg_dnd_spell_range_tl}{self}
+\RpgSpellAddProperty {components}{\l__rpg_dnd_spell_components_tl}{VSM}
+\RpgSpellAddProperty{duration}{\l__rpg_dnd_spell_duration_tl}{Instantaneous}
+\RpgSpellAddProperty{source}{\l__rpg_dnd_spell_source_tl}{}
 
 \cs_new_protected:Npn \__rpg_dnd_spell_header:nn#1#2
 {
@@ -37,10 +28,10 @@
 	{\centering
 		
 		{
-			\RpgFontSpellCardHeader\scriptsize
-			\__rpg_dnd_spell_header:nn {\l__rpg_dnd_spell_level_tl}{\l__rpg_dnd_spell_school_tl}
+			\RpgFontCardHeader\scriptsize
+			\__rpg_dnd_spell_header:nn {\getkey{level}}{\getkey{school}}
 		}
-		{\\\RpgFontSpellCardTitle\color{titlered}\mbox{#1}}
+		{\\\RpgFontCardTitle\color{titlered}\mbox{#1}}
 		
 		\vspace{-0.5em} \\
 
@@ -49,81 +40,66 @@
 		\vspace{-0.25em}
 
 		
-		{\RpgFontSpellCardHeader
+		{\RpgFontCardHeader
 		\begin{tabularx}{\linewidth}{YY}
-			% \centering
-			\color{titlered}Casting~time & \color{titlered}Range
+			\color{titlered}Casting~time 	& 		\color{titlered}Range
 			\\
-			 \l__rpg_dnd_spell_casting_time_tl & \l__rpg_dnd_spell_range_tl
+			\getkey{casting-time}			&	 	\getkey{range}
 			\\
-			\color{titlered}Components & \color{titlered} Duration
+			\color{titlered}Components 		& 		\color{titlered} Duration
 			\\
-			 \l__rpg_dnd_spell_components_tl & \l__rpg_dnd_spell_duration_tl
+			\getkey{components}				& 		\getkey{duration}
 		\end{tabularx}
 		}
 		}
 
 }
 \NewDocumentCommand{\AddSpellSource}{}{
-		\str_if_empty:NF {\l__rpg_dnd_spell_source_tl}{
+		\str_if_empty:NF {\getkey{source}}{
 		
 		\vfill 
-			\hfil{\it  Source:~\l__rpg_dnd_spell_source_tl} \hfil
+			\hfil{\it  Source:~\getkey{source}} \hfil
 		%%For some reason \centering has no effect, so manually force centering via hfil
 		}
 }
 
-\NewDocumentEnvironment{spellcard}{O{} m m +b}
+\RpgSpellCardFormat
 {
 	\setlength{\parindent}{0pt}
-    \keys_set:nn {rpg/dnd/spell}{#3}
-	\begin{RpgCard}[underlay=\RpgPackagePath/themes/dnd/img/paper,#1]
 		
-		\FormatSpellHeading{#2}
+		\FormatSpellHeading{#1}
 		
 		\\ \vspace{0.5em}
 		\rule{\linewidth}{0.4pt} 
 		\\ 
 		\vspace{0.5em}
 		
-		\RpgFontSpellCardBody
+		\RpgFontCardBody
 
-		#4
+		#2
 		
 		\AddSpellSource{}
 		
-}{
-	\end{RpgCard}
 }
 
-\NewDocumentEnvironment{spelltext}{m m}
-{
-	\keys_set:nn {rpg/dnd/spell}{#2}
+
+\RpgSpellTextFormat{
 	\subsection{#1}
-	
-	\textit{\__rpg_dnd_spell_header:nn {\l__rpg_dnd_spell_level_tl}{\l__rpg_dnd_spell_school_tl}}
-	\par \vspace{3pt} \noindent \ignorespaces
+		
+		\textit{\__rpg_dnd_spell_header:nn {\getkey{level}}{\getkey{school}}}
+		\par \vspace{3pt} \noindent \ignorespaces
 
-	 \begin{description}
-      [
-        nosep,
-        labelsep = \l__rpg_space_dim,
-        after    = { \vspace{4pt plus 1pt minus 1pt} },
-      ]
-			\item [ Casting~time : ] \l__rpg_dnd_spell_casting_time_tl
-			\item [ Range       : ] \l__rpg_dnd_spell_range_tl
-			\item [ Components  : ] \l__rpg_dnd_spell_components_tl
-			\item [ Duration    : ] \l__rpg_dnd_spell_duration_tl
-			\str_if_empty:NF {\l__rpg_dnd_spell_source_tl}{\item [ Source      : ] \textit{\l__rpg_dnd_spell_source_tl}
-	  } 
-    \end{description}
-}{
-	% \par{\it \spellsource}
-}
-
-\NewDocumentEnvironment{RpgSpell}{O{} m m}
-{
-	\begin{RpgCardSwitch}[#1]{spellcard}{spelltext}{#2}{#3}
-}{
-	\end{RpgCardSwitch}
+		\begin{description}
+		[
+			nosep,
+			labelsep = \l__rpg_space_dim,
+			after    = { \vspace{4pt plus 1pt minus 1pt} },
+		]
+				\item [ Casting~time : ] \getkey{casting-time}
+				\item [ Range       : ] \getkey{range}
+				\item [ Components  : ] \getkey{components}
+				\item [ Duration    : ] \getkey{duration}
+				\str_if_empty:NF {\getkey{source}}{\item [ Source      : ] \textit{\getkey{source}}
+		} 
+		\end{description}
 }

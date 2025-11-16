@@ -1,0 +1,86 @@
+
+\ExplSyntaxOn
+\msg_new:nnn { rpg } { bad-getkey} {Not~in~a~suitable~environment~to~call~\getkey}
+
+\NewDocumentCommand{\getkey}{m}{
+	\msg_error:nn{rpg}{bad-getkey}
+}
+
+\NewDocumentCommand{\RpgMakeFeature}{m O{O{} m O{}} m m}
+{
+	%%%%Initialise the hooks to the internal formatters
+		\cs_new:cpn {__#1_card_format:nn}{-No-Format-Set-For-#1-Card-}
+		\cs_new:cpn {__#1_text_format:nn}{-No-Format-Set-For-#1-Text-}
+
+		\cs_new:cpn {#1CardFormat} ##1
+		{
+			\cs_set:cn {__#1_card_format:nn} {##1}
+		}
+		\cs_new:cpn {#1TextFormat} ##1
+		{
+			\cs_set:cn {__#1_text_format:nn} {##1}
+		}
+	%%Define default formatter values
+		\use:c{#1CardFormat}{\subsection{##1} ##2\par \vfill}
+		\use:c{#1TextFormat}{\subsection{##1} ##2\par}
+
+	%%Define the attribute list
+		\prop_new:c  {#1_property_list}
+		\cs_new:cpn {#1AddProperty} ##1##2##3
+		{
+			\__rpg_insert_tl_key:xene{rpg/forge/#4}{##1}{##2}{##3}   
+			\prop_put:cnn{#1_property_list}{##1}{##2}
+		}
+
+
+	%%Individual environments
+	\NewDocumentEnvironment{__#1Card}{O{} m +b}
+	{
+		\begin{RpgCard}[##1]
+			\use:c{__#1_card_format:nn}{##2}{##3}
+	}
+	{
+		\end{RpgCard}
+	}
+	\NewDocumentEnvironment{__#1Text}{m +b}
+	{
+		\use:c{__#1_text_format:nn}{##1}{##2}
+	}{}
+
+	
+		%%Define the switch setter
+		\cs_new:cpn {#1ShowCard} ##1
+		{
+		\RpgSwitch{#3}{##1} 
+		}
+		\RpgSwitch{#3}{false}
+
+	%%Now define the actual switchenv wrapper
+	
+	\NewDocumentEnvironment{#1}{#2}
+	{
+		 \keys_set:nn{rpg/forge/#4}{##3}
+		
+		\RenewDocumentCommand{\getkey}{m}{
+			\prop_item:cn{#1_property_list}{####1}
+			}
+
+		\begin{RpgSwitchEnv}{#3}[##1]{__#1Card}{__#1Text}{##2}
+			
+	}{
+		\end{RpgSwitchEnv}
+	}
+
+	
+}
+
+
+\RpgMakeFeature{RpgItem}[O{opacity=0.2} m O{}]{UseItemCard}{item}
+
+\RpgMakeFeature{RpgSpell}[O{} m m]{UseSpellCard}{spell}
+
+\RpgMakeFeature{RpgAbility}{UseAbilityCard}{ability}
+
+\RpgMakeFeature{RpgStat}{UseStatCard}{statblock}
+
+\ExplSyntaxOff

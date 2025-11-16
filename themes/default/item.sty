@@ -1,8 +1,8 @@
 
-\RpgAddItemProperty{description}{\RpgItemDescription}{}
-\RpgAddItemProperty{image}{\RpgItemImage}{}
+\RpgItemAddProperty{description}{\RpgItemDescription}{}
+\RpgItemAddProperty{image}{\RpgItemImage}{}
 
-\RpgSetItemCardFormat{
+\RpgItemCardFormat{
     \subsection{#1}
 
     \tl_if_blank:eF{\RpgItemDescription}
@@ -13,8 +13,6 @@
     {
         {\hfil \includegraphics[width=\linewidth,height=3cm,keepaspectratio=true]{\RpgItemImage}\hfil }\par\noindent
     }
-
-    \vfill{} 
 
     \footnotesize #2
 }

@@ -36,9 +36,9 @@
 			
 			~~(\ldots)
 		}{
-			\cmd{maketitle} has been completely defined, so commands such as \texttt{titlepage} won't work as expected. Instead, the appearance of the title page (or title header) are set by the theme, or user calls to either \cmdref{RpgSetCover} or \cmdref{RpgSetSimpleTitle}. Which of the two title `modes' is active is controlled by \cmd{RpgUseCoverPage}.
+			\cmd{maketitle} has been completely defined, so commands such as \texttt{titlepage} won't work as expected. Instead, the appearance of the title page (or title header) are set by the theme, or user calls to either \cmdref{RpgSetCover} or \cmdref{RpgSetSimpleTitle}. Which of the two title `modes' is active is controlled by \cmdref{RpgSetCoverMode}.
 
-			If \texttt{RpgUseCoverPage} has been set to true, then the image stored in \texttt{\bs{}{@}cover} (if there is one) is automatically used as a full-page background image. This is independent of the drawing commands, and occurs before that function is called -- all subsequent drawing occurs over the top of the cover image.
+			If `cover-mode' has been set, then the image stored in \texttt{\bs{}{@}cover} (if there is one) is automatically used as a full-page background image. This is independent of the drawing commands, and occurs before that function is called -- all subsequent drawing occurs over the top of the cover image.
 		}
 	
 	\RpgMacro{part}{\cmd{part*},\param{{o m}}}
@@ -62,19 +62,11 @@
 			\end{RpgTable}
 			The `drawing command' is a control sequence set by \cmdref{RpgSetPartPage}, which defines a series of tikz functions to place the part title according to the theme specifications. 
 		}
-	\RpgMacro{RpgUseCoverPage}{\param{{m}}}
-		{
-			If true, \cmd{maketitle} creates a title page to populate, else the title is rendered as an article-like heading.
-		}{
-			\cmd{RpgUseCoverPage}\param{true/false}
-		}
-		{
-			When true, \cmd{maketitle} attempts to use \cmd{@cover} and then calls \cmdref{RpgSetCover}. If false, it calls \cmdref{RpgSetSimpleTitle}.
-		}
+
 	\RpgMacro{subtitle}{\param{{m}},\cmd{@subtitle}}
 		{
 			Saves a string to the variable \cmd{@subtitle}. Themes may use this when defining their \cmd{RpgSetCover} and \cmd{RpgSimpleTitle}.
-			\cmdidx{{"@}subtitle}
+			\index{{"@}subtitle}
 		}
 		{
 			\bs{}subtitle\param{<string>}
@@ -87,7 +79,7 @@
 
 \section{Fonts \& Decorative Text}
     % In addition to the fundamental typeface alterations \rpgtex{} includes a number of commands to turn text into decorative elements.
-	\RpgMacro{emph}{\param{m},\cmd{key},\param{m}}{Uses the \texttt{RpgFontEmphasis} font to emphasise text.\cmdidx{key}}
+	\RpgMacro{emph}{\param{m},\cmd{key},\param{m}}{Uses the \texttt{RpgFontEmphasis} font to emphasise text.\index{key}}
 		{
 			\cmd{emph}\param{text}
 
@@ -155,7 +147,7 @@
 
    
     
-    \RpgMacro{RpgSetTheme}{\param{{m}}}
+    \RpgMacro[RpgSet!Theme]{RpgSetTheme}{\param{{m}}}
         {
             Activates a chosen theme.
         }
@@ -169,7 +161,7 @@
         }
 
     
-    \RpgMacro{RpgSetThemePath}{\param{{m}}}
+    \RpgMacro[RpgSet!Theme!Path]{RpgSetThemePath}{\param{{m}}}
         {
             Changes the value of the theme path searched for by \cmd{RpgSetTheme}
         }
@@ -211,7 +203,7 @@
                 \texttt{\bs{}RpgDice\param{2*1d6}}, \texttt{\bs{}RpgDice\param{1 d6}}, \texttt{\bs{}RpgDice\param{3d 6 +3}} & (Fails to compile)
             \end{RpgTable}
         
-            \cmd{RpgDice} is neat, but not necessarily impressive by itself. The true power of the expression is that it calls the control sequence set by \cmdref{RpgSetDiceFormat} to perform the output formatting (after performing the regular expression parsing), allowing designers to customise their dice formatting.
+            \cmd{RpgDice} is neat, but not necessarily impressive by itself. The true power of the expression is that it calls the control sequence set by \cmdref{RpgDiceFormat} to perform the output formatting (after performing the regular expression parsing), allowing designers to customise their dice formatting.
         }
 
     \RpgMacro{RpgFakeChapter}{\param{m}}{Mimics creating a new chapter with \cmd{chapter} (including adding in to the table of contents) without inserting a `chapter heading'}

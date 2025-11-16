@@ -17,10 +17,10 @@
 		\RpgContour[outer=white!50!titleblue,inner=titleblue,style=\RpgFontPart\Huge]{{#1}}}};
 }
 
-\RpgSetCover
+\RpgSetTitleCover
 {
-	\node[text width=0.8\paperwidth, anchor=north] at ($(current page.north)+(0,-3cm)$) {\centering\RpgContour[outer=titleblue,inner=white,style=
-	\RpgFontTitle]{\@title}};
+	\node[text width=0.8\paperwidth, anchor=north] at ($(current page.north)+(0,-3cm)$) {\begin{center}\RpgContour[outer=titleblue,inner=white,style=
+	\RpgFontTitle]{\@title}\end{center}};
 
 	\node[anchor=south] at ($(current page.south)+(0,+3cm)$) {\parbox[t]{0.9\paperwidth}{
 		\begin{center}

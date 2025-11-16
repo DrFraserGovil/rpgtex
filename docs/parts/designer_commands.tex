@@ -40,38 +40,46 @@
 	\end{RpgSidebar}
 
 	\section{Title \& Part Pages}
-		\RpgMacro{RpgSetCover}{\param{{+m}}}
+		\RpgMacro[RpgSet!Title!Cover]{RpgSetTitleCover}{\param{{+m}}}
             {
                 Assign the Tikz code for drawing a custom cover page over the top of the \cmd{@cover}-image.
             }{
-                \bs{}RpgSetCover
+                \bs{}RpgSetTitleCover
                 \\\{
                 \\	~~<custom-tikz-code>
                 \\\}
             }
             {
-                 This is a \COSS{}, with the resulting control sequences being used when \cmd{maketitle} is called (and \cmd{RpgUseCoverPage{true}} has been set), allowing the designer to determine where to place the text on the page, and what embellishments accompany it. The stored sequence is called from within an existing tikz environment with the \texttt{remember,overlay} options active, allowing for page coordinates (i.e. current page.north) to be used.
+                 This is a \COSS{}, with the resulting control sequences being used when \cmd{maketitle} is called (in \texttt{cover} mode), allowing the designer to determine where to place the text on the page, and what embellishments accompany it. The stored sequence is called from within an existing tikz environment with the \texttt{remember,overlay} options active, allowing for page coordinates (i.e. current page.north) to be used.
 
                 The custom tikz code does not permit any arguments, but the contents of \cmd{@title}, \cmd{@subtitle}, \cmd{@author} and \cmd{@date} are accessible.
 
                 If a \cmd{@cover} has been defined, this command is executed after the image is placed, drawing on top of it.
             }
-        \RpgMacro{RpgSetSimpleTitle}{\param{{+m}}}
+        \RpgMacro[RpgSet!Title!Header]{RpgSetTitleHeader}{\param{{+m}}}
             {
                 Assigns the code for typesetting a `header' title - a simple text-only title at the top of the page.
             }{
-                \bs{}RpgSetSimpleTitle
+                \bs{}RpgSetTitleHeader
                 \\\{
                 \\	~~<custom-code>
                 \\\}
             }
             {
-                 This is a \COSS{}, with the resulting control sequences being used when \cmd{maketitle} is called (and \cmd{RpgUseCoverPage} has been set to false), allowing the designer to determine how to structure the text which makes up the `simple' title.
+                 This is a \COSS{}, with the resulting control sequences being used when \cmd{maketitle} is called in \texttt{header} mode, allowing the designer to determine how to structure the text which makes up the `simple' title.
 
                 The Simple Title is configured so that, in a twocolumn document, it occupies the full page width; calling \texttt{centering} with the simple title therefore centers the text above both columns. 
             }
-       
-		\RpgMacro{RpgSetPartPage}{\param{{+m}}}{Assign the Tikz code for drawing a custom part page when activated by \cmdref{part}. }
+        \RpgMacro[RpgSet!Title!Mode]{RpgSetTitleMode}{\param{{m}}}
+            {
+                If true, \cmd{maketitle} creates a title page to populate, else the title is rendered as an article-like heading.
+            }{
+                \cmd{RpgSetTitleMode}\param{cover/header}
+            }
+            {
+                When \texttt{cover} is set, \cmd{maketitle} attempts to use \cmd{@cover} and then calls the \cmdref{RpgSetTitleCover}-set tikz code. If false, it uses the value sent to \cmdref{RpgSetTitleHeader} to render a simple text heading.
+            }
+		\RpgMacro[RpgSet!PartPage]{RpgSetPartPage}{\param{{+m}}}{Assign the Tikz code for drawing a custom part page when activated by \cmdref{part}. }
             {
                 \bs{}RpgSetPartPage
                 \\\{
@@ -112,7 +120,7 @@
                 \item[keepaspectratio] adds \texttt{keepaspectratio} to the includegraphics arguments    
             \end{description}
         }
-    \RpgMacro{RpgSetPaper}{\param{}}
+    \RpgMacro[RpgSet!Paper]{RpgSetPaper}{\param{}}
         {Sets a background image to be used as the `paper' image.}
         {
             \bs{}RpgSetPaper\param{path/to/image}
@@ -122,7 +130,7 @@
 
             The pagestyle \texttt{clear} is equal to \texttt{empty}, with the exception of the page texture.
         }
-		\RpgMacro{RpgSetThemeColor}{\param{{m}}}
+		\RpgMacro[RpgSet!ThemeColor]{RpgSetThemeColor}{\param{{m}}}
         {
             Sets the \texttt{themecolor}, and simultaneously updates the co-varying colors \RpgPage[p]{S:Colors}.
         }{
@@ -133,7 +141,7 @@
             Of the rpg-provided colors, only \texttt{narrationcolor} is unaffected by this command.
         }
 	\section{Other}
-		\RpgMacro{RpgSetFont}{\param{{m}}}
+		\RpgMacro[RpgSet!Font]{RpgSetFont}{\param{{m}}}
             {
                 Saves new font values and styles to the internal RpgFont[X] variables, which are then available for themes to use.			
             }
@@ -142,12 +150,12 @@
             }{
                 See \RpgPage{S:Fonts} for documentation of the available font families. The values changed by this command are local, and so persist only within a local group.
             }
-\RpgMacro{RpgSetDiceFormat}{\param{{+m}}}
+\RpgMacro[RpgDice!Format]{RpgDiceFormat}{\param{{+m}}}
         {Sets the typesetting of the RpgDice command
         }
         {
             % \bs{}RpgDiceFormat\param{<dice-count>}\param{<dice-size>}\param{<added bonus>}
-            \bs{}RpgSetDiceFormat
+            \bs{}RpgDiceFormat
             \\\{
             \\	~~\% \#1 = dice count ~~\#2 = dice size ~~ \#3 = added bonus
             \\	~~<custom-code>
@@ -155,11 +163,11 @@
         }
         {
              This is a \COSS{}, with the resulting control sequences allowing theme designers to determine how \cmd{RpgDice} is rendered. The default option is:
-            \cmd{RpgSetDiceFormat\param{\#1d\#2 \#3}}, such that \cmd{RpgDice\param{ndx + a + b}} gives ``ndx + c'', where c is the numerical value of a+b, with an additional check to see if \texttt{\#3} is equal to 0 (to avoid `1d6 + 0'). 
+            \cmd{RpgDiceFormat\param{\#1d\#2 \#3}}, such that \cmd{RpgDice\param{ndx + a + b}} gives ``ndx + c'', where c is the numerical value of a+b, with an additional check to see if \texttt{\#3} is equal to 0 (to avoid `1d6 + 0'). 
             
             The dnd implementation performs a more advanced operation, computing the average value of the roll, and formatting that first, to replicate the format used by monster stat blocks. 
 
-            \RpgSetDiceFormat{
+            \RpgDiceFormat{
                 \DndTempDiceFormat{#1}{#2}{#3}
             }
 
@@ -172,7 +180,7 @@
   \item \RpgDice{d8}
  \end{itemize}
  \ExplSyntaxOn %%Activate expl3 programming
- \RpgSetDiceFormat{ % #1: Dice Number, #2: Dice Sides, #3: Modifier
+ \RpgDiceFormat{ % #1: Dice Number, #2: Dice Sides, #3: Modifier
   %%Set dX -> 1dX
   \tl_set:Nn \l__temp_dice{\tl_if_blank:VTF {#1}{1}{#1}}
   %%Compute the average result

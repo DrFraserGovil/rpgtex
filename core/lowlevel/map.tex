@@ -25,7 +25,6 @@
 
 \cs_new_protected:Npn \__rpg_render_heading_level:nf #1#2
 {
-
 	\str_case_e:nnF {\fp_eval:n{#1}}
 	{
 		{0} {\let\rpgtmpsec\chapter}
@@ -37,7 +36,6 @@
 	{
 		\let\rpgtmpsec\subparagraph
 	}
-	% \rpgtmpsec{#2}
 	\__rpg_auto_star:nN {\l__rpg_map_starred_bool}{\rpgtmpsec}{#2}
 }
 
@@ -160,3 +158,6 @@
 
 
 }
+
+%% Mode switching
+\msg_new:nnn{rpg}{mapless-area}{Lonely~\area~--~perhaps~a~missing~RpgMap~environment.}

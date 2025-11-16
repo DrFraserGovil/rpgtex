@@ -7,6 +7,7 @@
 \usepackage{splitidx} %use rather than imakeidx because it gets hyperrefs right!
 \usepackage{pifont}
 
+
 \usepackage[official]{eurosym} %%used for the euro in item examle
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
@@ -21,33 +22,25 @@
 
 
 
-\newcommand{\lindex}[1]{%
-  \lowercase{\def\temp{#1}}%
-  \expandafter\index\expandafter{\temp}%
-}
-\NewDocumentCommand{\lcaseidx}{m}{
-	\lowercase{\def\temp{#1}}
-	\expandafter\index\expandafter{\temp@\texttt{#1}}
-}
 \NewDocumentCommand{\cmdidx}{ o m }{
 	\foreach \m in {#2}
 	{
 		% \lindex{\texttt{\textbackslash{}\lowercase{\m}}@{\lowercase{\m}}}
 		\IfNoValueTF{#1}
 		{
-			 \lowercase{\def\temp{\m}}
-			\expandafter\index\expandafter{\temp@\texttt{\m}}
+			\index{\m}
 		 }
 		 {
-			% \index{\m}
-			 \lowercase{\def\temp{\m}}
-			\expandafter\index\expandafter{#1!\temp@\texttt{\m}}
+			\index{#1!\m}
 		 }
 	}
 }
 
 \NewDocumentCommand{\cmdref}{m}{
 	\texttt{\textbackslash#1}~\RpgPage[p]{Macro:#1}
+}
+\NewDocumentCommand{\envref}{m}{
+	\texttt{#1}~\RpgPage[p]{#1}
 }
 
 \begin{document}
@@ -93,19 +86,20 @@
 		\input{parts/options.tex}
 		\input{parts/commands.tex}
 		\input{parts/environments.tex}
-	\part{rpgtex For Designers}
-	\input{parts/designer_commands.tex}
-	\input{parts/switchenv.tex}
-	\part{rpgtex Classes}
+	\part{Classes \& Themes}
 		\input{parts/class_book.tex}
 		\input{parts/class_handout.tex}
 		\input{parts/class_card.tex}
-	\part{Themes}
 		\input{parts/themes_default.tex}
 		\input{parts/themes_dnd.tex}
 		\input{parts/themes_scifi.tex}
-
-
+	
 	\RpgSetTheme{default}
+	\part{rpgtex For Designers}
+		\input{parts/designer_commands.tex}
+		\input{parts/featureforge.tex}
+
+
 	\printindex
+
 \end{document}

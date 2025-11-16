@@ -2,68 +2,78 @@
 \chapter{\texttt{dnd} Theme}
 
 
-	\section{dnd RpgItem}\label{S:DndItem}\index{rpgitem@\texttt{RpgItem}!\texttt{dnd}}
+	\section{RpgItem: dnd Version}\label{S:DndItem}
+	\index{RpgItem!Theme!dnd}
 
-awidj oaiwhd oiawdio aoiwdjoa ijwdijaiowj doi jaiowjd oija woijd ioajw d his is a test of \emph{My emphasis} adh ouawwhd iuahwiud hwaiudh iuawhdu iahwiudh iuwahdiu ahw iudhiuahw iudhaw iduh awliudh lauiwhdl iuahw idulha wiuldhiuhwiuh 
+		The \texttt{dnd} theme defines an override for the generic \envref{RpgItem}
 
-	\section{RpgMonster}\cmdidx{RpgMonster}
+	\labelsection{RpgSpell: dnd Version}\index{{RpgSpell!Theme!dnd}}
+
+	\section{RpgStatblock: dnd Version}\index{RpgStatblock!Theme!dnd}
 
 		The dnd theme defines a special command which mimics the appearance of a monster statblock - particularly those in the more modern D\&D 2024 iteration. 
 
-	% 	\begin{multicols}{2}
-	% 	\begin{RpgMonster}{Test}
-			
-	% 	\end{RpgMonster}
-	% 	\clearpage
-	% 	\Blindtext
-	% \end{multicols}
+		\begin{RpgStat}{A Monster}
+			 \RpgStatType{Medium aberration, lawful evil}
 
-	\labelsection{RpgSpell Environment}
-	\RpgUseCards{true}
+				  \RpgStatBasics[
+						armor-class = {9 (12 with \emph{mage armor})},
+						hit-points  = {\RpgDice{3d8 + 3}},
+						speed       = {30 ft., fly 30 ft.},
+						proficiency=2,
+						str = 12,
+						dex = 8,
+						con = 13,
+						int = 10,
+						wis = 14,
+						cha = 15,
+						str_save,
+						cha_save,
+					]
 
-	\begin{RpgSpell}{Hocus Pocus}{
-		level = 3,
-		school=Transmutation,
-		casting-time={1 bonus action\footnote{Taken whilst in waist-deep water}},
-		source={Player's Handbook}
-	}
-		The body text of the spell
+				\RpgStatDetails[
+					%saving-throws = {Str +0, Dex +0, Con +0, Int +0, Wis +0, Cha +0},
+					%skills = {Acrobatics +0, Animal Handling +0, Arcana +0, Athletics +0, Deception +0, History +0, Insight +0, Intimidation +0, Investigation +0, Medicine +0, Nature +0, Perception +0, Performance +0, Persuasion +0, Religion +0, Sleight of Hand +0, Stealth +0, Survival +0},
+					%damage-vulnerabilities = {cold},
+					%damage-resistances = {bludgeoning, piercing, and slashing from nonmagical attacks},
+					%damage-immunities = {poison},
+					%condition-immunities = {poisoned},
+					senses = {darkvision 60 ft., passive Perception 12},
+					languages = {\LaTeX},
+					challenge = 1,
+					% proficiency-bonus, % = +2
+				]
+		\end{RpgStat}
+		\RpgStatShowCard{true}
+		\begin{RpgStat}{A Monster}
+			 \RpgStatType{Medium aberration, lawful evil}
 
-	\end{RpgSpell}
+				  \RpgStatBasics[
+						armor-class = {9 (12 with \emph{mage armor})},
+						hit-points  = {\RpgDice{3d8 + 3}},
+						speed       = {30 ft., fly 30 ft.},
+						proficiency=2,
+						str = 12,
+						dex = 8,
+						con = 13,
+						int = 10,
+						wis = 14,
+						cha = 15,
+						str_save,
+						cha_save,
+					]
 
-	\begin{RpgSpell}[]{Hocus Pocus 2}{
-		% level = 1,
-		% school=Conjuration
-		casting-time={1 Reaction}
-	}
-		The body text of the \cardbreak spell
-		% \Blindtext
-	\end{RpgSpell}
-	
-	\begin{RpgSpell}[width=8cm]{Hocus Pocus 3}{
-		% level = 1,
-		% school=Conjuration
-		casting-time={1 Reaction}
-	}
-		The body text of the \cardbreak spell
-		% \Blindtext
-	\end{RpgSpell}
-
-	Now I test \footnote{That I didn't damage anything}.
-
-	% \newenvironment{testit}[1]{\textit{#1}\newline}{}
-	% \newenvironment{testbf}[1]{\textbf{#1}\newline}{}
-
-
-
-
-	% \begin{RpgCardSwitch}{testit}{testbf}{test this!}
-	% 		Some text
-	% \end{RpgCardSwitch}
-
-	% \RpgCardMode{true}
-
-	% \begin{RpgCardSwitch}[test]{testit}{testbf}{test this!}
-	% 		Some text
-	% \end{RpgCardSwitch}
-	
+				\RpgStatDetails[
+					%saving-throws = {Str +0, Dex +0, Con +0, Int +0, Wis +0, Cha +0},
+					%skills = {Acrobatics +0, Animal Handling +0, Arcana +0, Athletics +0, Deception +0, History +0, Insight +0, Intimidation +0, Investigation +0, Medicine +0, Nature +0, Perception +0, Performance +0, Persuasion +0, Religion +0, Sleight of Hand +0, Stealth +0, Survival +0},
+					%damage-vulnerabilities = {cold},
+					%damage-resistances = {bludgeoning, piercing, and slashing from nonmagical attacks},
+					%damage-immunities = {poison},
+					%condition-immunities = {poisoned},
+					senses = {darkvision 60 ft., passive Perception 12},
+					languages = {\LaTeX},
+					challenge = 1,
+					% proficiency-bonus, % = +2
+				]
+		\end{RpgStat}
+		

@@ -9,74 +9,74 @@
 
     The main power of the RpgCard is the ability to automatically \textit{cardbreak}, splitting large internal elements across multiple cards. 
 
-	\RpgMacro*{RpgCard}{\param{\paramO}}{Splits the contents across a number of playing-card sized units}{
-		
-			\cmd{begin}\param{RpgCard}[<key-value-opts>]
+    \RpgMacro*{RpgCard}{\param{\paramO}}{Splits the contents across a number of playing-card sized units}{
+        
+            \cmd{begin}\param{RpgCard}[<key-value-opts>]
 
-			~~~~~~<contents>
+            ~~~~~~<contents>
 
-			\cmd{end}\param{RpgCard}
-		}{
-			Creates a card environment with a height and width defined either by \texttt{<opts>}, or the global variables. Text is automatically broken if it exceeds this height, creating multiple cards to hold the text.
+            \cmd{end}\param{RpgCard}
+        }{
+            Creates a card environment with a height and width defined either by \texttt{<opts>}, or the global variables. Text is automatically broken if it exceeds this height, creating multiple cards to hold the text.
 
-			The available options are:
-			% \newcommand\kve[3]{\texttt{#1} & #2 & #3\\}
-			\begin{RpgTable}{llX}
-				Key & Values & Effect
-				\\
-				\kve{width}{dimexpr}{The outer width of the RPG card}
-				\kve{hmargin}{dimexpr}{The horizontal margin between the card boundary and the inner text}
-				\kve{height}{dimexpr}{The outer height of the RPG card}
-				\kve{vmargin}{dimexpr}{The vertical margin between the card boundary and the inner text}
-				\kve{cardsep}{dimexpr}{The horizontal space inserted after a card is finished}
-				\kve{color}{color specifier}{The background color of the image. Replaces \textit{tcb/colback}}
-				\kve{opacity}{[0-1]}{The opacity of the background of the image. Replaces \textit{tcb/opacityback}}
-				\kve{under-img}{img/path}{An image to be used as the background of the card. Clipped to the card background so no overspill occurs.}
-				\kve{underlay}{img/path}{An alias for under-img, which replaces \textit{tcb/underlay} to prevent premature tikz expansion.}
-			\end{RpgTable}
+            The available options are:
+            % \newcommand\kve[3]{\texttt{#1} & #2 & #3\\}
+            \begin{RpgTable}{llX}
+                Key & Values & Effect
+                \\
+                \kve{width}{dimexpr}{The outer width of the RPG card}
+                \kve{hmargin}{dimexpr}{The horizontal margin between the card boundary and the inner text}
+                \kve{height}{dimexpr}{The outer height of the RPG card}
+                \kve{vmargin}{dimexpr}{The vertical margin between the card boundary and the inner text}
+                \kve{cardsep}{dimexpr}{The horizontal space inserted after a card is finished}
+                \kve{color}{color specifier}{The background color of the image. Replaces \textit{tcb/colback}}
+                \kve{opacity}{[0-1]}{The opacity of the background of the image. Replaces \textit{tcb/opacityback}}
+                \kve{under-img}{img/path}{An image to be used as the background of the card. Clipped to the card background so no overspill occurs.}
+                \kve{underlay}{img/path}{An alias for under-img, which replaces \textit{tcb/underlay} to prevent premature tikz expansion.}
+            \end{RpgTable}
 
-			The formatting of RpgCard otherwise follows that of a \tcref{}, and all other tcb options can be passed in as normal. However, since the title-frame causes issues with the height calculations, RpgCards cannot use the tcb title interface: any attempt to set a title will fail. We provide two aliases, \texttt{color} and \texttt{opacity}, to make setting the usual values, \texttt{colback} and \texttt{opacityback}, less verbose and obtuse.
+            The formatting of RpgCard otherwise follows that of a \tcref{}, and all other tcb options can be passed in as normal. However, since the title-frame causes issues with the height calculations, RpgCards cannot use the tcb title interface: any attempt to set a title will fail. We provide two aliases, \texttt{color} and \texttt{opacity}, to make setting the usual values, \texttt{colback} and \texttt{opacityback}, less verbose and obtuse.
 
-			Options passed to the environment take precedence to the global variables.
+            Options passed to the environment take precedence to the global variables.
 
-			Note that the RpgCard also temporarily redefines the \cmd{footnote} command (see \cmd{footnote} below).
+            Note that the RpgCard also temporarily redefines the \cmd{footnote} command (see \cmd{footnote} below).
 
-			}
-			
-	\RpgMacro{cardbreak}{\param{}}{Analogous to \cmd{pagebreak}, forces a card to break at the specified location.}
-		{
-			<before-text>
+            }
+            
+    \RpgMacro{cardbreak}{\param{}}{Analogous to \cmd{pagebreak}, forces a card to break at the specified location.}
+        {
+            <before-text>
 
-			\cmd{cardbreak}
-			
-			<after-text>
-		}
-		{
-			The command inserts an infinite, but hidden, vertical space penalty, causing the card to break at its location, as if it had been `filled up'.
+            \cmd{cardbreak}
+            
+            <after-text>
+        }
+        {
+            The command inserts an infinite, but hidden, vertical space penalty, causing the card to break at its location, as if it had been `filled up'.
 
-			\cmd{cardbreak} is any empty function outside of the \texttt{RpgCard} environment, so it will have no effect on RpgCardSwitch environments.
-		}
-	\RpgMacro{footnote}{\param{m}}{A redefinition of the standard footnote to account for the quirks of an RpgCard}
-		{
-			<before-text>\cmd{footnote}\param{foottext}<after-text>
-		}
-		{
-			Due to the multiple processing passes required to ensure that the RpgCard contents fit inside the relevant space, and since footnotes must fit within that space, we had a great deal of difficulty getting footnotes to work as expected (despite them nominally functioning in a tcolorbox).
+            \cmd{cardbreak} is any empty function outside of the \texttt{RpgCard} environment, so it will have no effect on RpgCardSwitch environments.
+        }
+    \RpgMacro{footnote}{\param{m}}{A redefinition of the standard footnote to account for the quirks of an RpgCard}
+        {
+            <before-text>\cmd{footnote}\param{foottext}<after-text>
+        }
+        {
+            Due to the multiple processing passes required to ensure that the RpgCard contents fit inside the relevant space, and since footnotes must fit within that space, we had a great deal of difficulty getting footnotes to work as expected (despite them nominally functioning in a tcolorbox).
 
-			The compromise is that \textbf{only a single footnote can appear in a card}, and the standard \cmd{footnote} command is redefined for the duration of the environment. If multiple footnotes are present, only the final one (in order of execution) will appear. The footnote appears at the bottom of the final card, separated from the main text by a \cmd{hrule}. 
+            The compromise is that \textbf{only a single footnote can appear in a card}, and the standard \cmd{footnote} command is redefined for the duration of the environment. If multiple footnotes are present, only the final one (in order of execution) will appear. The footnote appears at the bottom of the final card, separated from the main text by a \cmd{hrule}. 
 
-			An RpgCard-footnote does not increment the global footnote counter.
-		}
-	\RpgMacro{RpgSetCard}{\param{m}}{Sets the card parameters as global values for all subsequent cards}
-		{
-			\cmd{RpgSetCard}\param{<key/values>}
-		}
-		{
-			The \texttt{<opts>} can contain any of the valid inputs to the \texttt{RpgCard} environment: this acts to set them as global default values, but any locally set values will override them.
-		}
+            An RpgCard-footnote does not increment the global footnote counter.
+        }
+    \RpgMacro[RpgCard!Set]{RpgCardSet}{\param{m}}{Sets the card parameters as global values for all subsequent cards}
+        {
+            \cmd{RpgCardSet}\param{<key/values>}
+        }
+        {
+            The \texttt{<opts>} can contain any of the valid inputs to the \texttt{RpgCard} environment: this acts to set them as global default values, but any locally set values will override them.
+        }
 
-	\RpgMacro{RpgResetCard}{\param{}}{Resets changes made to card parameters back to the defalt value.}{}{}
-	
+    \RpgMacro[RpgCard!Reset]{RpgCard!Reset}{\param{}}{Resets changes made to card parameters back to the defalt value.}{}{}
+    
     \colorlet{ForestGreen}{green!70!black}
 \begin{figure}
   \begin{ExampleBlock}[RpgCard,footnote]{Simple RpgCard}
@@ -119,16 +119,16 @@
 
 \labelsection{RpgMap}
 
-    The RpgMap environment makes it easy to create nested blocks, useful when needing to enumerate the contents of a map. The RpgMap environment uses a stacked counter system and dynamic labelling.
+    The RpgMap environment is similar to the standard itemize/ description/ enumerate environments, providing a structured way to list elements in an arbitrarily nested fashion. The main difference from the standard list environments are that \texttt{RpgMap} (and \cmd{area}, the analogue to \cmd{item}) provide a more elaborate labelling system, useful when needing to enumerate the contents of a map. 
 
-    \RpgMacro*{RpgMap}{RpgMap*, \param{{o}}}{Begins a dynamic-stacked environment for generating headed and labelled lists using the \cmd{RpgArea} object to provide entries. }{
+    \RpgMacro*{RpgMap}{RpgMap*, \param{{o}}}{Begins a nestable map-list environment and enables the \cmd{area} command for adding entries to the map.}{
         \bs{}begin\param{RpgMap}[<opts>]
 
         ~~~<contents>
 
         \cmd{end}\param{RpgMap}				
     }{
-        The starred version of the command is identical in function, but calls \cmd{section*} instead of \cmd{section} (and so on.), suppressing the map elements from the table of contents. 
+        The starred version of the command is identical in function, with the exception that \cmd{area} calls \cmd{section*} instead of \cmd{section} (and so on.), suppressing the map elements from the table of contents. 
         
         RpgMap uses the counter \texttt{RpgAreaDepth} to track how many Maps have been nested. A higher value of this counter results in `smaller' headings being used, beginning with \cmd{section} and progressing to \cmd{subparagraph}.
 
@@ -146,121 +146,150 @@
         The variables set by options are persistent throughout the nesting - setting \texttt{ref-prefix} in one map will mean the same value persists in all encapsulated maps unless manually overridden. Changes do \textit{not} persist once the nesting is finished.
 
     }
-    \RpgMacro{RpgArea}{\param{{o m}}}{
-            Creates a formatted entry within the RpgMap environment. The appearance of the title depends on the map-depth and the current header-offset.
-        }{
-            \bs{}RpgArea[<manual-label>]\param{<area-name>}
-        }{
-            Creates a `header' depending on the value of \texttt{RpgCounter + headeroffset}:
-            \begin{enumerate}
-                \item section
-                \item subsection
-                \item subsubsection
-                \item paragraph
-            \end{enumerate}
-            If outside these values, uses \texttt{subparagraph}. The name of the section is preceeded by the `map counter', which is equal to the index within the current map, appended to the `map counter' of any parent maps. The formatting function \texttt{RpgMapLevelName} enables hierarchical labelling, such that the third area inside the second map of the first map would be given the counter value `1b-iii'.
-
-            If the manual label is set, this is used as the label for this area; otherwise the automatic labelling is used (see below).
-    }
-    \RpgMacro*{RpgNestedArea}{{{o o m}}}
+    \RpgMacro[RpgMap!area]{area}{area, \param{\paramO \paramO}}
+        {Adds an area entry into the current RpgMap. The appearance of the entry depends on the current map depth.\index{area|see {RpgMap, area}} }
         {
-            A wrapper environment for calling \cmd{RpgArea} and then immediately \cmd{begin\param{RpgMap}}, creating nested map areas in a single call.
-        }
-        {
-            \cmd{begin}\param{RpgNestedArea}[manual-label][<nested-opts>]\param{<area name>}
+              \cmd{area}[area-name][<manual-label>]
 
-            ~~~\ldots
+            ~
 
-            \cmd{end}\param{RpgNestedArea}
+            Or
+
+            ~
+
+             \cmd{begin}\param{area}[area-name][manual-label]
+
+            ~~~\ldots <nested-contents>
+
+            \cmd{end}\param{area}
         }{
-            Note that since the RpgMap environment is invoked after the RpgArea is created, the options passed to \texttt{<nested-opts>} do not apply to the parent Area, which uses the Map options of its own parent.
-        }
+            Can be called either as a command (\cmd{area}), or as an environment (\cmd{begin\param{area}}), with slightly differing behaviours.
+
+            \subsection{As a Command}
+                 \begin{RpgTip}{Design Intent}
+                    When called as a command, \cmd{area} is designed to act similarly to an \cmd{item} call inside a \texttt{description} environment, providing a familiar interface.
+                \end{RpgTip}
+                Inserts a `header block' with the following properties:
+                \begin{enumerate}
+                    \item Block is wrapped in a \cmd{chapter},\cmd{section}, \cmd{subsection} (etc.) depending on the number of nested \texttt{RpgMap} environments and the \texttt{header-offset}.
+                    \item The header text is one of the following:
+                    \begin{enumerate}
+                        \item \texttt{<prefix> <counter>. <area-name>} if the first optional argument is a non-empty string.
+                        \item \texttt{<blank-prefix> <counter>} if an \texttt{area-name} was not provided.
+                    \end{enumerate}
+                    \texttt{prefix} and \texttt{blank-prefix} are arguments passed to the parent RpgMap.
+                    \item The heading is automatically labelled using the following syntax:
+                    \begin{enumerate}
+                        \item If a \texttt{manual-label} argument was provided, this is used as the label; \cmd{label\param{manual-label}}.
+                        \item If none was provided, and \texttt{area-name} is non-empty, then the label is set as \cmd{label\param{<ref-prefix><area-name}}.
+                        \texttt{ref-prefix} is a property of the parent RpgMap, with the default value being \texttt{Map:}.
+                    \end{enumerate}
+                    \item Text following the \cmd{area} is rendered as normal text with no modifications.
+                \end{enumerate} 
+               
+            \subsection{As an Environment}
+
+                Fig. \ref{F:MapNesting} shows that is possible to nest maps within an \cmd{area} by first adding an area, and then creating a map. We also provide an interface to do this automatically, if \texttt{area} is called as an environment.
+
+                The syntax and arguments remain identical to the command version, but the body of an \texttt{area} environment acts as if it was wrapped in a nested \texttt{RpgMap} call.
                 
- \begin{figure*}
- \begin{ExampleBlock}[RpgMap,RpgArea,RpgNestedArea]{Example RpgMap}
- \begin{RpgMap*}[
-  header-offset=1,%start at subsection
-  title={Example Map}]
-  
-  \RpgArea{The Spooky Mansion} 
-     There are things here
-  
-  \begin{RpgMap}[
-     title={ignored-as-nested}
-     ]
-     \RpgArea{Entrance Hall}
-         Where you go to enter
-     \RpgArea{Kitchen}
-         Yum, food
-  \end{RpgMap}
-  
-  \begin{RpgNestedArea}[][header-offset=2]
-     {The Creepy Grounds}
-     We set a header-offset for this nested block, so....
-     \RpgArea{The gardens}
-         Note that this is a paragraph, not a subsection
-     \begin{RpgNestedArea}{The stables}
-         Horses live(d) here.
-     
-         \RpgArea{Shire horse}
-             A very big boi, which still keeps the parent's header-offset
- 
-         \RpgArea{Shetland pony}
-             And a tiny one too!
-     \end{RpgNestedArea}
-  \end{RpgNestedArea}
-  
-  \RpgArea{The Graveyard}
-     The additional offset-didn't persist; we're back to subsections again, and the next element will be a subsubsection.
- 
-     \begin{RpgMap}[
-         blank-prefix={Tomb~}
-         ]
-         \RpgArea{}
-             This is an unnamed area - it gets given a slightly different name
-         \RpgArea[tomb-ref]{}
-             I might want to refer to this later, even though it is unnamed.
-     \end{RpgMap}
- \end{RpgMap*}
- \end{ExampleBlock}
- \end{figure*}
- 
+                The following blocks of code are therefore identical in functionality:
+                
+                \begin{minipage}[t]{0.48\linewidth}
+                \begin{Code}
+                    \cmd{begin}\param{area}[name][label] 
+
+                    ~<map-contents>
+
+                    \cmd{end}\param{area}
+                \end{Code}
+                \end{minipage}\hspace{0.04\linewidth}\begin{minipage}[t]{0.48\linewidth}
+                \begin{Code}
+                    \cmd{area}[name][label]
+
+                    \cmd{begin}\param{RpgMap}
+                    
+                    ~<map-contents>
+
+                    \cmd{end}\param{RpgMap}
+                \end{Code}
+                \end{minipage}
+
+                This is demonstrated in Fig. \ref{F:MapAreaNesting}. 
+
+                It is not possible to pass additional options to the internal \texttt{RpgMap} call when using the area environment; if the user wishes to vary the commands at different depths, they must use an explicit \texttt{RpgMap} environment. 
+        }
+        \begin{figure}[t]
+        \begin{ExampleBlock}[RpgMap,area]{RpgMap with manual nesting}
+\begin{RpgMap}
+    \area[Test Zone]
+    A description
+    \begin{RpgMap}
+        \area[Sub Zone]
+        A sub-description
+        \begin{RpgMap}
+            \area[Arbitrary nested zone]
+            (we can keep nesting)
+        \end{RpgMap}
+    \end{RpgMap}
+    \area A nameless zone
+\end{RpgMap}
+        \end{ExampleBlock}\
+        \caption{An example of RpgMap with area-nesting}\label{F:MapNesting}
+        \end{figure}
+
+         \begin{figure}[!b]
+        \begin{ExampleBlock}[area,RpgMap]{RpgMap with manual nesting}
+\begin{RpgMap}
+    \begin{area}[Test Zone]
+    A description
+        \begin{area}[Sub Zone]
+            A sub-description
+            \area[Arbitrary nested zone]
+                (we can keep nesting)
+        \end{area}
+    \end{area}
+    \area[][nameless-ref] A nameless zone
+\end{RpgMap}
+        \end{ExampleBlock}\
+        \caption{An example of RpgMap with area-nesting}\label{F:MapAreaNesting}
+        \end{figure}
 
     \subsection{Map Labelling \& Referencing}
                     
-        Each RpgArea with a non-empty name automatically labels itself using the syntax	\texttt{ \bs{}label{<ref-prefix><area-name>}}. If a manual label was passed to the RpgArea, this is used instead (without the prefix), even if the RpgArea was not named. This is designed to provide disambiguation, as no automatic checks are performed for name collisions. 
+        Each \texttt{area} with a non-empty name automatically labels itself using the syntax	\texttt{ \bs{}label\param{<ref-prefix><area-name>}}. If a manual label was passed to the area, this is used instead (without the prefix), even if the area was not named. This is designed to provide disambiguation, as no automatic checks are performed for name collisions. 
 
-        It is then possible to call \cmd{ref} on this label\footnote{Though it won't give you anything interesting -- the returned value will be the cumulative number of RpgAreas in the document at that point} and \cmd{pageref} or \cmd{RpgPage} \RpgPage[p]{Macro:RpgPage}. However, we provide a more powerful referencing interface:
+        It is then possible to call \cmd{ref} on this label\footnote{Though it won't give you anything interesting -- the returned value will be the cumulative number of areas in the document at that point} and \cmd{pageref} or \cmd{RpgPage} \RpgPage[p]{Macro:RpgPage}. However, we provide a more powerful referencing interface:
 
-        \RpgMacro{RpgMapRef}{\cmd{RpgMapRef*},\param{{m}}}{Returns the full name of the referenced area, including the map counter. The starred version returns only the map counter.}
+    \RpgMacro[RpgMap!Ref]{RpgMapRef}{\cmd{RpgMapRef*},\param{{m}}}{Returns the full name of the referenced area, including the customised map counter. The starred version returns only the map counter.}
             {
                 \bs{}RpgMapRef\param{<label-name>}
             }
             {
-                The provided text is fully integrated with \texttt{hyerref}, and so they enable click-jumping to the referenced map area. 
+                The provided text is fully integrated with \texttt{hyperref}, and so they enable click-jumping to the referenced map area. 
                 
                 Using the example map provided above:
                 \begin{RpgTable}{XX}
                     Example & Output \\
-                    \tabverbExample{\RpgMapRef{Map:Shire horse}}
-                    \tabverbExample{\RpgMapRef*{Map:Shire horse}}
-                    \tabverbExample{\RpgMapRef*{tomb-ref}}
+                    \tabverbExample{\RpgMapRef{Map:Test Zone}}
+                    \tabverbExample{\RpgMapRef*{Map:Sub Zone}}
+                    \tabverbExample{\RpgMapRef{nameless-ref}}
                 \end{RpgTable}
             }
-        \RpgMacro{RpgMapRefPage}{\cmd{RpgMapRefPage*},\param{{m}}}{Appends the page number of the referenced map area to a \cmd{RpgMapRef(*)} command}
+        \RpgMacro[RpgMap!RefPage]{RpgMapRefPage}{\cmd{RpgMapRefPage*},\param{{m}}}{Appends the page number of the referenced map area to a \cmd{RpgMapRef(*)} command}
             {
                 \bs{}RpgMapRefPage\param{<label-name>}
             }
             {
                 Using the example map provided above:
-                \begin{RpgTable}{XX}
+                 \begin{RpgTable}{XX}
                     Example & Output \\
-                    \tabverbExample{\RpgMapRefPage{Map:Shire horse}}
-                    \tabverbExample{\RpgMapRefPage*{Map:Shire horse}}
-                    \tabverbExample{\RpgMapRefPage*{tomb-ref}}
+                    \tabverbExample{\RpgMapRef{Map:Test Zone}}
+                    \tabverbExample{\RpgMapRef*{Map:Sub Zone}}
+                    \tabverbExample{\RpgMapRef{nameless-ref}}
                 \end{RpgTable}
             }
-        \RpgMacro{RpgShowMapRefs}{}{If called, all subsequent \cmd{RpgArea}s will print out a sub-heading listing their macro name.}
+        \RpgMacro[RpgMap!ShowRefs]{RpgMapShowRefs}{}{If called, all subsequent \cmd{area}s will print out a sub-heading listing their macro name.}
         {}
         {
             It is not unheard of for a writer to lose track of the labelling name conventions - especially those which are autogenerated. This provides a useful debugging tool for those who don't want to go digging into the aux files.				
@@ -268,58 +297,53 @@
 
                                                 
 
- \begin{ExampleBlock}[RpgShowMapRefs,tomb-ref]{Example RpgMap with labelling.}
+ \begin{ExampleBlock}[RpgMapShowRefs,tomb-ref]{Example RpgMap with labelling.}
  
-  \RpgShowMapRefs{}
-  \begin{RpgMap*}[
-      header-offset=1,
-      title={Example Map}
-   ]
-   
-   \RpgArea{The Spooky Mansion} 
-      (\dots)%(skip for example!)    
-      \RpgArea{The Graveyard}
-          (\dots)%(skip for example!)
-          \begin{RpgMap}[
-                  blank-prefix={Tomb~}
-              ]
-              \RpgArea{}
-              Unlabelled area.
-              \RpgArea[tomb-ref]{}
-                  (\dots)%(skip for example!)
-          \end{RpgMap}
-  \end{RpgMap*}
+  \RpgMapShowRefs{}
+   \begin{RpgMap}
+    \begin{area}[Test Zone]
+    A description
+        \begin{area}[Sub Zone]
+            A sub-description
+            \area[Arbitrary nested zone]
+                (we can keep nesting)
+        \end{area}
+    \end{area}
+    \area[][nameless-ref] A nameless zone
+\end{RpgMap}
  \end{ExampleBlock}
 
     \labelsection{RpgSecret}
 
         The RpgSecret environment uses the RpgSwitchEnv system \RpgPage[p]{S:SwitchEnv} to conditionally hide information; this allows a Game Master\footnote{Or whatever your system calls this role!} to use the same text for their own notes as they would for players, but wall off some parts of it as 'not for their eyes'. 
 
-	\RpgMacro*{RpgSecret}{\param{\paramO m} }{
-		A switchable environment \RpgPage[p]{S:SwitchEnv} associated with the switch \texttt{ShowSecrets}. When this key is true, the body of the environment is rendered; otherwise it is hidden. 
-		}{
-			\cmd{begin}\param{RpgSecret}[<opts>]\param{<player-text>}
+    \RpgMacro*{RpgSecret}{\param{\paramO m} }{
+        A switchable environment \RpgPage[p]{S:SwitchEnv} associated with the switch \texttt{ShowSecrets}. When this key is true, the body of the environment is rendered; otherwise it is hidden. 
+        }{
+            \cmd{begin}\param{RpgSecret}[<opts>]\param{<player-text>}
 
-			~~~<GM-text>
+            ~~~<GM-text>
 
-			\cmd{end}{RpgSecret}
-		}{
-			If the \texttt{ShowSecrets} switch has been set to false, then the \texttt<player-text> is inserted as plain text with nothing to suggest there's additional text being withheld.
+            \cmd{end}{RpgSecret}
+        }{
+            If the \texttt{ShowSecrets} switch has been set to false, then the \texttt<player-text> is inserted as plain text with nothing to suggest there's additional text being withheld.
 
-			If the switch is true, then the GM text is rendered in a highlighted box, informing the reader that this information is considered secret. If player text was present, this is also shown, and highlighted as the 'publicly available' knowledge.
+            If the switch is true, then the GM text is rendered in a highlighted box, informing the reader that this information is considered secret. If player text was present, this is also shown, and highlighted as the 'publicly available' knowledge.
 
-			The optional arguments take the form of key value pairs:
-			\begin{RpgTable}{llX}
-				Key & Values & Effect
-				\\
-				\kve{title-secret}{string}{Sets the name above the `secret' text (if shown). Default value `Secret Text' }
-				\kve{title-public}{string}{Sets the name above the `player' text (if secret text is shown, and player text present). Default value is `Normal Text'}
-				\kve{color}{color specifier}{Sets the outline color of the `secret box' rendered when the key is set to true.}
-			\end{RpgTable}
-		}
-	{
-	\RpgMacro{RpgShowSecrets}{\param{m}}{An alias for \cmd{RpgSetSwitch\param{ShowSecrets}\param{input}}}{}{}
-	}
+            The optional arguments take the form of key value pairs:
+            \begin{RpgTable}{llX}
+                Key & Values & Effect
+                \\
+                \kve{title-secret}{string}{Sets the name above the `secret' text (if shown). Default value `Secret Text' }
+                \kve{title-public}{string}{Sets the name above the `player' text (if secret text is shown, and player text present). Default value is `Normal Text'}
+                \kve{color}{color specifier}{Sets the outline color of the `secret box' rendered when the key is set to true.}
+            \end{RpgTable}
+        }
+    {
+    \RpgMacro[RpgSecret!Visible]{RpgSecretVisible}{\param{m}}{An alias for \cmd{RpgSwitch\param{ShowSecrets}\param{input}}}{}{
+        % If the value is set to \texttt{true}, 
+    }
+    }
 
         \def\fmt{\color{gray!60}\small}
 \def\lorumIpsumOne{{\fmt{}Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit,
@@ -334,9 +358,9 @@ tellus sit amet tortor gravida placerat. Integer sapien est, iaculis in,
 pretium quis, viverra ac, nunc. }}
 \begin{figure}[H]
 
- \begin{ExampleBlock}[false,RpgSecret,RpgSetSwitch]{RpgSecrets (in hide-mode)}
+ \begin{ExampleBlock}[false,RpgSecret,RpgSwitch]{RpgSecrets (in hide-mode)}
   %%hide the juicy gossip
-  \RpgSetSwitch{ShowSecrets}{false}
+  \RpgSwitch{ShowSecrets}{false}
   
   \lorumIpsumOne%Snippets of standard lorum ipsum
   \begin{RpgSecret}{}
@@ -355,7 +379,7 @@ pretium quis, viverra ac, nunc. }}
 \begin{figure}[H]
  \begin{ExampleBlock}[true,RpgSecret,RpgShowSecrets]{RpgSecrets (in show-mode)}
   %%exactly the same as above -- but reveal the secrets!
-  \RpgShowSecrets{true} 
+  \RpgSecretVisible{true} 
   \lorumIpsumOne
  
   \begin{RpgSecret}{}
@@ -399,6 +423,7 @@ pretium quis, viverra ac, nunc. }}
             \item[color=<color-name>] If set, uses this value instead of \texttt{tablecolor} for the alternating coloration.
             \item[title=<text>] Sets the text to be rendered as the title of the table. 
             \item[breakable] If flag is present, renders using \texttt{xltabular}, enabling the table to break over pages. \textbf{only available in 1-column mode (a fundamental limitation of xltabular).}
+            \item[simple] If flag is present, renders using a simple \texttt{tabular} (ignoring breakable flag). Useful if not using X-columns, and not wanting to specify a length of the table. 
             \item[noheader] If flag is present, suppresses the autoformatting of the title. The first row is instead rendered in the body formatting.
         \end{description}
     }
@@ -505,3 +530,81 @@ pretium quis, viverra ac, nunc. }}
     \end{ExampleBlock}
 
 
+\section{RpgItem, RpgSpell, RpgFeat (etc.)}
+
+    The prior documented environments have almost entirely been \textit{rules agnostic}. That is, they have primarily been typesetting aids which could equally be used for notes on a whimsical, rules-lite game about squirrels in a forest, or a crunchy, table-heavy futuristic scifi game -- all the theme did was change the appearance of the individual elements. 
+    
+    Some elements, however, are strongly tied not only to an aesthetic theme, but also to the rules of an individual system: a statblock for a Pathfinder monster not only looks wholly different to a hostile Traveller alien, but has different components and arguments.
+    
+    To this end, we have provided a powerful and flexible interface to allow a designer to create and customise environments. This is the subject of Chapter \ref{S:Forge}, and makes it somewhat difficult to robustly document the features - as they change behaviour depending on the theme that is being used! When using these functions, always consult the theme-specific documentation.
+
+    
+
+\begin{RpgSidebar}{Advanced Usage}
+    The functions listed below are the `basic interface' for the FeatureForge system; designed for those who are happy to use the format that a theme designer has set up for them. 
+
+    Those wishing to have a more fine-grained control over the appearance of the objects should consult the full documentation on page \RpgPage[p]{S:Forge}.
+\end{RpgSidebar}
+
+    By default, all of these environments have the same behaviour (except where noted otherwise)
+
+        
+        \begin{ExampleBlock}[TestObject]{Feature Forge Example}
+%% Test object does not exist before this moment.
+%%See FeatureForge for documentation
+\RpgMakeFeature{TestObject}{TestCard}{test}
+\TestObjectAddProperty{test-key} {\testKeyValue} {default}
+
+
+%card mode defaults to false, so get plain text output:
+\begin{TestObject}{An Example}
+    This is the body text, I can see that my key is `\getkey{test-key}'
+\end{TestObject}
+
+%%Then activate the card mode (and change the test-key value)
+\TestObjectShowCard{true}
+\begin{TestObject} {An Example} [test-key=alacrity]
+    This is the body text, I can see that my key is `\getkey{test-key}'
+\end{TestObject}
+        \end{ExampleBlock}
+
+
+    \RpgMacro*[RpgItem,RpgSpell,RpgFeat]{Rpg[X]}{{RpgItem},{RpgSpell},{RpgFeat},\param{\paramO{} m \paramO}}{A card-switching environment which renders the text either in normal text, or as an \envref{RpgCard} }
+    {
+        \cmd{begin}\param{Rpg[X]}[<card-opts>]\param{<name>}[<cmd-opts>] \% replace [X] with `Item/Feat/Spell'
+
+        \ldots
+    }{
+        All environments following this pattern are based off the Switched-Environment system \RpgPage[p]{S:SwitchEnv}, allowing them to render the same text either in normal (`text') mode, or in card-mode, depending on the value set by the user. The optional \texttt{card-opts} parameter is passed as the optional parameter to the RpgCard environment, allowing the user to customise the card's appearance.
+
+        The \texttt{name} parameter defines the object and will (usually) appear in a title/subtitle/subsubtitle. 
+
+        The main flexibility of the system is delivered through the \texttt{<cmd-opts>} argument, which accepts key/value pairs. The keys are determined by the theme (there are none by default), and define rules-based interactions (a D\&D theme might add an `armour-class' key, whilst a Forged in the Dark theme might add `tier'). Consult the theme-documentation for the present definition of the keys.
+    }{}
+
+	%has to be outside environment for some reason
+    \RpgMacro[RpgItem!ShowCard,RpgSpell!ShowCard,RpgFeat!ShowCard]{Rpg[X]ShowCard}{\param{m}}{Sets the card mode for all Rpg[X] environments. }{
+        \cmd{Rpg[X]ShowCard\param{true/false}}
+    }{
+        If set to true, the contents of the specified environment will be rendered in card-mode, or text-mode if false.
+    }
+	
+    \RpgMacro{getkey}{\param{m}}{Inserts the value passed to \texttt{key} in the \texttt{cmd-opts} args of the current [X]-environment}
+        {
+            \cmd{begin}\param{Rpg[X]}\param{Test Object}[key1=value,key2=value]
+    
+            \{
+
+            ~~The value of key1 is \cmd{getkey}\param{key1}
+
+            \}
+        }
+        {\label{S:getkey1}
+            % The writer may then reference the parameters of the object they are creating from within the body text of the environment, preventing duplication of information. 
+            % 
+            Recovers the value passed to the key (after any post-processing performed by the environment). This allows the user to access the key-values, as well as allowing them to be inserted into the expected formatting, without having to duplicate the information.
+
+            See \RpgPage{S:getkey2} for more details.
+        }
+    
+    

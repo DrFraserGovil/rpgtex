@@ -8,17 +8,33 @@
   % Remove Numbering (If you want Numbering set secnumdepth to the appropriate depth)
   \setcounter{secnumdepth}{0}
 
-
+	\def\__ChapterName{~}
+	\def\__SectionName{~}
+	\def\__SubsectionName{~}
+	\def\__SubsubsectionName{~}
 	\let\Chaptermark\chaptermark
-	\def\chaptermark#1{\def\RpgChapterName{#1}\Chaptermark{#1}}
+	\def\chaptermark#1{\def\__ChapterName{#1}\Chaptermark{#1}}
 	\let\Sectionmark\sectionmark
-	\def\sectionmark#1{\def\RpgSectionName{#1}\Sectionmark{#1}}
+	\def\sectionmark#1{\def\__SectionName{#1}\Sectionmark{#1}}
 	\let\Subsectionmark\subsectionmark
-	\def\subsectionmark#1{\def\RpgSubsectionName{#1}\Subsectionmark{#1}}
+	\def\subsectionmark#1{\def\__SubsectionName{#1}\Subsectionmark{#1}}
 	\let\Subsubsectionmark\subsubsectionmark
-	\def\subsubsectionmark#1{\def\RpgSubsubsectionName{#1}\Subsubsectionmark{#1}}
+	\def\subsubsectionmark#1{\def\__SubsubsectionName{#1}\Subsubsectionmark{#1}}
 	
-
+	\msg_new:nnn{rpg}{bad-section}{#1~is~not~a~valid~name~for~\RpgGetName}
+	\NewDocumentCommand{\RpgGetName}{m}
+	{
+		\str_case:enF{#1}
+		{
+			{chapter} {\__ChapterName}
+			{section} {\__SectionName}
+			{subsection} {\__SubsectionName}
+			{subsubsection} {\__SubsubsectionName}
+		}
+		{
+			\msg_error:nnn{rpg}{bad-section}{#1}
+		}
+	}
 	
 	\NewDocumentCommand\RpgFakeChapter{m}
 	{

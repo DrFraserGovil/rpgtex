@@ -78,7 +78,7 @@
     title=#2
 }
 
-\newtcblisting{BashBlock}{
+\newtcblisting{BashBlock}[1][bash]{
 
         listing~options={
             language=bash, % The correct, non-error-producing language
@@ -92,7 +92,7 @@
 		colframe=gray!50,colback=black!10!white,
 		 left=2pt,right=2pt, 
 		  top=1pt,bottom=1pt,    arc=1mm,enhanced,
-		  title=bash,
+		  title=#1,
 		  attach~boxed~title~to~top~left=
 {yshift=-\tcboxedtitleheight/2},
 boxed~title~style={size=small,colback=gray!80}
@@ -155,10 +155,32 @@ boxed~title~style={size=small,colback=gray!80}
 	\end{tcolorbox}
 }
 
+\usepackage{amsmath}
 
+\NewDocumentCommand\FFidx{m}
+{
+	\index{FeatureForge!#1}
+	\index{RpgSpell!#1}
+	\index{RpgFeat!#1}
+	\index{RpgItem!#1}
+	\index{RpgStatblock!#1}
+}
+\NewDocumentCommand{\RpgMacro}{s o m +m +m +m +m}{
+	\IfBooleanTF{#1}
+		{
+			\label{#3}
+		}
+		{
+			\label{Macro:#3}
+		}
 
-
-\NewDocumentCommand{\RpgMacro}{s m +m +m +m +m}{
+	\tl_if_novalue:nTF{#2}
+	{
+		\index{#3}
+	}
+	{
+		\cmdidx{#2}
+	}
 
 	\hspace{-3.1cm}
 	\begin{tcolorbox}[
@@ -173,29 +195,21 @@ boxed~title~style={size=small,colback=gray!80}
 		below~right]
 		at ([xshift=-3.5cm]frame.north~west)
 		{
-			\__rpg_doc_macro_list:nn{\IfBooleanTF{#1}{{#2}}{\cmd{#2}}}{#3}
+			\__rpg_doc_macro_list:nn{\IfBooleanTF{#1}{{#3}}{\cmd{#3}}}{#4}
 		};}
   ]
-		\IfBooleanTF{#1}
-		{
-			\label{#2}
-			\lcaseidx{#2}
-		}
-		{
-			\label{Macro:#2}
-			\cmdidx{#2}	
-		}
-		#4
+		
+		#5
 
-		 \str_if_empty:nF{#5}
+		 \str_if_empty:nF{#6}
 		{
-			\begin{Code}#5\end{Code}
+			\begin{Code}#6\end{Code}
 		}
 		
-		\str_if_empty:nF{#6}
+		\str_if_empty:nF{#7}
 		{
 			% \subsection{Details}
-			{#6}
+			{#7}
 		}
 
 	\end{tcolorbox}
@@ -219,7 +233,7 @@ boxed~title~style={size=small,colback=gray!80}
 
 		%%index
 		\tl_set:Nx \l_tmpa_tl { \str_range:nnn {#1} {8} {-1} }
-		\index{rpgfont@\texttt{RpgFont...}!\texttt{\l_tmpa_tl}}
+		% \index{RpgFont!\texttt{\l_tmpa_tl}}
 
 		% \lowercase{\def\temp{\m}}
 		% 	\expandafter\index\expandafter{\temp@\texttt{\textbackslash\m}}

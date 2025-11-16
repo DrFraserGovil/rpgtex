@@ -11,16 +11,9 @@
 
 
 
-\NewDocumentCommand{\RpgSetSwitch}{m m}{
+\NewDocumentCommand{\RpgSwitch}{m m}{
 
 	\prop_gput:Nnx \g__rpg_switch_prop{#1}{\__rpg_bool_from_text:e{#2}}
-}
-\NewDocumentCommand{\RpgSetAllSwitches}{m}{
-
-	\prop_map_inline:Nn \g__rpg_switch_prop
-    {
-		\prop_gput:Nnx \g__rpg_switch_prop { ##1 } { \__rpg_bool_from_text:e{#1}}
-	}
 }
 
 \msg_new:nnn {rpg}{bad-switch}{Cannot~load~SwitchEnv~with~key~'#1':~key~not~in~registry}
@@ -77,6 +70,6 @@
 %This allows arbitrary environment arguments to be passed, so long as both env1 and env2 use the same pattern
 
 %%now load in the child environments
-\input{core/environments/secret.sty}
-\input{core/environments/item.sty}
+% \input{core/environments/secret.sty}
+% \input{core/environments/item.sty}
 \ExplSyntaxOff

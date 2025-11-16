@@ -1,0 +1,536 @@
+\chapter{Feature Forge}\label{S:Forge}\label{S:SwitchEnv}
+
+    In initial drafts of this package, we found ourselves duplicating large swathes of code to produce customizable environments such as RpgItem, RpgSpell and RpgFeature -- these are environments that behave similarly enough to be almost identical in construction, but different enough to warrant their own unique interface. 
+    
+    Rather than forcing designers to write hundreds of lines of code to produce (for example) a slight variant on the RpgSpell environment, we have used the power of expl3 metaprogramming to automatically generate environments as well as configuration hooks and macros with a single line of code.
+
+    \labelsection{RpgMakeFeature}
+
+    \newcounter{makefeature}
+    \setcounter{makefeature}{0}
+    \newcommand\featuresection[1]
+    {
+        \stepcounter{makefeature}
+        \subsection{Step \arabic{makefeature}: #1}
+    }
+	\index{RpgMakeFeature|see {FeatureForge}}
+    \RpgMacro[FeatureForge!RpgMakeFeature]{RpgMakeFeature}{\param{m \paramO{} m m}}{
+        Creates a new environment with the specified name. The environment is switchable between card and text mode, and has a number of hooks to customise its appearance and input key values.
+        }{
+        \cmd{RpgMakeFeature}\param{EnvName}[environment-signature]\param{switch-name}\param{key-library-name}
+    }{
+        \cmd{RpgMakeFeature} is a high level meta-function which defines several new functions and environments which persist in the current group (which is most often the global one). 
+    }
+
+        \subsection{Quick Overview}
+
+            The following objects are created in the existing group when RpgMakeFeature is called:
+
+            \newcommand\titem[1]{\item[\texttt{#1}]}
+            \begin{description}
+                \titem{EnvName} The main environment - for example, \texttt{RpgSpell}, \texttt{RpgItem} etc.
+                \titem{\cmd{[EnvName]ShowCard}} A function which toggles the environment between \texttt{card-mode} (using \envref{RpgCard}) and \texttt{text-mode} (the default).
+                \titem{\cmd[EnvName]CardFormat} A \COSS{} to configure the appearance of the environment whilst in card-mode
+                \titem{\cmd[EnvName]TextFormat} A \COSS{} configure the appearance of the environment while in text-mode
+                \titem{\cmd{[EnvName]AddProperty}} Used to add a key into the key-value pair argument accepted by the main \texttt{EnvName} environment. 
+            \end{description}
+
+        \subsection{Creating New Features}
+
+            This interface makes defining a new feature quick and easy:
+            \begin{enumerate}
+                \item Call the RpgMakeFeature to initialise all of the functions
+                
+                
+                \begin{Code}
+                    \cmd{RpgMakeFeature}\param{RpgFoo}\param{FooCards}\param{foo}
+                \end{Code}
+                \item Call \cmd{[EnvName]AddProperty} to create new key-value properties associated with the feature.
+                
+                For RpgItem, this might be \texttt{weight} and \texttt{value}; for RpgSpell it might be \texttt{mana-cost} or \texttt{range}, and so on.
+
+               
+                \begin{Code}
+                    \cmd{RpgFooAddProperty}\param{description}\param{\cmd{}descriptString}\param{A basic foo}
+                \end{Code}
+                \item Write the formatting functions to determine where the title, the main body text, and the values of the keys are placed, and any formatting that is applied to them.
+            
+           
+            \begin{Code}
+                \cmd{RpgFooTextFormat}\{
+
+                    ~~\cmd{subsection}\param{\#1} \%header
+
+                    ~~\cmd{}textit\param{\cmd{}descriptString}\cmd{par} \%insert the key-defined value here
+
+                    ~~\#2 \% then the body
+                \}
+
+                ~
+
+                \cmd{RpgFooCardFormat}\{
+
+                    ~~\cmd{begin}\param{center}
+
+                      ~~~~  \cmd{color}\param{red} 
+                        
+                        ~~~~ \param{\cmd{}footnotesize \cmd{}scshape \cmd{}descriptString}
+
+                        ~
+
+                        ~~~~\param{\cmd{large}\cmd{bfseries}\#1}
+
+                    ~~\cmd{end}\param{center}
+
+                    ~~\#2
+
+                \}
+            \end{Code}
+            \end{enumerate}
+% \begin{figure}
+\RpgMakeFeature{RpgFoo}{FooCards}{foo}
+\RpgFooAddProperty{description}{\descriptString}{A basic foo}
+\RpgFooTextFormat{
+
+    \subsection{#1}
+    
+    \textit{\descriptString}\par
+
+    #2
+}
+\RpgFooCardFormat{
+    \begin{center}
+        \color{red}
+        {\footnotesize\scshape \descriptString}
+
+        {\large \bfseries #1}
+    \end{center}
+
+    #2
+}
+\begin{ExampleBlock}[RpgMakeFeature,RpgFoo]{Feature Forge Example}
+
+%card mode defaults to false, so get plain text output:
+\begin{RpgFoo}{An Example}
+This is the body text. 
+
+I can sneakily access the key value: `\getkey{description}'
+\end{RpgFoo}
+
+%%Then activate the card mode (and change the test-key value)
+\RpgFooShowCard{true}
+\begin{RpgFoo}{An Example}[description=An advanced foo]
+This is the body text. 
+
+I can sneakily access the key value: `\getkey{description}'
+\end{RpgFoo}
+\end{ExampleBlock}
+% \end{figure}
+
+% \newpage
+    \section{Full Documentation}
+
+    A more robust explanation of what happens when \cmd{RpgMakeFeature} is called goes as follows:
+
+    \featuresection{Create Main Environment}
+            
+            \RpgMacro*[]{EnvName}{(varies)}{The main environment created by the FeatureForge system, through a call to \cmd{RpgMakeFeature}.  The name of the argument (`\texttt{EnvName}') is the first argument to the constructor function, and serves as the `root' of the names of most of the co-created functions and environments. 
+            }{
+                \cmd{begin}\param{EnvName}[card-opts]\param{<name>}[key-opts]
+
+                ~~(\ldots)
+            }{
+               
+                The signature (the number and type of arguments) of the environment is set by the \texttt{environment-signature} optional argument to RpgMakeFeature, with the default value being \texttt{\param{\paramO{} m \paramO{}}}. There should always be three arguments, which always have the same meanings, but the specification might force some arguments to be mandatory (i.e. \texttt{\param{\paramO m m}}) instead of optional.
+                
+                The \texttt{card-opts} argument is passed to the \envref{RpgCard} environment when `card-mode' is active, the \texttt{name} argument is (typically) the header or title of the environment, whilst the \texttt{key-opts} are passed into the Key Registry system.
+            }
+
+    \featuresection{Text Mode Environment}
+        Defines the text-mode environment and hooks
+            
+            \begin{enumerate}
+                \item Creates a text-mode environment with the name \texttt{\_\_[EnvName]Text}, and a macro which is executed inside that environment, \cmd{\_\_[EnvName]\_text\_format:nn}. 
+                
+                \item Defines a \COSS{} to set the value of  \cmd{\_\_[EnvName]\_text\_format:nn}
+                
+                \RpgMacro[]{[EnvName]TextFormat}{\param{+m}}{Defines the body of the \texttt{EnvName} environment when in text-mode.\FFidx{TextFormat}}
+                {
+                    \cmd{[EnvName]TextFormat}\{
+                        
+                        \% \#1 = name, \#2 = body
+
+                        <custom-code>
+
+                    \}
+                }{
+                    The value of \#1 is the name passed as the first mandatory argument of the parent Environment, whilst \#2 is the body text of the environment. The designer is able to format these text elements, and also add elements defined by the \texttt{key-opts}. 
+                }
+            \end{enumerate}
+    \featuresection{Card Mode Environment}
+            Defines the card-mode environment and hooks.
+            \begin{enumerate}
+                \item Creates a card-mode environment with the name \texttt{\_\_[EnvName]Card}, and a macro which is wrapped inside a call to \envref{RpgCard}, \cmd{\_\_[EnvName]\_card\_format:nn}.
+                
+                \item Defines a \COSS{} to set the value of  \cmd{\_\_[EnvName]\_card\_format:nn}
+                
+                \RpgMacro[]{[EnvName]CardFormat}{\param{+m}}{Defines the body of the \texttt{EnvName} environment when in text-mode.\FFidx{CardFormat}}
+                {
+                    \cmd{[EnvName]CardFormat}\{
+                        
+                        \% \#1 = name, \#2 = body text 
+
+                        <custom-code>
+
+                    \}
+                }{
+                    This code is excuted from within an \envref{RpgCard} environment (which has parameters set by the call to \texttt{card-opts}); there is no need for the designer to invoke it themselves.
+                }
+            \end{enumerate}
+    \featuresection{Create Text/Card Switch \& Wrapper Function}
+
+        Defines a new Switch (see \cmdref{RpgSwitch}), with a name equal to \texttt{switch-name}, the second mandatory argument passed to the environment. This does not check if the switch already exists, so it is possible to have multiple environments triggering from the same switch. 
+        
+        This can be used with the default switch interface, but we also provide a wrapper which performs this for the user:
+        
+        \RpgMacro[FeatureForge!ShowCard]{[EnvName]ShowCard}{\param{m}}{Sets the switch associated with the card equal to the value provided.\FFidx{ShowCard}}{
+            \cmd{[EnvName]ShowCard}\param{true/false}~~~~equivalent to~~~~\cmd{RpgSwitch}\param{<switch-name>}\param{true/false}
+        }
+        {
+            If true, the internal \envref{S:SwitchEnv} sets the environment into `card mode' (and hence uses the format set by \cmd{[EnvName]CardFormat}). If false, it enters `text mode' (using the \cmd{[EnvName]TextFormat}-set formatter).
+
+            See \cmdref{RpgSwitch} for more information.
+        }
+    \featuresection{Create Parameter Registry}\label{S:ParameterRegistry}
+        \begin{enumerate}
+            \item Creates  \forcelink{https://texdoc.org/serve/interface3/0\#page=254}{an expl3 \texttt{key} list} with location \texttt{\param{rpg/forge/<key-library-name>}}, the final argument passed to the \cmd{RpgMakeFeature} when the feature is created. 
+            
+            This key list is used to parse the values of \texttt{<key-opts>}, the final argument to the EnvName argument each time that it is used.
+            \item Creates a \forcelink{https://texdoc.org/serve/interface3/0\#page=228}{property list}, with name \texttt{[EnvName]\_property\_list}. 
+            \item Defines a wrapper function for adding simple items into the registry
+            \RpgMacro[]{[EnvName]AddProperty}{\param{m m +m}}{
+                Adds the specified key in to the key-list. When the key is passed to \texttt{EnvName}, it is saved as a \forcelink{https://texdoc.org/serve/interface3/0\#page=122}{token list}. \FFidx{AddProperty}
+            }
+            {
+                \cmd{[EnvName]AddProperty}\param{key-name}\param{\cmd{macro-name}}\param{default-value}
+            }
+            {
+                The AddProperty command is a wrapper around some basic \texttt{tl}-parsing, calling, adding the following code into the key list at \texttt{\param{rpg/forge/<key-library-name>}}
+                \begin{Code}
+                    key-name .tl\_set:n = {\cmd{macro-name}},
+
+                    key-name .initial:n  = {default-value},
+
+                    key-name .value\_required:n =  true,
+                \end{Code}
+                
+                The code also adds the macro into the property list, indexed by the key:
+                \begin{Code}
+                    \cmd{prop\_put}:cnn\param{[EnvName]\_property\_list}\param{key-name}\param{\cmd{macro-name}}
+                \end{Code}
+                Accessing the values directly by macro name is more performant, and therefore the recommended way that designers insert the saved values. However, the property-list allows for a user to access the keys in a more natural fashion, through the \cmd{getkey} interface.
+            }
+
+        \item Locally redefines \cmd{getkey} \RpgPage[p]{S:getkey1}:
+        \RpgMacro{getkey}{\param{m}}{Returns the value passed to the current environment with identifier \texttt{key-name}}{
+            \cmd{getkey}\param{key-name}
+        }{\label{S:getkey2}
+        
+                Inserts the value associated with \texttt{key-name} from the property-list associated with the environment. 
+
+                Although we recommend that designers use the macros that they associated with their keys, it is convenient to allow users to only have to recall one set of associations: the key values they used to define those values in the first place -- at the cost of a minor performance impact.  
+        }
+        \end{enumerate}
+    
+        \begin{RpgTip}{Advanced Registry Usage}
+
+            The backend of the Parameter Registry comprises of two expl objects: a key-parser which saves input tokens to provided macros, and a property list which allows you to access those macros using the key-name, after the parsing has completed\footnote{There's probably a good reason why you can't do this directly from the keys, but for now you need to use this dual-approach!} 
+
+            Although we have streamlined this interface - making adding a new property into a single-line call rather than the multi-line affair it can often be, this necessarily means losing some of the power that the expl3 interface provides. 
+
+            For instance, expl3 keys can be set to use \textit{choices}; restricting the input value to one of a predefined set, and some keys may act as flags and not have values associated altogether.
+
+            These functions can still be used by a designer by manually adding elements into the underlying objects:
+
+            \begin{Code}
+                \cmd{RpgMakeFeature}\param{RpgFoo}\param{SwitchName}$\underbrace{\text{\textcolor{red}{\param{foo}}}}_{\text{directory}}$
+                
+                \cmd{RpgFooAddProperty}(\ldots) \%define the normal properties
+               
+                \cmd{ExplSyntaxOn}\%ensure expl3 mode is active
+
+~
+
+                \cmd{keys\_define:nn\param{rpg/forge/\textcolor{red}{foo}}}
+                
+                \{
+
+                    ~code-property .code ={<arbitrary-code>},
+
+                    ~multiple-choice .choice:,
+
+                    ~multiple-choice / a .code:n \param{code-if-a},
+
+                    ~multiple-choice / b .code:n \param{code-if-b},
+
+                \}
+            \end{Code}
+
+            This would enable the values \texttt{code-property} and \texttt{multiple-choice} to be passed as keys to the RpgFoo environment (and any other environment which was set to use `rpg/forge/foo' as its directory). It would not, however, automatically add the values into the property list where it can be accessed by \cmd{getkey}.
+
+            Sometimes this is not a problem - if the parameter is a flag which changes colors, then there's no reason to expect the user to access this. Otherwise, manually add the desired value into the property list:
+
+            \begin{Code}            
+                \cmd{keys\_define:nn\param{rpg/forge/\textcolor{red}{foo}}}
+                
+                \{
+
+                    ~~code-property .code =
+                   
+                    ~~~~\{<arbitrary-code>
+                    
+                    ~~~~~\cmd{}prop\_put\param{RpgFoo\_property\_list}\param{code-property} \param{<value/macro-to-insert>}
+                    
+                    ~~\}
+
+                    (\ldots)
+
+                    \}
+
+            \end{Code}
+
+        \end{RpgTip}
+    
+      
+
+    \labelsection{RpgSwitchEnv}
+
+        Often it is convenient to be able to toggle between two different environments depending on an external flag. In the context of an RPG this might be for a number of reasons: having a player version and a GM version, or having a screen-readable version versus a printable one. 
+
+        The overall goal of the RpgSwitchEnv is to reduce the amount of duplication that an author has to do to get the same text in multiple different forms. The forms the basis of the \texttt{RpgFeatureForge} system, however it is also used elsewhere; for example the \envref{RpgSecret} environment.
+
+        \subsection{Why switch environments?}
+
+
+
+            Whilst it is obviously possible to build an environment which performs the switching for you, we provide a generic interface for switching between \textit{similar environments}.
+
+        \begin{RpgSidebar}{'Similar' Environments}
+            It is important to note that this system only works for switching between environments which are `similar', insofar as they permit the same number and order of arguments, and interpret their contents similarly.
+
+            An itemize and an enumerate are `similar': an itemize and a figure are not.
+        \end{RpgSidebar}
+
+        
+        \RpgMacro*[RpgSwitch!Env]{RpgSwitchEnv}{\param{m o m o m}}
+            {
+                Acts as one of two similar environments based on the value of an input key.
+            }{
+                \cmd{begin}\param{RpgSwitchEnv}\param{<key>}[opt-1]\param{env-1}[opt-2]\param{env-2}
+
+                ~~<contents>
+
+                \cmd{end}\param{RpgSwitchEnv}
+            }{
+                The \texttt{key} is an input token (a string) which should be in the global \textit{switch-registry} (see below). The value associated with that key determines the behaviour of the Switch-Env:
+                \begin{description}
+                    \item[Value is true] The environment acts as \texttt{env-1} (with optional arguments \texttt{[opt-1]})
+                    \item[Value is false] The environment acts as \texttt{env-2[opt-2]}.
+                \end{description}
+                Due to the way that token expansion works, it is possible to pass \textit{additional} arguments to this environment:
+                \begin{Code}
+                    \cmd{begin}\param{RpgSwitchEnv}\param{<key>}[opt-1]\param{env-1}[opt-2]\param{env-2}\param{arg1}\param{arg2}
+                \end{Code}
+                Formally speaking, \texttt{arg1} and \texttt{arg2} are a part of the body of the environment; however if both env-1 and env-2 are expecting two arguments, then the token expansion captures them. It is also possible to use a shared optional argument, instead of the unique arguments:
+                \begin{Code}
+                    \cmd{begin}\param{RpgSwitchEnv}\param{<key>}\param{env-1}\param{env-2}[shared-opt]
+                \end{Code}
+                If however, the environments are not similar, and take different numbers of arguments then any excess arguments are inserted into the body of the environment, which can cause unexpected behaviour.
+
+                An error is thrown if \texttt{key} does not exist in the global registry.
+            }
+            \RpgMacro[RpgSwitch!(command)]{RpgSwitch}{\param{m m}}
+                {Change the value of a \textit{switch}, and therefore the behaviour of the associated RpgSwitchEnv}{\cmd{RpgSwitch}\param{<key>}\param{<value>}}
+                {
+                    Sets the value of the \texttt{key} in the \textit{switch-registry} to \texttt{{value}}, which must be a 'bool-ish' text string\footnote{That is, either \param{true,True,1} or \param{false,False,0}}. If the entry does not exist in the registry, it is created.
+
+                    After the key is set, all subsequent \texttt{RpgSwitchEnv} calls which use that key will have their behaviour altered to match the new key.
+                }
+           
+% \begin{figure}
+\begin{ExampleBlock}[RpgSwitchEnv]{Example Switching Environment}
+  \def\exampleSwitch{
+      \begin{RpgSwitchEnv}{test}{enumerate} [leftmargin=1cm]{itemize}
+        \item item 1
+        \item item 2
+        \item orangutans
+      \end{RpgSwitchEnv}
+  }
+  Changing the switch makes the same contents appear differently:
+
+  \RpgSwitch{test}{true}
+  \exampleSwitch{}
+
+  \RpgSwitch{test}{false}
+  \exampleSwitch{}
+
+  %%Now repeat, but move the optional arg to the end as a 'hanging argument' 
+
+  \def\exampleSwitch{
+      \begin{RpgSwitchEnv}{test}{enumerate} {itemize}[leftmargin=1cm]
+        \item item 1
+        \item item 2
+        \item orangutans
+      \end{RpgSwitchEnv}
+  }
+   Both environments should now be indented:
+  \RpgSwitch{test}{true}
+  \exampleSwitch{}
+
+  \RpgSwitch{test}{false}
+  \exampleSwitch{}
+\end{ExampleBlock}
+% \end{figure}
+
+
+        
+  
+
+% 	\labelsection{RpgItem}
+        
+% 		Many RPGs have a system of `items' and equipment that a player may possess and use. It is useful to be able to both describe the item as it might appear in the source book, but also render it in a playing-card style unit \RpgPage[p]{S:Card} for a player to use. 
+
+% 		The RpgCard is associated with the UseItemCard switch; when true the text is rendered in a card, when false, as plain text.
+
+% 		\begin{RpgSidebar}{Highly Theme Dependent}
+% 			This is documentation for the generic \texttt{RpgItem} interface for those wishing to customise their own.  It is expected that individual themes significantly extend the functionality. 
+            
+% 			Documentation for the specific implementations can be found elsewhere:
+% 			\begin{description}
+% 				\item[default:] \RpgPage{S:DefaultItem}
+% 				\item[dnd:]	\RpgPage{S:DndItem}
+% 				\item[scifi:]   \RpgPage{S:ScifiItem}
+% 			\end{description} 
+% 		\end{RpgSidebar}
+
+% 		\RpgMacro*{RpgItem}{\param{\paramO{} m \paramO{}}}{A switchable environment associated with the UseItemCard switch. When true, places the contents in a \texttt{RpgCard} \RpgPage[p]{RpgCard}, when false, renders as plain text.}{
+% 			\cmd{begin}\param{RpgItem}[<card-opts>]\param{<Item-name>}[<item-key/values>]
+                
+% 			~~<item-body>
+
+% 			\cmd{end}\param{RpgItem}
+% 		}{
+% 			The optional \texttt{card-opts} argument is passed to the \texttt{RpgCard} (if active), and controls the size and appearance of the card. The \texttt{item-name} is the name which will (generally) appear at the top of the item. 
+
+% 			The \texttt{key/value} arguments are a kv-list of options. By default, only a single option is present:
+% 			\begin{RpgTable}[noheader]{llX}
+% 				\kve{image}{path/to/image}{Inserts the chosen image into the \textbf{card environment only}; between the item name and the body text.}
+% 			\end{RpgTable}
+
+% 			The customisation options (see below) allow a designer to add in additional keys, which they can then use to add a specific format to the item. Consult the individual theme documentation for implementation specific details.
+% 		}
+        
+% 		\RpgMacro{RpgItemShowCard}{\param{m}}{An alias for \cmd{RpgSwitch\param{UseItemCard}\param{input}}}{}{}
+        
+
+% \begin{ExampleBlock}{RpgItem}
+
+% \def\testItem{
+% \begin{RpgItem}[color=red, opacity=0.4] {Joyeuse} 
+% 	[image=example/img/joyeuse]
+
+% 	The legendary Sword of Charlemagne; this weapon is known as the `joybringer' and the `Jewelled Blade'. It grants you +13 on heroism rolls. 
+% \end{RpgItem}}
+% \RpgItemShowCard{false} %plain text first
+% \testItem{} 
+
+% \RpgItemShowCard{true} %now the card
+% \testItem{} 
+% \end{ExampleBlock}
+
+% 	\subsection{Customizing Items}
+
+% 		We provide three key functions which allow a designer to completely change the appearance of an item card
+
+% 		\RpgMacro{RpgItemAddProperty}{\param{m v m}}
+% 			{}{
+% 				\cmd{RpgItemAddProperty}\param{new-key}\param{\cmd{destination}}\param{default-value}
+% 			}{Creates a new entry in the \texttt{rpg/item} key-value parser, which stores the value passed by the user in the chosen destination macro. If the key is not present in the RpgItem \texttt{key-value} argument, the default value is assigned instead.
+            
+% 			This allows a designer to request the user provide structured information, which they can then place as they choose.
+% 			}
+        
+% 		\begin{RpgTip}{More Complex Key/Value behaviour}
+% 			\cmd{RpgItemAddProperty} is a wrapper around the usual expl3 key interface, \cmd{keys\_define\param{rpg/item}}, automatically creating \cmd{tl\_set} commands (and a few others). For more complex key/value pairs, such as choices, toggles etc., a designer may manually edit the \texttt{rpg/item} registry.
+% 		\end{RpgTip}
+% 		\RpgMacro{RpgItemCardFormat}{\param{+m}}
+% 			{A \COSS{}, with the resulting control sequence being used as the body of a \texttt{RpgCard} call when \cmd{RpgItemShowCard} has been set to true.}{
+% 				\cmd{RpgItemCardFormat}\{
+% 					\%\#1 = Card name, \#2 = Card body
+% 				~~<card-description>
+
+% 				\}
+% 			}{
+% 				As can be seen, the CoSS only takes two arguments; however by constructing a customised \cmd{RpgItemAddProperty} interface, the designer can add additional elements around the item body, and therefore have an arbitrary amount of information passed from the user -- see the examples below.
+% 			}
+% 		\RpgMacro{RpgItemTextFormat}{\param{+m}}	{A \COSS{}, with the resulting control sequence being used as the output of \texttt{RpgItem}, when \cmd{RpgItemShowCard} has been set to false.}
+% 			{
+% 				\cmd{RpgItemTextFormat}\{
+% 					\%\#1 = Card name, \#2 = Card body
+% 				~~<card-description>
+
+% 				\}
+% 			}{
+% 				As can be seen, the CoSS only takes two arguments; however by constructing a customised \cmd{RpgItemAddProperty} interface, the designer can add additional elements around the item body, and therefore have an arbitrary amount of information passed from the user -- see the examples below.
+% 			}
+        
+
+% \begin{ExampleBlock}{Customised RpgItem}
+% \RpgItemAddProperty{tagline} {\RpgItemTagline}{}
+% \RpgItemAddProperty{weight} {\RpgItemWeight}{0kg}
+% \RpgItemAddProperty{value} {\RpgItemValue}{\euro{}0}
+
+% \def\testItem{
+% \begin{RpgItem}[color=red, opacity=0.4] {Joyeuse} 
+% [image=example/img/joyeuse,
+% tagline={The Sword Jewellous},
+% weight=1kg,
+% value=\euro{}1 billion]
+% The legendary Sword of Charlemagne; this weapon is known as the `joybringer' and the `Jewelled Blade'. It grants you +13 on heroism rolls. 
+% \end{RpgItem}}
+
+% %plain text first
+% \RpgItemShowCard{false} 
+% %%set the plaintext format
+% \RpgItemTextFormat{
+% \subsection{#1\hfill{}\RpgItemValue{}}
+% \hrule{}
+% \textit{\RpgItemTagline (\RpgItemWeight)}\par
+% #2
+% }
+% \testItem{} 
+
+% \vspace{1cm}
+
+% %now the card
+% \RpgItemShowCard{true} 
+% %%set the card format
+% \RpgItemCardFormat{
+% \begin{center}
+% 	{\RpgFontSubsection #1}
+    
+% 	\includegraphics[width=0.8\linewidth, height=2cm]{\RpgItemImage}
+    
+% 	{\scshape \RpgItemTagline}
+% \end{center}
+% \vfill{}
+% #2
+% \vfill{}
+% \RpgItemValue{} \hfill{} \RpgItemWeight{}
+% }
+% \testItem{} 
+% \end{ExampleBlock}
+% 	\labelsection{RpgAbility}
+
+
+% 	\section{Creating a New Feature}

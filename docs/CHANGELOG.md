@@ -5,7 +5,25 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## 0.4.0 (2025-08-11)
+## 0.5.0 (2025-11-16)
+
+### Major Renaming Effort
+
+A major renaming effort has been undertaking to give the objects a more consistent interface: RpgSetItem has been renamed to RpgItemSet, and so on. This makes looking things up in the index simpler, and gives a 'branching' structure to the names, which is necessary given how many things with 'similar' names we have provided.
+
+### Feature Forge
+
+The full power of the SwitchEnv has been leveraged to create the `FeatureForge` system which allows a designed to rapidly create an environment with key/value hooks, a text mode and a card mode and a number of other properties, all with a single function call (`RpgMakeFeature`).
+
+This is some neat tex metaprogramming that makes use of expl3's ability to programmatcially create macro names. 
+
+### Other Features
+
+* RpgMap interface changed; replaced RpgArea and RpgNestedArea with a simple `area` command which can be used either as a command or an environment, with different behaviours in each. The interface has been simplified to be more similar to a standard latex list
+
+* RpgTable has a `simple` command [undocumented!] which uses `tabular` rather than `tabularx` or `lxtabular`; enables variable-width tables which can be useful in some cases. 
+
+## 0.4.0 (2025-11-08)
 
 ### Core Functionality
 

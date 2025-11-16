@@ -14,7 +14,7 @@
 			\node[inner~sep=0pt,anchor=west,xshift=.28in,yshift=.3in,anchor=west] at (current~page.south~west)  {\parbox[t]{2cm}{
 				\RpgFontPageNumber \thepage
 				\\
-				\raggedright \RpgFontFooter \RpgChapterName{}
+				\raggedright \RpgFontFooter \__ChapterName
         	}};
 		},
 	]{themes/scifi/img/scifi_scroll.pdf}
@@ -28,13 +28,13 @@
 				\begin{flushright}
 					\RpgFontPageNumber \thepage
 					\\
-					\raggedleft \RpgFontFooter \RpgChapterName{}
+					\raggedleft \RpgFontFooter \__ChapterName
 				\end{flushright}
 				}};
 		},
 	]{themes/scifi/img/scifi_scroll.pdf}
   }
 
-  % Clear the current definition of 'plain' footers/headers
+%   % Clear the current definition of 'plain' footers/headers
 \fancypagestyle{plain}{}
 \ExplSyntaxOff

@@ -82,6 +82,7 @@
 	columns / 1 .code:n = { \tl_set:Nn \l__rpg_cols_tl { onecolumn } },
 	columns / 2 .code:n = { \tl_set:Nn \l__rpg_cols_tl { twocolumn } },
 	columns .initial:n = 2,
+	% cols .initial:n = {onecolumn}
 
 	%Use openany
     openright .code:n =
