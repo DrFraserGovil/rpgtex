@@ -10,6 +10,7 @@
 \tl_new:N \g__rpg_base_class_tl
 \tl_set:Nn \g__rpg_base_class_tl { standalone }
 
+% \usepackage[subpreambles=true]{standalone}
 \input {core/rpgoptions.clo}
 
 
@@ -23,17 +24,19 @@
 	\RequirePackage[left=5pt,right=5pt,top=5pt,bottom=5pt]{geometry}
 	
 }
-% \bool_set_false:N \l__rpg_show_background_bool
-
 
 \RequirePackage{rpg}
 
-\RpgSetPaper{}
-\RpgSetTitleMode{header}
+%%Set all flags to true, (assuming most are cards!)
+\prop_map_inline:Nn \g__rpg_switch_prop
+{
+	\prop_gput:Nnx \g__rpg_switch_prop { #1 } {\c_true_bool}
+}
 
-% \input {rpgcore.def}
-% %%custom card stuff
-\RpgUseCards{true}
+
+\RpgSetTitleMode{header}
+\pagestyle{empty}
+
 
 
 

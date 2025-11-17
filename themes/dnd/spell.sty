@@ -55,10 +55,9 @@
 
 }
 \NewDocumentCommand{\AddSpellSource}{}{
-		\str_if_empty:NF {\getkey{source}}{
-		
+		\tl_if_blank:eF {\l__rpg_dnd_spell_source_tl}{
 		\vfill 
-			\hfil{\it  Source:~\getkey{source}} \hfil
+			\hfil{\it  Source:~(\l__rpg_dnd_spell_source_tl)} \hfil
 		%%For some reason \centering has no effect, so manually force centering via hfil
 		}
 }
@@ -99,7 +98,7 @@
 				\item [ Range       : ] \getkey{range}
 				\item [ Components  : ] \getkey{components}
 				\item [ Duration    : ] \getkey{duration}
-				\str_if_empty:NF {\getkey{source}}{\item [ Source      : ] \textit{\getkey{source}}
+				\tl_if_blank:eF {\l__rpg_dnd_spell_source_tl}{\item [ Source      : ] \textit{\getkey{source}}
 		} 
 		\end{description}
 }
