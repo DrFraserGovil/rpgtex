@@ -8,22 +8,25 @@
 \bool_new:N \c__rpg_isclass_bool
 \bool_set_true:N \c__rpg_isclass_bool
 \tl_new:N \g__rpg_base_class_tl
-\tl_set:Nn \g__rpg_base_class_tl { article }
-
-\tl_set:Nn\l__rpg_twocol_override{onecolumn}
+\tl_set:Nn \g__rpg_base_class_tl { standalone }
 
 \input {core/rpgoptions.clo}
 
 
-\LoadClass[a4paper,onecolumn] { article}
-
-\RequirePackage[left=5pt,right=5pt,top=5pt,bottom=5pt]{geometry}
+%%toggle between standalone mode and article mode, allowing for a nice 'print' interface (though rpgdeck should probably be used to save paper!)
+\bool_if:NTF \l__rpg_show_background_bool
+{
+	\RequirePackage[pass,left=0pt,right=0pt,top=0pt,bottom=0pt]{geometry}
+	\LoadClass[] { standalone}
+}
+{
+	\LoadClass[a4paper] { article}
+	\RequirePackage[left=5pt,right=5pt,top=5pt,bottom=5pt]{geometry}
 	
+}
 
 \RequirePackage{rpgtex}
 
-
-\RequirePackage[subpreambles=true]{standalone}
 %%Set all flags to true, (assuming most are cards!)
 \prop_map_inline:Nn \g__rpg_switch_prop
 {
@@ -32,7 +35,7 @@
 
 
 \RpgSetTitleMode{header}
-\pagestyle{clear}
+\pagestyle{empty}
 
 
 

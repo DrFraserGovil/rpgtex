@@ -15,7 +15,7 @@
 
 
 
-\RequirePackage{rpg}
+\RequirePackage{rpgtex}
 
 \RpgSetTitleMode{cover}
 

@@ -21,6 +21,15 @@
 \bool_set_false:N \l__rpg_openright_bool
 \bool_set_true:N \l__rpg_multitoc_bool
 \bool_set_eq:NN \l__rpg_layout_bool \c__rpg_isclass_bool
+
+\tl_if_exist:NF\l__rpg_onecol_override
+{
+	\tl_set:Nn \l__rpg_onecol_override {onecolumn}
+}
+\tl_if_exist:NF\l__rpg_twocol_override
+{
+	\tl_set:Nn \l__rpg_twocol_override {twocolumn}
+}
 \RequirePackage{core/theme_engine} %%need this for theme path switching
 
 
@@ -79,8 +88,8 @@
 
 	% Columns
 	columns .choice:,
-	columns / 1 .code:n = { \tl_set:Nn \l__rpg_cols_tl { onecolumn } },
-	columns / 2 .code:n = { \tl_set:Nn \l__rpg_cols_tl { twocolumn } },
+	columns / 1 .code:n = { \tl_set:Ne \l__rpg_cols_tl { \l__rpg_onecol_override } },
+	columns / 2 .code:n = { \tl_set:Ne \l__rpg_cols_tl { \l__rpg_twocol_override} },
 	columns .initial:n = 2,
 	% cols .initial:n = {onecolumn}
 

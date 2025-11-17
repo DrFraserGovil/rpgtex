@@ -13,6 +13,7 @@
 \RequirePackage {etoolbox}
 \RequirePackage {hang} % hanging paragraphs
 \RequirePackage {tabularx} % variable-width table columns
+\RequirePackage {xltabular} % breakable tables
 \RequirePackage [breakable,skins,xparse]{tcolorbox} % styled text boxes
 \RequirePackage {tikz} % drawing ornaments and lines
 \RequirePackage {xcolor}

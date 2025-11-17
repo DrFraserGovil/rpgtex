@@ -46,6 +46,9 @@
 
 \cs_new_protected:Npn \__rpg_single_card:nn#1#2
 {
+	%%Insert some blank space
+	\hskip #2
+	
 	% PROCESS THE CHUNK AS ITS OWN CARD
 	\hbox{
 		\begin{__rpgcard}
@@ -63,6 +66,5 @@
 		\end{__rpgcard}
 	}
 
-	%%Insert some blank space
-	\hskip #2
+	
 }

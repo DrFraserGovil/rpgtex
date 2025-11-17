@@ -13,7 +13,7 @@
 \LoadClass { \g__rpg_base_class_tl }
 
 
-\RequirePackage{rpg}
+\RequirePackage{rpgtex}
 
 \input{core/abstract}%load the handout-unique redefinition of abstract
 
