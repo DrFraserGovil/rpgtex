@@ -7,7 +7,7 @@ This is a 'to do list' of features which are incomplete, in the works, or otherw
 Features which *must* be added before the next major release
 
 * Full documentation 
-    * RpgCard object
+    * ~~RpgCard object~~
     * rpgcard class
     * Theme documentation
         * Including 'how to write a theme' 
@@ -26,6 +26,7 @@ Features which would improve the package
 * Full page images / landscape support
 * `Fancy box' (i.e. the D&D class table wrapper environment)
 * Circle/dot producers & fill-ins (i.e. for FitD skills)
+* A rpgdeck-maker, which automatically assembles card files into a deck meeting some criteria
 
 ### Low Priority
 
@@ -38,4 +39,4 @@ These are some desired features which are on the radar, but probably won't be hi
 Features which would improve the developer experience, but would not affect the user interface
 
 * Complete the transition to the __rpg_add_key interface to simplify the vast number of keys
-* Generate a more robust font-generation interface so that new fonts can be created in a single line
+* ~~Generate a more robust font-generation interface so that new fonts can be created in a single line~~
