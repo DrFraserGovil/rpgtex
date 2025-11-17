@@ -5,13 +5,44 @@
 \RpgItemAddProperty{rarity}{\RpgItemRarity}{}
 \RpgItemAddProperty{requires-attunement}{\RpgAttunement}{none}
 
+\keys_define:nn{rpg/forge/item}
+{
+    requires-attunement .value_required:n={false},
+}
+
 \keys_define:nn{rpg/item}
 {
     requires-attunement .value_required:n = false,
 }
 \newlength\tempwidth
 
+\RpgItemTextFormat{
+    \subsubsection{#1}
+     \tl_if_blank:eF{\RpgItemRarity}
+    {
+        \tl_concat:NNN{\RpgItemRarity}{\RpgItemRarity}{~}
+    }
+    
+    \tl_concat:NNN\RpgItemDescription{\RpgItemRarity}{\RpgItemType}
+   
+    \str_compare:eNeF{\RpgAttunement}{=}{none}
+    {
+        \tl_if_blank:eF{\RpgItemDescription}
+        {
+            \tl_concat:NNN\RpgItemDescription{\RpgItemDescription}{.~}
+        }
+        \tl_concat:NNN\RpgItemDescription{\RpgItemDescription}{Requires~attunement~\RpgAttunement{}}
+    }
+    \tl_if_blank:eF{\RpgItemDescription}
+    {
+        {{\small \it \RpgItemDescription}}
 
+        \newline
+        % \vspace{-0.4cm}
+    }
+	
+    #2
+}
 \RpgItemCardFormat{
     {\setlength\parindent{0pt}
     % \setlength\parskip{5pt}
@@ -26,8 +57,9 @@
         {\hfil{} {\small\scshape \RpgItemDescription} \hfil{}}
 
         \newline
+        \vspace{-0.4cm}
     }
-	\vspace{-0.4cm}
+	
     {\setlength\topsep{0pt}\begin{center}
         
 

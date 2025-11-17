@@ -1,10 +1,16 @@
 
 \ExplSyntaxOn
 
-\NewDocumentCommand{\Swatch}{m}{
+\NewDocumentCommand{\Swatch}{O{} m}{
 	\def\a{1.5}
-	\tikz{\fill[#1] (-\a,-\a) rectangle (\a,\a);
-	\node[fill=white,fill~opacity=0.5,text~opacity=1] at (0,0) {\maxsizebox{2.5cm}{!}{#1}};
+	\tikz{\fill[#2] (-\a,-\a) rectangle (\a,\a);
+	\node[fill=white,fill~opacity=0.5,text~opacity=1] at (0,0) {\maxsizebox{2.5cm}{!}{#2}};
+	
+	\tl_if_empty:eF{#1}
+	{
+		\node[anchor=south,fill=white,fill~opacity=0.5,text~opacity=1] at (0,-\a) {\parbox[t]{2.5cm}{\centering \scriptsize #1}}
+
+	}
 	}\hskip 2pt
 }
 \NewDocumentCommand{\DefaultSwatches}{}{

@@ -1,241 +1,211 @@
 \RpgSetTheme{dnd}
-\chapter{\texttt{dnd} Theme}
-	
-	\section{Appearance}
-		\subsection{Fonts}
-			The default format defines only a single font: the Latin Modern Roman font, the standard \LaTeX{} font. For consistency with the rest of the library (which uses fontspec-defined fonts), we have used an OTF version of LMR which is bundled with the package.
-			
-			\RpgMacro{lrfont}{}{The name given to the Latin Modern Roman font-family (extended with a small-caps font; Latin Modern Roman Caps) defined by the default theme}{}{}{}
+\chapter{\texttt{dnd} Theme}\label{Theme:dnd}
 
- 			The values assigned to the font elements areas follows (note that \verb|\normalfont| is aliased to the value of RpgFontBody).
+	The \texttt{dnd} theme is designed to mimic the Appearance of the \textit{Dungeons \& Dragons} source books. The specific parameters used to replicate the D\&D books are mostly derived from the original DnD-5e-Latex-Template package, with some additional updates in line with the changes made with the 2024 rules update.
 
-			\InsertFontTable{
-				main-body-family = \lrfont,
-				main-body-style= {},
-				title-family         = \normalfont,
-				title-style         = \Huge,
-				% Subtitle
-				subtitle-family         = \normalfont,
-				subtitle-style         = \Large,
-				% Part
-				part-family         = \normalfont,
-				part-style         = \Huge,
-				% Chapter
-				chapter-family         = \normalfont,
-				chapter-style         = \Huge \bfseries,
-				% Section
-				section-family         = \normalfont,
-				section-style         = \huge \bfseries,
-				% Subsection
-				subsection-family         = \normalfont,
-				subsection-style         = \Large \bfseries,
-				% subsubsection
-				subsubsection-family         = \normalfont,
-				subsubsection-style         = \large \bfseries,
-				% paragraph
-				paragraph-family 			=\normalfont,
-				paragraph-style         = \bfseries \slshape,
-				% subparagraph
-				subparagraph-family 			=\normalfont,
-				subparagraph-style         = \slshape,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Tables
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Table title
-				table-title-family         = \sffamily,
-				table-title-style         = \bfseries \large,
-				% Table header
-				table-header-family         = \sffamily,
-				table-header-style         = \bfseries,
-				% Table body
-				table-body-family         = \normalfont,
-				table-body-style         = \small,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Tip boxes
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Tip title
-				tip-title-family         = \sffamily,
-				tip-title-style         = \bfseries,
-				% Tip body
-				tip-body-family         = \normalfont,
-				tip-body-style         = \small,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Sidebars
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Sidebar title
-				sidebar-title-family         = \sffamily,
-				sidebar-title-style         = \bfseries\normalsize,
-				% Sidebar body
-				sidebar-body-family         = \normalfont,
-				sidebar-body-style         = \small,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Read-aloud boxes
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				narration-family         = \normalfont,
-				narration-style         = \small,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Abstract
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				abstract-title-family = \Large,
-				abstract-title-style = \scshape\bfseries,
-				abstract-body-family = \normalfont,
-				abstract-body-style = \small\slshape,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Table of Contentss
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Part
-				toc-part-family         = \normalfont,
-				toc-part-style         = \Large\bfseries,
-				% Chapter
-				toc-chapter-family         = \normalfont,
-				toc-chapter-style         = \large,
-				% Section
-				toc-section-family         = \normalfont,
-				toc-section-style         = \normalsize,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Stat blocks
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Stat block title
-				stat-block-title-family         = \normalfont,
-				stat-block-title-style         = \bfseries \LARGE,
-				% Stat block body
-				stat-block-body-family         = \normalfont,
-				stat-block-body-style         = \small,
-				% Stat block section
-				stat-block-section-family         = \sffamily,
-				stat-block-section-style         = \large,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Miscellaneous
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Footer
-				footer-family         = \normalfont,
-				footer-style         = \scriptsize,
-				% Page number
-				page-number-family         = \normalfont,
-				page-number-style         = \scriptsize ,
-				% Drop caps
-				drop-cap-family         = \normalfont,
-				drop-cap-first-line-style         = \scshape,
-				emph-family 		= \normalfont,
-				emph-style			=  \bfseries\slshape,
-			}
-			
-		\subsection{Colors}
+    \section{Appearance}
+        \subsection{Fonts}
+            The dnd theme defines a number of font families which are used throughout the theme.
+            
+            \RpgMacro{bookman}{}{The {Bookman Old Style STd} typeface, used as the main body text.}{}{}{}
+            \RpgMacro{keplerserif}{}{\keplerserif The {KpRoman} font, used for \textbf{emphasis}}{}{}{}
+            \RpgMacro{kepler}{}{\kepler The {KpSans} font, primarily used in headers and titles}{}{}{}
+            \RpgMacro{gillius}{}{\gillius The Gillius ADF No. 2 Font, used as a lighter sans-serif font, often in the body of environments where \cmd{kepler} was used as the title.}{}{}{}
 
-			The default theme colors are largely monochromatic:
+             The values assigned to the font elements areas follows (note that \verb|\normalfont| is aliased to the value of RpgFontBody).
 
-			\DefaultSwatches{}
+            \InsertFontTable{
+                main-body-family			={\bookman},
+				%Sections
+				title-family=		{\normalfont},
+				title-style			= {\bfseries\fontsize{30}{50}\selectfont\color{titlered}},
+				subtitle-family		={\scshape},
+				subtitle-style 		= {\LARGE\color{titlered} },
+				part-style			= {\color{titlered}\fontsize{50}{30}\selectfont},
+				chapter-style		= {\titlemode\fontsize{30}{50}\selectfont},
+				section-family		={\keplerserif \scshape},
+				section-style		= {\color{titlered} \Huge},
+				subsection-family		={\keplerserif \scshape},
+				subsection-style	= {\color{titlered} \huge},
+				subsubsection-family		={\keplerserif \scshape},
+				subsubsection-style	= {\color{titlered} \Large},
+				paragraph-style	= {\bfseries \slshape},
+				subparagraph-style	= {\bfseries \slshape},
+				%Tables
+				table-title-family	= {\kepler},
+				table-title-style	= {\bfseries\large\scshape},
+				table-header-family	= {\kepler},
+				table-body-family	= {\gillius},
+				%tip boxes
+				tip-title-family= {\kepler},
+				tip-title-style	= {\bfseries\scshape},
+				tip-body-family	= {\gillius},
+				tip-body-style	= {\small},
+				%sidebars
+				sidebar-title-family= {\kepler},
+				sidebar-title-style	= {\bfseries\scshape},
+				sidebar-body-family	= {\gillius},
+				sidebar-body-style	= {\small},
+				%narration
+				narration-family	= {\gillius},
+				narration-style		= {\small},
+				% TOC
+				toc-part-style		= {\LARGE \keplerserif \scshape \color{titlered}},
+				toc-chapter-style	= {\Large \keplerserif \scshape \color{titlered}},
+				toc-section-style	= {\normalsize},
+				%stat block
+				stat-block-title-style= {\bfseries\scshape \LARGE},
+				stat-block-body-family={\gillius},
+				stat-block-body-style={\small},
+				stat-block-section-family={\kepler},
+				stat-block-section-style={\color{titlered} \scshape \large},
+				%%misc
+				footer-style		= {\color{pagegold}\scriptsize},
+				page-number-style	= {\color{pagegold}\scriptsize},
+				drop-cap-family		= {\Royal},
+				%%Spell card
+				card-title-family = {\keplerserif},
+				card-title-style = { \color{titlered}\large\bfseries},
+				card-header-family = {\normalfont}, 
+				card-header-style = {\normalfont \scshape \footnotesize}, 
+				card-body-family = {\normalfont},
+				card-body-style = {\footnotesize},
+				emph-family = {\keplerserif},
+				emph-style = {\bfseries\scshape\larger[1]},
+            }
+            
+        \subsection{Colors}
 
-		\subsection{Backgrounds \& Footers}
-			The default theme defines no background or headers (and clears any existing ones). The footer consists of the chapter name and a page number, using the appropriate fonts (\cmd{RpgFontFooter} and \cmd{RpgFontPageNumber}). 
+            The theme provides a large number of colors:
 
+            \noindent\DefaultSwatches{}
 
-		\subsection{Text Boxes}
+			\noindent\ignorespaces\Swatch[default narration]{bgtan}
+			\Swatch[pagenumbers \& footer]{pagegold}
+			\Swatch[title font \& default contour-inner]{titlered}
+			\Swatch[default contour-outer]{contourgray}
+			\Swatch[title rules]{titlegold}
+			\Swatch[statblock triangles]{rulered}
+			\Swatch{statblockoutline}
+			\Swatch[top/bottom line (2014 only)]{statblockribbon}
+			\Swatch{statblockbg}
+			\Swatch[Basic Rules]{BrGreen}
+			\Swatch[PHB Part 1]{PhbLightGreen}
+			\Swatch[PHB Part 2]{PhbLightCyan}
+			\Swatch[PHB Part 3]{PhbMauve}
+			\Swatch[PHB Appendix]{PhbTan}
+			\Swatch[DMG Part 1]{DmgLavender}
+			\Swatch[DMG Part 2]{DmgCoral}
+			\Swatch[DMG Part 3]{DmgSlateGray}
+			\Swatch[DMG Appendix]{DmgLilac}
 
-			The default text boxes are very simple in design:
+			The colors from BrGreen through DmgLilac are chosen so that, when set as the \texttt{themecolor} (using \cmdref{RpgSetThemeColor}), the appearance of the tables and sidebars is the same as the corresponding part in either the Basic Rules, the Players' Handbook, and the Dungeon Master's Guide.
+        \subsection{Backgrounds \& Footers}
 
-			\begin{multicols}{3}
-				
-				\begin{RpgSidebar}{The RpgSidebar}
-					Has minor decorations at the top and bottom to distinguish it from an RpgTip
-				\end{RpgSidebar}
-				
-				\begin{RpgTip}{The RpgTip}
-					Almost entirely undecorated
-				\end{RpgTip}
+			The dnd theme uses a paper-like image as the background, and places a `scroll' on the footer\footnote{The scroll alternates direction in \texttt{twoside} documents; this document is written in oneside mode, so there is no alternating.}. The chapter name is placed in the footer (in \texttt{pagegold} color). The page number is positioned to lie in a divot of the scroll.
 
-				\begin{RpgNarration}
-					RpgNarration is also simple; but uses the narration color
-				\end{RpgNarration}
-			\end{multicols}
+        \subsection{Text Boxes}
+
+            The dnd theme modifies the text boxes to give them the following appearance:
+
+            \begin{multicols}{3}
+                
+                \begin{RpgSidebar}{The RpgSidebar}
+                   
+					Horizontal `ribbons' and sharp corners differentiate it from RpgTip.
+                \end{RpgSidebar}
+                
+                \begin{RpgTip}{The RpgTip}
+                    Almost entirely undecorated, with rounded corners.
+                \end{RpgTip}
+
+                \begin{RpgNarration}
+                    RpgNarration has `bars' on the side.
+                \end{RpgNarration}
+            \end{multicols}
 
 
 
         \subsection{Section Headers}
 
-                Only chapters\footnote{If in an rpgbook / other class which support chapters} are numbered; all other section/subsections (etc.) are unnumbered. Otherwise there are no changes made to the titles aside from minor spacing changes, and the assignment of the relevant fonts.
-          
+               As in the default mode, only chapters\footnote{If in an rpgbook / other class which support chapters} are numbered; all other section/subsections (etc.) are unnumbered. 
+
+				Chapters are rendered using a \cmd{RpgContour} (with the default colors). The subsection environment is embellished with a \cmd{hrule} (in the \texttt{titlegold} color) which stretches across the page.
 
               \begin{ExampleBlock}{Section Headers}
-    \section{Example}
+    \section*{Example} %starred so not added to toc; otherwise the same
     \subsection{Another Example}
     \subsubsection{More Examples!}
             \end{ExampleBlock}
 
         \subsection{RpgDice}\index{RpgDice}
             
-            The default RpgDice format is $n\mathrm d x + m$:
+            Following the syntax found in D\&D monster statblocks, RpgDice shows the average of the roll:
             \begin{ExampleBlock}{Default Dice}
             \RpgDice{3d8 -5 +2}
             \end{ExampleBlock}
 
-	\labelsection{RpgSpell: dnd Version}\index{{RpgSpell!Theme!dnd}}
+    \newpage
+    \section{RpgItem}\label{S:DefaultItem}\index{RpgItem!Theme!default}
 
-	\section{RpgStatblock: dnd Version}\index{RpgStatblock!Theme!dnd}
+        The default configuration of the \envref{RpgItem} environment, used to describe physical objects and equipment. As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgItemShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+        
+        The \texttt{default} theme defines two keys for the RpgItem object:
+        \begin{RpgTable}{llX}
+            Key & Default Value & Effect
+            \\
+            description & \param{} & An italicised byline used to summarise the item
+            \\
+            image & \param{} & If non-empty, define an image path which is used when in card-mode.
+        \end{RpgTable}
+    
+    \begin{ExampleBlock}{Default RpgItem: Text Mode}
+    \RpgItemShowCard{false}
+    \begin{RpgItem}{Joyeuse}[
+        description={The Sword Jewellous},
+		rarity=Rare,
+		type=weapon (sword),
+		requires-attunement={by a paladin.},
+        image={../example/img/joyeuse}
+    ]
+        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+    \end{RpgItem}
+    \end{ExampleBlock}
+    \begin{ExampleBlock}{Default RpgItem: Card Mode}
+    \RpgItemShowCard{true}
+    \begin{RpgItem}{Joyeuse}[
+        description={The Sword Jewellous},
+        image={../example/img/joyeuse}
+    ]
+        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+    \end{RpgItem}
+    \end{ExampleBlock}
 
-		The dnd theme defines a special command which mimics the appearance of a monster statblock - particularly those in the more modern D\&D 2024 iteration. 
+\newpage
+\section{RpgFeat}\index{RpgFeat!Theme!default}
+     The default configuration of the \envref{RpgFeat} environment, used to describe abilities and character features and choices. As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgItemShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+        
+      The \texttt{default} theme defines two keys for the RpgFeat object:
+        \begin{RpgTable}{llX}
+            Key & Default Value & Effect
+            \\
+            prerequisite & \param{} & If non-empty, an italicised note is added, indicating the prerequisites for acquiring the ability.
+        \end{RpgTable}
+     \begin{ExampleBlock}{Default RpgFeat: Text Mode}
+    \RpgFeatShowCard{false}
+    \begin{RpgFeat}{Hyperattack}[
+         prerequisite={Mega-attack},
+    ]
 
-		\begin{RpgStat}{A Monster}
-			 \RpgStatType{Medium aberration, lawful evil}
+        You can unleash superhuman speed against your enemies. Once per day, make \RpgDice{3d10} additional attacks.
+    \end{RpgFeat}
+    \end{ExampleBlock}
+    \begin{ExampleBlock}{Default RpgFeat: Card Mode}
+    \RpgFeatShowCard{true}
+    \begin{RpgFeat}{Hyperattack}[
+        prerequisite={Mega-attack},
+    ]
 
-				  \RpgStatBasics[
-						armor-class = {9 (12 with \emph{mage armor})},
-						hit-points  = {\RpgDice{3d8 + 3}},
-						speed       = {30 ft., fly 30 ft.},
-						proficiency=2,
-						str = 12,
-						dex = 8,
-						con = 13,
-						int = 10,
-						wis = 14,
-						cha = 15,
-						str_save,
-						cha_save,
-					]
-
-				\RpgStatDetails[
-					%saving-throws = {Str +0, Dex +0, Con +0, Int +0, Wis +0, Cha +0},
-					%skills = {Acrobatics +0, Animal Handling +0, Arcana +0, Athletics +0, Deception +0, History +0, Insight +0, Intimidation +0, Investigation +0, Medicine +0, Nature +0, Perception +0, Performance +0, Persuasion +0, Religion +0, Sleight of Hand +0, Stealth +0, Survival +0},
-					%damage-vulnerabilities = {cold},
-					%damage-resistances = {bludgeoning, piercing, and slashing from nonmagical attacks},
-					%damage-immunities = {poison},
-					%condition-immunities = {poisoned},
-					senses = {darkvision 60 ft., passive Perception 12},
-					languages = {\LaTeX},
-					challenge = 1,
-					% proficiency-bonus, % = +2
-				]
-		\end{RpgStat}
-		\RpgStatShowCard{true}
-		\begin{RpgStat}{A Monster}
-			 \RpgStatType{Medium aberration, lawful evil}
-
-				  \RpgStatBasics[
-						armor-class = {9 (12 with \emph{mage armor})},
-						hit-points  = {\RpgDice{3d8 + 3}},
-						speed       = {30 ft., fly 30 ft.},
-						proficiency=2,
-						str = 12,
-						dex = 8,
-						con = 13,
-						int = 10,
-						wis = 14,
-						cha = 15,
-						str_save,
-						cha_save,
-					]
-
-				\RpgStatDetails[
-					%saving-throws = {Str +0, Dex +0, Con +0, Int +0, Wis +0, Cha +0},
-					%skills = {Acrobatics +0, Animal Handling +0, Arcana +0, Athletics +0, Deception +0, History +0, Insight +0, Intimidation +0, Investigation +0, Medicine +0, Nature +0, Perception +0, Performance +0, Persuasion +0, Religion +0, Sleight of Hand +0, Stealth +0, Survival +0},
-					%damage-vulnerabilities = {cold},
-					%damage-resistances = {bludgeoning, piercing, and slashing from nonmagical attacks},
-					%damage-immunities = {poison},
-					%condition-immunities = {poisoned},
-					senses = {darkvision 60 ft., passive Perception 12},
-					languages = {\LaTeX},
-					challenge = 1,
-					% proficiency-bonus, % = +2
-				]
-		\end{RpgStat}
-		
+        You can unleash superhuman speed against your enemies. Once per day, make \RpgDice{3d10} additional attacks.
+    \end{RpgFeat}
+    \end{ExampleBlock}

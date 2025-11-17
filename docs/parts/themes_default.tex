@@ -5,153 +5,159 @@
     
     The majority of this document has been typeset in a rpgbook class \RpgPage[p]{S:bookClass} using the default theme.
 
-	\section{Appearance}
-		\subsection{Fonts}
-			The default format defines only a single font: the Latin Modern Roman font, the standard \LaTeX{} font. For consistency with the rest of the library (which uses fontspec-defined fonts), we have used an OTF version of LMR which is bundled with the package.
-			
-			\RpgMacro{lrfont}{}{The name given to the Latin Modern Roman font-family (extended with a small-caps font; Latin Modern Roman Caps) defined by the default theme}{}{}{}
+    \section{Appearance}
+        \subsection{Fonts}
+            The default format defines only a single font: the Latin Modern Roman font, the standard \LaTeX{} font. For consistency with the rest of the library (which uses fontspec-defined fonts), we have used an OTF version of LMR which is bundled with the package.
+            
+            \RpgMacro{lrfont}{}{The name given to the Latin Modern Roman font-family (extended with a small-caps font; Latin Modern Roman Caps) defined by the default theme}{}{}{}
 
- 			The values assigned to the font elements areas follows (note that \verb|\normalfont| is aliased to the value of RpgFontBody).
+             The values assigned to the font elements areas follows (note that \verb|\normalfont| is aliased to the value of RpgFontBody).
 
-			\InsertFontTable{
-				main-body-family = \lrfont,
-				main-body-style= {},
-				title-family         = \normalfont,
-				title-style         = \Huge,
-				% Subtitle
-				subtitle-family         = \normalfont,
-				subtitle-style         = \Large,
-				% Part
-				part-family         = \normalfont,
-				part-style         = \Huge,
-				% Chapter
-				chapter-family         = \normalfont,
-				chapter-style         = \Huge \bfseries,
-				% Section
-				section-family         = \normalfont,
-				section-style         = \huge \bfseries,
-				% Subsection
-				subsection-family         = \normalfont,
-				subsection-style         = \Large \bfseries,
-				% subsubsection
-				subsubsection-family         = \normalfont,
-				subsubsection-style         = \large \bfseries,
-				% paragraph
-				paragraph-family 			=\normalfont,
-				paragraph-style         = \bfseries \slshape,
-				% subparagraph
-				subparagraph-family 			=\normalfont,
-				subparagraph-style         = \slshape,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Tables
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Table title
-				table-title-family         = \sffamily,
-				table-title-style         = \bfseries \large,
-				% Table header
-				table-header-family         = \sffamily,
-				table-header-style         = \bfseries,
-				% Table body
-				table-body-family         = \normalfont,
-				table-body-style         = \small,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Tip boxes
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Tip title
-				tip-title-family         = \sffamily,
-				tip-title-style         = \bfseries,
-				% Tip body
-				tip-body-family         = \normalfont,
-				tip-body-style         = \small,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Sidebars
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Sidebar title
-				sidebar-title-family         = \sffamily,
-				sidebar-title-style         = \bfseries\normalsize,
-				% Sidebar body
-				sidebar-body-family         = \normalfont,
-				sidebar-body-style         = \small,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Read-aloud boxes
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				narration-family         = \normalfont,
-				narration-style         = \small,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Abstract
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				abstract-title-family = \Large,
-				abstract-title-style = \scshape\bfseries,
-				abstract-body-family = \normalfont,
-				abstract-body-style = \small\slshape,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Table of Contentss
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Part
-				toc-part-family         = \normalfont,
-				toc-part-style         = \Large\bfseries,
-				% Chapter
-				toc-chapter-family         = \normalfont,
-				toc-chapter-style         = \large,
-				% Section
-				toc-section-family         = \normalfont,
-				toc-section-style         = \normalsize,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Stat blocks
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Stat block title
-				stat-block-title-family         = \normalfont,
-				stat-block-title-style         = \bfseries \LARGE,
-				% Stat block body
-				stat-block-body-family         = \normalfont,
-				stat-block-body-style         = \small,
-				% Stat block section
-				stat-block-section-family         = \sffamily,
-				stat-block-section-style         = \large,
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Miscellaneous
-				%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-				% Footer
-				footer-family         = \normalfont,
-				footer-style         = \scriptsize,
-				% Page number
-				page-number-family         = \normalfont,
-				page-number-style         = \scriptsize ,
-				% Drop caps
-				drop-cap-family         = \normalfont,
-				drop-cap-first-line-style         = \scshape,
-				emph-family 		= \normalfont,
-				emph-style			=  \bfseries\slshape,
-			}
-			
-		\subsection{Colors}
+            \InsertFontTable{
+                main-body-family = \lrfont,
+                main-body-style= {},
+                title-family         = \normalfont,
+                title-style         = \Huge,
+                % Subtitle
+                subtitle-family         = \normalfont,
+                subtitle-style         = \Large,
+                % Part
+                part-family         = \normalfont,
+                part-style         = \Huge,
+                % Chapter
+                chapter-family         = \normalfont,
+                chapter-style         = \Huge \bfseries,
+                % Section
+                section-family         = \normalfont,
+                section-style         = \huge \bfseries,
+                % Subsection
+                subsection-family         = \normalfont,
+                subsection-style         = \Large \bfseries,
+                % subsubsection
+                subsubsection-family         = \normalfont,
+                subsubsection-style         = \large \bfseries,
+                % paragraph
+                paragraph-family 			=\normalfont,
+                paragraph-style         = \bfseries \slshape,
+                % subparagraph
+                subparagraph-family 			=\normalfont,
+                subparagraph-style         = \slshape,
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Tables
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Table title
+                table-title-family         = \sffamily,
+                table-title-style         = \bfseries \large,
+                % Table header
+                table-header-family         = \sffamily,
+                table-header-style         = \bfseries,
+                % Table body
+                table-body-family         = \normalfont,
+                table-body-style         = \small,
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Tip boxes
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Tip title
+                tip-title-family         = \sffamily,
+                tip-title-style         = \bfseries,
+                % Tip body
+                tip-body-family         = \normalfont,
+                tip-body-style         = \small,
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Sidebars
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Sidebar title
+                sidebar-title-family         = \sffamily,
+                sidebar-title-style         = \bfseries\normalsize,
+                % Sidebar body
+                sidebar-body-family         = \normalfont,
+                sidebar-body-style         = \small,
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Read-aloud boxes
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                narration-family         = \normalfont,
+                narration-style         = \small,
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Abstract
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                abstract-title-family = \Large,
+                abstract-title-style = \scshape\bfseries,
+                abstract-body-family = \normalfont,
+                abstract-body-style = \small\slshape,
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Table of Contentss
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Part
+                toc-part-family         = \normalfont,
+                toc-part-style         = \Large\bfseries,
+                % Chapter
+                toc-chapter-family         = \normalfont,
+                toc-chapter-style         = \large,
+                % Section
+                toc-section-family         = \normalfont,
+                toc-section-style         = \normalsize,
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Stat blocks
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Stat block title
+                stat-block-title-family         = \normalfont,
+                stat-block-title-style         = \bfseries \LARGE,
+                % Stat block body
+                stat-block-body-family         = \normalfont,
+                stat-block-body-style         = \small,
+                % Stat block section
+                stat-block-section-family         = \sffamily,
+                stat-block-section-style         = \large,
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Miscellaneous
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                % Footer
+                footer-family         = \normalfont,
+                footer-style         = \scriptsize,
+                % Page number
+                page-number-family         = \normalfont,
+                page-number-style         = \scriptsize ,
+                % Drop caps
+                drop-cap-family         = \normalfont,
+                drop-cap-first-line-style         = \scshape,
+                emph-family 		= \normalfont,
+                emph-style			=  \bfseries\slshape,
+                 card-title-family          =\normalfont,
+                card-title-style =          \textbf,
+                card-header-family =        \normalfont,
+                card-header-style= \textit,
+                card-body-family=\normalfont,
+                card-body-style=\small,
+            }
+            
+        \subsection{Colors}
 
-			The default theme colors are largely monochromatic:
+            The default theme colors are largely monochromatic:
 
-			\DefaultSwatches{}
+            \DefaultSwatches{}
 
-		\subsection{Backgrounds \& Footers}
-			The default theme defines no background or headers (and clears any existing ones). The footer consists of the chapter name and a page number, using the appropriate fonts (\cmd{RpgFontFooter} and \cmd{RpgFontPageNumber}). 
+        \subsection{Backgrounds \& Footers}
+            The default theme defines no background or headers (and clears any existing ones). The footer consists of the chapter name and a page number, using the appropriate fonts (\cmd{RpgFontFooter} and \cmd{RpgFontPageNumber}). 
 
 
-		\subsection{Text Boxes}
+        \subsection{Text Boxes}
 
-			The default text boxes are very simple in design:
+            The default text boxes are very simple in design:
 
-			\begin{multicols}{3}
-				
-				\begin{RpgSidebar}{The RpgSidebar}
-					Has minor decorations at the top and bottom to distinguish it from an RpgTip
-				\end{RpgSidebar}
-				
-				\begin{RpgTip}{The RpgTip}
-					Almost entirely undecorated
-				\end{RpgTip}
+            \begin{multicols}{3}
+                
+                \begin{RpgSidebar}{The RpgSidebar}
+                    Has minor decorations at the top and bottom to distinguish it from an RpgTip
+                \end{RpgSidebar}
+                
+                \begin{RpgTip}{The RpgTip}
+                    Almost entirely undecorated
+                \end{RpgTip}
 
-				\begin{RpgNarration}
-					RpgNarration is also simple; but uses the narration color
-				\end{RpgNarration}
-			\end{multicols}
+                \begin{RpgNarration}
+                    RpgNarration is also simple; but uses the narration color
+                \end{RpgNarration}
+            \end{multicols}
 
 
 
@@ -161,7 +167,7 @@
           
 
               \begin{ExampleBlock}{Section Headers}
-    \section{Example}
+    \section*{Example} %starred so not added to toc; otherwise the same
     \subsection{Another Example}
     \subsubsection{More Examples!}
             \end{ExampleBlock}
@@ -173,10 +179,64 @@
             \RpgDice{3d8 -5 +2}
             \end{ExampleBlock}
 
+    \newpage
     \section{RpgItem}\label{S:DefaultItem}\index{RpgItem!Theme!default}
 
-        The default value of the \envref{RpgItem}
+        The default configuration of the \envref{RpgItem} environment, used to describe physical objects and equipment. As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgItemShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+        
+        The \texttt{default} theme defines two keys for the RpgItem object:
+        \begin{RpgTable}{llX}
+            Key & Default Value & Effect
+            \\
+            description & \param{} & An italicised byline used to summarise the item
+            \\
+            image & \param{} & If non-empty, define an image path which is used when in card-mode.
+        \end{RpgTable}
     
-    \section{RpgFeat}\index{RpgFeat!Theme!default}
-    
-    \section{RpgSpell:}\index{RpgSpell!Theme!default}
+    \begin{ExampleBlock}{Default RpgItem: Text Mode}
+    \RpgItemShowCard{false}
+    \begin{RpgItem}{Joyeuse}[
+        description={The Sword Jewellous},
+        image={../example/img/joyeuse}
+    ]
+        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+    \end{RpgItem}
+    \end{ExampleBlock}
+    \begin{ExampleBlock}{Default RpgItem: Card Mode}
+    \RpgItemShowCard{true}
+    \begin{RpgItem}{Joyeuse}[
+        description={The Sword Jewellous},
+        image={../example/img/joyeuse}
+    ]
+        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+    \end{RpgItem}
+    \end{ExampleBlock}
+
+\newpage
+\section{RpgFeat}\index{RpgFeat!Theme!default}
+     The default configuration of the \envref{RpgFeat} environment, used to describe abilities and character features and choices. As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgItemShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+        
+      The \texttt{default} theme defines two keys for the RpgFeat object:
+        \begin{RpgTable}{llX}
+            Key & Default Value & Effect
+            \\
+            prerequisite & \param{} & If non-empty, an italicised note is added, indicating the prerequisites for acquiring the ability.
+        \end{RpgTable}
+     \begin{ExampleBlock}{Default RpgFeat: Text Mode}
+    \RpgFeatShowCard{false}
+    \begin{RpgFeat}{Hyperattack}[
+         prerequisite={Mega-attack},
+    ]
+
+        You can unleash superhuman speed against your enemies. Once per day, make \RpgDice{3d10} additional attacks.
+    \end{RpgFeat}
+    \end{ExampleBlock}
+    \begin{ExampleBlock}{Default RpgFeat: Card Mode}
+    \RpgFeatShowCard{true}
+    \begin{RpgFeat}{Hyperattack}[
+        prerequisite={Mega-attack},
+    ]
+
+        You can unleash superhuman speed against your enemies. Once per day, make \RpgDice{3d10} additional attacks.
+    \end{RpgFeat}
+    \end{ExampleBlock}

@@ -26,7 +26,7 @@
 
 	%%Define the attribute list
 		\prop_new:c  {#1_property_list}
-		\cs_new:cpn {#1AddProperty} ##1##2##3
+				\cs_new:cpn {#1AddProperty} ##1##2##3
 		{
 			\__rpg_insert_tl_key:xene{rpg/forge/#4}{##1}{##2}{##3}   
 			\prop_put:cnn{#1_property_list}{##1}{##2}
@@ -79,7 +79,7 @@
 
 \RpgMakeFeature{RpgSpell}[O{} m m]{UseSpellCard}{spell}
 
-\RpgMakeFeature{RpgAbility}{UseAbilityCard}{ability}
+\RpgMakeFeature{RpgFeat}{UseFeatCard}{feat}
 
 \RpgMakeFeature{RpgStat}{UseStatCard}{statblock}
 
