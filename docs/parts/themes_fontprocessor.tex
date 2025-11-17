@@ -1,0 +1,106 @@
+
+\ExplSyntaxOn
+
+\NewDocumentCommand{\Swatch}{m}{
+	\def\a{1.5}
+	\tikz{\fill[#1] (-\a,-\a) rectangle (\a,\a);
+	\node[fill=white,fill~opacity=0.5,text~opacity=1] at (0,0) {\maxsizebox{2.5cm}{!}{#1}};
+	}\hskip 2pt
+}
+\NewDocumentCommand{\DefaultSwatches}{}{
+	\Swatch{themecolor}
+	\Swatch{narrationcolor}
+	\Swatch{contouroutercolor}
+	\Swatch{contourinnercolor}
+}
+
+\prop_new:N \table_names
+\NewDocumentCommand{\FontTableElement}{m m}
+	{
+		%%Add entries into the registry
+		%%Dynamically creates cs-sequences
+		\exp_args:Ne\keys_define:nn{fonttable}
+		{
+			#2-family .tl_set:c = temp__#2_family,
+			#2-family .value_required:n = true,
+			#2-family .initial:n = {},
+			#2-style .tl_set:c = temp__#2_style,
+			#2-style .value_required:n = true,
+			#2-style .initial:n = {},
+		}
+		\prop_put:Nen{\table_names}{#2}{\verb|#1| & \texttt{\tl_to_str:c{temp__#2_family}}& \texttt{\tl_to_str:c{temp__#2_style}}}
+
+	}
+\NewDocumentCommand{\InsertFontTable}{m}{
+	\keys_set:nn{fonttable}{#1}
+
+	\begin{RpgTable}[breakable]{XXX}
+		Element & Font Family & Font Style\\
+	\prop_map_inline:Nn\table_names{
+		##2  \\
+	}
+	\end{RpgTable}
+}
+	
+\FontTableElement{\RpgFontBody}{main-body}
+	\FontTableElement{\RpgFontEmphasis}{emph}
+
+	%%%%%%%%%%%%
+	%%Sections
+	%%%%%%%%%%%%
+	\FontTableElement{\RpgFontTitle}{title}
+	\FontTableElement{\RpgFontSubTitle}{subtitle}
+	\FontTableElement{\RpgFontPart}{part}
+	\FontTableElement{\RpgFontChapter}{chapter}
+	\FontTableElement{\RpgFontSection}{section}
+	\FontTableElement{\RpgFontSubsection}{subsection}
+	\FontTableElement{\RpgFontSubsubsection}{subsubsection}
+	\FontTableElement{\RpgFontParagraph}{paragraph}
+	\FontTableElement{\RpgFontSubparagraph}{subparagraph}
+
+	%%%%%%%%%%%%
+	%%Environments
+	%%%%%%%%%%%%
+	\FontTableElement{\RpgFontTableTitle}{table-title}
+	\FontTableElement{\RpgFontTableHeader}{table-header}
+	\FontTableElement{\RpgFontTableBody}{table-body}
+	\FontTableElement{\RpgFontTipTitle}{tip-title}
+	\FontTableElement{\RpgFontTipBody}{tip-body}
+	\FontTableElement{\RpgFontSidebarTitle}{sidebar-title}
+	\FontTableElement{\RpgFontSidebarBody}{sidebar-body}
+	\FontTableElement{\RpgFontNarration}{narration}
+	\FontTableElement{\RpgFontAbstractTitle}{abstract-title}
+	\FontTableElement{\RpgFontAbstractBody}{abstract-body}
+	\FontTableElement{\RpgFontSecretTitle}{secret-title}
+
+	%%%%%%%%%%%%
+	%%Cards
+	%%%%%%%%%%%%
+	\FontTableElement{\RpgFontCardTitle}{card-title}
+	\FontTableElement{\RpgFontCardHeader}{card-header}
+	\FontTableElement{\RpgFontCardBody}{card-body}
+
+	%%%%%%%%%%%%
+	%%TOC
+	%%%%%%%%%%%%
+	\FontTableElement{\RpgFontTocPart}{toc-part}
+	\FontTableElement{\RpgFontTocChapter}{toc-chapter}
+	\FontTableElement{\RpgFontTocSection}{toc-section}
+
+	%%%%%%%%%%%%
+	%%Statblocks
+	%%%%%%%%%%%%
+	\FontTableElement{\RpgFontStatBlockTitle}{stat-block-title}
+	\FontTableElement{\RpgFontStatBlockBody}{stat-block-body}
+	\FontTableElement{\RpgFontStatBlockSection}{stat-block-section}
+
+	%%%%%%%%%%%%
+	%%Decoration
+	%%%%%%%%%%%%
+	\FontTableElement{\RpgFontFooter}{footer}
+	\FontTableElement{\RpgFontPageNumber}{page-number}
+	\FontTableElement{\RpgFontDropCap}{drop-cap}
+	\FontTableElement{\RpgFontDropCapFirstLine}{drop-cap-first-line}
+
+
+\ExplSyntaxOff
