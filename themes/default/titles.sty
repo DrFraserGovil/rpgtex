@@ -1,4 +1,11 @@
 \ExplSyntaxOff %%turn off to simplify formatting
+
+
+
+%%%%%%%%%%%%%%%%%%%
+% Image Pages
+%%%%%%%%%%%%%%%%%%%
+
 \RpgSetPartPage
 {
     \fill [white, opacity=0.5] (current page.south west) rectangle (current page.north east);
@@ -65,4 +72,125 @@
 		{onecolumn}{\contents}
 		{twocolumn}{\twocolumn[\contents]}
 	}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%
+% TOC
+%%%%%%%%%%%%%%%%%%%
+
+
+\setcounter{tocdepth}{1}
+
+\titlecontents{part}
+[0pt] % left
+{ \addvspace{.06in} \RpgFontTocPart } % above-code
+{Part\ \thecontentslabel :~ } % numbered-entry-format
+{} % numberless-entry-format
+{} % filler-page-format
+[]
+% [ \addvspace{-.03in} \titleline{ \color{red} \titlerule[1pt] } \addvspace{.05in } ] % below-code
+
+\titlecontents{chapter}
+[0pt] % left
+{ \addvspace{.1in} \RpgFontTocChapter } % above-code
+{ \tocchapapp\ \thecontentslabel :~ } % numbered-entry-format
+{} % numberless-entry-format
+{} % filler-page-format
+
+\titlecontents{section}
+[0pt] % left
+{\RpgFontTocSection} % above-code
+{\thecontentslabel :~ } % numbered-entry-format
+{} % numberless-entry-format
+{\titlerule*{.}\contentspage} % filler-page-format
+
+\RpgLayoutOnly{
+  % Set spacing around floats
+  \setlength{\textfloatsep}{11pt plus 4pt minus 4pt}
+  \setlength{\intextsep}{11pt plus 4pt minus 4pt}
+  \setlength{\dbltextfloatsep}{11pt plus 4pt minus 4pt}
+
+  % Remove Numbering (If you want Numbering set secnumdepth to the appropriate depth)
+  \setcounter{secnumdepth}{0}
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Section formatting
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Part
+
+
+  % Chapter
+  \titleformat {\chapter}
+    { \RpgFontChapter } % format
+    { {\chaptertitlename\ \thechapter :} } % label
+    { \wordsep } % sep
+    {  } % before-code
+
+  \titlespacing* {\chapter}
+    { 0pt }  % left
+    { .3ex }  % before-sep
+    { 2.8ex } % after-sep
+
+  % Section
+  \titleformat {\section}
+    { \RpgFontSection } % format
+    { \thesection } % label
+    { 1em } % sep
+    { \nopagebreak } % before-code
+
+  \titlespacing* { \section }
+    { 0pt } % left
+    { 3ex plus .43ex minus .43ex } % before-sep
+    { 1ex plus .43ex minus .43ex } % after-sep
+
+  % Subsection
+  \titleformat {\subsection}
+    { \RpgFontSubsection } % format
+    { \thesubsection } % label
+    { 1em } % sep
+    { \nopagebreak } % before-code
+
+  \titlespacing*{ \subsection }
+    { 0pt } % left
+    { 1.4ex plus .47ex minus .47ex } % before-sep
+    { 1.2ex } % after-sep
+
+  % Subsubsection
+  \titleformat {\subsubsection}
+    { \RpgFontSubsubsection } % format
+    { \thesubsubsection } % label
+    { 1em } % sep
+    { \nopagebreak } % before-code
+
+  \titlespacing* { \subsubsection }
+    { 0pt } % left
+  { 2ex plus .67ex minus .67ex } % before-sep
+    { .2ex } % after-sep
+
+  % Paragraph
+  \titleformat {\paragraph} [runin]
+    { \RpgFontParagraph } % format
+    { \theparagraph \quad } % label
+    {0pt} % sep
+    {}    % before-code
+    [.]   % after-code
+
+  \titlespacing* {\paragraph}
+    {0pt}      % left
+    {\the\dimexpr\parskip+5pt\relax} % before-sep
+    {\wordsep} % after-sep
+
+  % Subparagraph
+  \titleformat {\subparagraph} [runin]
+    { \RpgFontSubparagraph } % format
+    { \thesubparagraph \quad } % label
+    {pt} % sep
+    {}    % before-code
+    [.]   % after-code
+
+  \titlespacing* {\subparagraph}
+    {\parindent} % left
+    {\the\dimexpr\parskip+5pt\relax}   % before-sep
+    {\wordsep}   % after-sep
 }

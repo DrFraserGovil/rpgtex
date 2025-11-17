@@ -2,6 +2,14 @@
 
 \input{core/lowlevel/image_pages}
 
+%%%% redefines appendices in TOC
+\newcommand\tocchapapp{}
+\g@addto@macro\appendix{%
+\addtocontents{toc}{\protect\renewcommand{\protect\@chapapp}{Appendix}}%
+\addtocontents{toc}{\protect\renewcommand{\protect\tocchapapp}{Appendix}}%
+}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Part pages (with images)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
