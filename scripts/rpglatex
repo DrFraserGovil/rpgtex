@@ -108,7 +108,7 @@ def argprint(args,message):
 
 ###Replaces the need for the manual configuration step by auto-injecting the package directory into document
 def locatePackageDirectory():
-	package_name = "rpg.sty"
+	package_name = "rpgtex.sty"
 	command = ['kpsewhich',"-subdir=rpgtex", package_name]
 	try:
 		result = subprocess.run(
