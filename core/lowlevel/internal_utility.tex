@@ -45,6 +45,19 @@
     #2 .value_required:n = true
 	}
 }
+\cs_new_protected:Npn \__rpg_insert_bool_key:xen #1#2#3
+{
+	\bool_if_exist:NF{#3}
+	{
+		\bool_new:N{#3}
+	}
+	
+	\exp_args:Ne\keys_define:nn{#1}{
+    #2 .code:n = {\bool_set_true:N #3},
+    #2 .value_forbidden:n = true
+	}
+}
+
 
 \msg_new:nnn { rpg } { bad-key-add } {Cannot~add~key~'#1'~without~specifying~group.}
 \cs_new_protected:Npn \__rpg_tl_key:nnn #1#2#3

@@ -2,7 +2,7 @@
 \ExplSyntaxOn
 
 \NewDocumentCommand{\Swatch}{O{} m}{
-	\def\a{1.5}
+	\def\a{1.4}
 	\tikz{\fill[#2] (-\a,-\a) rectangle (\a,\a);
 	\node[fill=white,fill~opacity=0.5,text~opacity=1] at (0,0) {\maxsizebox{2.5cm}{!}{#2}};
 	
@@ -24,23 +24,14 @@
 \NewDocumentCommand{\FontTableElement}{m m}
 	{
 		%%Add entries into the registry
-		%%Dynamically creates cs-sequences
-		\exp_args:Ne\keys_define:nn{fonttable}
-		{
-			#2-family .tl_set:c = temp__#2_family,
-			#2-family .value_required:n = true,
-			#2-family .initial:n = {},
-			#2-style .tl_set:c = temp__#2_style,
-			#2-style .value_required:n = true,
-			#2-style .initial:n = {},
-		}
-		\prop_put:Nen{\table_names}{#2}{\verb|#1| & \texttt{\tl_to_str:c{temp__#2_family}}& \texttt{\tl_to_str:c{temp__#2_style}}}
+		%%extracts the current values assigned to the variables
+		\prop_put:Nen{\table_names}{#2}{\verb|#1| & \texttt{\tl_to_str:c{l__#2_family}}& \texttt{\tl_to_str:c{l__#2_style}}}
 
 	}
 \NewDocumentCommand{\InsertFontTable}{m}{
-	\keys_set:nn{fonttable}{#1}
+	% \keys_set:nn{fonttable}{#1}
 
-	\begin{RpgTable}[breakable]{XXX}
+	\begin{RpgTable}[breakable]{llX}
 		Element & Font Family & Font Style\\
 	\prop_map_inline:Nn\table_names{
 		##2  \\

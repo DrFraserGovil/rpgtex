@@ -36,32 +36,10 @@
 
 %%%%%% RpgStat Environment
 
-	%%Helper function for print mode injection
-	\NewDocumentCommand \rpg_stat_box:nn { m m }
-	{
-		\RpgSetStatName{#2} %make #the stat's name accessible via macro so stat blocks can easily change names
-		\bool_if:NTF \l__rpg_show_background_bool
-		{
-			\begin{RpgStatBox}[#1]{}
-		}
-		{
-			\begin{RpgStatBox}[#1,colback=white,colframe=black!30!white]{}
-		}
-			\vspace{5pt}{\RpgFontStatBlockTitle \color{titlered}#2}
-
-
-	}
+	
 
 	% %%Standard dnd stat environment
-	% \NewDocumentEnvironment {RpgStat} { O{} m +b}
-	% {
-	% 	\rpg_stat_box:nn {#1}{#2}
 
-	% 	#3
-	% }
-	% {
-	% 	\end{RpgStatBox}
-	% }
 	\RpgStatTextFormat{
 		\rpg_stat_box:nn{}{#1}
 				#2
@@ -69,10 +47,9 @@
 	}
 
 	\RpgStatCardFormat{
-		% \rpg_stat_box:nn{}{#1}
+		
 		\subsection{#1}
-				\scriptsize #2
-		% \end{RpgStatBox}
+			#2
 	}
 	
 
@@ -94,6 +71,28 @@
 		\end{figure*}
 	}
 
+
+	%%Begins the environment with different arguments depending on print mode
+	\NewDocumentCommand \rpg_stat_box:nn { m m }
+	{
+		\RpgSetStatName{#2} %make #the stat's name accessible via macro so stat blocks can easily change names
+		\bool_if:NTF \l__rpg_show_background_bool
+		{
+			\begin{RpgStatBox}[#1]{}
+		}
+		{
+			\begin{RpgStatBox}[#1,colback=white,colframe=black!30!white]{}
+		}
+		\vspace{5pt}{\RpgFontStatBlockTitle \color{titlered}#2}
+
+		\tl_if_empty:eF{\l__crtype_tl}
+		{
+			\begin {hangingpar}
+				\textit {\l__crtype_tl}
+			\end {hangingpar}
+		}
+		\RpgStatBasics
+	}
 
 
 %%%%%% Internal Helper functions
@@ -123,16 +122,31 @@
 		\int_abs:n {#1}
 	}
 
-
+	\msg_new:nnn{rpg}{bad-ability}{Cannot~parse~#1~as~a~valid~ability~score}
 	\cs_new_protected_nopar:Npn \__rpg_ability_score_modifier:N #1
 	{
 		\regex_match:NnTF \c__pos_int_regex {#1}
 		{
-			\int_set:Nn \l_tmpa_int { \fp_eval:n { floor ( ( #1 - 10 ) / 2 ) } }
-			\exp_args:Nf \__rpg_format_signed_integer:N \l_tmpa_int
+			\fp_eval:n { floor ( ( #1 - 10 ) / 2 ) }
 		}
-		{(#1)}
+		{
+			
+			\msg_error:nnn{rpg}{bad-ability}{#1}
+		}
 	}
+	\cs_new_protected_nopar:Npn \__rpg_store_ability_score_modifier:NV #1#2
+	{
+		\regex_match:NVTF \c__pos_int_regex {#2}
+		{
+			% \int_gset:Nn{#2}{\fp_eval:n { floor ( ( #1 - 10 ) / 2 ) }}
+			\int_gset:Nn #1 { \fp_eval:n { floor ( ( #2 - 10 ) / 2 ) } }
+		}
+		{
+			
+			\msg_error:nnn{rpg}{bad-ability}{#2}
+		}
+	}
+			
 
 	\cs_new_protected_nopar:Npn \__rpg_save_modifier:Nn #1 #2
 	{
@@ -170,93 +184,54 @@
 %%%%%% Variable definitions
 	\tl_new:N \l__initiative_bonus_tl
 	\bool_new:N \l__manual_initiative_bool
-	\bool_new:N  \l__str_save_proficient_bool
-	\bool_new:N  \l__dex_save_proficient_bool
-	\bool_new:N  \l__con_save_proficient_bool
-	\bool_new:N  \l__int_save_proficient_bool
-	\bool_new:N  \l__wis_save_proficient_bool
-	\bool_new:N  \l__cha_save_proficient_bool
-	\bool_new:N  \l__save_row_bool
 
 	%% This is a big long keyval section, there's no real way to make it pretty
-	\keys_define:nn { rpg / stat / basics }
+
+				
+	\RpgStatAddProperty{type}{ \l__crtype_tl}{}
+	\RpgStatAddProperty{armor-class}{ \l__armor_class_tl}{10}
+	\RpgStatAddProperty{hit-points}{\l__hit_points_tl}{\RpgDice{1d8}}
+	\RpgStatAddProperty{speed}{\l__speed_tl}{30ft}
+	\RpgStatAddProperty{initiative}{\l__initiative_bonus_tl}{\q_no_value}
+	\RpgStatAddProperty{str}{\l__str_tl}{10}
+	\RpgStatAddProperty{dex}{\l__dex_tl}{10}
+	\RpgStatAddProperty{con}{\l__con_tl}{10}
+	\RpgStatAddProperty{int}{\l__int_tl}{10}
+	\RpgStatAddProperty{wis}{\l__wis_tl}{10}
+	\RpgStatAddProperty{cha}{\l__cha_tl}{10}
+	
+	\RpgStatAddProperty{proficiency-bonus}{\g__rpg_proficiency_bonus_int}{2}
+	
+	\RpgStatAddBoolean{str-save}{\l__str_save_proficient_bool}
+	\RpgStatAddBoolean{dex-save}{\l__dex_save_proficient_bool}
+	\RpgStatAddBoolean{con-save}{\l__con_save_proficient_bool}
+	\RpgStatAddBoolean{int-save}{\l__int_save_proficient_bool}
+	\RpgStatAddBoolean{wis-save}{\l__wis_save_proficient_bool}
+	\RpgStatAddBoolean{cha-save}{\l__cha_save_proficient_bool}
+	
+	\RpgStatAddProperty{skills}{\l__skills_tl}{}
+	\RpgStatAddProperty{skills-expertise}{\l__skills_expertise_tl}{}
+	
+	\keys_define:nn { rpg / forge / statblock }
 	{
-		%%Basic Properties
-		armor-class .tl_set:N          = \l__armor_class_tl,
-		armor-class .initial:n         = 10,
-		armor-class .value_required:n  = true,
-		armorclass .meta:n = { armor-class = {#1} },
-		hit-points .tl_set:N         = \l__hit_points_tl,
-		hit-points .initial:n        = \RpgDice {1d8},
-		hit-points .value_required:n = true,
-		hitpoints .meta:n = { hit-points = {#1} },
-		speed .tl_set:N         = \l__speed_tl,
-		speed .initial:n        = 30 ~ ft,
-		speed .value_required:n = true,
-		initiative .code:n = {\tl_set:Nn \l__initiative_bonus_tl{#1}
-		\bool_set_true:N \l__manual_initiative_bool},
-		%%Ability scores
-		str .tl_set:N         = \l__str_tl,
-		str .initial:n        = 10,
-		str .value_required:n = true,
-		STR .meta:n = { str = #1 },
-		dex .tl_set:N         = \l__dex_tl,
-		dex .initial:n        = 10,
-		dex .value_required:n = true,
-		DEX .meta:n = { dex = #1 },
-		con .tl_set:N         = \l__con_tl,
-		con .initial:n        = 10,
-		con .value_required:n = true,
-		CON .meta:n = { con = #1 },
-		int .tl_set:N         = \l__int_tl,
-		int .initial:n        = 10,
-		int .value_required:n = true,
-		INT .meta:n = { int = #1 },
-		wis .tl_set:N         = \l__wis_tl,
-		wis .initial:n        = 10,
-		wis .value_required:n = true,
-		WIS .meta:n = { wis = #1 },
-		cha .tl_set:N         = \l__cha_tl,
-		cha .initial:n        = 10,
-		cha .value_required:n = true,
-		CHA .meta:n = { cha = #1 },
-		%%%%SAVES
-		str_save .code:n 	=	{\bool_set_true:N \l__str_save_proficient_bool
-							\bool_set_true:N \l__save_row_bool
-		},
-		str_save .value_forbidden:n = true,
-		dex_save .code:n 	=	{\bool_set_true:N \l__dex_save_proficient_bool
-							\bool_set_true:N \l__save_row_bool
-		},
-		dex_save .value_forbidden:n = true,
-		con_save .code:n 	=	{\bool_set_true:N \l__con_save_proficient_bool
-							\bool_set_true:N \l__save_row_bool
-		},
-		con_save .value_forbidden:n = true,
-		int_save .code:n 	=	{\bool_set_true:N \l__int_save_proficient_bool
-							\bool_set_true:N \l__save_row_bool
-		},
-		int_save .value_forbidden:n = true,
-		wis_save .code:n 	=	{\bool_set_true:N \l__wis_save_proficient_bool
-							\bool_set_true:N \l__save_row_bool
-		},
-		wis_save .value_forbidden:n = true,
-		cha_save .code:n 	=	{\bool_set_true:N \l__cha_save_proficient_bool
-							\bool_set_true:N \l__save_row_bool
-		},
-		cha_save .value_forbidden:n = true,
-		% Proficiency Bonus
-		proficiency_bonus .int_set:N  = \g__rpg_proficiency_bonus_int,
-		proficiency_bonus .initial:n = 2,
-		proficiency .meta:n = { proficiency_bonus = #1 },
+	% 	%%Aliases
+		ac 				.meta:n = { armor-class=#1},
+		AC 				.meta:n = { armor-class=#1},
+		hp 				.meta:n = { hit-points=#1},
+		HP 				.meta:n = { hit-points=#1},
+		STR 			.meta:n = { str = #1 },
+		DEX 			.meta:n = { dex = #1 },
+		CON 			.meta:n = { con = #1 },
+		INT 			.meta:n = { int = #1 },
+		WIS 			.meta:n = { wis = #1 },
+		CHA 			.meta:n = { cha = #1 },
+		proficiency 	.meta:n = { proficiency-bonus = #1} 
 	}
+
 
 	%% Stat details
 	\keys_define:nn { rpg / stat / details }
 	{
-		saving-throws .tl_set:N         = \l__saving_throws_tl,
-		saving-throws .value_required:n = true,
-		savingthrows .meta:n = { saving-throws = {#1} },
 		skills .tl_set:N         = \l__skills_tl,
 		skills .value_required:n = true,
 		damage-vulnerabilities .tl_set:N         = \l__damage_vulnerabilities_tl,
@@ -275,7 +250,7 @@
 		condition-resistances .value_required:n = true,
 		conditionresistances .meta:n = { condition-immunities = {#1} },
 		senses .tl_set:N         = \l__senses_tl,
-		senses .initial:n        = \defaultsensesname,
+		senses .initial:n        = {},
 		senses .value_required:n = true,
 		languages .tl_set:N         = \l__languages_tl,
 		languages .initial:n        = ---,
@@ -372,16 +347,64 @@
 				{
 					\l__initiative_bonus_tl
 					}{
-						\exp_args:NV \__rpg_ability_score_modifier:N \l__dex_tl
+						\__rpg_format_signed_integer:N \l__dex_mod
 					}
 			\end{tabularx}
 		}
 	}
 
+	\tl_new:N \l__processed_skills
+	\seq_new:N \l__seq_holder
+	\cs_new_protected:Npn \__rpg_stat_compute_skill_bonus:nn#1#2
+	{
+		\str_case:enF{\str_lowercase:n{#1}}
+		{
+			{athletics} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__str_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{acrobatics} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__dex_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{sleight~of~hand} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__dex_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{stealth} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__dex_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{arcana} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__int_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{history} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__int_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{investigation} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__int_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{nature} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__int_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{religion} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__int_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{animal~handling} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__wis_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{insight} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__wis_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{medicine} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__wis_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{perception} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__wis_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{survival} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__wis_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{deception} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__cha_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{intimidation} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__cha_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{performance} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__cha_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			{persuasion} {\__rpg_format_signed_integer:N{\fp_eval:n{\l__cha_mod+#2*\g__rpg_proficiency_bonus_int}}}
+			
+
+		}
+		{
+			0% \g__rpg_proficiency_bonus_int0
+		}
+	}
+	\cs_new_protected:Npn \__rpg_stat_process_skills:
+	{
+		\seq_clear:N\l__seq_holder
+		% \clist_set:Nx\l__cs_holder{\l__skills_tl}
+		\clist_map_inline:Nn\l__skills_expertise_tl
+		{
+			\seq_put_right:Nn\l__seq_holder{\text_titlecase_all:n{##1}~(\__rpg_stat_compute_skill_bonus:nn{##1}{2})}
+		}
+		\clist_map_inline:Nn\l__skills_tl
+		{
+			\seq_put_right:Nn\l__seq_holder{\text_titlecase_all:n{##1}~(\__rpg_stat_compute_skill_bonus:nn{##1}{1})}
+		}
+		\tl_set:Nn{\l__processed_skills}{\seq_use:Nn{\l__seq_holder}{,~}}
+		
+	}
+
 	\cs_new_protected_nopar:Npn \__rpg_stat_details:
 	{
+		\__rpg_stat_process_skills:
 		\begin {__rpg_stat_attributes}
-		\__rpg_if_stat_attribute:nn {\l__skills_tl}                 {Skills}
+		\__rpg_if_stat_attribute:nn {\l__processed_skills}                 {Skills}
 		\__rpg_if_stat_attribute:nn {\l__damage_vulnerabilities_tl} {Damage~Vulnerabilities}
 		\__rpg_if_stat_attribute:nn {\l__damage_resistances_tl}     {Damage~Resistances}
 		\__rpg_if_stat_attribute:nn {\l__damage_immunities_tl}      {Damage~Immunities}
@@ -404,13 +427,37 @@
 		{
 			& \parbox[t]{1.25cm}{\centering \RpgFontStatBlockTitle  \footnotesize{#1} ~{ (#2)} }
 		}
-
+	
+	\int_new:N\l__str_mod
+	\int_new:N\l__dex_mod
+	\int_new:N\l__con_mod
+	\int_new:N\l__int_mod
+	\int_new:N\l__wis_mod
+	\int_new:N\l__cha_mod
+	% \int_new:N\l__str_mod
+	\cs_new_protected_nopar:Npn \__rpg_stat_compute_modifiers:
+	{
+		% \int_set:Nn \l__str_mod{\__rpg_ability_score_modifier:N{\l__dex_tl}}
+		\__rpg_store_ability_score_modifier:NV{\l__str_mod}{\l__str_tl}
+		\__rpg_store_ability_score_modifier:NV{\l__dex_mod}{\l__dex_tl}
+		\__rpg_store_ability_score_modifier:NV{\l__con_mod}{\l__con_tl}
+		\__rpg_store_ability_score_modifier:NV{\l__int_mod}{\l__int_tl}
+		\__rpg_store_ability_score_modifier:NV{\l__wis_mod}{\l__wis_tl}
+		\__rpg_store_ability_score_modifier:NV{\l__cha_mod}{\l__cha_tl}
+	}
 
 	% Ability scores in a table
 	\cs_new_protected_nopar:Npn \__rpg_stat_ability_scores:
 	{
+		
+
+		\vspace{-0.8em}
+
 		\color {titlered}
-		\addtolength{\tabcolsep}{-0.5em}
+		{
+		% \addtolength{\tabcolsep}{-0.5em}
+		\setlength\topsep{0pt}
+		\setlength\tabcolsep{0pt}
 		\noindent\begin{center}\maxsizebox{\linewidth}{!}{
 		\noindent\begin{RpgTable}[simple]{rcccccc}
 		~
@@ -422,28 +469,37 @@
 		\__rpg_format_stat_titles:nn{CHA}{\l__cha_tl}
 		\\
 		\__rpg_format_mod_labels:n{mod} &
-		\exp_args:NV \__rpg_ability_score_modifier:N \l__str_tl &
-		\exp_args:NV \__rpg_ability_score_modifier:N \l__dex_tl &
-		\exp_args:NV \__rpg_ability_score_modifier:N \l__con_tl &
-		\exp_args:NV \__rpg_ability_score_modifier:N \l__int_tl &
-		\exp_args:NV \__rpg_ability_score_modifier:N \l__wis_tl &
-		\exp_args:NV \__rpg_ability_score_modifier:N \l__cha_tl
+		\__rpg_format_signed_integer:N{\l__str_mod} &
+		\__rpg_format_signed_integer:N{\l__dex_mod} &
+		\__rpg_format_signed_integer:N{\l__con_mod} &
+		\__rpg_format_signed_integer:N{\l__int_mod} &
+		\__rpg_format_signed_integer:N{\l__wis_mod} &
+		\__rpg_format_signed_integer:N{\l__cha_mod}
 		\\
-		\bool_if:NT \l__save_row_bool{
-
-		\__rpg_format_mod_labels:n{save}&
-		\__rpg_save_modifier:Nn \l__str_tl \l__str_save_proficient_bool &
-		\__rpg_save_modifier:Nn \l__dex_tl \l__dex_save_proficient_bool &
-		\__rpg_save_modifier:Nn \l__con_tl \l__con_save_proficient_bool &
-		\__rpg_save_modifier:Nn \l__int_tl \l__int_save_proficient_bool &
-		\__rpg_save_modifier:Nn \l__wis_tl \l__wis_save_proficient_bool &
-		\__rpg_save_modifier:Nn \l__cha_tl \l__cha_save_proficient_bool
+		%if any proficiencies set, then render the save row
+		\bool_lazy_any:nT {
+			\l__str_save_proficient_bool
+			\l__dex_save_proficient_bool
+			\l__con_save_proficient_bool
+			\l__int_save_proficient_bool
+			\l__wis_save_proficient_bool
+			\l__cha_save_proficient_bool
+		}{
+			\__rpg_format_mod_labels:n{save}&
+			\__rpg_save_modifier:Nn \l__str_tl \l__str_save_proficient_bool &
+			\__rpg_save_modifier:Nn \l__dex_tl \l__dex_save_proficient_bool &
+			\__rpg_save_modifier:Nn \l__con_tl \l__con_save_proficient_bool &
+			\__rpg_save_modifier:Nn \l__int_tl \l__int_save_proficient_bool &
+			\__rpg_save_modifier:Nn \l__wis_tl \l__wis_save_proficient_bool &
+			\__rpg_save_modifier:Nn \l__cha_tl \l__cha_save_proficient_bool
 		}{}
 
 		\end{RpgTable}
 		}
+		
 	\end{center}
-		\par \vspace{-5pt}%
+		}
+		\par 
 	}
 
 
@@ -508,14 +564,18 @@
 		}
 
 		%%Formats Speed, hp, ability scores etc
-		\NewDocumentCommand {\RpgStatBasics} {o}
+		\NewDocumentCommand {\RpgStatBasics} {O{}}
 		{
+			\__rpg_stat_compute_modifiers:
 			%%deliberately not wrapped in a group because we want these variables to expose to other sections!
 			\keys_set:nn { rpg / stat / basics } {#1}
 			\RpgStatLine
 			\__rpg_stat_basics:
 			\RpgStatLine
 			\__rpg_stat_ability_scores:
+			\RpgStatLine
+			\__rpg_stat_details:
+
 			% (\g__rpg_proficiency_bonus_int)
 		}
 

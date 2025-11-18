@@ -6,7 +6,7 @@
 \usepackage{blindtext}
 \usepackage{splitidx} %use rather than imakeidx because it gets hyperrefs right!
 \usepackage{pifont}
-
+\usepackage{idxlayout}
 
 \usepackage[official]{eurosym} %%used for the euro in item examle
 \newcommand{\cmark}{\ding{51}}%
@@ -102,7 +102,12 @@
 		\input{parts/designer_commands.tex}
 		\input{parts/featureforge.tex}
 
-
+	{\footnotesize 
+	% \begin{multicols}{3}
+	\idxlayout{columns=3}
 	\printindex
+	% \end{multicols}
+	}
+
 
 \end{document}

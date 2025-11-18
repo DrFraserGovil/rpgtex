@@ -15,65 +15,7 @@
 
              The values assigned to the font elements areas follows (note that \verb|\normalfont| is aliased to the value of RpgFontBody).
 
-            \InsertFontTable{
-                main-body-family			={\bookman},
-                %Sections
-                title-family=		{\normalfont},
-                title-style			= {\bfseries\fontsize{30}{50}\selectfont\color{titlered}},
-                subtitle-family		={\scshape},
-                subtitle-style 		= {\LARGE\color{titlered} },
-                part-style			= {\color{titlered}\fontsize{50}{30}\selectfont},
-                chapter-style		= {\titlemode\fontsize{30}{50}\selectfont},
-                section-family		={\keplerserif \scshape},
-                section-style		= {\color{titlered} \Huge},
-                subsection-family		={\keplerserif \scshape},
-                subsection-style	= {\color{titlered} \huge},
-                subsubsection-family		={\keplerserif \scshape},
-                subsubsection-style	= {\color{titlered} \Large},
-                paragraph-style	= {\bfseries \slshape},
-                subparagraph-style	= {\bfseries \slshape},
-                %Tables
-                table-title-family	= {\kepler},
-                table-title-style	= {\bfseries\large\scshape},
-                table-header-family	= {\kepler},
-                table-body-family	= {\gillius},
-                %tip boxes
-                tip-title-family= {\kepler},
-                tip-title-style	= {\bfseries\scshape},
-                tip-body-family	= {\gillius},
-                tip-body-style	= {\small},
-                %sidebars
-                sidebar-title-family= {\kepler},
-                sidebar-title-style	= {\bfseries\scshape},
-                sidebar-body-family	= {\gillius},
-                sidebar-body-style	= {\small},
-                %narration
-                narration-family	= {\gillius},
-                narration-style		= {\small},
-                % TOC
-                toc-part-style		= {\LARGE \keplerserif \scshape \color{titlered}},
-                toc-chapter-style	= {\Large \keplerserif \scshape \color{titlered}},
-                toc-section-style	= {\normalsize},
-                %stat block
-                stat-block-title-style= {\bfseries\scshape \LARGE},
-                stat-block-body-family={\gillius},
-                stat-block-body-style={\small},
-                stat-block-section-family={\kepler},
-                stat-block-section-style={\color{titlered} \scshape \large},
-                %%misc
-                footer-style		= {\color{pagegold}\scriptsize},
-                page-number-style	= {\color{pagegold}\scriptsize},
-                drop-cap-family		= {\Royal},
-                %%Spell card
-                card-title-family = {\keplerserif},
-                card-title-style = { \color{titlered}\large\bfseries},
-                card-header-family = {\normalfont}, 
-                card-header-style = {\normalfont \scshape \footnotesize}, 
-                card-body-family = {\normalfont},
-                card-body-style = {\small},
-                emph-family = {\keplerserif},
-                emph-style = {\bfseries\scshape\larger[1]},
-            }
+            \InsertFontTable{}
             
         \subsection{Colors}
 
@@ -365,6 +307,34 @@
             
         }
 
+    \begin{ExampleBlock}{RpgStat}
+    \begin{RpgStat}{Tom Bombadil}[
+       type={Medium Celestial, Chaotic Good},
+       armor-class = {14},
+       hp  = {\RpgDice{12d12 + 40}},
+       speed       = {35 ft.},
+       str=10,  dex=  13,  con = 15,  int=9,  wis = 24, cha  = 22,
+       cha-save, wis-save,
+       proficiency=8,
+	   skills={arcana,sleight of hand},
+	   skills-expertise={Performance}
+       ]
+    \end{RpgStat}
+    \end{ExampleBlock}
+  % \RpgStatBasics[
+            %     armor-class = {9 (12 with \emph{mage armor})},
+            %     hit-points  = {\RpgDice{3d8 + 3}},
+            %     speed       = {30 ft., fly 30 ft.},
+            %     proficiency=2,
+            %     str = 12,
+            %     dex = 8,
+            %     con = 13,
+            %     int = 10,
+            %     wis = 14,
+            %     cha = 15,
+            %     str_save,
+            %     cha_save,
+            % ]
 \section{RpgStatLegacy}
 
     \RpgMacro*[RpgStat!Theme!dnd]{RpgStat}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgStat} environment, used to describe monsters and enemies, using the rules and parameters of spells in D\&D 5e.}

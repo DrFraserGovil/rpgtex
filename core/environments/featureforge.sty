@@ -26,9 +26,14 @@
 
 	%%Define the attribute list
 		\prop_new:c  {#1_property_list}
-				\cs_new:cpn {#1AddProperty} ##1##2##3
+		\cs_new:cpn {#1AddProperty} ##1##2##3
 		{
 			\__rpg_insert_tl_key:xene{rpg/forge/#4}{##1}{##2}{##3}   
+			\prop_put:cnn{#1_property_list}{##1}{##2}
+		}
+		\cs_new:cpn {#1AddBoolean} ##1##2
+		{
+			\__rpg_insert_bool_key:xen{rpg/forge/#4}{##1}{##2}   
 			\prop_put:cnn{#1_property_list}{##1}{##2}
 		}
 
