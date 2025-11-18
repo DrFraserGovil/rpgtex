@@ -31,14 +31,14 @@
     #2
 }
 
-\RpgFeatAddProperty{prerequisite}{\l__rpgfeat_prereq}{}
+\RpgFeatAddProperty{requires}{\l__rpgfeat_prereq}{}
 \RpgFeatTextFormat{
     \subsection{#1}
 
       \tl_if_blank:eF{\l__rpgfeat_prereq}
     {
         % \vspace{-0.6em}
-        {\RpgFontCardHeader Prerequisite:~\l__rpgfeat_prereq} \par\vspace{0.5em} \noindent
+        {\RpgFontCardHeader Requires:~\l__rpgfeat_prereq} \par\vspace{0.5em} \noindent
     }   
 
     #2
@@ -47,7 +47,7 @@
 \RpgFeatCardFormat{
     \subsection{#1}
 
-    #2
+    {\RpgFontCardBody #2}
 
     \tl_if_blank:eF{\l__rpgfeat_prereq}
     {

@@ -180,19 +180,30 @@
             \end{ExampleBlock}
 
     \newpage
-    \section{RpgItem}\label{S:DefaultItem}\index{RpgItem!Theme!default}
+    \section{RpgItem}\label{S:DefaultItem}
 
-        The default configuration of the \envref{RpgItem} environment, used to describe physical objects and equipment. As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgItemShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
-        
-        The \texttt{default} theme defines two keys for the RpgItem object:
-        \begin{RpgTable}{llX}
-            Key & Default Value & Effect
-            \\
-            description & \param{} & An italicised byline used to summarise the item
-            \\
-            image & \param{} & If non-empty, define an image path which is used when in card-mode.
-        \end{RpgTable}
-    
+		\RpgMacro[RpgItem!Theme!default]{RpgItem}{\param{\paramO m \paramO}}{The default configuration of the \envref{RpgItem} environment, used to describe physical objects and equipment.}
+			{
+				\cmd{RpgItemShowCard\param{true/false}} \% set the card mode
+
+				\cmd{begin}\param{RpgItem}[card-opts]\param{Item Name}[key-values]
+
+				~~<body text>
+
+				\cmd{end}\param{RpgItem}
+			}
+			{
+			As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgItemShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+			
+			The \texttt{default} theme defines two keys for the RpgItem object:
+			\begin{RpgTable}{llX}
+				Key & Default Value & Effect
+				\\
+				description & \param{} & An italicised byline used to summarise the item
+				\\
+				image & \param{} & If non-empty, define an image path which is used when in card-mode.
+			\end{RpgTable}
+			}
     \begin{ExampleBlock}{Default RpgItem: Text Mode}
     \RpgItemShowCard{false}
     \begin{RpgItem}{Joyeuse}[
@@ -213,19 +224,30 @@
     \end{ExampleBlock}
 
 \newpage
-\section{RpgFeat}\index{RpgFeat!Theme!default}
-     The default configuration of the \envref{RpgFeat} environment, used to describe abilities and character features and choices. As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgItemShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
-        
-      The \texttt{default} theme defines two keys for the RpgFeat object:
-        \begin{RpgTable}{llX}
-            Key & Default Value & Effect
-            \\
-            prerequisite & \param{} & If non-empty, an italicised note is added, indicating the prerequisites for acquiring the ability.
-        \end{RpgTable}
-     \begin{ExampleBlock}{Default RpgFeat: Text Mode}
+\section{RpgFeat}
+	\RpgMacro[RpgFeat!Theme!default]{RpgFeat}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgFeat} environment, used to describe abilities and character features and choices.}
+		{
+			\cmd{RpgFeatShowCard\param{true/false}} \% set the card mode
+
+			\cmd{begin}\param{RpgFeat}[card-opts]\param{Feat Name}[key-values]
+
+			~~<body text>
+
+			\cmd{end}\param{RpgFeat}
+		}
+		{As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgFeatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+				
+			The \texttt{default} theme defines only a single key for the RpgFeat object:
+			\begin{RpgTable}{llX}
+			Key & Default Value & Effect
+			\\
+			requires & \param{} & If non-empty, an italicised note is added, indicating the prerequisites for acquiring the ability.
+			\end{RpgTable}
+		}
+    \begin{ExampleBlock}{Default RpgFeat: Text Mode}
     \RpgFeatShowCard{false}
     \begin{RpgFeat}{Hyperattack}[
-         prerequisite={Mega-attack},
+         requires={Mega-attack},
     ]
 
         You can unleash superhuman speed against your enemies. Once per day, make \RpgDice{3d10} additional attacks.
@@ -234,7 +256,7 @@
     \begin{ExampleBlock}{Default RpgFeat: Card Mode}
     \RpgFeatShowCard{true}
     \begin{RpgFeat}{Hyperattack}[
-        prerequisite={Mega-attack},
+        requires={Mega-attack},
     ]
 
         You can unleash superhuman speed against your enemies. Once per day, make \RpgDice{3d10} additional attacks.
