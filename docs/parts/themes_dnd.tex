@@ -255,3 +255,130 @@
        \grapplerText
     \end{RpgFeat}
     \end{ExampleBlock}
+\section{RpgSpell}
+
+    \RpgMacro*[RpgSpell!Theme!dnd]{RpgSpell}{\param{\paramO m \paramO}}{ The dnd configuration of the \envref{RpgSpell} environment, used to describe magical spells or spell-like abilities.}
+        {
+            \cmd{RpgSpellShowCard\param{true/false}} \% set the card mode
+
+            \cmd{begin}\param{RpgSpell}[card-opts]\param{Spell Name}[key-values]
+
+            ~~<body text>
+
+            \cmd{end}\param{RpgSpell}
+        }
+        {As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgSpellShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. The RpgSpell formats the components of a D\&D spell by defining the following keys:
+               \begin{RpgTable}{llX}
+                Key & Default Value & Effect
+                \\
+                school & \param{} & The spell school (conjuration etc.). Can be empty.
+                \\
+                level & 0 & The level of the spell, expressed as a single integer. 0 is converted into `Cantrip'.
+                \\
+                casting-time & 1 action & A plaintext field for the casting time (1 action, 1 reaction etc.) 
+                \\
+                range & self & The range of the spell.
+                \\
+                components & VSM & The Verbal/Somatic/Material components for casting the spell
+                \\
+                duration & Instantaneous & The duration of the spell (and its concentration status)
+                \\
+                source & \param{} & An optional field for declaring the source of the spell (i.e. the PHB).
+            \end{RpgTable}
+            All these fields support a \cmd{footnote}, but note that per the RpgCard documentation \RpgPage[p]{RpgCard}, only a single footnote can be included when in card-mode; successive footnotes override each other.
+
+            In addition to these keys, we also provide some commands for typesetting some `boilerplate language' found in D\&D spells:
+        }
+    \RpgMacro{RpgCantripScaling}{\param{O\param{Damage} m m m m}}{Provides a convenient interface for typesetting the `level scaling' of cantrips in D\&D}
+    {
+        \cmd{RpgCantripScaling}[benefit-name]\param{1st-lvl}\param{5th-lvl}\param{11th-level}\param{17th-level}
+    }
+    {
+        The command is typeset with some boilerplate text, followed by a \envref{RpgTable}, with each argument as an entry used as the corresponding level in the table.
+    }
+    
+    \RpgMacro{RpgSpellUpcast}{\param{O{} m O{}}}{Provides a convenient interface for typesetting the `upcasting' (increased benefits when using higher level spell slots) of spells in D\&D}
+    {
+        \cmd{RpgSpellUpcast}[benefit-of-upcasting]\param{benefit-per-increase}[slots-per-increase]
+    }
+    {
+        The default `benefit' text is ``\textit{The damage increases by}''; with the expectation that the mandatory argument is a damage increase (such as 1d6). The slots-per-increase is an integer value (default 1), indicating the number of level gains per increase.
+    }
+    \ExplSyntaxOn
+    \tl_set:Nn\l__rpg_dnd_spell_level_tl{3}
+    \ExplSyntaxOff
+    \begin{ExampleBlock}{Spell Helper Functions}
+     \RpgCantripScaling[\# of Beams]{1} {3} {5}{9d10}
+
+     \vspace{0.5cm}
+
+     \RpgSpellUpcast[The duration increases by]{1 minute}[2]
+    \end{ExampleBlock}
+\begin{ExampleBlock}[RpgSpell]{Example Spells}
+    \RpgSpellShowCard{false}
+    \begin{RpgSpell}{Firebolt}[
+        school=Evocation,
+        level = 0,
+        casting-time=1 action,
+        range=120ft,
+        components = VS,
+        duration=Instantaneous,
+        source=Free Basic Rules (2014)
+       ]
+    You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried.
+
+        \RpgCantripScaling{1d10}{2d10} {3d10}{4d10}
+    \end{RpgSpell}
+
+    \vspace{1cm}
+
+    \RpgSpellShowCard{true}
+    \begin{RpgSpell}{Cone of Cold}[
+        school=Evocation,
+        level = 5,
+        casting-time=1 action,
+        range=self (60ft cone),
+        components = VSM\footnote{A small crystal or glass cone},
+        duration=Instantaneous,
+        source=Free Basic Rules (2014)
+       ]
+     A blast of cold air erupts from your hands. Each creature in a 60-foot cone must make a Constitution saving throw. A creature takes 8d8 cold damage on a failed save, or half as much damage on a successful one. A creature killed by this spell becomes a frozen statue until it thaws.
+
+        \RpgSpellUpcast{1d8}
+    \end{RpgSpell}
+\end{ExampleBlock}
+\section{RpgStat}
+
+    \RpgMacro*[RpgStat!Theme!dnd]{RpgStat}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgStat} environment, used to describe monsters and enemies, using the rules and parameters of spells in D\&D 5e.}
+        {
+            \cmd{RpgStatShowCard\param{true/false}} \% set the card mode
+
+            \cmd{begin}\param{RpgStat}[card-opts]\param{Spell Name}[key-values]
+
+            ~~<body text>
+
+            \cmd{end}\param{RpgStat}
+        }
+        {	
+            As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+                
+            
+        }
+
+\section{RpgStatLegacy}
+
+    \RpgMacro*[RpgStat!Theme!dnd]{RpgStat}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgStat} environment, used to describe monsters and enemies, using the rules and parameters of spells in D\&D 5e.}
+        {
+            \cmd{RpgStatShowCard\param{true/false}} \% set the card mode
+
+            \cmd{begin}\param{RpgStat}[card-opts]\param{Spell Name}[key-values]
+
+            ~~<body text>
+
+            \cmd{end}\param{RpgStat}
+        }
+        {	
+            As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+                
+            
+        }

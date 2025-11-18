@@ -101,4 +101,30 @@
 				\tl_if_blank:eF {\l__rpg_dnd_spell_source_tl}{\item [ Source      : ] \textit{\getkey{source}}
 		} 
 		\end{description}
+
+		#2
+}
+
+\NewDocumentCommand\RpgSpellUpcast{O{The~damage~increases~by} m  O{1}}
+{
+	\subparagraph{At~higher~levels} #1~#2~for~every~\str_compare:eNeF{#3}{=}{1}{#3~}\RpgPlural*{#3}{spell~level}~above~\RpgOrdinal{\l__rpg_dnd_spell_level_tl}~used~to~cast~this~spell.
+}
+\NewDocumentCommand\RpgCantripScaling{O{Damage} m m m m}
+{
+	This~cantrip~improves~with~your~character~level:
+	% \begin{RpgTable}{lX}
+	% 	Level & #1\\
+	% 	1st & #2
+	% 	\\
+	% 	5th & #3
+	% 	\\
+	% 	11th & #4
+	% 	\\
+	% 	17th & #5
+	% \end{RpgTable}
+	\begin{RpgTable}{X Y Y Y Y}
+		{ Level} & 1st & 5th & 11th & 17th
+		\\
+		{\RpgFontTableHeader  #1} & #2 & #3 & #4 & #5
+	\end{RpgTable}
 }

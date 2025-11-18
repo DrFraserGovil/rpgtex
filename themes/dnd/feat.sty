@@ -1,0 +1,28 @@
+\ExplSyntaxOn
+%%Prerequisite already added by default version
+
+\RpgFeatAddProperty{prerequisite}{\l__rpgfeat_prereq}{}
+\RpgFeatTextFormat
+{
+	\subsection{#1}
+
+	\tl_if_blank:eF{\l__rpgfeat_prereq}
+	{
+		\textit{Prerequisite:~\l__rpgfeat_prereq} \par
+	}
+	\noindent #2
+}
+
+\RpgFeatCardFormat{
+    \subsection{#1}
+
+    {\RpgFontCardBody #2}
+
+    \tl_if_blank:eF{\l__rpgfeat_prereq}
+    {
+
+         \vfill
+
+    {\RpgFontCardHeader Prerequisite:~\l__rpgfeat_prereq}
+    }   
+}

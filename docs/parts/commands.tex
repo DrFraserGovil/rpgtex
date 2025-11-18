@@ -227,10 +227,8 @@
                 Example & Output \\
                 \tabverbExample{\RpgOrdinal{1}}
                 \tabverbExample{\RpgOrdinal{2}}
-                \tabverbExample{\RpgOrdinal{13}}
-                \tabverbExample{\RpgOrdinal[\textsuperscript]{7}}
+                \tabverbExample{\RpgOrdinal[\textsuperscript]{13}}
                 \tabverbExample{\RpgOrdinal[\textbf]{133}}
-                \tabverbExample{\RpgOrdinal[<arbitrary text>]{133}}
             \end{RpgTable}
             {\it Note that due to a lack of brace-capturing, it is not possible to chain multiple commands.}.
         }
@@ -243,7 +241,7 @@
         }
         {
             The optional arguments wrapping of the main reference. The options are:
-            \begin{description}
+            \begin{description}[itemsep=0pt]
                 \item[t (default)] No wrapping
                 \item[p] (parentheses)
                 \item[b] [square brackets]
@@ -260,7 +258,7 @@
                 \tabverbExample{\RpgPage[(error)]{example:current page}}
             \end{RpgTable}
         }
-    \RpgMacro{RpgPlural}{\param{{o m m}}}
+    \RpgMacro{RpgPlural}{\param{{s o m m}}}
         {
             Generates grammatically correct plural forms of a word based on a given count.
         }
@@ -268,19 +266,17 @@
             \bs{}RpgPlural[<custom-plural>]\param{count}\param{<text>}
         }
         {
-            The command outputs the count followed by the value of \texttt{<text>}. For a count of 1, the command then finishes. For any other count, it appends an ``s'', pluralizing the text.
+            The command outputs the count followed by the value of \texttt{<text>}. For a count of 1, the command then finishes. For any other count, it appends an ``s'', pluralizing the text. The starred version of the command suppresses the number output; so only the potentially-plural word is printed.
 
             The optional argument \texttt{[<custom-plural>]} overrides the default logic, allowing for irregular plurals.
-
-
             \begin{RpgTable}{XX}
                 Example & Output \\
                 \tabverbExample{\RpgPlural{1}{hat}}
                 \tabverbExample{\RpgPlural{2}{hat}}
                 \tabverbExample{\RpgPlural[octopodes]{1}{octopus}}
                 \tabverbExample{\RpgPlural[octopodes]{359}{octopus}}
-            \end{RpgTable}
+                \tabverbExample{\RpgPlural*[octopodes]{1}{octopus}}
+                \tabverbExample{\RpgPlural*[octopodes]{359}{octopus}}
+            \end{RpgTable}\normalfont
         }
-
-        
-
+		{}

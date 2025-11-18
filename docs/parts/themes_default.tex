@@ -225,7 +225,7 @@
 
 \newpage
 \section{RpgFeat}
-	\RpgMacro[RpgFeat!Theme!default]{RpgFeat}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgFeat} environment, used to describe abilities and character features and choices.}
+	\RpgMacro*[RpgFeat!Theme!default]{RpgFeat}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgFeat} environment, used to describe abilities and character features and choices.}
 		{
 			\cmd{RpgFeatShowCard\param{true/false}} \% set the card mode
 
@@ -262,3 +262,37 @@
         You can unleash superhuman speed against your enemies. Once per day, make \RpgDice{3d10} additional attacks.
     \end{RpgFeat}
     \end{ExampleBlock}
+\newpage
+\section{RpgSpell}
+
+	\RpgMacro*[RpgSpell!Theme!default]{RpgSpell}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgSpell} environment, used to describe magical spells or spell-like abilities.}
+		{
+			\cmd{RpgSpellShowCard\param{true/false}} \% set the card mode
+
+			\cmd{begin}\param{RpgSpell}[card-opts]\param{Spell Name}[key-values]
+
+			~~<body text>
+
+			\cmd{end}\param{RpgSpell}
+		}
+		{As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgSpellShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+				
+			The \texttt{default} RpgSpell is a placeholder; it defines no keys, and defines no special formatting for RpgSpell; on the assumption that `spells' are so system dependent as to make an attempt to make a default would be pointless.
+		}
+
+\section{RpgStat}
+
+	\RpgMacro*[RpgStat!Theme!default]{RpgStat}{\param{\paramO m \paramO}}{ The dnd configuration of the \envref{RpgStat} environment, used to describe monsters and enemies via a \textit{statblock}}
+		{
+			\cmd{RpgStatShowCard\param{true/false}} \% set the card mode
+
+			\cmd{begin}\param{RpgStat}[card-opts]\param{Creature Name}[key-values]
+
+			~~<body text>
+
+			\cmd{end}\param{RpgStat}
+		}
+		{As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+				
+			The \texttt{default} RpgStat is a placeholder; it defines no keys, and defines no special formatting; on the assumption that `statblocks' are so system dependent as to make an attempt to make a default would be pointless.
+		}
