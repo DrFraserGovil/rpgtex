@@ -1,0 +1,49 @@
+\ExplSyntaxOn
+%% Top block
+	\RpgStatAddProperty	{type}					{ \l__crtype_tl}		{}
+	\RpgStatAddProperty	{armor-class}[ac,AC]	{ \l__armor_class_tl}	{10}
+	\RpgStatAddProperty	{hit-points}[HP,hp]		{\l__hit_points_tl}		{\RpgDice{1d4}}
+	\RpgStatAddProperty{speed}					{\l__speed_tl}			{30ft}
+	\RpgStatAddProperty{initiative}				{\l__initiative_bonus_tl}{}
+	\RpgStatAddProperty{proficiency-bonus}[proficiency]{\g__rpg_proficiency_bonus_int}{}
+
+%% Attributes
+	%%define the hooks for stats and save-bools
+	%% do so by looping over the names and constructing them fancily 
+	\seq_map_inline:Nn{\g__dnd_stats}{
+		\exp_args:Nnc\RpgStatAddProperty{#1}{l__#1_tl}{10}
+		\exp_args:Nnc\RpgStatAddBoolean{#1-save}{l__#1_save_proficient_bool}
+	}
+%% Bottom block
+	\tl_new:N \l__processed_skills %%storage for skills (& expertise) after processing
+	\RpgStatAddProperty{skills}				{\l__raw_skills_tl}			{}
+	\RpgStatAddProperty{skills-expertise}	{\l__raw_skills_expertise_tl}{}
+	\RpgStatAddProperty{languages}			{\l__languages_tl}		{}
+	\RpgStatAddProperty{senses}				{\l__senses_tl}			{}
+	\RpgStatAddProperty{passive-perception}	{\l__passive_perception_tl}{}
+	\RpgStatAddProperty{challenge}			{\l__challenge_tl}		{}
+	\RpgStatAddProperty{damage-vulnerabilities}{\l__damage_vulnerabilities_tl}{}
+	\RpgStatAddProperty{damage-resistances}	{\l__damage_resistances_tl}{}
+	\RpgStatAddProperty{condition-immunities}	{\l__condition_immunities_tl}{}
+	\RpgStatAddProperty{damage-immunities}	{\l__damage_immunities_tl}{}
+
+% 	%%Aliases
+% \keys_define:nn { rpg / forge / statblock }
+% {
+% 	ac 				.meta:n = { armor-class=#1},
+% 	AC 				.meta:n = { armor-class=#1},
+% 	hp 				.meta:n = { hit-points=#1},
+% 	HP 				.meta:n = { hit-points=#1},
+% 	STR 			.meta:n = { str = #1 },
+% 	DEX 			.meta:n = { dex = #1 },
+% 	CON 			.meta:n = { con = #1 },
+% 	INT 			.meta:n = { int = #1 },
+% 	WIS 			.meta:n = { wis = #1 },
+% 	CHA 			.meta:n = { cha = #1 },
+% 	proficiency 	.meta:n = { proficiency-bonus = #1},
+% 	cr				.meta:n	= {challenge =#1},
+% 	resistances 	.meta:n = {damage-resistances =#1},
+% 	immunities	 	.meta:n = {damage-immunities =#1},
+% 	vulnerabilities	.meta:n = {damage-vulnerabilities =#1},
+% 	conditions		.meta:n = {condition-immunities =#1},
+% }

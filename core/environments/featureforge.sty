@@ -6,6 +6,17 @@
 	\msg_error:nn{rpg}{bad-getkey}
 }
 
+\NewDocumentCommand{\DefineAliases}{m m m}{
+	
+	\clist_map_inline:nn{#3}
+	{
+		\keys_define:nn{#1}
+		{
+			##1 .meta:n = {#2=####1} 
+		}
+	}
+}
+
 \NewDocumentCommand{\RpgMakeFeature}{m O{O{} m O{}} m m}
 {
 	%%%%Initialise the hooks to the internal formatters
@@ -26,10 +37,20 @@
 
 	%%Define the attribute list
 		\prop_new:c  {#1_property_list}
-		\cs_new:cpn {#1AddProperty} ##1##2##3
+		% \cs_new:cpn {#1AddProperty} ##1##2##3
+		% {
+		% 	\__rpg_insert_tl_key:xene{rpg/forge/#4}{##1}{##2}{##3}   
+		% 	\prop_put:cnn{#1_property_list}{##1}{##2}
+		% }
+		\exp_args:Nc \NewDocumentCommand{#1AddProperty}{m o m m}
 		{
-			\__rpg_insert_tl_key:xene{rpg/forge/#4}{##1}{##2}{##3}   
-			\prop_put:cnn{#1_property_list}{##1}{##2}
+			\__rpg_insert_tl_key:xene{rpg/forge/#4}{##1}{##3}{##4}   
+			\prop_put:cnn{#1_property_list}{##1}{##3}
+
+			\tl_if_novalue:nF{##2}
+			{
+				\DefineAliases{rpg/forge/#4}{##1}{##2}
+			}
 		}
 		\cs_new:cpn {#1AddBoolean} ##1##2
 		{

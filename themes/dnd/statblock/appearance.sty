@@ -1,0 +1,119 @@
+\ExplSyntaxOff
+%%%%%% Main box
+	\DeclareTColorBox {RpgStatBox} { O{} m }
+	{
+	enhanced,
+	before skip      = 12pt plus 3pt minus 3pt,
+	boxrule          = 2pt,
+	% breakable,
+	parbox           = false,
+	boxsep           = 2pt,
+	toptitle         = 8pt,
+	top              = 0pt,
+	left             = 2pt,
+	right            = 2pt,
+	bottom           = 7pt,
+	rounded corners,
+	arc=4mm,
+	oversize         = 0pt,
+	colback          = statblockbg,
+	colbacktitle     = statblockbg,
+	colframe         = statblockoutline,
+	fontupper        = \RpgFontStatBlockBody,
+	fontlower        = \RpgFontStatBlockBody,
+	title            = {#2},
+	#1
+	}
+
+
+\ExplSyntaxOn
+\cs_new_protected_nopar:Npn \__rpg_stat_details:
+	{
+		%% Each item is wrapped in command that ensures it only appears 
+		%% if the value is non-empty
+		%% Have to render the contents first to check if we have an empty itemize!
+	
+			\begin {description}[
+				before   = \color {titlered},
+				font     = \RpgFontStatBlockBody,
+				labelsep = \l__rpg_space_dim,
+				nosep]
+			
+				\__maybe_item:nn {Skills}					{\l__processed_skills}                 
+				\__maybe_item:nn {Damage~Vulnerabilities}	{\l__damage_vulnerabilities_tl} 
+				\__maybe_item:nn {Damage~Resistances}		{\l__damage_resistances_tl}     
+				\__maybe_item:nn {Damage~Immunities}		{\l__damage_immunities_tl}      
+				\__maybe_item:nn {Condition~Immunities}		{\l__condition_immunities_tl}  
+				\__maybe_item:nn {Senses}					{\__rpg_construct_perception:}   
+				\__maybe_item:nn {Languages}				{\l__languages_tl}   
+				\__maybe_item:nn {Challenge}				{\l__challenge_tl{}~(\__rpg_format_signed_integer:N {\g__rpg_proficiency_bonus_int})}   
+			\end {description}
+	}
+
+
+%%Core stat environments
+	% Title and Italicized text appearing immediately afterwas
+	\NewDocumentCommand {\RpgStatTitle} {m}
+	{
+		\vspace{3pt}
+		
+		{\RpgFontStatBlockTitle #1}
+
+		\tl_if_empty:eF{\l__crtype_tl}
+		{
+			\begin {hangingpar}
+				\textit {\l__crtype_tl}
+			\end {hangingpar}
+		}
+
+		\renewcommand{\section}{\RpgStatSection}
+	}
+
+	%%Formats Speed, hp, ability scores etc
+	\NewDocumentCommand {\RpgHeaderBlock} {}
+	{
+		\RpgStatLine
+		\__rpg_stat_basics:
+		\RpgStatLine
+		\__rpg_stat_ability_scores:
+		\RpgStatLine
+		\__rpg_stat_details:
+		\RpgStatLine
+	}
+
+	\cs_new_protected_nopar:Npn \__rpg_stat_basics:
+	{
+		{
+			\color{titlered}
+			\noindent
+			\begin{tabularx}{\linewidth}{lXlX}
+				\textbf{AC} & \l__armor_class_tl 
+				&
+				\textbf{Speed} &  \l__speed_tl
+				\\
+				\textbf{HP} &  \l__hit_points_tl 
+				&
+				\textbf{Initiative} &\l__initiative_bonus_tl
+			\end{tabularx}
+		}
+	}
+% Fancy DnD 5e stat block rule
+	\NewDocumentCommand {\RpgStatLine} {}
+	{
+		\par \vspace{-2pt} \noindent
+		\begin {tikzpicture}
+		\draw [ rulered, fill = rulered ] ( 0, 0 ) -- ( 0, 0.1 ) -- ( \linewidth, 0.05 );
+		\end {tikzpicture}
+		\par
+	}
+% Stat subsection header style
+	\NewDocumentCommand {\RpgStatSection} {m}
+	{
+		\par\addvspace{6pt plus 2pt minus 2pt}
+		\vbox{ 
+		\noindent\RpgFontStatBlockSection #1
+		\vspace {2pt}\nopagebreak[4]
+		\hrule height 0.6pt
+		\par
+		\vspace {5pt}}\ignorespaces
+	}

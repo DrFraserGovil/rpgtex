@@ -11,7 +11,7 @@
 			\tl_set:Nn \l__temp_dice{#1}
 		}
 		\tl_set:Nn \l_tmp_mean_tl { \fp_eval:n {
-				floor ( \tl_use:N{\l__temp_dice} * ( #2 + 1 ) / 2 ) + (#3)
+				round (0.001+ \tl_use:N{\l__temp_dice} * ( #2 + 1 ) / 2 ) + (#3)
 			}}
 			\l_tmp_mean_tl{}~(\l__temp_dice d#2
 			\fp_compare:nNnTF { #3 } { = } { 0 }{}{#3})
