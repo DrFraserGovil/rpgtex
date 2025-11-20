@@ -33,7 +33,10 @@
 	simple .code:n			={\bool_set_true:N\l__rpg_table_simple_bool},
 	simple .value_required:n =false,
 }
-
+\__rpg_add_tl_keys:Nn{rpg/table}
+{
+	\__rpg_tl_key:nnn{vskip}{\l__table_vskip}{9pt plus 3pt minus 3pt}
+}
 \cs_new_protected:Npn \__write_table_title:n #1
 {
 	 \tl_if_empty:NF #1

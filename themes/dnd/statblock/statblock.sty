@@ -5,29 +5,7 @@
 %%%%%% RpgStat Environment
 
 	
-	\RpgStatTextFormat{
-
-		%%initial value processing
-		\RpgSetStatName{#1} %make #the stat's name accessible via macro so stat blocks can easily change names
-		\__rpg_stat_preprocessing:
-
-		%%begin the box
-		\rpg_stat_box:n{}
-			
-			\RpgStatTitle{#1}
-
-			
-			\RpgHeaderBlock{}
-
-				#2
-		\end{RpgStatBox}
-	}
-
-	\RpgStatCardFormat{
-		
-		\subsection{#1}
-			#2
-	}
+	
 	
 
 	% %%Starred version is a floating, two column version used for boss stats
@@ -50,19 +28,7 @@
 
 
 	%%Begins the environment with different arguments depending on print mode
-	\NewDocumentCommand \rpg_stat_box:n { m }
-	{
-		
-		\bool_if:NTF \l__rpg_show_background_bool
-		{
-			\begin{RpgStatBox}[#1]{}
-		}
-		{
-			\begin{RpgStatBox}[#1,colback=white,colframe=black!30!white]{}
-		}
-		
-	}
-
+	
 
 %%%%%% Internal Helper functions
 			
@@ -170,73 +136,6 @@
 	}
 %%%%% Formatting functions
 	%% These are the functions which do the actual nitty gritty of formatting the environments the user declared
-	
-
-	
-
-	
-
-
-	%%Formatters for ability table
-		\cs_new:Npn \__rpg_format_mod_labels:n #1
-		{
-			\rotatebox[origin=c]{90}{\scriptsize \hspace{0.1cm} #1 \hspace{0.1cm}}
-		}
-		\cs_new:Npn \__rpg_format_stat_titles:nn #1#2
-		{
-			& \parbox[t]{1.25cm}{\centering \RpgFontStatBlockTitle  \footnotesize{#1} ~{ (#2)} }
-		}
-	
-	
-
-	% Ability scores in a table
-	\cs_new_protected_nopar:Npn \__rpg_stat_ability_scores:
-	{
-		
-
-		\vspace{-0.8em}
-
-		\color {titlered}
-		{
-		% \addtolength{\tabcolsep}{-0.5em}
-		\setlength\topsep{0pt}
-		\setlength\tabcolsep{0pt}
-		\noindent\begin{center}\maxsizebox{\linewidth}{!}{
-		\noindent\begin{RpgTable}[simple]{rcccccc}
-		~
-		\__rpg_format_stat_titles:nn{STR}{\l__str_tl}
-		\__rpg_format_stat_titles:nn{DEX}{\l__dex_tl}
-		\__rpg_format_stat_titles:nn{CON}{\l__con_tl}
-		\__rpg_format_stat_titles:nn{INT}{\l__int_tl}
-		\__rpg_format_stat_titles:nn{WIS}{\l__wis_tl}
-		\__rpg_format_stat_titles:nn{CHA}{\l__cha_tl}
-		\\
-		\__rpg_format_mod_labels:n{mod} &
-		\__rpg_format_signed_integer:N{\l__str_mod} &
-		\__rpg_format_signed_integer:N{\l__dex_mod} &
-		\__rpg_format_signed_integer:N{\l__con_mod} &
-		\__rpg_format_signed_integer:N{\l__int_mod} &
-		\__rpg_format_signed_integer:N{\l__wis_mod} &
-		\__rpg_format_signed_integer:N{\l__cha_mod}
-		\\
-		%if any proficiencies set, then render the save row
-		
-		\__rpg_if_any_saves:T
-		{
-			\__rpg_format_mod_labels:n{save}
-			\seq_map_inline:Nn{\g__dnd_stats}
-			{
-				& \tl_use:c{l__##1_save} 	
-			}
-		}
-
-		\end{RpgTable}
-		}
-		
-	\end{center}
-		}
-		\par 
-	}
 
 
 
@@ -245,51 +144,15 @@
 	% Utility
 		
 
-		\tl_new:N \l__rpg_stat_name
+		
 		%overwrites the internal macro
-		\NewDocumentCommand\RpgSetStatName{m}
-		{
-			\tl_set:Nn \l__rpg_stat_name {#1}
-		}
-
-		\NewDocumentCommand\RpgStatName{}
-		{
-			\l__rpg_stat_name{}
-		}
-
-		\NewDocumentCommand \RpgSavingThrow { m m m m }
-		{
-			\textit{#1~Save,~DC~#2}.~\textbf{Failure:}~#3.
-			\IfValueT {#4} {\textbf{~Success:}~#4}
-		}
-
-		\NewDocumentCommand\RpgRepeatableSavingThrow{O{The~target~can~repeat~the~save~at~the~end~of~each~turn.} m m m m}
-		{
-			\RpgSavingThrow{#2}{#3}{#4}{#5} \\ #1
-		}
-
-		\NewDocumentCommand\RpgStatReaction{m m m}
-		{
-			\RpgStatAction{#1} \textit{Trigger:} #2 \\ \textit{Response:} #3
-		}
-
-		\NewDocumentCommand\RpgLegendaryDefiance{}
-		{
-			\RpgStatLegendaryAction{Legendary~Defiance}~{At~the~end~of~another~creature's~turn,~\RpgStatName{}~chooses~to~repeat~a~saving~throw~that~they~failed~in~the~past~hour~(using~their~original~modifier).}
-		}
-
-
-
-	
+		
 		
 
-		% Inline header for stat actions - similar to a paragraph
-		\NewDocumentCommand {\RpgStatAction} {m}
-		{ \par \smallskip \noindent \textsl { \textbf {#1.} } }
 
-		% Inline header for stat sub actions - similar to a subparagraph
-		\NewDocumentCommand {\RpgStatSubAction} {m}
-		{ \par \textsl { \textbf {#1.} } }
+
+		
+		
 
 %%%%%% Spellcasting
 

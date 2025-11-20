@@ -7,9 +7,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-#### Themes
-
-
 
 ### Added
 
@@ -27,6 +24,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## Changed
 
 * RpgPlural modified to have a starred version which omits the counter number.
+* RpgTable has an argument added (vskip) which enables modifying the vertical space above and below
+* Rpg[X]AddProperty and Rpg[X]AddBoolean now have the ability to include aliases for the same toggle
 
 <!-- ## Removed -->
 

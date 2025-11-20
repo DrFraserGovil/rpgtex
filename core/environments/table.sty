@@ -6,7 +6,6 @@
 \NewDocumentEnvironment {RpgTable} { o m +b}
 {
 	\group_begin:
-
 	\keys_set:nn {rpg/table}{width=\linewidth}
 	\tl_if_novalue:nF {#1}
 	{ 
@@ -14,7 +13,7 @@
 	}
 
 
-  	\par \vspace { 9pt plus 3pt minus 3pt } \noindent
+  	\par \vspace { \l__table_vskip } \noindent
 
  
 	\__write_table_title:n {\l__rpg_table_header_tl}
@@ -34,7 +33,7 @@
 	}
 }
 {
-  \vspace { 9pt plus 3pt minus 3pt }
+  \vspace { \l__table_vskip }
 
   \group_end:
 }

@@ -49,7 +49,7 @@
 	\seq_new:N \l__seq_holder
 
 %% main preprocessor; called at start of environment
-\cs_new_protected_nopar:Npn \__rpg_stat_preprocessing:
+\cs_new_protected_nopar:Npn \__rpg_stat_preprocessing:n#1
 {
 	\__rpg_check_cr_and_proficiency:
 	\seq_map_inline:Nn{\g__dnd_stats}
@@ -60,9 +60,47 @@
 	\__rpg_stat_process_skills:
 	\__rpg_check_initiative:
 	\__rpg_check_passive_perception:
-	
+	\__rpg_check_nickname:n{#1}
+	\__rpg_remap_functions:
+
+	%%colours
+	\colorlet{rulecolor}{\l__stat_color}
+	\colorlet{statblockcolor}{\l__stat_color!50!black}
+	\RpgSetThemeColor{\l__stat_color!25!white}
 }
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Strings & Aliases
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cs_new_protected_nopar:Npn\__rpg_check_nickname:n#1
+{
+	\tl_if_empty:eT{\l__rpg_stat_name}
+	{
+		\tl_set:Ne\l__rpg_stat_name{#1}
+	}
+}
+
+\cs_new_protected_nopar:Npn\__rpg_remap_functions:
+{
+	\ProvideDocumentCommand{\action}{m}
+	{
+		\RpgStatAction{##1}
+	}
+	\ProvideDocumentCommand{\subaction}{m}
+	{
+		\RpgStatSubAction{##1}
+	}
+	\ProvideDocumentCommand{\name}{}
+	{
+		\l__rpg_stat_name	
+	}
+	\RenewDocumentCommand{\section}{m}
+	{
+		\RpgStatSection{##1}
+	}
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 % Modifiers
@@ -103,17 +141,20 @@
 	{
 		\tl_if_blank:eT{\l__initiative_bonus_tl}
 		{
-			\tl_gset:Ne\l__initiative_bonus_tl{\__rpg_format_signed_integer:N \l__dex_mod}
+			\tl_set:Ne\l__initiative_bonus_tl{\__rpg_format_signed_integer:N \l__dex_mod}
 		}
 	}
 
 	%% Checks if a passive perception was passed
 	\cs_new_protected_nopar:Npn \__rpg_check_passive_perception:
 	{
-		\tl_if_blank:eT{\l__passive_perception_tl}
+		\tl_if_blank:eTF{\l__passive_perception_tl}
 		{
 			\tl_set:Ne\l__passive_perception_tl{\int_eval:n{10+\l__wis_mod}}
 			\bool_set_true:N\l__search_perception
+		}
+		{
+			\bool_set_false:N\l__search_perception
 		}
 	}
 
@@ -126,7 +167,7 @@
 			{
 				%% no values provided; assume cr 0
 				\tl_set:Nn{\g__rpg_proficiency_bonus_int}{2}
-				\tl_gset:Nn{\l__challenge_tl}{0}
+				\tl_set:Nn{\l__challenge_tl}{0}
 			}
 			{
 				%% no PB provided, compute from cr
@@ -188,7 +229,7 @@
 		{
 			\str_compare:eNeT{\str_lowercase:f{#1}}{=}{perception}
 			{
-				\tl_gset:Ne{\l__passive_perception_tl}{\fp_eval:n{\l__passive_perception_tl +#2*\g__rpg_proficiency_bonus_int}}
+				\tl_set:Ne{\l__passive_perception_tl}{\fp_eval:n{\l__passive_perception_tl +#2*\g__rpg_proficiency_bonus_int}}
 			}
 		}
 	}

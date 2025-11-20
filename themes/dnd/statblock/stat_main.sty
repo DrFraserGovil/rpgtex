@@ -10,3 +10,36 @@
 \statInclude{options.sty}
 \statInclude{appearance.sty}
 \statInclude{statblock.sty}
+\statInclude{interface.sty}
+
+\RpgStatTextFormat{
+    %%initial value processing
+    \__rpg_stat_preprocessing:n{#1}
+    %%begin the box
+    \rpg_stat_box:n{}
+        
+        \RpgStatTitle{#1}
+
+        
+        \RpgHeaderBlock{}
+
+        {\RpgFontStatBlockBody	#2}
+    \end{RpgStatBox}
+}
+
+\RpgStatCardFormat{
+    
+    \subsection{#1}
+        #2
+}
+
+\NewDocumentCommand \rpg_stat_box:n { m }
+{
+    \bool_if:NTF \l__rpg_show_background_bool
+    {
+        \begin{RpgStatBox}[#1]{}
+    }
+    {
+        \begin{RpgStatBox}[#1,colback=white,colframe=black!30!white]{}
+    }   
+}
