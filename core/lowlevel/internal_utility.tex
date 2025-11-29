@@ -45,6 +45,44 @@
     #2 .value_required:n = true
 	}
 }
+\cs_new_protected:Npn \__rpg_insert_tl_choice_key:xenee #1#2#3#4#5
+{
+	\exp_args:Ne\keys_define:nn{#1}{
+    	#2 .choice:,
+		#2 .choices:nn =
+ 		{#4}
+		{ \tl_set:Ne #3{\l_keys_choice_tl} },
+		#2 .initial:n = #5
+	}
+}
+
+\cs_new_protected:Npn\__rpg_make_unique_cname:nn#1#2
+{
+	\tl_set:Ne\l_cname{#1#2}
+	\regex_replace_all:nnN {/}{}{\l_cname}
+	\tl_gset:Ne\l_cname{l_seq_\l_cname :}
+	
+}
+
+\cs_new_protected:Npn \__rpg_insert_varying_choice_key:xenee #1#2#3#4#5#6
+{
+	\tl_if_exist:NF{#3}
+	{
+		\tl_new:N{#3}
+	}
+	\__rpg_make_unique_cname:nn{#4}{#5}
+	\cs_new:cn {\l_cname}{}
+	\clist_gset:cn{\l_cname}{#5}
+	% \clist_set_eq:cn{l_seq_#1_#2:}{#5}
+	\exp_args:Ne\keys_define:nn{#1}{
+    	#2 .choice:,
+		#2 .choices:nn =
+ 		{#4}
+		{\__rpg_make_unique_cname:nn{#4}{#5} \tl_set:Ne #3{\clist_item:cn{\l_cname}{\l_keys_choice_int}}},
+		#2 .initial:n = #6
+	}
+}
+
 \cs_new_protected:Npn \__rpg_insert_bool_key:xen #1#2#3
 {
 	\bool_if_exist:NF{#3}
@@ -60,14 +98,36 @@
 
 
 \msg_new:nnn { rpg } { bad-key-add } {Cannot~add~key~'#1'~without~specifying~group.}
-\cs_new_protected:Npn \__rpg_tl_key:nnn #1#2#3
+\cs_new_protected:Npn \__rpg_key_check_group:n#1
 {
 	\tl_if_empty:NT\l__current_group_tl
 	{
 		\msg_error:nnn { rpg } { bad-key-add } {#1}
 	}
+}
+\cs_new_protected:Npn \__rpg_tl_key:nnn #1#2#3
+{
+	\__rpg_key_check_group:n{#1}
 	\__rpg_insert_tl_key:xene {\l__current_group_tl}{#1}{#2}{#3}
 }
+\cs_new_protected:Npn \__rpg_bool_key:nn #1#2
+{
+	\__rpg_key_check_group:n{#1}
+	\__rpg_insert_bool_key:xen {\l__current_group_tl}{#1}{#2}
+}
+\cs_new_protected:Npn \__rpg_tl_choice_key:nnnn #1#2#3#4
+{
+	\__rpg_key_check_group:n{#1}
+	\__rpg_insert_tl_choice_key:xenee {\l__current_group_tl}{#1}{#2}{#3}{#4}
+}
+\cs_new_protected:Npn \__rpg_varying_choice_key:nnnn #1#2#3#4
+{
+	\__rpg_key_check_group:n{#1}
+	\__rpg_insert_varying_choice_key:xenee {\l__current_group_tl}{#1}{#2}{#3}{#4}
+}
+
+
+
 
 \tl_new:N \l__current_group_tl
 \cs_new_protected:Npn \__rpg_add_tl_keys:Nn#1#2

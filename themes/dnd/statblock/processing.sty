@@ -5,42 +5,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%
 	\msg_new:nnn{rpg}{bad-ability}{Cannot~parse~#1~as~a~valid~ability~score}	
 
-	%% assign the skills to the relevant mod macros
-	\prop_const_from_keyval:Nn\g__skill_mods
-	{
-			{athletics}={\l__str_mod},
-			{acrobatics}={\l__dex_mod},
-			{sleight~of~hand}={\l__dex_mod},
-			{stealth}={\l__dex_mod},
-			{arcana}={\l__int_mod},
-			{history}={\l__int_mod},
-			{investigation}={\l__int_mod},
-			{nature}={\l__int_mod},
-			{religion}={\l__int_mod},
-			{animal~handling}={\l__wis_mod},
-			{insight}={\l__wis_mod},
-			{medicine}={\l__wis_mod},
-			{perception}={\l__wis_mod},
-			{survival}={\l__wis_mod},
-			{deception}={\l__cha_mod},
-			{intimidation}={\l__cha_mod},
-			{performance}={\l__cha_mod},
-			{persuasion}={\l__cha_mod},
-	}
-
-	%%to avoid having to write everything 6 times for each stat:
-	\seq_const_from_clist:Nn \g__dnd_stats {str,dex,con,int,wis,cha}
-
-	\prop_const_from_keyval:Nn\g__dnd_stats_names
-	{
-		str={Strength},
-		dex={Dexterity},
-		con={Constitution},
-		int={Intelligence},
-		wis={Wisdom},
-		cha={Charisma},
-	}
-
 	\seq_map_inline:Nn{\g__dnd_stats}{
 		\int_new:c{l__#1_mod} %%defines \l__[stat]_mod for each stat in the list
 		\tl_new:c{l__#1_save} %%defines \l__[stat]_save for each stat in the list
@@ -84,22 +48,23 @@
 
 \cs_new_protected_nopar:Npn\__rpg_remap_functions:
 {
-	\ProvideDocumentCommand{\action}{m}
-	{
-		\RpgStatAction{##1}
-	}
-	\ProvideDocumentCommand{\subaction}{m}
-	{
-		\RpgStatSubAction{##1}
-	}
-	\ProvideDocumentCommand{\name}{}
-	{
-		\l__rpg_stat_name	
-	}
-	\RenewDocumentCommand{\section}{m}
-	{
-		\RpgStatSection{##1}
-	}
+	%alias a command that definitely exists
+	\RenewDocumentCommand{		\section}{m}		{\RpgStatSection{##1}}
+	
+	%provide short names that are likely to collide. 
+	%'Provide' ensures that if a command with that name exists, the local version is used 
+	\ProvideDocumentCommand		{\action}	{O{} m}		{\RpgStatAction[##1]{##2}}
+	\ProvideDocumentCommand		{\subaction}{m}		{\RpgStatSubAction{##1}}
+	\ProvideDocumentCommand		{\name}{}			{\l__rpg_stat_name}
+	%attacks
+	\ProvideDocumentCommand		{\attack}{m O{}}	{\RpgStatAttack{##1}[##2]}
+	\ProvideDocumentCommand		{\melee}{m O{}}		{\RpgStatAttack{##1}[##2,distance=melee]}
+	\ProvideDocumentCommand		{\ranged}{m O{}}	{\RpgStatAttack{##1}[##2,distance=ranged]}
+	%spellss
+	\ProvideDocumentEnvironment	{spells}{O{}}		{\begin{RpgStatSpellcasting}[##1]}{\end{RpgStatSpellcasting}}
+	\ProvideDocumentCommand		{\slot}{o o m}		{\RpgStatSpellSlots[##1][##2]{##3}}
+	\ProvideDocumentCommand		{\innate}{O{} m}	{\RpgStatSpellList[##1]{##2}}
+
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -211,7 +176,7 @@
 	%% check if each skill is in the list, and if so, compute the modifier
 	\cs_new_protected:Npn \__rpg_stat_compute_skill_bonus:nn#1#2
 	{
-		\tl_set:Nn \l_tmpa_tl {\prop_item:Ne\g__skill_mods{\str_lowercase:f{#1}}}
+		\tl_set:Nn \l_tmpa_tl {\prop_item:Ne\g__dnd_skills{\str_lowercase:f{#1}}}
 		
 		\tl_if_empty:eTF\l_tmpa_tl
 		{
@@ -281,4 +246,17 @@
 		\l__senses_tl,~
 	}
 	passive~Perception~ \l__passive_perception_tl
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Process Strings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cs_new_protected:Npn \__rpg_append_if_missing:nn#1#2
+{
+	\regex_match:nVF{#2}{#1}
+	{
+		\tl_set:Ne#1{#1#2}
+	}
 }

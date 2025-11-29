@@ -6,25 +6,25 @@
 
 \newcommand\statInclude[1]{\input{themes/dnd/statblock/#1}}
 
-\statInclude{processing.sty}
 \statInclude{options.sty}
+\statInclude{processing.sty}
 \statInclude{appearance.sty}
-\statInclude{statblock.sty}
+\statInclude{attack.sty}
 \statInclude{interface.sty}
+\statInclude{statblock.sty}
 
+\ExplSyntaxOn
 \RpgStatTextFormat{
+    \group_begin:
     %%initial value processing
     \__rpg_stat_preprocessing:n{#1}
-    %%begin the box
-    \rpg_stat_box:n{}
-        
-        \RpgStatTitle{#1}
 
-        
-        \RpgHeaderBlock{}
+    \rpg_stat_box:n{}
+        \RpgHeaderBlock{#1}
 
         {\RpgFontStatBlockBody	#2}
     \end{RpgStatBox}
+    \group_end:
 }
 
 \RpgStatCardFormat{

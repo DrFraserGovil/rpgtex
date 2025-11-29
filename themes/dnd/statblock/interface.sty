@@ -1,0 +1,62 @@
+\ExplSyntaxOn
+
+\NewDocumentCommand \RpgSavingThrow { m m m o }
+{
+    \textit{#1~Save,~DC~#2}.
+    \begin{description}[nosep,left=1em]
+        \item[Failure:]~#3
+        \IfValueT {#4} {\item[Success:]~#4}
+    \end{description}
+}
+
+\NewDocumentCommand\RpgSavingThrowRepeat{O{The~target~can~repeat~the~save~at~the~end~of~each~turn.} m m m o}
+{
+    \RpgSavingThrow{#2}{#3}{#4}[#5] \\ #1
+}
+
+\NewDocumentCommand\RpgStatReaction{m o}
+{
+    \RpgStatAction{#1} 
+    \IfNoValueF{#2}{~\textit{(#2)}}
+}
+
+\NewDocumentCommand\RpgLegendaryDefiance{}
+{
+    \RpgStatLegendaryAction{Legendary~Defiance}~{At~the~end~of~another~creature's~turn,~\RpgStatName{}~chooses~to~repeat~a~saving~throw~that~they~failed~in~the~past~hour~(using~their~original~modifier).}
+}
+
+% Inline header for stat actions - similar to a paragraph
+\NewDocumentCommand {\RpgStatAction} {O{} m}
+{ \par \smallskip \noindent \textsl { \textbf {#2\str_if_empty:NF#1{~(\textbf{#1~actions})}.} } }
+
+\NewDocumentCommand\RpgSetStatName{m}
+{
+    \tl_set:Nn \l__rpg_stat_name {#1}
+}
+
+\NewDocumentCommand\RpgStatName{}
+{
+    \l__rpg_stat_name{}
+}
+
+% Inline header for stat sub actions - similar to a subparagraph
+\NewDocumentCommand {\RpgStatSubAction} {m}
+{ \par \textsl { \textbf {#1.} } }
+
+%%See attack.sty for what's going on here
+
+
+\NewDocumentCommand{\getstat}{m}{
+    \__rpg_format_signed_integer:N{\str_case:nn{#1}
+    {
+        {proficiency}{\g__rpg_proficiency_bonus_int}
+        {str}{\l__str_mod}
+        {dex}{\l__dex_mod}
+        {con}{\l__con_mod}
+        {wis}{\l__wis_mod}
+        {int}{\l__int_mod}
+        {cha}{\l__cha_mod}
+        
+    }}
+
+}

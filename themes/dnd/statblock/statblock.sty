@@ -25,314 +25,8 @@
 	% 	\end{RpgStatBox}
 	% 	\end{figure*}
 	% }
-
-
-	%%Begins the environment with different arguments depending on print mode
 	
-
-%%%%%% Internal Helper functions
-			
-	\int_new:N \l__ability_modifier_int
-	\int_set:Nn \l__ability_modifier_int {0}
-	\cs_new:Npn \__rpg_get_ability_mod:Nn #1#2
-	{
-		%%retrieve ability scores based on string names
-		% \group_begin:
-		\tl_set:Nn \l_tmpa_tl { \tl_use:N #1 }
-		\tl_set:Nn \l_tmpb_tl { l__\l_tmpa_tl _tl }
-		\cs_if_exist:cTF { \l_tmpb_tl }
-		{
-			\int_set:Nn \l__ability_modifier_int { \fp_eval:n {#2 + floor ( ( \tl_use:c{ \l_tmpb_tl } - 10 ) / 2 ) } }
-			% \int_set:Nn \l_tmpa_int { \fp_eval:n { floor ( ( \tl_use:c{ \l_tmpb_tl } - 10 ) / 2 ) } }
-			% \exp_args:Nf \l_tmpa_int
-		}
-		{
-			\msg_set:nnnn { rpg } { bad-modifier } { #1~expands~to~\l_tmpa_tl} { looong }
-			\msg_error:nnnn { rpg } { bad-modifier }
-			+0
-		}
-
-    % \group_end:
-}
-%%%%%% Variable definitions
-
-	%% This is a big long keyval section, there's no real way to make it pretty
-
-				
-
-
-	\tl_new:N \l__rpg_attack_distance_tl
-	\tl_new:N \l__rpg_attack_type_tl
-	\tl_new:N \l__attack_stat_tl
-	\keys_define:nn { rpg / stat / attack }
-	{
-		distance .choice:,
-		distance .choices:nn =
-		{ both, melee, ranged }
-		{ \tl_set:Nn \l__rpg_attack_distance_tl {\l_keys_choice_tl} },
-		distance .initial:n  = both,
-		type .choice:,
-		type / weapon .code:n = { \tl_set:Nn \l__rpg_attack_type_tl {} },
-		type / spell .code:n = { \tl_set:Nn \l__rpg_attack_type_tl {Spell~} },
-		type .initial:n  = weapon,
-		modifier .choice:,
-		modifier / STR .code:n = {\tl_set:Nn \l__attack_stat_tl{str} },
-		modifier / DEX .code:n = {\tl_set:Nn \l__attack_stat_tl{dex} },
-		modifier / CON .code:n = {\tl_set:Nn \l__attack_stat_tl{con} },
-		modifier / INT .code:n = {\tl_set:Nn \l__attack_stat_tl{int} },
-		modifier / WIS .code:n = {\tl_set:Nn \l__attack_stat_tl{wis} },
-		modifier / CHA .code:n = {\tl_set:Nn \l__attack_stat_tl{cha} },
-        modifier .initial:n = {INT},
-		bonus .int_set:N=\l__attack_bonus_int,
-		bonus .initial:n = 0,
-		reach .tl_set:N         = \l__reach_tl,
-		reach .initial:n        = 5,
-		reach .value_required:n = true,
-		range .tl_set:N         = \l__range_tl,
-		range .initial:n        = 20/60,
-		range .value_required:n = true,
-		dmg .tl_set:N         = \l__dmg_tl,
-		dmg .value_required:n = true,
-		dmg-type .tl_set:N         = \l__dmg_type_tl,
-		dmg-type .value_required:n = true,
-		plus-dmg .tl_set:N         = \l__plus_dmg_tl,
-		plus-dmg .value_required:n = true,
-		plus-dmg-type .tl_set:N         = \l__plus_dmg_type_tl,
-		plus-dmg-type .value_required:n = true,
-		or-dmg .tl_set:N         = \l__or_dmg_tl,
-		or-dmg .value_required:n = true,
-		or-dmg-when .tl_set:N         = \l__or_dmg_when_tl,
-		or-dmg-when .value_required:n = true,
-		extra .tl_set:N         = \l__extra_tl,
-		extra .value_required:n = true,
-	}
-
-	\tl_new:N \l__spell_stat_tl
-	\tl_new:N \l__spell_stat_nice_tl
-	\bool_new:N \l__spells_nocomponents_bool
-	\bool_new:N \l__spells_notext_bool
-	% \bool_set_false:N \l__spells_nocomponents_bool
-	\keys_define:nn { rpg / stat / spells }
-	{
-		spellcasting-name	.tl_set:N= \l__spell_list_name_tl,
-		spellcasting-name .value_required:n = true,
-		spellcasting-name .initial:n = {Spellcasting},
-		modifier .choice:,
-		modifier / STR .code:n = {\tl_set:Nn \l__spell_stat_tl{str} \tl_set:Nn \l__spell_stat_nice_tl{Strength}},
-		modifier / DEX .code:n = {\tl_set:Nn \l__spell_stat_tl{dex} \tl_set:Nn \l__spell_stat_nice_tl{Dexterity}},
-		modifier / CON .code:n = {\tl_set:Nn \l__spell_stat_tl{con} \tl_set:Nn \l__spell_stat_nice_tl{Constitution}},
-		modifier / INT .code:n = {\tl_set:Nn \l__spell_stat_tl{int} \tl_set:Nn \l__spell_stat_nice_tl{Intelligence}},
-		modifier / WIS .code:n = {\tl_set:Nn \l__spell_stat_tl{wis} \tl_set:Nn \l__spell_stat_nice_tl{Wisdom}},
-		modifier / CHA .code:n = {\tl_set:Nn \l__spell_stat_tl{cha} \tl_set:Nn \l__spell_stat_nice_tl{Charisma}},
-        modifier .initial:n = {INT},
-		bonus .int_set:N=\l__spell_bonus_int,
-		bonus .initial:n = 0,
-		no-components .code:n = {\bool_set_true:N \l__spells_nocomponents_bool},
-		no-components .value_forbidden:n = true,
-		no-text .code:n = {\bool_set_true:N \l__spells_notext_bool},
-		no-text .value_forbidden:n = true,
-		notext .code:n = {\bool_set_true:N \l__spells_notext_bool},
-		notext .value_forbidden:n = true,
-	}
-%%%%% Formatting functions
-	%% These are the functions which do the actual nitty gritty of formatting the environments the user declared
-
-
-
-%%%% User-facing functions
-
-	% Utility
-		
-
-		
-		%overwrites the internal macro
-		
-		
-
-
-
-		
-		
-
-%%%%%% Spellcasting
-
-	\newlist {__rpg_spell_block} {description} {1}
-	\setlist [__rpg_spell_block]
-	{
-		font     = \normalfont \RpgFontStatBlockBody,
-		labelsep = \l__rpg_space_dim,
-		noitemsep,
-		topsep   = 5pt plus 2pt minus 2pt,
-	}
-
-	\NewDocumentEnvironment{RpgStatSpells}{O{}}
-	{
-		\group_begin:
-			\keys_set:nn { rpg / stat / spells } {#1}
-			\bool_if:NF {\l__spells_notext_bool}
-			{
-				\__rpg_get_ability_mod:Nn {\l__spell_stat_tl}{\g__rpg_proficiency_bonus_int+\l__spell_bonus_int}
-
-				\RpgStatAction{\l__spell_list_name_tl} ~{Save~DC~\fp_eval:n {8+\l__ability_modifier_int},~\__rpg_format_signed_integer:N {\l__ability_modifier_int}~to~hit}.\newline\RpgStatName{}~can~cast~the ~following~spells~using~\l__spell_stat_nice_tl{}
-				\bool_if:NT \l__spells_nocomponents_bool
-				{
-					,~requiring~no~material~components
-				}
-				:
-			}
-			\begin{__rpg_spell_block}
-	}
-	{
-			\end{__rpg_spell_block}
-		\group_end:
-	}
-
-	%general wrapper for printing all spells in a list, with nice parsing of commans and whitespace
-	\NewDocumentCommand {\RpgEmphSpellString} {m}
-	{
-		\group_begin:
-		\seq_set_from_clist:Nn \l_tmpa_seq {#1}
-		\seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n { \it {##1} } }
-		\seq_use:Nn \l_tmpb_seq { ,~ }
-		\group_end:
-	}
-
-	\NewDocumentCommand {\RpgSpellList} { O {At~will} m }
-	{
-		\item
-		[
-			\regex_match:NnTF \c__pos_int_regex {#1} %checks it's a positive integer (no -2.4 times per day!)
-			{
-			\str_if_in:NnTF {#2} {,} %checks if there's one or more elements in list
-			{ #1/day~each }
-			{ #1/day}
-			}
-			{#1}
-			:
-		]
-		\RpgEmphSpellString {#2}
-	}
-
-	%%New design paradigm has moved away from spell slots on stats, but this is here for consistency
-	\NewDocumentCommand {\RpgStatSpellSlots} { o o m }
-  {
-    \item
-      [
-		\IfNoValueTF{#1}{
-			Cantrips
-		}
-		{
-			\RpgOrdinal{#1}~level
-		}
-
-        {~}(
-        \IfNoValueTF{#2}{
-			at~will
-		}
-		{
-			\RpgPlural{#2}{slot}
-		}
-        ) :
-      ]
-    \RpgEmphSpellString{#3}
-  }
-
-%%%%%% Attacks
-
-	%%Wrapper & formatters
-		\cs_new_protected:Npn \__rpg_stat_reach:
-		{
-			\l__reach_tl\ ft
-		}
-
-		\cs_new_protected:Npn \__rpg_stat_range:
-		{
-			\l__range_tl\ ft
-		}
-
-		\cs_new_protected:Npn \__rpg_if_plus_dmg:
-		{
-			\tl_if_empty:NF {\l__plus_dmg_tl}
-			{ ~ plus\ \l__plus_dmg_tl\ \l__plus_dmg_type_tl\ damage }
-		}
-
-		\cs_new_protected_nopar:Npn \__rpg_if_or_dmg:
-		{
-			\tl_if_empty:NF {\l__or_dmg_tl}
-			{
-			, ~ or\ \l__or_dmg_tl\ \l__dmg_type_tl\ damage\ \l__or_dmg_when_tl
-
-			\tl_if_empty:NF {\l__plus_dmg_tl}
-				{,}
-			}
-		}
-
-	%%Main complex print function
-
-
-		\cs_new_protected:Npn \__rpg_stat_attack:N #1
-		{
-			\__rpg_check_for_key:Nnn \l__attack_stat_tl {\RpgStatAttack} {mod}
-
-			\begin{RpgStatAction} {#1}~
-			\__rpg_get_ability_mod:Nn {\l__attack_stat_tl}{\g__rpg_proficiency_bonus_int+\l__attack_bonus_int}
-
-			\str_case_e:nnF {\l__rpg_attack_distance_tl}
-				{
-				{ melee }
-					{
-					\textit{ Melee~\l__rpg_attack_type_tl{}(\__rpg_stat_reach:): } ~ \__rpg_format_signed_integer:N {\l__ability_modifier_int}~to~hit
-					}
-				{ ranged }
-					{
-					\textit{Ranged~\l__rpg_attack_type_tl{}(\__rpg_stat_range:):} ~ \__rpg_format_signed_integer:N {\l__ability_modifier_int}~to~hit
-					}
-				}
-				{% Melee and Ranged is the default
-				\textit{Melee~or~Ranged~\l__rpg_attack_type_tl{}(\__rpg_stat_reach:\ or\ \__rpg_stat_range:): } ~  \__rpg_format_signed_integer:N {\l__ability_modifier_int}~to~hit
-				}
-			. ~
-			\textit { On~Hit : } ~
-
-			\str_if_empty:NF {\l__dmg_tl} % Don't show any damage if `dmg' is not set.
-				{
-				\l__dmg_tl\ \l__dmg_type_tl\ damage
-				\__rpg_if_or_dmg:
-				\__rpg_if_plus_dmg:
-				}
-
-			% `extra' is any special text that goes after the final damage; do not
-			% include the final full stop.
-			\l__extra_tl .
-			\end{RpgStatAction}
-		}
-
-	%%User interface
-		\NewDocumentCommand {\RpgStatAttack} {o m}
-		{
-			\group_begin:
-			\keys_set:nn { rpg / stat / attack } {#1}
-			\__rpg_stat_attack:N {#2}
-			\group_end:
-		}
-
-		\NewDocumentCommand {\RpgStatMelee} {o m}
-		{
-			\group_begin:
-			\keys_set:nn { rpg / stat / attack } { #1, distance = melee }
-			\__rpg_stat_attack:N {#2}
-			\group_end:
-		}
-
-		\NewDocumentCommand {\RpgStatRanged} {o m}
-		{
-			\group_begin:
-			\keys_set:nn { rpg / stat / attack } { #1, distance = ranged }
-			\__rpg_stat_attack:N {#2}
-			\group_end:
-		}
-
-%%%%%% Legendary Actions
+% %%%%%% Legendary Actions
 
 
 	\newlist {__rpg_legendary} {description} {1}
@@ -345,23 +39,46 @@
 	}
 
 
-	\NewDocumentEnvironment{RpgStatLegendaryActions}{ O{} +b}
+	\NewDocumentCommand{\RpgStatLegendarySection}{m}
 		{
-			\RpgStatSection{Legendary~Actions}
-			\str_if_empty:NF #1
+
+			\RpgStatSection{Legendary~Actions\ (#1\ uses)}
 			{
-				\RpgStatName{}~can~take~\textbf{#1}~legendary~actions.~Only~one~legendary~action~option~can~be~used~at~a~time~and~only~at~the~end~of~another~creature's~turn.~\RpgStatName{}~regains~spent~legendary~actions~at~the~start~of~its~turn.
+				{\noindent\RpgFontStatBlockLegendary \linespread{0}
+				 Immediately\ after\ another\ creature's\ turn,\ \RpgStatName{}\ can\ expend\ a\ Legendary\ Action\ to\ take\ one\ of\ the\ following\ actions.\ Expended\ actions\ are\ regained\ at\ the\ start\ of\ each\ of\ its\ turns.}
 			}
-			\begin{__rpg_legendary}
-				#2
-		}{
-			\end{__rpg_legendary}
 		}
+			
 
-	\NewDocumentCommand {\RpgStatLegendaryAction} {O{} m m }
+	\__rpg_add_tl_keys:Nn{rpg/stat/mythic}
 	{
-		\item [ #2 \str_if_empty:NF#1{~(\textbf{#1~actions})}. ] #3
+		\__rpg_bool_key:nn{passive-only}{\l__passive_only_bool}
+		\__rpg_tl_key:nnn{narration}{\l__mythic_narration}{}
+		\__rpg_tl_key:nnn{trait-name}{\l__mythic_trait}{Second~Phase}
+		\__rpg_tl_key:nnn{trait}{\l__mythic_trait_body}{\@mythicDefaultBody}
 	}
+	\NewDocumentCommand{\RpgStatMythicSection}{+O{}}{
+		\RpgStatSection{Mythic~Monster}
 
+			\keys_set:nn{rpg/stat/mythic}{#1}
+			
 
+			\action{\l__mythic_trait}\ \l__mythic_trait_body \par
+			\tl_if_empty:eF{\l__mythic_narration}
+			{
+				{\noindent\RpgFontStatBlockLegendary When\ the\ mythic\ trait\ activates\ read\ the\ following\ aloud:}
+				
+				\begin{RpgNarration}[before~skip=3pt,after~skip=3pt]
+					\l__mythic_narration
+				\end{RpgNarration}
+			}
+			{\noindent\RpgFontStatBlockLegendary 
+				When\ the\ mythic\ trait\ is\ activated,\ \RpgStatName{}\ gains\ the\ following\ traits\bool_if:nF{\l__passive_only_bool}{\ and\ Legendary\ Actions}.  \par
+			}
+
+	}
+%%%%%% Strings
+\ExplSyntaxOff
+\def\@mythicDefaultBody{When reduced to 0HP, \RpgStatName{} recovers all hit points and removes all negative status effects.}
+% \def\@mythicDescription{When reduced to 0HP, \RpgStatName{} recovers all hit points and removes all negative status effects.}
 

@@ -3,7 +3,7 @@
 	\DeclareTColorBox {RpgStatBox} { O{} m }
 	{
 		enhanced jigsaw,
-		opacityback= 0.4,
+		opacityback= 0.8,
 		before skip      = 12pt plus 3pt minus 3pt,
 		boxrule          = 2pt,
 		parbox           = false,
@@ -14,7 +14,7 @@
 		right            = 2pt,
 		bottom           = 7pt,
 		rounded corners,
-		arc=4mm,
+		arc=2mm,
 		oversize         = 0pt,
 		colback          = statblockbg,
 		colbacktitle     = statblockbg,
@@ -49,15 +49,16 @@
 	}
 
 	%%Formats Speed, hp, ability scores etc
-	\NewDocumentCommand {\RpgHeaderBlock} {}
+	\NewDocumentCommand {\RpgHeaderBlock} {m}
 	{
+		\RpgStatTitle{#1}
 		\RpgStatLine
 		\__rpg_stat_basics:
 		\RpgStatLine
 		\__rpg_stat_ability_scores:
 		\RpgStatLine
 		\__rpg_stat_details:
-		\RpgStatLine
+		% \RpgStatLine
 	}
 
 %% BASIC BLOCK -- HP / AC / etc.

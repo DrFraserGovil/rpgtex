@@ -34,7 +34,8 @@
             			{ \fp_compare:nNnT { \fp_use:N \l_tmpa_fp } { > } { 0 }{+}\fp_use:N \l_tmpa_fp} % #3 final computed modifier (with + if positive)
         }
         {
-			 \msg_error:nnn { rpg } { dice / invalid_argument } { #1  }
+			%  \msg_error:nnn { rpg } { dice / invalid_argument } { #1  }
+      #1
 			 }
     \group_end:
 }

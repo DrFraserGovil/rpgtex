@@ -52,6 +52,8 @@
 %The white color of the cover page in rpgbook mode is not set here, but in the \RpgDrawCoverPage command
 %This is to prevent white text being used everywhere else!
 
+\RpgCreateFont{\RpgFontStatBlockLegendary}{stat-block-legendary}
+
 \RpgSetFont{
 	main-body-family			={\bookman},
 	%Sections
@@ -108,6 +110,9 @@
 	card-body-style = {\small},
 	emph-family = {\keplerserif},
 	emph-style = {\bfseries\scshape\larger[1]},
+	stat-block-legendary-family={\normalfont},
+	stat-block-legendary-style={\it \scriptsize \color{gray!90}},
+	
 }
 
 %%modify fonts if in handout mode
