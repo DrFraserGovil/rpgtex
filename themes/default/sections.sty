@@ -97,4 +97,47 @@
 	rounded~corners,
   }
 }
+%% filigree
+
+\RpgFiligreeSet{
+  \fill ($(frame.north~west)+(0,-\l_filigree_dim)$)--++(0,\l_filigree_dim)--++(\l_filigree_dim,0)--cycle;
+  \fill ($(frame.south~west)+(0,\l_filigree_dim)$)--++(0,-\l_filigree_dim)--++(\l_filigree_dim,0)--cycle;
+  \fill ($(frame.south~east)+(0,\l_filigree_dim)$)--++(0,-\l_filigree_dim)--++(-\l_filigree_dim,0)--cycle;
+  \fill ($(frame.north~east)+(0,-\l_filigree_dim)$)--++(0,\l_filigree_dim)--++(-\l_filigree_dim,0)--cycle;
+}
+\ExplSyntaxOn
+\tcbset{
+  rpg filigree/.style={
+	 before~upper =
+      {
+         \RpgLayoutOnly{
+            \bool_if:NF \l__rpg_justified_bool
+              { \RaggedRight }
+          }
+      },
+    code         = {\linespread{.9}},
+    % frame~hidden,
+    boxrule      = 0pt,
+    enhanced,
+    before~skip  = 13pt plus 4pt minus 4pt,
+    toptitle     = 0pt,
+    boxsep       = 0pt,
+    left         = 4pt,
+    right        = 4pt,
+    top          = 4pt,
+    bottom       = 4pt,
+    sharp~corners,
+    fonttitle    = \RpgFontTipTitle,
+    fontupper    = \RpgFontTipBody,
+    fontlower    = \RpgFontTipBody,
+    parbox       = false,
+    coltitle     = black,
+    after~skip   = 13pt plus 4pt minus 4pt,
+    overlay = {
+      \begin{scope}[draw=black,line~width=1pt]
+        \__rpg_filigree:
+      \end{scope}
+    },
+  }
+}
 \ExplSyntaxOff

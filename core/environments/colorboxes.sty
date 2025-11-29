@@ -30,6 +30,12 @@
 	#1,
 }
 
+\DeclareTColorBox {__rpg_filigree} {o}
+{
+	rpg filigree,
+	#1,
+}
+
 \NewDocumentEnvironment {RpgNarration} {o}
 {
 	\group_begin:
@@ -55,6 +61,31 @@
 {
 	\group_begin:
 	\__rpg_begin_box:nnnn{__rpg_tip}{tipcolor}{#1}{#2}
+}
+{
+	\end {__rpg_tip}
+	\group_end:
+}
+
+\cs_new_protected:Npn\__rpg_filigree:{}
+
+\NewDocumentCommand{\RpgFiligreeSet}{+m}{
+	\cs_set:Nn \__rpg_filigree:{#1}
+}
+
+\tcbset{
+  rpg filigree/.style={
+	\begin{scope}[draw=black,line~width=1pt]
+        \__rpg_filigree:
+      \end{scope}
+	  enhanced,
+	  frame~hidden,
+  }}
+
+\NewDocumentEnvironment {RpgFiligree} {O{}}
+{
+	\group_begin:
+	\__rpg_begin_box:nnnn{__rpg_tip}{filigreebackcolor}{#1,rpgfiligree}{}
 }
 {
 	\end {__rpg_tip}

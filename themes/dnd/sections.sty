@@ -24,6 +24,47 @@
 	}
 }
 
+\RpgFiligreeSet{
+  \coordinate (jp-tl) at ($(frame.north~west)+(\l_filigree_dim,0)$);
+  \coordinate (jp-tr) at ($(frame.north~east)+(-\l_filigree_dim,0)$);
+  \coordinate (jp-bl) at ($(frame.south~west)+(\l_filigree_dim,0)$);
+  \coordinate (jp-br) at ($(frame.south~east)+(-\l_filigree_dim,0)$);
+
+  \def\offset{{round(5*\l_filigree_dim)/10}}
+
+  %%simple line
+  \draw[rounded~corners=1pt] (jp-tl)--(jp-tr) %%top border
+  --++(0,\offset)--++(\l_filigree_dim,0)      %%top right outcrop
+  --($(frame.south~east)+(0,-\offset)$)       %%right border
+  --++(-\l_filigree_dim,0)--(jp-br)           %%bottom right outcrop
+  --(jp-bl)                                   %%bottom border
+  --++(0,-\offset)--++(-\l_filigree_dim,0)    %%bottom left outcrop
+  --($(frame.north~west)+(0,\offset)$)        %%left border
+  --++(\l_filigree_dim,0)                     %%top left outcrop
+  --cycle;        
+ 
+   \def\offset{{round(7*\l_filigree_dim)/10}}
+   \def\outcrop{2.5pt}
+   \def\vjump{{round(12*\l_filigree_dim)/10}}
+   
+   \draw[rounded~corners=1pt] (jp-tl)--++(0,\offset)--($(jp-tr)+(0,\offset)$)--(jp-tr)--($(frame.north~east)+(\outcrop,0)$)--++(-\outcrop,-\vjump)--($(frame.south~east)+(0,\vjump)$)--++(\outcrop,-\vjump)--(jp-br)--++(0,-\offset)--($(jp-bl)+(0,-\offset)$)--(jp-bl)--($(frame.south~west)+(-\outcrop,0)$)--++(\outcrop,\vjump)--($(frame.north~west)+(0,-\vjump)$)--++(-\outcrop,\vjump)
+   --cycle;
+}
+
+%%overwrite existing filigree defaults
+\tcbset{
+  rpg filigree/.style={
+     overlay = {
+      \begin{scope}[draw=titlegold,line~width=2pt]
+        \__rpg_filigree:
+      \end{scope}
+      \begin{scope}[draw=black,line~width=1pt]
+        \__rpg_filigree:
+      \end{scope}
+    },
+    frame~hidden,
+  }
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Special command for magic items, traps, and the like.

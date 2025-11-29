@@ -11,7 +11,7 @@
 	} 
 	\bool_new:N \l__search_perception
 	\seq_new:N \l__seq_holder
-
+	\tl_new:N \l__box_options
 %% main preprocessor; called at start of environment
 \cs_new_protected_nopar:Npn \__rpg_stat_preprocessing:n#1
 {
@@ -27,7 +27,8 @@
 	\__rpg_check_nickname:n{#1}
 	\__rpg_remap_functions:
 
-	%%colours
+	%%colours & appearance
+	\tl_set:Ne{\l__box_options}{\bool_if:NT{\l__stat_filigree}{rpgfiligree}}
 	\colorlet{rulecolor}{\l__stat_color}
 	\colorlet{statblockcolor}{\l__stat_color!50!black}
 	\RpgSetThemeColor{\l__stat_color!25!white}
