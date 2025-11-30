@@ -53,7 +53,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Environment Options
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+	
 	%% Appearance
 		\RpgStatAddProperty{color}					{ \l__stat_color}		{rulecolor}
 		\RpgStatAddProperty{outline-color}			{ \statOutlineColor}{\tl_use:N\l__stat_color!80!white}
@@ -70,7 +70,8 @@
 		\RpgStatAddProperty	{hit-points}[HP,hp]		{\l__hit_points_tl}		{\RpgDice{1d8}}
 		\RpgStatAddProperty {speed}					{\l__speed_tl}			{30ft}
 		\RpgStatAddProperty {initiative}			{\l__initiative_bonus_tl}{}
-		\RpgStatAddProperty {proficiency-bonus}[proficiency]{\g__rpg_proficiency_bonus_int}{}
+		\RpgStatAddProperty {proficiency-bonus}[proficiency,pb]{\g__rpg_proficiency_bonus_int}{}
+		
 
 	%% Attributes
 		%%define the hooks for stats and save-bools
@@ -87,6 +88,7 @@
 		\RpgStatAddProperty{senses}				{\l__senses_tl}			{}
 		\RpgStatAddProperty{passive-perception}	{\l__passive_perception_tl}{}
 		\RpgStatAddProperty{challenge}[cr,CR]	{\l__challenge_tl}		{}
+		\RpgStatAddProperty {xp}			{\l__xp_reward}{}
 		\RpgStatAddProperty{damage-vulnerabilities}{\l__damage_vulnerabilities_tl}{}
 		\RpgStatAddProperty{damage-resistances}	{\l__damage_resistances_tl}{}
 		\RpgStatAddProperty{condition-immunities}	{\l__condition_immunities_tl}{}
@@ -273,6 +275,19 @@
 			}
 
 			%%the fourth option is both CR and PB provided; in which case we do nothing -- just use the user's values
+		}
+
+		\tl_if_blank:eT{\l__xp_reward}
+		{
+			%%an approximate formula for xp gain (accurate to +/- 100xp until cr16)
+			\fp_compare:nNnTF{\fp_eval:n{round(\l__challenge_tl)}}{>}{0}
+			{
+				\int_set:Nn{\l_tmpa_int}{\l__challenge_tl/7}
+				\tl_set:Ne{\l__xp_reward}{\int_eval:n{100+50*((\l__challenge_tl)*(\l__challenge_tl)+(\l__challenge_tl)+2*(\l__challenge_tl)*\l_tmpa_int-7*\l_tmpa_int*\l_tmpa_int - 5 * \l_tmpa_int)}}
+			}
+			{
+				\tl_set:Ne{\l__xp_reward}{\fp_eval:n{100*\l__challenge_tl}}
+			}
 		}
 	}
 

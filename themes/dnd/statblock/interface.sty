@@ -3,9 +3,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % Basic Interface
 %%%%%%%%%%%%%%%%%%%%%%%%
+
+    % Creates a section within environment
+    % aliased by 'section' within the environment
+	\NewDocumentCommand {\RpgStatSection} {m}
+	{
+		{
+		\par\addvspace{6pt plus 2pt minus 2pt}
+		\vbox{ 
+		\noindent\RpgFontStatBlockSection #1
+		\vspace {2pt}
+		\hrule height 0.6pt
+		\par
+		}}\ignorespaces\nopagebreak
+	}
     
-
-
     % Inline header for stat actions - similar to a paragraph
     % aliased in the environment by \action
     % optional arg is used by legendary actions
@@ -14,19 +26,17 @@
         \par \smallskip \noindent { \RpgFontParagraph {#2\str_if_empty:NF#1{~({#1~actions})}.} }
     }
 
-  
-
+    % As with action, but allows for an italicised trigger
     \NewDocumentCommand\RpgStatReaction{m m}
     {
         \RpgStatAction{#1} 
         \tl_if_blank:eF{#2}{~\textit{#2:}}
     }
 
-   
 
     
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% User interface for stats
+% Interface for internal values
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     \NewDocumentCommand\RpgSetStatName{m}
@@ -39,7 +49,8 @@
         \l__rpg_stat_name{}
     }
 
-    %%extracts a value 
+    %%extract a numerical value
+    %% aliased by 'stat'
     \NewDocumentCommand{\RpgStatGet}{m}{
         \__rpg_format_signed_integer:N{\str_case:nn{#1}
         {
@@ -54,13 +65,11 @@
         }}
     }
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Attacks
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-	%% Options
-
+	%% Options & keys
 	\__rpg_add_tl_keys:Nn{rpg/stat/attack}
 	{
 		\__rpg_tl_choice_key:nnnn{distance}{\l__rpg_attack_distance_tl}
@@ -309,19 +318,7 @@
             }
         }
     }
-    %  \NewDocumentCommand \RpgSavingThrow { m m m m o }
-    % {
-    %     \textit{#1~Save,~(DC~#2)}.
-    %     \begin{description}[nosep,left=1em]
-    %         \item[Failure:]~#3
-    %         \IfValueT {#4} {\item[Success:]~#4}
-    %     \end{description}
-    % }
-    % \NewDocumentCommand\RpgSavingThrowRepeat{O{\string@savingThrowRepeat} m m m o}
-    % {
-    %     \RpgSavingThrow{#2}{#3}{#4}[#5] \\ #1
-    % }
-
+ 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Legendary & Actions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

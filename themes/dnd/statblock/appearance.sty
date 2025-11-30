@@ -4,11 +4,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 	%define the default tcolorbox which wraps the environemnt
+	% \tcbset{
+
+	% }
 	\DeclareTColorBox {RpgStatBox} { O{}}
 	{
 		enhanced jigsaw,
 		opacityback= 0.8,
-		before skip      = 12pt plus 3pt minus 3pt,
+		before skip      = 6pt plus 3pt minus 3pt,
 		boxrule          = 2pt,
 		parbox           = false,
 		boxsep           = 2pt,
@@ -155,7 +158,6 @@
 		{
 		%% Each item is wrapped in command that ensures it only appears 
 		%% if the value is non-empty
-		%% Have to render the contents first to check if we have an empty itemize!
 		\begin {description}[
 			before   = \color {statblockcolor},
 			font     = \RpgFontStatBlockBody\color {statblockcolor},
@@ -169,12 +171,11 @@
 			\__maybe_item:nn {Condition~Immunities}		{\l__condition_immunities_tl}  
 			\__maybe_item:nn {Senses}					{\__rpg_construct_perception:}   
 			\__maybe_item:nn {Languages}				{\l__languages_tl}   
-			\__maybe_item:nn {Challenge}				{\l__challenge_tl{}~(proficiency:~\__rpg_format_signed_integer:N {\g__rpg_proficiency_bonus_int})}   
+			\__maybe_item:nn {Challenge}				{\l__challenge_tl{}~(\l__xp_reward{}xp,~ proficiency:~\__rpg_format_signed_integer:N {\g__rpg_proficiency_bonus_int})}   
 		\end {description}
 	}
 
-%% Appearance functions
-	% Fancy DnD 5e stat block rule
+% Fancy DnD 5e stat block rule
 	\NewDocumentCommand {\RpgStatLine} {}
 	{
 		\par \vspace{-2pt} \noindent
@@ -183,15 +184,4 @@
 		\end {tikzpicture}
 		\par
 	}
-	% Stat subsection header style
-	\NewDocumentCommand {\RpgStatSection} {m}
-	{
-		{
-		\par\addvspace{6pt plus 2pt minus 2pt}
-		\vbox{ 
-		\noindent\RpgFontStatBlockSection #1
-		\vspace {2pt}
-		\hrule height 0.6pt
-		\par
-		}}\ignorespaces\nopagebreak
-	}
+	
