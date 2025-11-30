@@ -1,6 +1,10 @@
 \ExplSyntaxOff
-%%%%%% Main box
-	\DeclareTColorBox {RpgStatBox} { O{} m }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Tcolorbox wrapper & modification
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	%define the default tcolorbox which wraps the environemnt
+	\DeclareTColorBox {RpgStatBox} { O{}}
 	{
 		enhanced jigsaw,
 		opacityback= 0.8,
@@ -21,12 +25,11 @@
 		colframe         = \statOutlineColor,
 		fontupper        = \RpgFontStatBlockBody,
 		fontlower        = \RpgFontStatBlockBody,
-		title            = {#2},
-		#1
+		#1,
 	}
 
 
-\ExplSyntaxOn
+	\ExplSyntaxOn
 
 %% Appearance modification
 \cs_new_protected_nopar:Npn \__rpg_appearance_preprocessing:
@@ -58,17 +61,13 @@
 	\NewDocumentCommand {\RpgStatTitle} {m}
 	{
 		\vspace{3pt}
-		
 		{\RpgFontStatBlockTitle #1}
-
 		\tl_if_empty:eF{\l__crtype_tl}
 		{
 			\begin {hangingpar}
 				\textit {\l__crtype_tl}
 			\end {hangingpar}
 		}
-
-		
 	}
 
 	%%Formats Speed, hp, ability scores etc

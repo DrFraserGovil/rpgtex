@@ -6,30 +6,71 @@
 
 \newcommand\statInclude[1]{\input{themes/dnd/statblock/#1}}
 
-% \statInclude{options.sty}
 \statInclude{processing.sty}
 \statInclude{appearance.sty}
-\statInclude{attack.sty}
 \statInclude{interface.sty}
-\statInclude{legendary.sty}
-% \statInclude{statblock.sty}
 
 \ExplSyntaxOn
+
 \RpgStatTextFormat{
     \group_begin:
 
     %%initial value processing
-    \__rpg_stat_preprocessing:n{#1}
+    \__rpg_stat_preprocessing:
+    \__rpg_check_nickname:n{#1}
     \__rpg_appearance_preprocessing:
 
+    %%define functions remappings inside environment
+	\__rpg_remap_functions:
 
-    \begin{RpgStatBox}[\l__box_options]{}
+   
 
+    \tl_if_blank:eF{\l__stat_float}
+    {
+        \bool_set_true:N\l__use_strip
+        
+        \str_compare:eNeF{\l__stat_float}{=}{h}
+        {
+            \bool_set_false:N\l__use_strip
+        }
+        \str_compare:eNeF{\l__rpg_cols_tl}{=}{twocolumn}
+        {
+            \bool_set_false:N\l__use_strip   
+        }
+        \str_compare:eNeF{\l__stat_float_type}{=}{figure*}
+        {
+            \bool_set_false:N\l__use_strip   
+        }
+        
+        \bool_if:NTF{\l__use_strip}
+        {
+            \tl_set:Ne{\l__stat_float_type}{strip}
+            \begin{strip}
+        }
+        {
+            \edef\floatbegin{\noexpand\begin{\l__stat_float_type}[\l__stat_float]}%
+            \floatbegin
+        }
+    }
+
+    \begin{RpgStatBox}[\l__box_options]
+
+        \bool_if:NT\l__stat_twocol{
+            \begin{multicols}{2}
+        }
         %% This is the main magic of the environment
         \RpgHeaderBlock{#1}
 
         {\RpgFontStatBlockBody	#2}
+
+          \bool_if:NT\l__stat_twocol{
+            \end{multicols}
+        }
     \end{RpgStatBox}
+    \tl_if_blank:eF{\l__stat_float}
+    {
+         \expandafter\end\expandafter{\l__stat_float_type}
+    }
     \group_end:
 }
 
@@ -37,4 +78,15 @@
     
     \subsection{#1}
         #2
+}
+
+
+
+\NewDocumentEnvironment{RpgStat*}{O{} m O{} +b}
+{
+    \begin{RpgStat}[#1]{#2}[float=t,#3,twocolumn,float-type=figure*]
+        #4    
+    \end{RpgStat}
+}
+{
 }

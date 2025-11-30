@@ -1,21 +1,5 @@
 \ExplSyntaxOn
 
-%%%%%%%%%%%%%%%%%%%%%%%
-%%  Define variables %%
-%%%%%%%%%%%%%%%%%%%%%%%
-	\msg_new:nnn{rpg}{bad-ability}{Cannot~parse~#1~as~a~valid~ability~score}	
-
-	\seq_map_inline:Nn{\g__dnd_stats}{
-		\int_new:c{l__#1_mod} %%defines \l__[stat]_mod for each stat in the list
-		\tl_new:c{l__#1_save} %%defines \l__[stat]_save for each stat in the list
-	} 
-	\bool_new:N \l__search_perception
-	\seq_new:N \l__seq_holder
-	\tl_new:N \l__box_options
-
-
-
-\ExplSyntaxOn
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Define D&D Variables
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -54,6 +38,18 @@
 		cha={Charisma},
 	}
 
+	%now programatically generate some variables...
+	\seq_map_inline:Nn{\g__dnd_stats}{
+		\int_new:c{l__#1_mod} %%defines \l__[stat]_mod for each stat
+		\tl_new:c{l__#1_save} %%defines \l__[stat]_save for each stat 
+	} 
+
+	% Some helper variables....
+	\msg_new:nnn{rpg}{bad-ability}{Cannot~parse~#1~as~a~valid~ability~score}		
+	\bool_new:N \l__search_perception 
+	\seq_new:N \l__seq_holder
+	\tl_new:N \l__box_options
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Environment Options
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -63,6 +59,9 @@
 		\RpgStatAddProperty{outline-color}			{ \statOutlineColor}{\tl_use:N\l__stat_color!80!white}
 		\RpgStatAddBoolean{filigree}{\l__stat_filigree}
 		\RpgStatAddBoolean{filigree-inherit-color}{\l__stat_filigree_outline}
+		\RpgStatAddBoolean{twocolumn}{\l__stat_twocol}
+		\RpgStatAddProperty{float}{\l__stat_float}{}
+		\RpgStatAddProperty{float-type}{\l__stat_float_type}{figure}
 
 	%% Top block
 		\RpgStatAddProperty	{nickname}				{\l__rpg_stat_name}		{}
@@ -93,58 +92,115 @@
 		\RpgStatAddProperty{condition-immunities}	{\l__condition_immunities_tl}{}
 		\RpgStatAddProperty{damage-immunities}	{\l__damage_immunities_tl}{}
 
-
-%% main preprocessor; called at start of environment
-\cs_new_protected_nopar:Npn \__rpg_stat_preprocessing:n#1
-{
-	\__rpg_check_cr_and_proficiency:
-	\seq_map_inline:Nn{\g__dnd_stats}
-	{
-		\__rpg_store_ability_score_modifier:n{##1}
-		\__rpg_store_save_modifier:n{##1}
-	}
-	\__rpg_stat_process_skills:
-	\__rpg_check_initiative:
-	\__rpg_check_passive_perception:
-	\__rpg_check_nickname:n{#1}
-	\__rpg_remap_functions:
-
 	
-}
+%%%%%%%%%%%%%%%%%%%%%%%
+%% Preprocessing
+%%%%%%%%%%%%%%%%%%%%%%%
+	% computes ability scores, save mods, skil bonuses etc. 
+	\cs_new_protected_nopar:Npn \__rpg_stat_preprocessing:
+	{
+		% see if cr/prof provided, otherwise generate them
+		\__rpg_check_cr_and_proficiency:
 
+		% compute mods and saves
+		\seq_map_inline:Nn{\g__dnd_stats}
+		{
+			\__rpg_store_ability_score_modifier:n{##1}
+			\__rpg_store_save_modifier:n{##1}
+		}
+		% compute skill bonuses
+		\__rpg_stat_process_skills:
+
+		% check if values provided; otherwise compute from default assumptions
+		\__rpg_check_initiative:
+		\__rpg_check_passive_perception:
+	}
+
+	% Defines a bunch of commands; or redefines existing ones; within the statblock scope
+	% Use 'Provide' so no conflicts with pre-existing definitions
+	\cs_new_protected_nopar:Npn\__rpg_remap_functions:
+	{
+		%alias a command that definitely exists
+		\RenewDocumentCommand{		\section}{m}		{\RpgStatSection{##1}}
+		
+		%provide short names that are likely to collide. 
+		%'Provide' ensures that if a command with that name exists, the local version is used 
+		\ProvideDocumentCommand		{\action}	{O{} m}		{\RpgStatAction[##1]{##2}}
+		\ProvideDocumentCommand		{\subaction}{m}		{\RpgStatSubAction{##1}}
+		\ProvideDocumentCommand		{\reaction}{m m}		{\RpgStatReaction{##1}{##2}}
+		\ProvideDocumentCommand		{\name}{}			{\l__rpg_stat_name}
+		\ProvideDocumentCommand		{\stat}{m}			{\RpgStatGet{##1}}
+		\ProvideDocumentCommand		{\save}{m O{}}		{\RpgSavingThrow{m O{}}}
+		%attacks
+		\ProvideDocumentCommand		{\attack}{m O{}}	{\RpgStatAttack{##1}[##2]}
+		\ProvideDocumentCommand		{\melee}{m O{}}		{\RpgStatAttack{##1}[##2,distance=melee]}
+		\ProvideDocumentCommand		{\ranged}{m O{}}	{\RpgStatAttack{##1}[##2,distance=ranged]}
+		%spellss
+		\ProvideDocumentEnvironment	{spells}{O{}}		{\begin{RpgStatSpellcasting}[##1]}{\end{RpgStatSpellcasting}}
+		\ProvideDocumentCommand		{\slot}{o o m}		{\RpgStatSpellSlots[##1][##2]{##3}}
+		\ProvideDocumentCommand		{\innate}{O{} m}	{\RpgStatSpellList[##1]{##2}}
+
+	}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
-% Strings & Aliases
+% String Manipulation
 %%%%%%%%%%%%%%%%%%%%%%%%
 
-\cs_new_protected_nopar:Npn\__rpg_check_nickname:n#1
-{
-	\tl_if_empty:eT{\l__rpg_stat_name}
-	{
-		\tl_set:Ne\l__rpg_stat_name{#1}
-	}
-}
-
-\cs_new_protected_nopar:Npn\__rpg_remap_functions:
-{
-	%alias a command that definitely exists
-	\RenewDocumentCommand{		\section}{m}		{\RpgStatSection{##1}}
 	
-	%provide short names that are likely to collide. 
-	%'Provide' ensures that if a command with that name exists, the local version is used 
-	\ProvideDocumentCommand		{\action}	{O{} m}		{\RpgStatAction[##1]{##2}}
-	\ProvideDocumentCommand		{\subaction}{m}		{\RpgStatSubAction{##1}}
-	\ProvideDocumentCommand		{\name}{}			{\l__rpg_stat_name}
-	%attacks
-	\ProvideDocumentCommand		{\attack}{m O{}}	{\RpgStatAttack{##1}[##2]}
-	\ProvideDocumentCommand		{\melee}{m O{}}		{\RpgStatAttack{##1}[##2,distance=melee]}
-	\ProvideDocumentCommand		{\ranged}{m O{}}	{\RpgStatAttack{##1}[##2,distance=ranged]}
-	%spellss
-	\ProvideDocumentEnvironment	{spells}{O{}}		{\begin{RpgStatSpellcasting}[##1]}{\end{RpgStatSpellcasting}}
-	\ProvideDocumentCommand		{\slot}{o o m}		{\RpgStatSpellSlots[##1][##2]{##3}}
-	\ProvideDocumentCommand		{\innate}{O{} m}	{\RpgStatSpellList[##1]{##2}}
 
-}
+	% A toggle-item for descriptions; if the body is empty, the item is not added 
+	\cs_new_protected_nopar:Npn \__maybe_item:nn #1#2
+	{
+		\tl_if_empty:eF {#2}{ \item [#1] #2 }
+	}
+
+	% Format signed integers for display
+	\cs_new_protected_nopar:Npn \__rpg_format_signed_integer:N #1
+	{
+		\int_compare:nNnTF {#1} < {0}
+		{ - }
+		{+}
+		\int_abs:n {#1}
+	}
+
+	% If string 2 is not present in token list #1; append it
+	% Useful for ensuring, i.e. distances always end in 'ft'.
+	\cs_new_protected:Npn \__rpg_append_if_missing:nn#1#2
+	{
+		\regex_match:nVF{#2}{#1}
+		{
+			\tl_set:Ne#1{#1#2}
+		}
+	}
+
+	%% If no nickname set, use the 'main name'
+	\cs_new_protected_nopar:Npn\__rpg_check_nickname:n#1
+	{
+		\tl_if_empty:eT{\l__rpg_stat_name}
+		{
+			\tl_set:Ne\l__rpg_stat_name{#1}
+		}
+	}
+
+	%% If no senses provided, just uses passive, otherwise put other senses first
+	\cs_new_protected_nopar:Npn \__rpg_construct_perception:
+	{
+		\tl_if_blank:eF{\l__senses_tl}
+		{
+			\l__senses_tl,~
+		}
+		passive~Perception~ \l__passive_perception_tl
+	}
+
+	%% Checks if a manual initiative value was passed
+	\cs_new_protected_nopar:Npn \__rpg_check_initiative:
+	{
+		\tl_if_blank:eT{\l__initiative_bonus_tl}
+		{
+			\tl_set:Ne\l__initiative_bonus_tl{\__rpg_format_signed_integer:N \l__dex_mod}
+		}
+	}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 % Modifiers
@@ -180,15 +236,7 @@
 		}
 	}
 	
-	%% Checks if a manual initiative value was passed
-	\cs_new_protected_nopar:Npn \__rpg_check_initiative:
-	{
-		\tl_if_blank:eT{\l__initiative_bonus_tl}
-		{
-			\tl_set:Ne\l__initiative_bonus_tl{\__rpg_format_signed_integer:N \l__dex_mod}
-		}
-	}
-
+	
 	%% Checks if a passive perception was passed
 	\cs_new_protected_nopar:Npn \__rpg_check_passive_perception:
 	{
@@ -299,43 +347,3 @@
 		%%save the sequence as a string; use seq to automatically format the list delimiters
 		\tl_set:Nn{\l__processed_skills}{\seq_use:Nn{\l__seq_holder}{,~}}
 	}
-
-%%%%%%%%%%%%%%%%%%%%
-% Misc. helpers
-%%%%%%%%%%%%%%%%%%%%
-
-% A toggle-item for descriptions; if the body is empty, the item is not added 
-\cs_new_protected_nopar:Npn \__maybe_item:nn #1#2
-{
-	\tl_if_empty:eF {#2}{ \item [#1] #2 }
-}
-% Function to format signed integers for display
-\cs_new_protected_nopar:Npn \__rpg_format_signed_integer:N #1
-{
-	\int_compare:nNnTF {#1} < {0}
-	{ - }
-	{+}
-	\int_abs:n {#1}
-}
-
-\cs_new_protected_nopar:Npn \__rpg_construct_perception:
-{
-	\tl_if_blank:eF{\l__senses_tl}
-	{
-		\l__senses_tl,~
-	}
-	passive~Perception~ \l__passive_perception_tl
-}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Process Strings
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\cs_new_protected:Npn \__rpg_append_if_missing:nn#1#2
-{
-	\regex_match:nVF{#2}{#1}
-	{
-		\tl_set:Ne#1{#1#2}
-	}
-}
