@@ -426,6 +426,7 @@ pretium quis, viverra ac, nunc. }}
             \item[simple] If flag is present, renders using a simple \texttt{tabular} (ignoring breakable flag). Useful if not using X-columns, and not wanting to specify a length of the table. 
             \item[noheader] If flag is present, suppresses the autoformatting of the title. The first row is instead rendered in the body formatting.
             \item[vskip] The vertical spacing above and below the table. Default value is \texttt{9pt plus 3pt minus 3pt}. 
+            \item[filigree] If present, wraps the table in an \envref{RpgFiligree} environment, producing ornamental tables 
         \end{description}
     }
     \subsection{RpgTable Example}
@@ -443,9 +444,9 @@ pretium quis, viverra ac, nunc. }}
  Colour & but this one is the colour we set in the header
  \end{RpgTable}
  \end{ExampleBlock}
- This example adds a title, but suppresses the header formatting:
+ This example adds a title, but suppresses the header formatting. It also adds a filigree:
  \begin{ExampleBlock}{Header-Suppressed RpgTable}
- \begin{RpgTable}[title={Test Table},noheader]{XlX}
+ \begin{RpgTable}[title={Test Table},noheader, filigree]{XlX}
  Plain & Header & Text
  \\
  Now there's no & difference & between the header and the main
@@ -456,11 +457,13 @@ pretium quis, viverra ac, nunc. }}
 
 \labelsection{Text Boxes}
 
-    \rpgtex{} defines three `colorbox' environments, which inherit from \tcref{}. These provide a consistent way for a writer to highlight and differentiate blocks of text on the page.
+   
 
     \begin{RpgSidebar}{Which colorbox to use?}
-        
-        The choice between RpgSidebar and RpgTip is somewhat arbitrary -- although they have a mechanical difference by default (one being breakable, the other not) -- this can be overridden by themes. Instead, the intention is that they serve slightly different purposes:
+         \rpgtex{} defines three `colorbox' environments, which inherit from \tcref{}. These provide a consistent way for a writer to highlight and differentiate blocks of text on the page.
+
+
+        The choice between RpgSidebar and RpgTip is somewhat arbitrary --   although they have a mechanical difference by default (one being breakable, the other not) -- this can be overridden by themes. Instead, the intention is that they serve slightly different purposes:
         
         \begin{description}
                         \item[RpgSidebar] is used for `important information' -- key rules or summaries which readers \textit{should} pay attention to.
@@ -530,7 +533,44 @@ pretium quis, viverra ac, nunc. }}
     \end{RpgTip}
     \end{ExampleBlock}
 
+    
+\section{Filigree}
 
+    In design, Filigree is a decorative ribbon or other ornament around the outside of an element. We provide both a standard `RpgFiligree' environment and a 
+
+    \RpgMacro*{rpgfiligree}{}{A prewritten \tcref{} style command that replaces the existing frame with a pre-defined overlay frame. }{
+        \cmd{begin}{<tcolorbox environment>}[rpgfiligree]
+
+         ~~~~\texttt{<body>}
+            
+        \cmd{end\param{RpgFiligree}}
+    }{}
+
+    \RpgMacro*{RpgFiligree}{\param{o}}{A simple \tcref{} wrapper with a tikz overlay for producing intricate borders.}
+    {
+         \cmd{begin\param{RpgFiligree}[color=<color>,<tcbox-options>]}
+
+            ~~~~\texttt{<body>}
+            
+            \cmd{end\param{RpgFiligree}}
+    }
+    {
+        This environment is equivalent to calling \envref{RpgTip} with the filigree option enabled. See that documentation for customisation options.
+    }
+
+    \begin{ExampleBlock}[RpgFiligree,rpgfiligree,filigree]{Filigree}
+%% As environment
+\begin{RpgFiligree}
+    A basic filigree-wrapped tcbox.
+\end{RpgFiligree}
+
+
+%% As option
+\begin{RpgSidebar}[rpgfiligree, filigree-size=8pt]{Fancy Sidebar}
+    A very fancy sidebar
+\end{RpgSidebar}
+
+    \end{ExampleBlock}
 \section{RpgItem, RpgSpell, RpgFeat (etc.)}
 
     The prior documented environments have almost entirely been \textit{rules agnostic}. That is, they have primarily been typesetting aids which could equally be used for notes on a whimsical, rules-lite game about squirrels in a forest, or a crunchy, table-heavy futuristic scifi game -- all the theme did was change the appearance of the individual elements. 
@@ -548,26 +588,6 @@ pretium quis, viverra ac, nunc. }}
 \end{RpgSidebar}
 
     By default, all of these environments have the same behaviour (except where noted otherwise)
-
-        
-        \begin{ExampleBlock}[TestObject]{Feature Forge Example}
-%% Test object does not exist before this moment.
-%%See FeatureForge for documentation
-\RpgMakeFeature{TestObject}{TestCard}{test}
-\TestObjectAddProperty{test-key} {\testKeyValue} {default}
-
-
-%card mode defaults to false, so get plain text output:
-\begin{TestObject}{An Example}
-    This is the body text, I can see that my key is `\getkey{test-key}'
-\end{TestObject}
-
-%%Then activate the card mode (and change the test-key value)
-\TestObjectShowCard{true}
-\begin{TestObject} {An Example} [test-key=alacrity]
-    This is the body text, I can see that my key is `\getkey{test-key}'
-\end{TestObject}
-        \end{ExampleBlock}
 
 	\label{RpgItem}\label{RpgSpell}\label{RpgFeat}
     \RpgMacro*[RpgItem,RpgSpell,RpgFeat]{Rpg[X]}{{RpgItem},{RpgSpell},{RpgFeat},\param{\paramO{} m \paramO}}{A card-switching environment which renders the text either in normal text, or as an \envref{RpgCard} }
@@ -609,3 +629,22 @@ pretium quis, viverra ac, nunc. }}
         }
     
     
+        
+        \begin{ExampleBlock}[TestObject]{Feature Forge Example}
+%% Test object does not exist before this moment.
+%%See FeatureForge for documentation
+\RpgMakeFeature{TestObject}{TestCard}{test}
+\TestObjectAddProperty{test-key} {\testKeyValue} {default}
+
+
+%card mode defaults to false, so get plain text output:
+\begin{TestObject}{An Example}
+    This is the body text, I can see that my key is `\getkey{test-key}'
+\end{TestObject}
+
+%%Then activate the card mode (and change the test-key value)
+\TestObjectShowCard{true}
+\begin{TestObject} {An Example} [test-key=alacrity]
+    This is the body text, I can see that my key is `\getkey{test-key}'
+\end{TestObject}
+        \end{ExampleBlock}
