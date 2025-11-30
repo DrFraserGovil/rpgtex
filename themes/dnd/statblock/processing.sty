@@ -126,7 +126,6 @@
 		%provide short names that are likely to collide. 
 		%'Provide' ensures that if a command with that name exists, the local version is used 
 		\ProvideDocumentCommand		{\action}	{O{} m}		{\RpgStatAction[##1]{##2}}
-		\ProvideDocumentCommand		{\subaction}{m}		{\RpgStatSubAction{##1}}
 		\ProvideDocumentCommand		{\reaction}{m m}		{\RpgStatReaction{##1}{##2}}
 		\ProvideDocumentCommand		{\name}{}			{\l__rpg_stat_name}
 		\ProvideDocumentCommand		{\stat}{m}			{\RpgStatGet{##1}}

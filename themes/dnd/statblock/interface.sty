@@ -14,12 +14,7 @@
         \par \smallskip \noindent { \RpgFontParagraph {#2\str_if_empty:NF#1{~({#1~actions})}.} }
     }
 
-    % Inline header for stat sub actions - similar to a subparagraph
-    % aliased by \subaction
-    \NewDocumentCommand {\RpgStatSubAction} {m}
-    { 
-        \par { \RpgFontParagraph #1. } 
-    }
+  
 
     \NewDocumentCommand\RpgStatReaction{m m}
     {
