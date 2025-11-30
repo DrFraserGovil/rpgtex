@@ -32,6 +32,11 @@
 	\colorlet{rulecolor}{\l__stat_color}
 	\colorlet{statblockcolor}{\l__stat_color!50!black}
 	\RpgSetThemeColor{\l__stat_color!25!white}
+
+	\bool_if:NT{\l__stat_filigree_outline}
+	{
+	\colorlet{filigreecolor}{\statOutlineColor}
+	}
 }
 
 
