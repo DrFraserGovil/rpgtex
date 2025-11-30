@@ -6,20 +6,26 @@
 
 \newcommand\statInclude[1]{\input{themes/dnd/statblock/#1}}
 
-\statInclude{options.sty}
+% \statInclude{options.sty}
 \statInclude{processing.sty}
 \statInclude{appearance.sty}
 \statInclude{attack.sty}
 \statInclude{interface.sty}
-\statInclude{statblock.sty}
+\statInclude{legendary.sty}
+% \statInclude{statblock.sty}
 
 \ExplSyntaxOn
 \RpgStatTextFormat{
     \group_begin:
+
     %%initial value processing
     \__rpg_stat_preprocessing:n{#1}
+    \__rpg_appearance_preprocessing:
 
-    \rpg_stat_box:n{\l__box_options}
+
+    \begin{RpgStatBox}[\l__box_options]{}
+
+        %% This is the main magic of the environment
         \RpgHeaderBlock{#1}
 
         {\RpgFontStatBlockBody	#2}
@@ -31,15 +37,4 @@
     
     \subsection{#1}
         #2
-}
-
-\NewDocumentCommand \rpg_stat_box:n { m }
-{
-    \bool_if:NTF \l__rpg_show_background_bool
-    {
-        \begin{RpgStatBox}[#1]{}
-    }
-    {
-        \begin{RpgStatBox}[#1,colback=white,colframe=black!30!white]{}
-    }   
 }

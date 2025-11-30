@@ -28,6 +28,29 @@
 
 \ExplSyntaxOn
 
+%% Appearance modification
+\cs_new_protected_nopar:Npn \__rpg_appearance_preprocessing:
+{
+	\bool_if:NF{\l__rpg_show_background_bool}
+	{
+		\colorlet{statblockbg}{white}
+	}
+	
+	%%set theme colors
+	\colorlet{rulecolor}{\l__stat_color}
+	\colorlet{statblockcolor}{\l__stat_color!50!black}
+	\RpgSetThemeColor{\l__stat_color!25!white}
+	
+	% change filigree color to
+	\bool_if:NT{\l__stat_filigree_outline}
+	{
+		\colorlet{filigreecolor}{\statOutlineColor}
+	}
+
+	%construct arguments for tl-box insertion
+	\tl_set:Ne{\l__box_options}{\bool_if:NT{\l__stat_filigree}{rpgfiligree}}
+}
+
 
 %%Core stat environments
 
@@ -157,7 +180,7 @@
 	{
 		\par \vspace{-2pt} \noindent
 		\begin {tikzpicture}
-		\fill [\l__stat_color ] ( 0, 0 ) -- ( 0, 0.1 ) -- ( \linewidth, 0.05 );
+		\fill [rulecolor ] ( 0, 0 ) -- ( 0, 0.1 ) -- ( \linewidth, 0.05 );
 		\end {tikzpicture}
 		\par
 	}
