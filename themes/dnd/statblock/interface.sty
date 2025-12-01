@@ -1,62 +1,390 @@
 \ExplSyntaxOn
 
-\NewDocumentCommand \RpgSavingThrow { m m m o }
-{
-    \textit{#1~Save,~DC~#2}.
-    \begin{description}[nosep,left=1em]
-        \item[Failure:]~#3
-        \IfValueT {#4} {\item[Success:]~#4}
-    \end{description}
-}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Basic Interface
+%%%%%%%%%%%%%%%%%%%%%%%%
 
-\NewDocumentCommand\RpgSavingThrowRepeat{O{The~target~can~repeat~the~save~at~the~end~of~each~turn.} m m m o}
-{
-    \RpgSavingThrow{#2}{#3}{#4}[#5] \\ #1
-}
+    % Creates a section within environment
+    % aliased by 'section' within the environment
+	\NewDocumentCommand {\RpgStatSection} {m}
+	{
+		{
+		\par\addvspace{6pt plus 2pt minus 2pt}
+		\vbox{ 
+		\noindent\RpgFontStatBlockSection #1
+		\vspace {2pt}
+		\hrule height 0.6pt
+		\par
+		}}\ignorespaces\nopagebreak
+	}
+    
+    % Inline header for stat actions - similar to a paragraph
+    % aliased in the environment by \action
+    % optional arg is used by legendary actions
+    \NewDocumentCommand {\RpgStatAction} {O{} m}
+    { 
+        \par \smallskip \noindent { \RpgFontParagraph {#2\str_if_empty:NF#1{~({#1~actions})}.} }
+    }
 
-\NewDocumentCommand\RpgStatReaction{m o}
-{
-    \RpgStatAction{#1} 
-    \IfNoValueF{#2}{~\textit{(#2)}}
-}
-
-\NewDocumentCommand\RpgLegendaryDefiance{}
-{
-    \RpgStatLegendaryAction{Legendary~Defiance}~{At~the~end~of~another~creature's~turn,~\RpgStatName{}~chooses~to~repeat~a~saving~throw~that~they~failed~in~the~past~hour~(using~their~original~modifier).}
-}
-
-% Inline header for stat actions - similar to a paragraph
-\NewDocumentCommand {\RpgStatAction} {O{} m}
-{ \par \smallskip \noindent \textsl { \textbf {#2\str_if_empty:NF#1{~(\textbf{#1~actions})}.} } }
-
-\NewDocumentCommand\RpgSetStatName{m}
-{
-    \tl_set:Nn \l__rpg_stat_name {#1}
-}
-
-\NewDocumentCommand\RpgStatName{}
-{
-    \l__rpg_stat_name{}
-}
-
-% Inline header for stat sub actions - similar to a subparagraph
-\NewDocumentCommand {\RpgStatSubAction} {m}
-{ \par \textsl { \textbf {#1.} } }
-
-%%See attack.sty for what's going on here
-
-
-\NewDocumentCommand{\getstat}{m}{
-    \__rpg_format_signed_integer:N{\str_case:nn{#1}
+    % As with action, but allows for an italicised trigger
+    \NewDocumentCommand\RpgStatReaction{m m}
     {
-        {proficiency}{\g__rpg_proficiency_bonus_int}
-        {str}{\l__str_mod}
-        {dex}{\l__dex_mod}
-        {con}{\l__con_mod}
-        {wis}{\l__wis_mod}
-        {int}{\l__int_mod}
-        {cha}{\l__cha_mod}
-        
-    }}
+        \RpgStatAction{#1} 
+        \tl_if_blank:eF{#2}{~\textit{#2:}}
+    }
 
-}
+
+    
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Interface for internal values
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \NewDocumentCommand\RpgSetStatName{m}
+    {
+        \tl_set:Nn \l__rpg_stat_name {#1}
+    }
+
+    \NewDocumentCommand\RpgStatName{}
+    {
+        \l__rpg_stat_name{}
+    }
+
+    %%extract a numerical value
+    %% aliased by 'stat'
+    \NewDocumentCommand{\RpgStatGet}{m}{
+        \__rpg_format_signed_integer:N{\str_case:nn{#1}
+        {
+            {proficiency}{\g__rpg_proficiency_bonus_int}
+            {str}{\l__str_mod}
+            {dex}{\l__dex_mod}
+            {con}{\l__con_mod}
+            {wis}{\l__wis_mod}
+            {int}{\l__int_mod}
+            {cha}{\l__cha_mod}
+            
+        }}
+    }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Attacks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	%% Options & keys
+	\__rpg_add_tl_keys:Nn{rpg/stat/attack}
+	{
+		\__rpg_tl_choice_key:nnnn{distance}{\l__rpg_attack_distance_tl}
+						{ both , melee , ranged }{both}
+		\__rpg_varying_choice_key:nnnn{type}{\l__rpg_attack_type_tl}{weapon,spell}{{},{~Spell}}{weapon}
+		\__rpg_tl_choice_key:nnnn{modifier}{\l__attack_stat_tl}
+						{ str , dex , con , int , wis , cha}{str}
+		\__rpg_varying_choice_key:nnnn{modifier}{\l__attack_stat_tl}
+						{STR , DEX , CON , INT , WIS , CHA}
+						{str , dex , con , int , wis , cha}{str}
+		\__rpg_tl_key:nnn{bonus}			{\l__bonus_int}		{0}
+		\__rpg_tl_key:nnn{reach}			{\l__reach_tl}		{5}
+		\__rpg_tl_key:nnn{range}			{\l__range_tl}		{20/60}
+		\__rpg_tl_key:nnn{dmg}				{\l__dmg_tl}		{\RpgDice{1d4}}
+		\__rpg_tl_key:nnn{dmg-type}			{\l__dmg_type_tl}	{bludgeoning}
+		\__rpg_tl_key:nnn{plus-dmg}			{\l__plus_dmg_tl}	{}
+		\__rpg_tl_key:nnn{plus-dmg-type}	{\l__plus_dmg_type_tl}{}
+		\__rpg_tl_key:nnn{or-dmg}			{\l__or_dmg_tl}		{}
+		\__rpg_tl_key:nnn{or-dmg-type}		{\l__or_dmg_type_tl}{}
+		\__rpg_tl_key:nnn{or-dmg-when}		{\l__or_dmg_tl}		{}
+		\__rpg_tl_key:nnn{extra}			{\l__extra_tl}		{}
+	}
+
+	%%Formatters
+
+	\cs_new_protected:Npn \__rpg_if_plus_dmg:
+	{
+		\tl_if_empty:NF {\l__plus_dmg_tl}
+		{ ~ plus\ \l__plus_dmg_tl\ \l__plus_dmg_type_tl\ damage }
+	}
+
+	\cs_new_protected_nopar:Npn \__rpg_if_or_dmg:
+	{
+		\tl_if_empty:NF {\l__or_dmg_tl}
+		{
+		, ~ or\ \l__or_dmg_tl\ \l__dmg_type_tl\ damage\ \l__or_dmg_when_tl
+
+		\tl_if_empty:NF {\l__plus_dmg_tl}
+			{,}
+		}
+	}
+
+	\cs_new_protected_nopar:Npn \__rpg_make_modifier:nnn#1#2#3
+	{
+		\tl_set:Ne#1{\__rpg_format_signed_integer:N{\int_eval:n{\g__rpg_proficiency_bonus_int+#3+\use:c{l__#2 _mod}}}}
+	}
+
+	%%% Construct the `on hit' text
+	\cs_new_protected:Npn \__rpg_on_hit_text:
+	{
+		\tl_clear:N\l_tmpa_tl
+		\str_if_empty:NF {\l__dmg_tl}
+			{
+				\tl_set:Ne\l_tmpa_tl{
+					\RpgDice{\l__dmg_tl}\ \l__dmg_type_tl\ damage
+					\__rpg_if_or_dmg:
+					\__rpg_if_plus_dmg:
+					.\ 
+				}
+			}
+		% `extra' is any special text that goes after the final damage; do not
+		% include the final full stop.
+		\str_if_empty:NF {\l__extra_tl}
+			{
+				\tl_set:Ne\l_tmpa_tl{\l_tmpa_tl\l__extra_tl .}
+			}
+		
+		%%now place the output into the stream 	
+		\l_tmpa_tl	
+	}
+
+	%%Attack function
+
+	%% Formats the attack into the standard form:
+	%% Melee/Ranged (distance-in-ft): +x to hit. On hit [damage-calculation] damage, [optional plus] [optional or]. 
+	\NewDocumentCommand {\RpgStatAttack} {m O{}}
+	{
+		\group_begin:
+		\keys_set:nn { rpg / stat / attack } {#2}
+		%%format the reach/range strings into the desired form
+		\__rpg_append_if_missing:nn{\l__reach_tl}{ft}
+		\__rpg_append_if_missing:nn{\l__range_tl}{ft}
+
+		%Compute the to-hit modifier
+		\__rpg_make_modifier:nnn{\l__ability_modifier_int}{\l__attack_stat_tl}{\l__bonus_int}
+
+		%%Typeset the main attack
+		\RpgStatAction{#1}~
+		
+			\str_case_e:nn {\l__rpg_attack_distance_tl}
+				{
+					{ melee }   {\textit{Melee\l__rpg_attack_type_tl{}~(\l__reach_tl):}~}
+					{ ranged }  {\textit{Ranged\l__rpg_attack_type_tl{}~(\l__range_tl):}~}
+					{ both }    {\textit{Melee~(\l__reach_tl)\ or\ Ranged~(\l__range_tl)\l__rpg_attack_type_tl :}~} 
+				}
+
+		{\l__ability_modifier_int}~to~hit.\ 
+
+		\tl_set:Nn\l_tmpa_tl{\__rpg_on_hit_text:}		
+		\str_if_empty:NF {\l_tmpa_tl}
+			{
+				\textit { On~Hit : } ~ \l_tmpa_tl
+			}
+		\group_end:
+	}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Spells
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	\__rpg_add_tl_keys:Nn{rpg/stat/spell}
+	{
+		\__rpg_tl_key:nnn{title}{\l__spell_title_tl}{Spellcasting}
+		\__rpg_tl_choice_key:nnnn{modifier}{\l__spell_stat_tl}{str,dex,con,int,wis,cha}{int}	
+		\__rpg_tl_key:nnn{bonus}{\l__spell_bonus_int}{0}
+		\__rpg_bool_key:nn{innate}{\l__spell_innate_bool}
+		\__rpg_bool_key:nn{list-only}{\l__spell_list_only}
+	}
+
+	\NewDocumentEnvironment{RpgStatSpellcasting}{O{}}{
+		\group_begin:
+		\keys_set:nn { rpg / stat / spells } {#1}
+	
+		\__rpg_make_modifier:nnn{\l__ability_modifier_int}{\l__spell_stat_tl}{\l__spell_bonus_int}
+		\tl_set:Ne \l__save_int{\fp_eval:n{8+\l__ability_modifier_int}}
+		\tl_set:Ne \l__nice_stat{\prop_item:Ne{\g__dnd_stats_names}{\l__spell_stat_tl}}
+
+		\RpgStatAction{\l__spell_title_tl}~Save\ DC\ \l__save_int,~\l__ability_modifier_int\ to\ hit.\ \name{}\ can\ cast\ the\ following\ spells\ using\ their\ \l__nice_stat
+		\bool_if:NT{\l__spell_innate_bool}
+		{
+			,\ requiring\ no\ material\ components
+		}
+		:
+
+		\providecommand{\spell}{\RpgStatSpellList}
+		\providecommand{\slot}{\RpgStatSpellSlots}
+		\begin{description}
+			[
+			font     = \normalfont \RpgFontStatBlockBody,
+			labelsep = \l__rpg_space_dim,
+			itemindent=0.5em,
+			noitemsep,
+			topsep   = 5pt plus 2pt minus 2pt,
+		]
+	}
+	{
+		\end{description}
+		\group_end:
+	}
+
+	%general wrapper for printing all spells in a list, with nice parsing of commans and whitespace
+	\NewDocumentCommand {\RpgEmphSpellString} {m}
+	{
+		\group_begin:
+		\seq_set_from_clist:Nn \l_tmpa_seq {#1}
+		\seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n { \it {##1} } }
+		\seq_use:Nn \l_tmpb_seq { ,~ }
+		\group_end:
+	}
+
+	\NewDocumentCommand {\RpgStatSpellList} { O {At~will} m }
+	{
+		\item
+		[
+			\regex_match:NnTF \c__pos_int_regex {#1} %checks it's a positive integer (no -2.4 times per day!)
+			{
+			\str_if_in:NnTF {#2} {,} %checks if there's one or more elements in list
+			{ #1/day~each }
+			{ #1/day}
+			}
+			{#1}
+			:
+		]
+		\RpgEmphSpellString {#2}
+	}
+
+	%%New design paradigm has moved away from spell slots on stats, but this is here for consistency
+	\NewDocumentCommand {\RpgStatSpellSlots} { o o m }
+  {
+    \item
+      [
+		\IfNoValueTF{#1}{
+			Cantrips
+		}
+		{
+			\RpgOrdinal{#1}~level
+		}
+
+        {~}(
+        \IfNoValueTF{#2}{
+			at~will
+		}
+		{
+			\RpgPlural{#2}{slot}
+		}
+        ) :
+      ]
+    \RpgEmphSpellString{#3}
+  }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Saving Throw
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \__rpg_add_tl_keys:Nn{rpg/stat/save}
+	{
+        \__rpg_tl_choice_key:nnnn{save}{\l__save_stat_tl}{str,dex,con,int,wis,cha}{dex}
+        \__rpg_tl_key:nnn{dc}{\l__save_dc}{10}
+        \__rpg_tl_key:nnn{target}{\l__save_target_tl}{single}
+        \__rpg_tl_key:nnn{size}{\l__save_size_tl}{60}
+        \__rpg_tl_key:nnn{origin}{\l__save_origin_tl}{}
+        \__rpg_bool_key:nn{target-all}{\l__target_all_bool}
+        \__rpg_tl_key:nnn{failure}{\l__save_fail}{}
+        \__rpg_tl_key:nnn{success}{\l__save_succeed}{}
+    }
+    \NewDocumentCommand{\RpgSavingThrow}{m O{} }{
+        \keys_set:nn { rpg / stat / save} {#2}
+        \tl_set:Ne \l__nice_stat{\prop_item:Ne{\g__dnd_stats_names}{\l__save_stat_tl}}
+        \RpgStatAction{#1}~{\__rpg_save_target: DC\ \l__save_dc\ \l__nice_stat{}~Save.}
+         \begin{description}[nosep,left=1em]
+            \item[On~Failure:]~\l__save_fail
+            \tl_if_blank:eF{\l__save_succeed}{{\item[On~Success:]~\l__save_succeed}}
+        \end{description}
+    }
+
+    \cs_new_protected:Npn \__rpg_save_target:
+    {
+        \__rpg_append_if_missing:nn{\l__save_size_tl}{ft}
+        \def\string@mustMake{\ must\ make\ a\ }
+        
+        \tl_set:Ne\l_tmpa_target{\bool_if:NTF{\l__target_all_bool}{All\ creatures}{All\ enemies}}
+        \tl_set:Ne\l_tmpa_origin{\tl_if_empty:eF{\l__save_origin_tl}{,\ originating\ from\ \l__save_origin_tl}}
+        \str_case:enF{\l__save_target_tl}
+        {
+            {single}{One\ target\ within\ \l__save_size_tl\string@mustMake}
+            {cone}{\l_tmpa_target\ within\ a\ \l__save_size_tl\ cone\l_tmpa_origin\string@mustMake}
+            {sphere}{\l_tmpa_target\ within\ a\ \l__save_size_tl\ sphere\l_tmpa_origin\string@mustMake}
+            {line}{\l_tmpa_target\ in\ a\ \l__save_size_tl\ line\l_tmpa_origin\string@mustMake}
+        }
+        {
+            \tl_if_blank:eF{\l__save_target_tl}
+            {
+                \l__save_target_tl\string@mustMake 
+            }
+        }
+    }
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Legendary & Actions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \__rpg_add_tl_keys:Nn{rpg/stat/legendary}
+	{
+		\__rpg_bool_key:nn{defiance}{\l__has_defiance_bool}
+		\__rpg_tl_key:nnn{uses}{\l__uses_tl}{3}
+	}
+	\NewDocumentCommand{\RpgStatLegendarySection}{+O{}}
+		{
+            \keys_set:nn{rpg/stat/legendary}{#1}
+			
+			\RpgStatSection{Legendary~Actions\ (\l__uses_tl\ uses)}
+			{
+				{\noindent\RpgFontStatBlockLegendary
+				\string@legendarySpeil\par}
+			}
+
+            \bool_if:NT{\l__has_defiance_bool}
+            {
+                \RpgLegendaryDefiance{}
+            }
+		}
+    \NewDocumentCommand\RpgLegendaryDefiance{}
+        {
+            \action{Legendary~Defiance}~{\string@legendaryDefiance}
+        }
+
+
+	\__rpg_add_tl_keys:Nn{rpg/stat/mythic}
+	{
+		\__rpg_bool_key:nn{passive-only}{\l__passive_only_bool}
+		\__rpg_tl_key:nnn{narration}{\l__mythic_narration}{}
+		\__rpg_tl_key:nnn{trait-name}{\l__mythic_trait}{Second~Phase}
+		\__rpg_tl_key:nnn{trait}{\l__mythic_trait_body}{\string@mythicDefaultBody}
+	}
+	\NewDocumentCommand{\RpgStatMythicSection}{+O{}}{
+		\RpgStatSection{Mythic~Monster}
+
+			\keys_set:nn{rpg/stat/mythic}{#1}
+			
+
+			\action{\l__mythic_trait}\ \l__mythic_trait_body \par
+			\tl_if_empty:eF{\l__mythic_narration}
+			{
+				{\noindent\RpgFontStatBlockLegendary \string@mythicNarrationLeadIn\par}
+				
+				\begin{RpgNarration}[before~skip=3pt,after~skip=3pt]
+					\l__mythic_narration
+				\end{RpgNarration}
+			}
+			{\noindent\RpgFontStatBlockLegendary 
+				\string@mythicGains\bool_if:nF{\l__passive_only_bool}{\ and\ Legendary\ Actions}.  \par
+			}
+
+	}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Strings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %Long blocks of text and Expl3 don't play well together; so define the strings in 'standard' mode!
+    \ExplSyntaxOff
+    \def\string@savingThrowRepeat{The target repeats the saving throw at the end of each turn, ending the effect on a success.}
+    \def\string@legendarySpeil{Immediately after another creature's turn, \RpgStatName{} can expend a Legendary Action to take one of the following actions. Expended actions are regained at the start of each of its turns.}
+    \def\string@legendaryDefiance{\RpgStatName{} repeats a saving throw that they failed in the past hour (using their original modifier). On a success the effect is ended.}
+    \def\string@mythicDefaultBody{When reduced to 0HP, \RpgStatName{} recovers all hit points and removes all negative status effects.}
+    \def\string@mythicNarrationLeadIn{When the mythic trait activates, read the following aloud:}
+    \def\string@mythicGains{When\ the\ mythic\ trait\ is\ activated,\ \RpgStatName{}\ gains\ the\ following\ traits}
+
