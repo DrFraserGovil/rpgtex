@@ -48,13 +48,18 @@
 	\RpgSetThemeColor{\l__stat_color!25!white}
 	
 	% change filigree color to
-	\bool_if:NT{\l__stat_filigree_outline}
+	\tl_clear:N\l__box_options
+	\bool_if:NTF{\l__stat_filigree_outline}
 	{
 		\colorlet{filigreecolor}{\statOutlineColor}
+		\tl_set:Ne\l__box_options{rpgfiligree}
 	}
-
-	%construct arguments for tl-box insertion
-	\tl_set:Ne{\l__box_options}{\bool_if:NT{\l__stat_filigree}{rpgfiligree}}
+	{
+		\bool_if:NT{\l__stat_filigree}
+		{
+			\tl_set:Ne\l__box_options{rpgfiligree}
+		}
+	}
 }
 
 
