@@ -300,21 +300,21 @@
     \cs_new_protected:Npn \__rpg_save_target:
     {
         \__rpg_append_if_missing:nn{\l__save_size_tl}{ft}
-        \def\string@mustMake{\ must\ make\ a\ }
+        \def\rpgstring@mustMake{\ must\ make\ a\ }
         
         \tl_set:Ne\l_tmpa_target{\bool_if:NTF{\l__target_all_bool}{All\ creatures}{All\ enemies}}
         \tl_set:Ne\l_tmpa_origin{\tl_if_empty:eF{\l__save_origin_tl}{,\ originating\ from\ \l__save_origin_tl}}
         \str_case:enF{\l__save_target_tl}
         {
-            {single}{One\ target\ within\ \l__save_size_tl\string@mustMake}
-            {cone}{\l_tmpa_target\ within\ a\ \l__save_size_tl\ cone\l_tmpa_origin\string@mustMake}
-            {sphere}{\l_tmpa_target\ within\ a\ \l__save_size_tl\ sphere\l_tmpa_origin\string@mustMake}
-            {line}{\l_tmpa_target\ in\ a\ \l__save_size_tl\ line\l_tmpa_origin\string@mustMake}
+            {single}{One\ target\ within\ \l__save_size_tl\rpgstring@mustMake}
+            {cone}{\l_tmpa_target\ within\ a\ \l__save_size_tl\ cone\l_tmpa_origin\rpgstring@mustMake}
+            {sphere}{\l_tmpa_target\ within\ a\ \l__save_size_tl\ sphere\l_tmpa_origin\rpgstring@mustMake}
+            {line}{\l_tmpa_target\ in\ a\ \l__save_size_tl\ line\l_tmpa_origin\rpgstring@mustMake}
         }
         {
             \tl_if_blank:eF{\l__save_target_tl}
             {
-                \l__save_target_tl\string@mustMake 
+                \l__save_target_tl\rpgstring@mustMake 
             }
         }
     }
@@ -335,7 +335,7 @@
 			\RpgStatSection{Legendary~Actions\ (\l__uses_tl\ uses)}
 			{
 				{\noindent\RpgFontStatBlockLegendary
-				\string@legendarySpeil\par}
+				\rpgstring@legendarySpeil\par}
 			}
 
             \bool_if:NT{\l__has_defiance_bool}
@@ -345,7 +345,7 @@
 		}
     \NewDocumentCommand\RpgLegendaryDefiance{}
         {
-            \action{Legendary~Defiance}~{\string@legendaryDefiance}
+            \action{Legendary~Defiance}~{\rpgstring@legendaryDefiance}
         }
 
 
@@ -354,7 +354,7 @@
 		\__rpg_bool_key:nn{passive-only}{\l__passive_only_bool}
 		\__rpg_tl_key:nnn{narration}{\l__mythic_narration}{}
 		\__rpg_tl_key:nnn{trait-name}{\l__mythic_trait}{Second~Phase}
-		\__rpg_tl_key:nnn{trait}{\l__mythic_trait_body}{\string@mythicDefaultBody}
+		\__rpg_tl_key:nnn{trait}{\l__mythic_trait_body}{\rpgstring@mythicDefaultBody}
 	}
 	\NewDocumentCommand{\RpgStatMythicSection}{+O{}}{
 		\RpgStatSection{Mythic~Monster}
@@ -365,14 +365,14 @@
 			\action{\l__mythic_trait}\ \l__mythic_trait_body \par
 			\tl_if_empty:eF{\l__mythic_narration}
 			{
-				{\noindent\RpgFontStatBlockLegendary \string@mythicNarrationLeadIn\par}
+				{\noindent\RpgFontStatBlockLegendary \rpgstring@mythicNarrationLeadIn\par}
 				
 				\begin{RpgNarration}[before~skip=3pt,after~skip=3pt]
 					\l__mythic_narration
 				\end{RpgNarration}
 			}
 			{\noindent\RpgFontStatBlockLegendary 
-				\string@mythicGains\bool_if:nF{\l__passive_only_bool}{\ and\ Legendary\ Actions}.  \par
+				\rpgstring@mythicGains\bool_if:nF{\l__passive_only_bool}{\ and\ Legendary\ Actions}.  \par
 			}
 
 	}
@@ -381,10 +381,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %Long blocks of text and Expl3 don't play well together; so define the strings in 'standard' mode!
     \ExplSyntaxOff
-    \def\string@savingThrowRepeat{The target repeats the saving throw at the end of each turn, ending the effect on a success.}
-    \def\string@legendarySpeil{Immediately after another creature's turn, \RpgStatName{} can expend a Legendary Action to take one of the following actions. Expended actions are regained at the start of each of its turns.}
-    \def\string@legendaryDefiance{\RpgStatName{} repeats a saving throw that they failed in the past hour (using their original modifier). On a success the effect is ended.}
-    \def\string@mythicDefaultBody{When reduced to 0HP, \RpgStatName{} recovers all hit points and removes all negative status effects.}
-    \def\string@mythicNarrationLeadIn{When the mythic trait activates, read the following aloud:}
-    \def\string@mythicGains{When\ the\ mythic\ trait\ is\ activated,\ \RpgStatName{}\ gains\ the\ following\ traits}
+    \def\rpgstring@savingThrowRepeat{The target repeats the saving throw at the end of each turn, ending the effect on a success.}
+    \def\rpgstring@legendarySpeil{Immediately after another creature's turn, \RpgStatName{} can expend a Legendary Action to take one of the following actions. Expended actions are regained at the start of each of its turns.}
+    \def\rpgstring@legendaryDefiance{\RpgStatName{} repeats a saving throw that they failed in the past hour (using their original modifier). On a success the effect is ended.}
+    \def\rpgstring@mythicDefaultBody{When reduced to 0HP, \RpgStatName{} recovers all hit points and removes all negative status effects.}
+    \def\rpgstring@mythicNarrationLeadIn{When the mythic trait activates, read the following aloud:}
+    \def\rpgstring@mythicGains{When\ the\ mythic\ trait\ is\ activated,\ \RpgStatName{}\ gains\ the\ following\ traits}
 

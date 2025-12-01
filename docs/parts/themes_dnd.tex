@@ -17,7 +17,7 @@
 
             \InsertFontTable{}
             
-        \subsection{Colors}
+        \subsection{Colors}\label{S:DndColor}
 
             The theme provides a large number of colors:
 
@@ -143,8 +143,6 @@
     \end{RpgItem}
     \end{ExampleBlock}
     
-   
-
     
 \section{RpgFeat}\label{S:DndFeat}\index{RpgFeat!Theme!default}
 
@@ -288,9 +286,12 @@
         \RpgSpellUpcast{1d8}
     \end{RpgSpell}
 \end{ExampleBlock}
+\clearpage
 \section{RpgStat}
 
-    \RpgMacro*[RpgStat!Theme!dnd]{RpgStat}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgStat} environment, used to describe monsters and enemies, using the rules and parameters of spells in D\&D 5e.}
+    Internally, the monster statblock is one of the most complex environments in the \rpgtex{} library; the upside being that it makes it quick and easy to generate a monster which follows the standard D\&D monster assumptions.
+
+    \RpgMacro*[RpgStat!Theme!dnd]{RpgStat}{\param{\paramO m \paramO}}{ The dnd configuration of the \envref{RpgStat} environment, used to describe monsters and enemies, using the rules and parameters of spells in D\&D 5e. As with all FeatureForge environments, RpgStat has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. }
         {
             \cmd{RpgStatShowCard\param{true/false}} \% set the card mode
 
@@ -301,12 +302,57 @@
             \cmd{end}\param{RpgStat}
         }
         {	
-            As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+            We semantically split the standard \forcelink{https://media.wizards.com/2018/dnd/downloads/DnD_BasicRules_2018.pdf\#page=110}{D\&D statblock} into two parts:
+            \begin{enumerate}
+                \item The \textit{statistics} - hit points, armour class, stat modifiers, skill proficiencies and so on. These are highly structured and amount to 'form filling'. 
                 
-            
+                \textbf{These are defined in the key-value options}.
+                \item The \textit{abilities} - including the traits, actions, bonus actions and so on. These are freeform and largely consist of plain text.
+                
+                \textbf{These are defined in the body of the environment}.
+            \end{enumerate}            
         }
+        \begin{center}
+            \begin{tikzpicture}
+                \node[text width=0.45\linewidth] at (0,0) {
+                    \begin{RpgStat}{Commoner}[
+                        type={Medium or Small Humanoid; typically neutral},
+                        languages=Common
+                    ]
+                        \section{Traits}
+                            \action{Mob Mentality} If a Commoner is subjected to a mind-altering effect (such as the frightened condition, or a charm spell), all Commoners within 10ft are also subjected to this effect.
+                        \section{Actions}
+                            \attack{Club}
+                    \end{RpgStat}
+                };
+                \draw[decorate,decoration={brace,amplitude=10pt,raise=-7pt},ultra thick] (4.5,4.25)--++(0,-4.75) node[midway,anchor=west]{\bf ~~Statistics (key/values)};
+                \draw[decorate,decoration={brace,amplitude=10pt,raise=-7pt},ultra thick] (4.5,-0.6)--++(0,-3.75) node[midway,anchor=west]{\bf ~~Abilities (body text)};
+            \end{tikzpicture}
+        \end{center}
+        \clearpage
+        \subsection{Statistics Options}
+
+            There are a large number of options that can be passed to the statistics. Where multiple key names are presented, these are aliased to the same value and behave identically. As with all expl3 keys, repeated values are sequentially overwritten, with only the final value retained.
+            \newcommand{\statkey}[4]{\\\parbox[t]{2cm}{\raggedright #1} & #2 & #3 & #4}
+            \newcommand{\catbreak}[1]{\\\multicolumn{4}{l}{\textit{#1}}}
+            \begin{RpgTable}[breakable]{lllX}
+                Key & Type & Default Value &Effect 
+                \catbreak{Appearance \& Visual Tweaks}
+                    \statkey{color}{tikz-color code}{rulered \RpgPage[p]{S:DndColor}}{The base color used by the environment. Several colors are automatically derived from this:
+                        \begin{itemize}
+                            \item The `triangle dividers' use this color
+                            \item The 'header text' color is 50\% darker\footnote{In the sense that it is defined as \texttt{color!50!black}}
+                            \item The border color is 20\% lighter (unless otherwise specified)
+                            \item The \texttt{themecolor} is temporarily set to a value 75\% lighter.
+                        \end{itemize}
+                        }
+                    \statkey{outline-color}{tikz-color code}{--empty--}{If non-empty, this color is used for the border of the environment, intstead of the one derived from 'color'}
+                    \statkey{filigree}{tikz-color code}{--no value--}{}
+                \catbreak{Appearance}
+            \end{RpgTable}
 
     \begin{ExampleBlock}{RpgStat}
+        \RpgStatShowCard{true}
     \begin{RpgStat}{Tom Bombadil}[
        type={Medium Celestial, Chaotic Good},
        armor-class = {14},
