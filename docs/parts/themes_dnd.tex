@@ -87,6 +87,26 @@
             \RpgDice{3d8 -5 +2}
             \end{ExampleBlock}
 
+        \subsection{Filigree}\label{S:DndFiligree}
+
+            The dnd implemenation of \envref{RpgFiligree} is designed to mimic the decorative elements seen around the class tables in the Player's Handbook:
+            
+\begin{ExampleBlock}{D\&D Filigree}
+    \begin{RpgFiligree}
+        Some decorative text
+    \end{RpgFiligree}
+
+    \vspace{1cm}
+
+    \begin{RpgTable}[filigree]{lX}
+        Header 1 & Header 2
+        \\
+        Body 1 & Body 2
+        \\
+        Body 3 & Body 4
+    \end{RpgTable}
+\end{ExampleBlock}
+
     \newpage
     \section{RpgItem}\label{S:DndItem}
 
@@ -287,21 +307,24 @@
     \end{RpgSpell}
 \end{ExampleBlock}
 \clearpage
-\section{RpgStat}
+\section{RpgStat: D\&D Monsters}
 
     Internally, the monster statblock is one of the most complex environments in the \rpgtex{} library; the upside being that it makes it quick and easy to generate a monster which follows the standard D\&D monster assumptions.
 
-    \RpgMacro*[RpgStat!Theme!dnd]{RpgStat}{\param{\paramO m \paramO}}{ The dnd configuration of the \envref{RpgStat} environment, used to describe monsters and enemies, using the rules and parameters of spells in D\&D 5e. As with all FeatureForge environments, RpgStat has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. }
+    \RpgMacro*[RpgStat!Theme!dnd]{RpgStat}{RpgStat*,\param{\paramO m \paramO}}{ The dnd configuration of the \envref{RpgStat} environment, used to describe monsters and enemies, using the rules and parameters of spells in D\&D 5e. As with all FeatureForge environments, RpgStat has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. }
         {
             \cmd{RpgStatShowCard\param{true/false}} \% set the card mode
 
-            \cmd{begin}\param{RpgStat}[card-opts]\param{Spell Name}[key-values]
+            \cmd{begin}\param{RpgStat}[card-opts]\param{Creature Name}[key-values]
 
             ~~<body text>
 
             \cmd{end}\param{RpgStat}
         }
         {	
+             \begin{RpgSidebar}{RpgStat vs RpgStat*}
+                 \texttt{RpgStat*} is identical to the unstarred version, except it automatically activates the \texttt{twocolumn} mode, and sets \texttt{float-type = figure*} (see below). This makes it suitable for rendering 'boss' (i.e. large) stat blocks whilst writing twocolumn documents. 
+            \end{RpgSidebar}
             We semantically split the standard \forcelink{https://media.wizards.com/2018/dnd/downloads/DnD_BasicRules_2018.pdf\#page=110}{D\&D statblock} into two parts:
             \begin{enumerate}
                 \item The \textit{statistics} - hit points, armour class, stat modifiers, skill proficiencies and so on. These are highly structured and amount to 'form filling'. 
@@ -310,7 +333,9 @@
                 \item The \textit{abilities} - including the traits, actions, bonus actions and so on. These are freeform and largely consist of plain text.
                 
                 \textbf{These are defined in the body of the environment}.
-            \end{enumerate}            
+            \end{enumerate}    
+            
+         
         }
         \begin{center}
             \begin{tikzpicture}
@@ -322,22 +347,31 @@
                         \section{Traits}
                             \action{Mob Mentality} If a Commoner is subjected to a mind-altering effect (such as the frightened condition, or a charm spell), all Commoners within 10ft are also subjected to this effect.
                         \section{Actions}
-                            \attack{Club}
+                            \melee{Club}
                     \end{RpgStat}
                 };
                 \draw[decorate,decoration={brace,amplitude=10pt,raise=-7pt},ultra thick] (4.5,4.25)--++(0,-4.75) node[midway,anchor=west]{\bf ~~Statistics (key/values)};
                 \draw[decorate,decoration={brace,amplitude=10pt,raise=-7pt},ultra thick] (4.5,-0.6)--++(0,-3.75) node[midway,anchor=west]{\bf ~~Abilities (body text)};
             \end{tikzpicture}
         \end{center}
+          
         \clearpage
         \subsection{Statistics Options}
 
             There are a large number of options that can be passed to the statistics. Where multiple key names are presented, these are aliased to the same value and behave identically. As with all expl3 keys, repeated values are sequentially overwritten, with only the final value retained.
-            \newcommand{\statkey}[4]{\\\parbox[t]{2cm}{\raggedright #1} & #2 & #3 & #4}
+            \newcommand{\statkey}[4]{\\\parbox[t]{2.5cm}{\raggedright #1} & #2 & #3 & #4}
+            \newcommand{\statflag}[2]{\\\parbox[t]{2cm}{\raggedright #1} & (flag) & ~ & #2}
             \newcommand{\catbreak}[1]{\\\multicolumn{4}{l}{\textit{#1}}}
-            \begin{RpgTable}[breakable]{lllX}
-                Key & Type & Default Value &Effect 
-                \catbreak{Appearance \& Visual Tweaks}
+            \newcommand{\tablesection}[2]
+            {
+                \subsubsection{#1}
+                \begin{RpgTable}[breakable,vskip=2pt plus 2pt minus 2pt]{lllX}
+                Key & Value & Default Value &Effect 
+                #2
+                \end{RpgTable}
+            }
+            \tablesection{Appearance}
+            {
                     \statkey{color}{tikz-color code}{rulered \RpgPage[p]{S:DndColor}}{The base color used by the environment. Several colors are automatically derived from this:
                         \begin{itemize}
                             \item The `triangle dividers' use this color
@@ -346,14 +380,138 @@
                             \item The \texttt{themecolor} is temporarily set to a value 75\% lighter.
                         \end{itemize}
                         }
-                    \statkey{outline-color}{tikz-color code}{--empty--}{If non-empty, this color is used for the border of the environment, intstead of the one derived from 'color'}
-                    \statkey{filigree}{tikz-color code}{--no value--}{}
-                \catbreak{Appearance}
-            \end{RpgTable}
+                    \statkey{outline-color}{tikz-color code}{--empty--}{If non-empty, this color is used for the border of the environment, intstead of the one derived from 'color'. No effect when in Card mode.}
+                    \statflag{filigree}{If this flag is present, replaces the default border with filigree \RpgPage[p]{S:DndFiligree}, using the current \texttt{filigreecolor}. No effect when in Card mode.}
+                    \statflag{filigree-match}{If this flag is present, replaces the default border with filigree \RpgPage[p]{S:DndFiligree} and locally changes \texttt{filigreecolor} to be equal to the border color. If both \texttt{filigree-match} and \texttt{filigree} present, \texttt{filigree-match} takes priority. No effect when in card mode.}
+                    \statflag{twocolumn}{If this flag is present, the environment is rendered in twocolumns, suitable for breaking up statblocks which are full-page width (either when in a onecolumn document, or placed inside a full-width float). Automatically activated by RpgStat*. No effect when in card mode.}
+            }
+            \tablesection{Positioning}{
+                    \statkey{float}{!/h/t/b}{--empty--}{If non-empty, wraps the statblock in a float (of a type determined by \texttt{float-type}), with the float command equal to this value.
+                    
+                    \begin{RpgSidebar}{IMPORTANT!}
+                        Normally the `h' option does not work for \texttt{figure*} when in a twocolumn environment. We have implemented a workaround which uses the \texttt{strip} environment to simulate a ``immediate full width image''. \textbf{This is very fragile!} It is likely to throw compilation errors when on the same page as other floats, or when there is insufficient text before or after the environment begins. Use with extreme caution!
+                    \end{RpgSidebar}
 
+                    No effect when in card mode.
+                    }
+                    \statkey{float-type}{environment name}{figure}{The environment which wraps the statblock if a float command is given; setting this to \texttt{figure*} creates a full-width statblock when in a twocolumn document.}
+            }
+            \clearpage
+            \tablesection{Basic Description}{
+                    \statkey{nickname}{text}{<title value>}{A shorter or alternative version of the `main name' which appears at the top of the statblock; this is the value returned by \cmdref{RpgStatName}, and used automatically in several places. Useful when you want to give the statblock a grand title, but don't want ``\textit{Gorgenhar Haluavin, the Devourer of Worlds} makes three attacks''.}
+                    \statkey{type}{text}{(empty)}{This text is placed in italics underneath the main title. Usually used for size and alignment declarations.}
+                    \statkey{armor-class / ac / AC}{text}{10}{The value given as the armour class of the monster. Can accept strings explaining the armour such as `15 (Natural Armour)' or `10 (13 with \textit{mage armor})'}
+                    \statkey{hit-points / hp / HP}{text}{\cmd{RpgDice\param{1d8}}}{The value given as the total HP of the monster. The value given is usually as a \cmdref{RpgDice} command. This value is expanded after the modifiers are computed, so it is possible to use (i.e.) the consitution modifier as a variable: \texttt{hp=\cmd{RpgDice}\param{8d10 + 8*\cmd{stat}\param{con}}} will be correctly computed.}
+                    \statkey{speed}{text}{30ft}{Value given as the monster's movement speed. If the substring `ft' is not found in the input, then it is appended to the end; i.e. \texttt{speed=30} will render as '30ft'.}
+                    \statkey{initiative}{text}{}{If this value is non-empty, it is used (without further formatting) as the initiative of the creature. If the value is empty, the computed dexterity modifier is used instead.}
+
+            }
+            \tablesection{Abilities \& Saves}{
+                    \statkey{proficiency-bonus / proficiency / pb}{integer}{(empty)}{If a value is provided, this is used as the proficiency bonus for all save bonus, skill bonuses and to-hit values. If not provided, a value is computed based on the challenge rating.}
+                    \statkey{str}{integer}{10}{Sets the value of the Strength Score. The associated modifier is automatically computed} 
+                    \statkey{dex}{integer}{10}{Sets the value of the Dexterity Score. The associated modifier is automatically computed} 
+                    \statkey{con}{integer}{10}{Sets the value of the Constitution Score. The associated modifier is automatically computed} 
+                    \statkey{int}{integer}{10}{Sets the value of the Intelligence Score. The associated modifier is automatically computed} 
+                    \statkey{wis}{integer}{10}{Sets the value of the Wisdom Score. The associated modifier is automatically computed} 
+                    \statkey{cha}{integer}{10}{Sets the value of the Charisma Score. The associated modifier is automatically computed} 
+                    \statflag{str-save}{If present, this flag indicates the monster is proficient in Strength saving throws.}
+                    \statflag{dex-save}{If present, this flag indicates the monster is proficient in Dexterity saving throws.}
+                    \statflag{con-save}{If present, this flag indicates the monster is proficient in Constitution saving throws.}
+                    \statflag{int-save}{If present, this flag indicates the monster is proficient in Intelligence saving throws.}
+                    \statflag{wis-save}{If present, this flag indicates the monster is proficient in Wisdom saving throws.}
+                    \statflag{cha-save}{If present, this flag indicates the monster is proficient in Charisma saving throws.}
+            }
+            \clearpage
+            \tablesection{Skills \& Details}{
+                \statkey{skills}{comma-separated list}{(empty)}{Each skill in this list is iterated over - if the value is one of the 18 D\&D skills, it is matched with its usual ability modifier, and a skill bonus is computed in the normal fashion. This bonus is appended to the skill name in the list when displayed.
+                
+                \begin{RpgSidebar}{Manual Skills}
+                    The automated computing assumes that skills will always be paired with their normal attribute. If a monster uses a variant pairing (i.e. Strength (Intimidation)) then this will need to be manually declared. 
+
+                    The automation only occurs if the string exactly matches\footnote{Whitespace and variant capitalisation count as `exact matches'} the names of the skills; so \texttt{athletics, Acrobatics (+25)} will cause the `athletics' to be computed automatically, but the Acrobatics will not count as a match, so will keep its manual bonus declaration.  
+                \end{RpgSidebar}
+                }
+                \statkey{skills-expertise}{comma-separated list}{(empty)}{Exactly as with the \texttt{skills} key, except the automated bonus adds twice the proficiency bonus. Expertise-skills are listed before other skills in the rendered environemnt.}
+                \statkey{languages}{text}{(empty)}{Any languages spoken or understood by the creature. This is used as a simple string (no manipulation)}
+                \statkey{senses}{text}{(empty)}{Any special senses possed by the creature. Passive perception is handled separately.}
+                \statkey{passive-perception}{integer}{(empty)}{If empty, the passive perception is equal to the Wisdom (Perception) bonus (computed from the Wisdom modifier, and if the perception skill was declared as proficient or expertise). If this value is non-empty, override that value with the given one.}
+                \statkey{challenge / cr / CR}{number}{(special)}{If a value is provided, this sets the display value of the CR. If no value was provided to the CR, one is computed from the proficiency bonus using the usual formula. If no CR was provided and no PB, then the CR defaults to 0. 
+                
+                If both a CR and a proficiency bonus are manually provided, then no checks are performed to ensure they `make sense'. It is possible to have a CR0 creature with a +90 proficiency bonus, if the user manually sets those values.
+
+                Non-integer values are accepted (i.e. 1/4).
+                }
+                \statkey{xp}{integer}{(empty)}{If this value is non-empty, it is used as the XP gain defeat. 
+                
+                If left empty, the XP is manually computed from an approximate formula which is accurate to $\pm 100$xp up to CR16:
+                
+                $$\text{XP} = \begin{cases} 100 + 50\Big(\text{CR}^2 + \text{CR} + 2 \text{CR} \lfloor \frac{\text{CR}}{7}\rfloor  &  \text{CR} \geq 1 
+                    \\
+                    \quad\quad- 7  \lfloor \frac{\text{CR}}{7}\rfloor^2 - 5  \lfloor \frac{\text{CR}}{7}\rfloor\Big) &
+                    \\ 100 \times \text{CR} & \text{else}\end{cases}$$
+                
+
+                (This is a modified and analytically simplified version of the formula found on \forcelink{https://rpg.stackexchange.com/questions/192412/is-there-any-generalised-formula-for-converting-monster-cr-into-xp-in-dd-5e}{a helpful discussion online.})}
+
+                \statkey{condition-immunities}{text}{(empty)}{Any condition immunities possessed by the creature.}
+                \statkey{damage-immunities}{text}{(empty)}{Any damage immunities possessed by the creature.}
+                \statkey{damage-resistances}{text}{(empty)}{Any damage resistances possessed by the creature.}
+                \statkey{damage-vulnerabilities}{text}{(empty)}{Any damage vulnerabilities possessed by the creature.}
+            }
+    \subsection{Abilities, Attacks \& Spellcasting}
+
+        The body of the environment is where the user places the traits, abilities and attacks that the creature can use. In order to format these, we provide the following commands.
+
+        \subsubsection{Ability Interface}
+
+            \begin{RpgSidebar}{Global \& Local Names}
+                All of the commands we will introduce below follow the established syntax for the \rpgtex{} library: \cmd{RpgStat[Command]}. These are placed in the global namespace, and are accessible anywhere - a user may invoke RpgStat elements outside of the RpgStat environment.
+
+                This naming convention - though consistent and avoiding 'common name collisions' - can become cumbersome when used in a dense environment like the RpgStat. We therefore provide several \textit{local aliases}. These are macros which can only be used inside the RpgStat environment. 
+
+                With only one exception\footnote{\cmd{section}, because that will obviously already be defined!}, these aliases are created when the environment begins, using the \cmd{ProvideDocumentCommand} interface -- this means that the alias will only be created if a macro with that name \textit{doesn't exist}.
+
+                The local alias is given in \textcolor{red}{red text}.
+            \end{RpgSidebar}
+            \newcommand\statalias[1]
+            {
+                \textcolor{red}{\cmd{#1}}\index{#1}
+            }
+
+            \RpgMacro[RpgStat!Section]{RpgStatSection}{\statalias{section},\param{m}}{Creates a section header}{}
+            {
+                Although called a `section', the visual is most similar to the \cmd{subsection}, though with the text rendered in the \cmd{RpgFontStatBlockSection} font.
+            }
+\testBlock{}
+            
+            
+            \RpgMacro[RpgStat!Action]{RpgStatAction}{\statalias{action},\statalias{trait},\param{\paramO{} m}}{Creates an action `paragraph'}{}
+            {
+                This is how all actions and traits are declared, providing a `name' in a format similar to the \cmd{paragraph} command.
+
+                The optional argument is used to insert ``[X] actions'' into the action name. This is useful for Legendary Actions which might have a variable cost.
+            }
+\begin{ExampleBlock}{RpgStatAction}
+\RpgStatAction{Fire Breath} The monster breaths fire!
+
+\RpgStatAction[2]{Legendary Attack} This has a cost!
+\end{ExampleBlock}
+
+            \RpgMacro[RpgStat!Reaction]{RpgStatReaction}{\statalias{reaction},\param{m m}}{Creates an action `paragraph' with an additional `trigger', indicating when the reaction may be used.}{}
+            {}
+\begin{ExampleBlock}{RpgStatReaction}
+\RpgStatReaction{Mage Hunter}{When a creature within 5ft casts a spell} Immediately make a single weapon attack 
+\end{ExampleBlock}
+
+
+        \subsubsection{Attacks}
+
+        \subsubsection{Spellcasting}
+
+        \subsubsection{Saving Throws}
     \begin{ExampleBlock}{RpgStat}
-        \RpgStatShowCard{true}
-    \begin{RpgStat}{Tom Bombadil}[
+        \RpgStatShowCard{false}
+    \begin{RpgStat}{Bom Tombadil}[
        type={Medium Celestial, Chaotic Good},
        armor-class = {14},
        hp  = {\RpgDice{12d12 + 40}},
@@ -366,34 +524,42 @@
        ]
     \end{RpgStat}
     \end{ExampleBlock}
-  % \RpgStatBasics[
-            %     armor-class = {9 (12 with \emph{mage armor})},
-            %     hit-points  = {\RpgDice{3d8 + 3}},
-            %     speed       = {30 ft., fly 30 ft.},
-            %     proficiency=2,
-            %     str = 12,
-            %     dex = 8,
-            %     con = 13,
-            %     int = 10,
-            %     wis = 14,
-            %     cha = 15,
-            %     str_save,
-            %     cha_save,
-            % ]
-\section{RpgStatLegacy}
 
-    \RpgMacro*[RpgStat!Theme!dnd]{RpgStat}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgStat} environment, used to describe monsters and enemies, using the rules and parameters of spells in D\&D 5e.}
+    \subsection{Legacy Appearance}
+
+        The appearance and structure of the RpgStat block is based on the improvements made by the 2024 rules release (with a few modifications of our own). A version that closely aligns with the original 2014 version of the rules can be activated:
+
+        \RpgMacro{RpgStatLegacyMode}{}{Overrides the appearance of the RpgStat environment with 2014-style ones.}
         {
-            \cmd{RpgStatShowCard\param{true/false}} \% set the card mode
+            \% call outside the environment
 
-            \cmd{begin}\param{RpgStat}[card-opts]\param{Spell Name}[key-values]
 
-            ~~<body text>
+            \cmd{RpgStatLegacyMode}\{\}
 
-            \cmd{end}\param{RpgStat}
+    \% subsequent stats use the old visual style
+
+            \cmd{begin\param{RpgStat}} \dots 
         }
-        {	
-            As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
-                
-            
+        {
+            The overrides are purely stylistic; the underlying computation remains the same. The changes persist within a local group.
         }
+
+    \RpgStatShowCard{false}
+\begin{ExampleBlock}{2014-style RpgStat}
+{
+    \RpgStatLegacyMode{}
+    \begin{RpgStat}{Commoner}[
+        type={Medium or Small Humanoid; typically neutral},
+        languages=Common
+    ]
+        \section{Traits}
+            \action{Mob Mentality} If a Commoner is subjected to a mind-altering effect (such as the frightened condition, or a charm spell), all Commoners within 10ft are also subjected to this effect.
+        \section{Actions}
+            \melee{Club}
+    \end{RpgStat}
+
+    % all RpgStats in these braces use the old style
+}
+
+%outside the changes revert to the new style
+\end{ExampleBlock}
