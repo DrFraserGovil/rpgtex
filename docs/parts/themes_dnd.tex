@@ -482,7 +482,7 @@
             {
                 Although called a `section', the visual is most similar to the \cmd{subsection}, though with the text rendered in the \cmd{RpgFontStatBlockSection} font.
             }
-\testBlock{}
+
             
             
             \RpgMacro[RpgStat!Action]{RpgStatAction}{\statalias{action},\statalias{trait},\param{\paramO{} m}}{Creates an action `paragraph'}{}
@@ -491,17 +491,12 @@
 
                 The optional argument is used to insert ``[X] actions'' into the action name. This is useful for Legendary Actions which might have a variable cost.
             }
-\begin{ExampleBlock}{RpgStatAction}
-\RpgStatAction{Fire Breath} The monster breaths fire!
 
-\RpgStatAction[2]{Legendary Attack} This has a cost!
-\end{ExampleBlock}
+            \RpgGetExample{dnd-stat-action}
 
             \RpgMacro[RpgStat!Reaction]{RpgStatReaction}{\statalias{reaction},\param{m m}}{Creates an action `paragraph' with an additional `trigger', indicating when the reaction may be used.}{}
             {}
-\begin{ExampleBlock}{RpgStatReaction}
-\RpgStatReaction{Mage Hunter}{When a creature within 5ft casts a spell} Immediately make a single weapon attack 
-\end{ExampleBlock}
+            \RpgGetExample{dnd-stat-reaction}
 
 
         \subsubsection{Attacks}
@@ -545,21 +540,4 @@
         }
 
     \RpgStatShowCard{false}
-\begin{ExampleBlock}{2014-style RpgStat}
-{
-    \RpgStatLegacyMode{}
-    \begin{RpgStat}{Commoner}[
-        type={Medium or Small Humanoid; typically neutral},
-        languages=Common
-    ]
-        \section{Traits}
-            \action{Mob Mentality} If a Commoner is subjected to a mind-altering effect (such as the frightened condition, or a charm spell), all Commoners within 10ft are also subjected to this effect.
-        \section{Actions}
-            \melee{Club}
-    \end{RpgStat}
-
-    % all RpgStats in these braces use the old style
-}
-
-%outside the changes revert to the new style
-\end{ExampleBlock}
+    \RpgGetExample{dnd-stat-legacy}
