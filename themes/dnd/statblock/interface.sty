@@ -23,7 +23,7 @@
     % optional arg is used by legendary actions
     \NewDocumentCommand {\RpgStatAction} {O{} m}
     { 
-        \par \smallskip \noindent { \RpgFontParagraph {#2\str_if_empty:NF#1{~({#1~actions})}.} }
+        \par \smallskip \noindent { \RpgFontParagraph {#2\tl_if_blank:eF{#1}{~({#1~actions})}.} }
     }
 
     % As with action, but allows for an italicised trigger
@@ -132,7 +132,7 @@
 			}
 		% `extra' is any special text that goes after the final damage; do not
 		% include the final full stop.
-		\str_if_empty:NF {\l__extra_tl}
+		\str_if_empty:nF {\l__extra_tl}
 			{
 				\tl_set:Ne\l_tmpa_tl{\l_tmpa_tl\l__extra_tl .}
 			}
@@ -278,7 +278,7 @@
 
     \__rpg_add_tl_keys:Nn{rpg/stat/save}
 	{
-        \__rpg_tl_choice_key:nnnn{save}{\l__save_stat_tl}{str,dex,con,int,wis,cha}{dex}
+        \__rpg_tl_choice_key:nnnn{modifier}{\l__save_stat_tl}{str,dex,con,int,wis,cha}{dex}
         \__rpg_tl_key:nnn{dc}{\l__save_dc}{10}
         \__rpg_tl_key:nnn{target}{\l__save_target_tl}{single}
         \__rpg_tl_key:nnn{size}{\l__save_size_tl}{60}
@@ -300,21 +300,21 @@
     \cs_new_protected:Npn \__rpg_save_target:
     {
         \__rpg_append_if_missing:nn{\l__save_size_tl}{ft}
-        \def\rpgstring@mustMake{\ must\ make\ a\ }
+        \def\rpgstringmustMake{\ must\ make\ a\ }
         
         \tl_set:Ne\l_tmpa_target{\bool_if:NTF{\l__target_all_bool}{All\ creatures}{All\ enemies}}
         \tl_set:Ne\l_tmpa_origin{\tl_if_empty:eF{\l__save_origin_tl}{,\ originating\ from\ \l__save_origin_tl}}
         \str_case:enF{\l__save_target_tl}
         {
-            {single}{One\ target\ within\ \l__save_size_tl\rpgstring@mustMake}
-            {cone}{\l_tmpa_target\ within\ a\ \l__save_size_tl\ cone\l_tmpa_origin\rpgstring@mustMake}
-            {sphere}{\l_tmpa_target\ within\ a\ \l__save_size_tl\ sphere\l_tmpa_origin\rpgstring@mustMake}
-            {line}{\l_tmpa_target\ in\ a\ \l__save_size_tl\ line\l_tmpa_origin\rpgstring@mustMake}
+            {single}{One\ target\ within\ \l__save_size_tl\rpgstringmustMake}
+            {cone}{\l_tmpa_target\ within\ a\ \l__save_size_tl\ cone\l_tmpa_origin\rpgstringmustMake}
+            {sphere}{\l_tmpa_target\ within\ a\ \l__save_size_tl\ sphere\l_tmpa_origin\rpgstringmustMake}
+            {line}{\l_tmpa_target\ in\ a\ \l__save_size_tl\ line\l_tmpa_origin\rpgstringmustMake}
         }
         {
             \tl_if_blank:eF{\l__save_target_tl}
             {
-                \l__save_target_tl\rpgstring@mustMake 
+                \l__save_target_tl\rpgstringmustMake 
             }
         }
     }
@@ -335,7 +335,7 @@
 			\RpgStatSection{Legendary~Actions\ (\l__uses_tl\ uses)}
 			{
 				{\noindent\RpgFontStatBlockLegendary
-				\rpgstring@legendarySpeil\par}
+				\rpgstringlegendarySpeil\par}
 			}
 
             \bool_if:NT{\l__has_defiance_bool}
@@ -345,7 +345,7 @@
 		}
     \NewDocumentCommand\RpgLegendaryDefiance{}
         {
-            \action{Legendary~Defiance}~{\rpgstring@legendaryDefiance}
+            \action{Legendary~Defiance}~{\rpgstringlegendaryDefiance}
         }
 
 
@@ -354,7 +354,7 @@
 		\__rpg_bool_key:nn{passive-only}{\l__passive_only_bool}
 		\__rpg_tl_key:nnn{narration}{\l__mythic_narration}{}
 		\__rpg_tl_key:nnn{trait-name}{\l__mythic_trait}{Second~Phase}
-		\__rpg_tl_key:nnn{trait}{\l__mythic_trait_body}{\rpgstring@mythicDefaultBody}
+		\__rpg_tl_key:nnn{trait}{\l__mythic_trait_body}{\rpgstringmythicDefaultBody}
 	}
 	\NewDocumentCommand{\RpgStatMythicSection}{+O{}}{
 		\RpgStatSection{Mythic~Monster}
@@ -365,14 +365,14 @@
 			\action{\l__mythic_trait}\ \l__mythic_trait_body \par
 			\tl_if_empty:eF{\l__mythic_narration}
 			{
-				{\noindent\RpgFontStatBlockLegendary \rpgstring@mythicNarrationLeadIn\par}
+				{\noindent\RpgFontStatBlockLegendary \rpgstringmythicNarrationLeadIn\par}
 				
 				\begin{RpgNarration}[before~skip=3pt,after~skip=3pt]
 					\l__mythic_narration
 				\end{RpgNarration}
 			}
 			{\noindent\RpgFontStatBlockLegendary 
-				\rpgstring@mythicGains\bool_if:nF{\l__passive_only_bool}{\ and\ Legendary\ Actions}.  \par
+				\rpgstringmythicGains\bool_if:nF{\l__passive_only_bool}{\ and\ Legendary\ Actions}.  \par
 			}
 
 	}
@@ -381,10 +381,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %Long blocks of text and Expl3 don't play well together; so define the strings in 'standard' mode!
     \ExplSyntaxOff
-    \def\rpgstring@savingThrowRepeat{The target repeats the saving throw at the end of each turn, ending the effect on a success.}
-    \def\rpgstring@legendarySpeil{Immediately after another creature's turn, \RpgStatName{} can expend a Legendary Action to take one of the following actions. Expended actions are regained at the start of each of its turns.}
-    \def\rpgstring@legendaryDefiance{\RpgStatName{} repeats a saving throw that they failed in the past hour (using their original modifier). On a success the effect is ended.}
-    \def\rpgstring@mythicDefaultBody{When reduced to 0HP, \RpgStatName{} recovers all hit points and removes all negative status effects.}
-    \def\rpgstring@mythicNarrationLeadIn{When the mythic trait activates, read the following aloud:}
-    \def\rpgstring@mythicGains{When\ the\ mythic\ trait\ is\ activated,\ \RpgStatName{}\ gains\ the\ following\ traits}
+    \def\rpgstringsavingThrowRepeat{The target repeats the saving throw at the end of each turn, ending the effect on a success.}
+    \def\rpgstringlegendarySpeil{Immediately after another creature's turn, \RpgStatName{} can expend a Legendary Action to take one of the following actions. Expended actions are regained at the start of each of its turns.}
+    \def\rpgstringlegendaryDefiance{\RpgStatName{} repeats a saving throw that they failed in the past hour (using their original modifier). On a success the effect is ended.}
+    \def\rpgstringmythicDefaultBody{When reduced to 0HP, \RpgStatName{} recovers all hit points and removes all negative status effects.}
+    \def\rpgstringmythicNarrationLeadIn{When the mythic trait activates, read the following aloud:}
+    \def\rpgstringmythicGains{When\ the\ mythic\ trait\ is\ activated,\ \RpgStatName{}\ gains\ the\ following\ traits}
 

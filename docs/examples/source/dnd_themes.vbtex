@@ -1,42 +1,83 @@
 
+% EXAMPLE = dnd-stat-card
+%options=listing only
+	\RpgStatShowCard{true/false} % set the card mode
+	\begin{RpgStat}[card-opts]{Creature Name}[key-values]
+		<body text>
+	\end{RpgStat}
+
 %%EXAMPLE=dnd-stat-section
-	\begin{ExampleBlock}{RpgStatSection}
-	\RpgStatSection{An example}
+% highlight = RpgStatSection
+	\RpgStatSection{title-text} body-text
 
-		Body text goes here
-
-		%%% only works inside an RpgStat, but would look exactly the same:
-
-		% \section{An example}
-	\end{ExampleBlock}
 
 %%EXAMPLE=dnd-stat-action
-	\begin{ExampleBlock}{RpgStatAction}
-		\RpgStatAction{Fire Breath} The monster breaths fire!
+%highlight=RpgStatAction
+	\RpgStatAction{Trait} body-text
 
-		\RpgStatAction[2]{Legendary Attack} This has a cost!
-	\end{ExampleBlock}
+	\RpgStatAction[<cost>]{Action} body-text
 
 % example=dnd-stat-reaction
-	\RpgStatReaction{Mage Hunter}{When a creature within 5ft casts a spell} Immediately make a single weapon attack 
+%highlight=RpgStatReaction
+	\RpgStatReaction{Reaction}{<trigger>} body-text  
+	\RpgStatReaction{Reaction}{} body-text
+	%empty trigger text does not render the colon   
 
 
 % example = dnd-stat-legacy
-	\begin{ExampleBlock}{2014-style RpgStat}
-		{
-			\RpgStatLegacyMode{}
-			\begin{RpgStat}{Commoner}[
-				type={Medium or Small Humanoid; typically neutral},
-				languages=Common
+%highlight = RpgStatLegacyMode
+	%new style active before these braces
+	{
+		\RpgStatLegacyMode{}
+		\begin{RpgStat}{Commoner}[
+			type={Medium or Small Humanoid; typically neutral},
+			languages=Common
+		]
+			\section{Traits}
+				\action{Mob Mentality} If a Commoner is subjected to a mind-altering effect (such as the frightened condition, or a charm spell), all Commoners within 10ft are also subjected to this effect.
+			\section{Actions}
+				\melee{Club}
+		\end{RpgStat}
+
+		% legacy style persists within these braces
+	}
+
+	%outside the changes revert to the new style
+
+% example = dnd-stat-main-example
+% title = test
+% highlight = RpgStat,trait,save,action,RpgStatLegendarySection,RpgLegendaryDefiance,melee
+    \begin{RpgStat}{Bom Tombadil}[
+			%basics
+			type={Medium Celestial, Chaotic Good},
+			armor-class = {14},
+			hp  = {\RpgDice{12d12 + 40}},
+			speed       = {35 ft.},
+			%stats
+			str=10,  dex=  13,  con = 15,  int=9,  wis = 24, cha  = 22,
+			cha-save, wis-save,
+			%skills etc.
+			proficiency=8,
+			skills={nature (+8)},
+			skills-expertise={Performance},
+			damage-immunities={all damage inflicted by creatures with the \textit{Beast} type.},
+       	]
+		\section{Traits}		
+			\trait{Pacifist} \RpgStatName{} cannot deal lethal damage. A creature reduced to 0HP by \RpgStatName{} does not die, but instead falls \textit{unconscious}, even if they are immune to this condition.
+		\section{Actions}
+			\save{Lullaby}[
+				modifier=wis,
+				dc=22,
+				target=sphere,
+				size=30ft,
+				failure= {Fall \textit{unconscious} for \RpgDice{1d4} hours, until they take damage, or a creature uses an action to shake them awake.},
+			] Creatures with the \textit{deafened} condition or \textit{charm} immunity are unaffected.
+			\melee{Begone!}[
+				type=spell, modifier=cha,
+				dmg=\RpgDice{3d4+\stat{cha}}, dmg-type=force,
+				extra={A creature not native to the current plane must make a DC 22 Charisma saving throw or be banished to their native plane}
 			]
-				\section{Traits}
-					\action{Mob Mentality} If a Commoner is subjected to a mind-altering effect (such as the frightened condition, or a charm spell), all Commoners within 10ft are also subjected to this effect.
-				\section{Actions}
-					\melee{Club}
-			\end{RpgStat}
-
-			% all RpgStats in these braces use the old style
-		}
-
-		%outside the changes revert to the new style
-	\end{ExampleBlock}
+		\RpgStatLegendarySection{}
+			\RpgLegendaryDefiance{}
+			\action{Rebuke the Violent} A creature which took hostile action in the preceeding turn takes \RpgDice{2d10} psychic damage.
+    \end{RpgStat}

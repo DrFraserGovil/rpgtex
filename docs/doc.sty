@@ -32,52 +32,91 @@
 	
 \definecolor {backred}{HTML}{802020}
 \tcbuselibrary{listings,hooks}
-\newtcblisting{ExampleBlock}[2][]{
 
-        listing~options={
-            language=TeX, % The correct, non-error-producing language
-            basicstyle=\ttfamily\small,
-            showstringspaces=false,
-            breaklines=true,
-            
-            % --- Styles ---
-            texcsstyle=*\color{blue}\bfseries, 
-            keywordstyle=\color{purple}\bfseries,
-			% keywordstyle=[1]\color{red}\bfseries,
-			% rpgstyle=\color{red}\bfseries,
-            commentstyle=\color{green!60!black}\itshape,
-            stringstyle=\color{red},
-            
-            % --- ExplSyntax Compliant Keyword Lists ---
-            % Spaces must be replaced with the tilde (~) character.
-           texcs={
-                documentclass, usepackage, input, section, subsection, 
-                tcbset, newcommand, newenvironment, 
-                ExplSyntaxOn, ExplSyntaxOff , newfontfamily,
-				document,
-                tikzpicture,
-                tcolorbox,
-                lstlisting,
-                newtcolorbox,
-				begin,end
-            },
-		
+\lstdefinestyle{example}
+{
+	language=TeX,
+	basicstyle=\ttfamily\small,
+	showstringspaces=false,
+	breaklines=true,
+	
+	% --- Styles ---
+	texcsstyle=*\color{blue}\bfseries, 
+	keywordstyle=\color{purple}\bfseries,
+	commentstyle=\color{green!60!black}\itshape,
+	stringstyle=\color{red},
+	
+	% --- ExplSyntax Compliant Keyword Lists ---
+	% Spaces must be replaced with the tilde (~) character.
+	texcs={
+		documentclass, usepackage, input, section, subsection, 
+		tcbset, newcommand, newenvironment, 
+		ExplSyntaxOn, ExplSyntaxOff , newfontfamily,
+		document,
+		tikzpicture,
+		tcolorbox,
+		lstlisting,
+		newtcolorbox,
+		begin,end
+	},
+
+	
+
+	framexleftmargin=0pt,
+	
+	framexbottommargin=0pt,
+	breakindent=1em,
+	aboveskip=0pt,
+	belowskip=0pt,
+	framesep=0pt,
+	boxpos=t
+}
+
+\newtcblisting{exampleInternal}[1]{
+
+        listing~style={example},
+		#1,
+		% colframe=themecolor!80!black,
+        % colback=gray!10,
+		colframe=gray!50,colback=black!10!white,
+		enhanced~jigsaw,
+		opacityback=0.6,
+		opacityframe=1,
+		boxrule=1.5pt,arc=1mm,
+		titlerule=2pt,
+		left=0pt,
+		top=0pt,
+		bottom=0pt,
+		 attach~boxed~title~to~top~left=
+		{yshift=-\tcboxedtitleheight/2},
+		coltext=black,
+		boxed~title~style={coltext=black,size=small,colback=black!10!white,coltext=red},
+    % title={hi},
+	
+}
+
+\NewDocumentEnvironment{ExampleBlock}{O{} O{listing~side~text} m}
+{
+	\tl_if_empty:eTF{#3}{
+		\exampleInternal{
+			listing~options={style={example},keywords={#1},framextopmargin=0pt,},
+			top=0pt,
+			% top=-8pt,
+			% bottom=-8pt,
+			#2
+		}
+	}{
+		\exampleInternal{
+			title={\color{black}#3},
+			listing~options={style={example},keywords={#1},framextopmargin=15pt},
+			% bottom=-8pt,
+			#2,
 			
-            keywords={
-                #1
-            },
-			% keywords[1]={
-			% 	RpgSetFont
-			% }
-        },
-		colframe=backred,
-        colback=gray!10,
-		standard~jigsaw,
-		opacityback=0.4,
-       boxrule=1pt,
-    	listing~side~text,
-
-    title=#2
+		}
+	}
+}
+{
+	\endexampleInternal
 }
 
 \newtcblisting{BashBlock}[1][bash]{
@@ -217,6 +256,59 @@ boxed~title~style={size=small,colback=gray!80}
 	\end{tcolorbox}
 	% \vspace{-0.5em}
 }
+
+\NewDocumentCommand{\RpgMacroExample}{s o m +m +m +m +m}{
+	\IfBooleanTF{#1}
+		{
+			\label{#3}
+		}
+		{
+			\label{Macro:#3}
+		}
+
+	\tl_if_novalue:nTF{#2}
+	{
+		\index{#3}
+	}
+	{
+		\cmdidx{#2}
+	}
+
+	\hspace{-3.1cm}
+	\begin{tcolorbox}[
+			before~skip=0em,
+			after~skip=1.5em,
+		blanker,
+		breakable,
+		width=\linewidth,
+		overlay~unbroken~and~first={%
+		\node[inner~sep=0pt,outer~sep=0pt,text~width=3.1cm,
+		align=right,anchor=east,
+		below~right]
+		at ([xshift=-3.5cm]frame.north~west)
+		{
+			\__rpg_doc_macro_list:nn{\IfBooleanTF{#1}{{#3}}{\cmd{#3}}}{#4}
+		};}
+  ]
+		
+		#5
+
+		 \str_if_empty:nF{#6}
+		{
+			\RpgGetExample{#6}
+		}
+		
+		\str_if_empty:nF{#7}
+		{
+			% \subsection{Details}
+			{#7}
+		}
+
+	\end{tcolorbox}
+	% \vspace{-0.5em}
+}
+
+
 \usepackage{lipsum}
 \usepackage{wrapfig}
 \NewDocumentEnvironment{fontlist}{+b}{

@@ -1,7 +1,7 @@
 
 
 \documentclass[theme=default,justified,oneside,colums=1]{rpgbook}
-\input{examples/examples.tex}
+
 \usepackage{doc}
 \usepackage{blindtext}
 \usepackage{splitidx} %use rather than imakeidx because it gets hyperrefs right!
@@ -20,8 +20,6 @@
 \title{The rpgtex Package}
 \subtitle{A package for generating beautiful RPG documents}
 \author{Jack Fraser-Govil}
-
-\input{parts/example_blocks.tex}
 
 \NewDocumentCommand{\cmdidx}{ o m }{
 	\foreach \m in {#2}
@@ -45,7 +43,7 @@
 }
 
  \input{parts/themes_fontprocessor.tex}
-
+\input{examples/examples.tex}
 \begin{document}
 	\frontmatter
 	\maketitle{}

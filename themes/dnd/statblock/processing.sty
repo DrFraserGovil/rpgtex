@@ -128,10 +128,11 @@
 		%provide short names that are likely to collide. 
 		%'Provide' ensures that if a command with that name exists, the local version is used 
 		\ProvideDocumentCommand		{\action}	{O{} m}		{\RpgStatAction[##1]{##2}}
+		\ProvideDocumentCommand		{\trait}	{O{} m}		{\RpgStatAction[##1]{##2}}
 		\ProvideDocumentCommand		{\reaction}{m m}		{\RpgStatReaction{##1}{##2}}
 		\ProvideDocumentCommand		{\name}{}			{\l__rpg_stat_name}
 		\ProvideDocumentCommand		{\stat}{m}			{\RpgStatGet{##1}}
-		\ProvideDocumentCommand		{\save}{m O{}}		{\RpgSavingThrow{m O{}}}
+		\ProvideDocumentCommand		{\save}{m O{}}		{\RpgSavingThrow{##1}[##2]}
 		%attacks
 		\ProvideDocumentCommand		{\attack}{m O{}}	{\RpgStatAttack{##1}[##2]}
 		\ProvideDocumentCommand		{\melee}{m O{}}		{\RpgStatAttack{##1}[##2,distance=melee]}
@@ -152,7 +153,7 @@
 	% A toggle-item for descriptions; if the body is empty, the item is not added 
 	\cs_new_protected_nopar:Npn \__maybe_item:nn #1#2
 	{
-		\tl_if_empty:eF {#2}{ \item [#1] #2 }
+		\tl_if_empty:oF {#2}{ \item [#1] #2 }
 	}
 
 	% Format signed integers for display

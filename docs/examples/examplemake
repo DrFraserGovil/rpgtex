@@ -9,11 +9,20 @@ example_root = os.path.abspath(os.path.dirname(__file__))
 example_pattern = re.compile(
    r"^\s*%+\s*EXAMPLE\s*=\s*(.+)$", 
     re.MULTILINE | re.IGNORECASE)
+name_pattern = re.compile(
+   r"^\s*%+\s*title\s*=\s*(.+)$", 
+    re.MULTILINE | re.IGNORECASE)
+highlight_pattern = re.compile(
+   r"^\s*%+\s*highlight\s*=\s*(.+)$", 
+    re.MULTILINE | re.IGNORECASE)
+options_pattern = re.compile(
+   r"^\s*%+\s*options\s*=\s*(.+)$", 
+    re.MULTILINE | re.IGNORECASE)
 begin_pattern = re.compile(
-  r"^\s*\\begin\{ExampleBlock\}.*$", 
+  r".*\\begin\{ExampleBlock\}.*", 
     re.MULTILINE | re.IGNORECASE)
 end_pattern = re.compile(
-  r"^\s*\\end\{ExampleBlock\}.*$", 
+  r".*\\end\{ExampleBlock\}.*", 
     re.MULTILINE | re.IGNORECASE)
 
 def getFiles():
@@ -36,46 +45,73 @@ class Block:
         
 
         self.Text = "".join(self.Lines)
+
+    def MakeWrapper(self):
+        ## detect name and highlighting commands
+        title = ""
+        highlight = ""
+        listing = "listing side text"
+        begin = 0
+        for i,line in enumerate(self.Lines) :
+            detect_name = name_pattern.match(line)
+            if detect_name:
+                title=detect_name.group(1)
+                begin = max(begin+1,i)
+            detect_highlight = highlight_pattern.match(line)
+            if detect_highlight:
+                highlight = detect_highlight.group(1)
+                begin = max(begin+1,i)
+            detect_options = options_pattern.match(line)
+            if detect_options:
+                listing = detect_options.group(1)
+                begin = max(begin+1,i)
+
+        self.Lines[-1] += "\n"
+        self.Lines.insert(begin,f"\\begin{{ExampleBlock}}[{highlight}][{listing}]{{{title}}}\n")
+        self.Lines.append("\\end{ExampleBlock}")
+        self.beginIdx = [begin]
+        self.endIdx = [len(self.Lines)-1]
+        self.hasContent = [1] + self.hasContent + [1]
+    def DetectWrapper(self):
+        self.hasContent = [False]*len(self.Lines)
+        self.beginIdx = []
+        self.endIdx = []
+        for i,line in enumerate(self.Lines):
+            self.hasContent[i] = (len(line.strip()) > 0) #track non-empty lines
+            self.Lines[i] = self.Lines[i].replace("\t","    ") #convert tabs to spaces
+            if begin_pattern.match(line):
+                self.beginIdx.append(i)
+            if end_pattern.match(line):
+                self.endIdx.append(i)
+
     def WrappingAndIndent(self):
 
         # computes the positions of the wrapping \begin and \end commands
-        hasContent = [False]*len(self.Lines)
-        beginIdx = []
-        endIdx = []
-        for i,line in enumerate(self.Lines):
-            hasContent[i] = (len(line.strip()) > 0) #track non-empty lines
-            self.Lines[i] = self.Lines[i].replace("\t","    ") #convert tabs to spaces
-            if begin_pattern.match(line):
-                beginIdx.append(i)
-            if end_pattern.match(line):
-                endIdx.append(i)
+        self.DetectWrapper()
 
         # check nothing went wrong...
-        if len(beginIdx) > 1:
-            print(f"Warning: {self.Name} ({self.Parent}) contains {len(beginIdx)} ExampleBlocks, beginning at positions {beginIdx}")
-        if len(beginIdx)!=len(endIdx):
+        if len(self.beginIdx) > 1:
+            print(f"Warning: {self.Name} ({self.Parent}) contains {len(self.beginIdx)} ExampleBlocks, beginning at positions {self.beginIdx}")
+        if len(self.beginIdx)!=len(self.endIdx):
+            print(self.beginIdx,self.endIdx)
             print(f"ERROR: {self.Name} ({self.Parent}) has unbalanced \\begin and \\end commands.")
             exit(1)
+            
 
         #if no ExampleBlock wrapping provided, make one
-        if len(beginIdx)==0:
-            self.Lines[-1] += "\n"
-            self.Lines.insert(0,"\\begin{ExampleBlock}{}\n")
-            self.Lines.append("\\end{ExampleBlock}\n")
-            beginIdx = [0]
-            endIdx = [len(self.Lines)-1]
-            hasContent = [1] + hasContent + [1]
+        if len(self.beginIdx)==0:
+            self.MakeWrapper()
+           
         
         #now modify the indentation
 
-        for i,start_line in enumerate(beginIdx):
-            end_line = endIdx[i]
+        for i,start_line in enumerate(self.beginIdx):
+            end_line = self.endIdx[i]
             
             firstNonEmpty = start_line +1
             
-            while firstNonEmpty < hasContent[firstNonEmpty]: #no need to end-check as the end line is (by definition) non-empty
+            while firstNonEmpty < self.hasContent[firstNonEmpty]: #no need to end-check as the end line is (by definition) non-empty
                 firstNonEmpty += 1
-
             #the wrapping lines are at zero indent
             if firstNonEmpty < end_line:
                 self.Lines[start_line] = self.Lines[start_line].lstrip() 
@@ -83,7 +119,6 @@ class Block:
 
             #now compute the base indent of the contents - everything will be de-indented, but relative positions remian the same
             baseIndent = len(self.Lines[firstNonEmpty]) - len(self.Lines[firstNonEmpty].lstrip())
-
             for q in range(firstNonEmpty,end_line):
                 if len(self.Lines[q].strip()) > 0:
                     orig = len(self.Lines[q])
@@ -133,7 +168,7 @@ def writeTexOutput(blocks):
 \\ExplSyntaxOn
 \\prop_new:N \\g__rpg_example_directory
         
-\\msg_new:nnn{{rpg-docs}}{{bad-example}}{{#1~is~not~in~example~library}}
+\\msg_new:nnn{{rpg-docs}}{{bad-example}}{{(#1)~is~not~in~example~library}}
 \\NewDocumentCommand\\RpgGetExample{{m}}{{
     \\prop_if_in:NeF\\g__rpg_example_directory{{#1}}
     {{
@@ -144,8 +179,8 @@ def writeTexOutput(blocks):
 
 
         for block in blocks:
-            file.write(f"\\prop_gput:Nne\\g__rpg_example_directory{{{block.Name}}}{{{block.File}}}")
-
+            file.write(f"\\prop_gput:Nne\\g__rpg_example_directory{{{block.Name}}}{{{block.File}}}\n")
+            print("Writing",block.File)
         file.write("""\n\\ExplSyntaxOff
 %%end autogenerated code"""
         )

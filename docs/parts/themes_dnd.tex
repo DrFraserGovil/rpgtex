@@ -311,16 +311,8 @@
 
     Internally, the monster statblock is one of the most complex environments in the \rpgtex{} library; the upside being that it makes it quick and easy to generate a monster which follows the standard D\&D monster assumptions.
 
-    \RpgMacro*[RpgStat!Theme!dnd]{RpgStat}{RpgStat*,\param{\paramO m \paramO}}{ The dnd configuration of the \envref{RpgStat} environment, used to describe monsters and enemies, using the rules and parameters of spells in D\&D 5e. As with all FeatureForge environments, RpgStat has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. }
-        {
-            \cmd{RpgStatShowCard\param{true/false}} \% set the card mode
-
-            \cmd{begin}\param{RpgStat}[card-opts]\param{Creature Name}[key-values]
-
-            ~~<body text>
-
-            \cmd{end}\param{RpgStat}
-        }
+    \RpgMacroExample*[RpgStat!Theme!dnd]{RpgStat}{RpgStat*,\param{\paramO m \paramO}}{ The dnd configuration of the \envref{RpgStat} environment, used to describe monsters and enemies, using the rules and parameters of spells in D\&D 5e. As with all FeatureForge environments, RpgStat has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. }
+        {dnd-stat-card}
         {	
              \begin{RpgSidebar}{RpgStat vs RpgStat*}
                  \texttt{RpgStat*} is identical to the unstarred version, except it automatically activates the \texttt{twocolumn} mode, and sets \texttt{float-type = figure*} (see below). This makes it suitable for rendering 'boss' (i.e. large) stat blocks whilst writing twocolumn documents. 
@@ -478,47 +470,32 @@
                 \textcolor{red}{\cmd{#1}}\index{#1}
             }
 
-            \RpgMacro[RpgStat!Section]{RpgStatSection}{\statalias{section},\param{m}}{Creates a section header}{}
+            \RpgMacroExample[RpgStat!Section]{RpgStatSection}{\statalias{section},\param{m}}{Creates a section header}{dnd-stat-section}
             {
                 Although called a `section', the visual is most similar to the \cmd{subsection}, though with the text rendered in the \cmd{RpgFontStatBlockSection} font.
             }
 
             
             
-            \RpgMacro[RpgStat!Action]{RpgStatAction}{\statalias{action},\statalias{trait},\param{\paramO{} m}}{Creates an action `paragraph'}{}
+            \RpgMacroExample[RpgStat!Action]{RpgStatAction}{\statalias{action},\statalias{trait},\param{\paramO{} m}}{Creates an action `paragraph' for declaring traits and actions}{dnd-stat-action}
             {
-                This is how all actions and traits are declared, providing a `name' in a format similar to the \cmd{paragraph} command.
-
-                The optional argument is used to insert ``[X] actions'' into the action name. This is useful for Legendary Actions which might have a variable cost.
+                If a non-empty optional argument is passed, it inserts ``[X] actions'' into the action name. This is useful for Legendary Actions which might have a variable cost.
             }
 
-            \RpgGetExample{dnd-stat-action}
 
-            \RpgMacro[RpgStat!Reaction]{RpgStatReaction}{\statalias{reaction},\param{m m}}{Creates an action `paragraph' with an additional `trigger', indicating when the reaction may be used.}{}
+            \RpgMacroExample[RpgStat!Reaction]{RpgStatReaction}{\statalias{reaction},\param{m m}}{Creates an action `paragraph' with an additional `trigger', indicating when the reaction may be used.}{dnd-stat-reaction}
             {}
-            \RpgGetExample{dnd-stat-reaction}
 
 
         \subsubsection{Attacks}
+            A thing!
 
         \subsubsection{Spellcasting}
 
         \subsubsection{Saving Throws}
-    \begin{ExampleBlock}{RpgStat}
+            
         \RpgStatShowCard{false}
-    \begin{RpgStat}{Bom Tombadil}[
-       type={Medium Celestial, Chaotic Good},
-       armor-class = {14},
-       hp  = {\RpgDice{12d12 + 40}},
-       speed       = {35 ft.},
-       str=10,  dex=  13,  con = 15,  int=9,  wis = 24, cha  = 22,
-       cha-save, wis-save,str-save,
-       proficiency=8,
-	   skills={arcana,sleight of hand,history (+2)},
-	   skills-expertise={Performance}
-       ]
-    \end{RpgStat}
-    \end{ExampleBlock}
+\RpgGetExample{dnd-stat-main-example}
 
     \subsection{Legacy Appearance}
 
