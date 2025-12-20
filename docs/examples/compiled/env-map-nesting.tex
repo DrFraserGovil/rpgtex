@@ -1,0 +1,16 @@
+% title=Automated Map Nesting
+\begin{ExampleBlock}[][listing side text]{Automated Map Nesting}
+\begin{RpgMap}
+\begin{area}[Test Zone]
+    A description
+        \begin{area}[Sub Zone]
+            A sub-description
+            \area[Arbitrary nested zone]
+                (we can keep nesting)
+        \end{area}
+    \end{area}
+    \area[][nameless-ref] A nameless zone
+\end{RpgMap}
+
+
+\end{ExampleBlock}

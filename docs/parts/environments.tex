@@ -6,17 +6,9 @@
 
     The RpgCard environment is designed to allow a writer to create a small, playing-card sized unit which is useful for handing out to players for game elements such as items, spells or abilities.
 
-    We anticipate that users won't access RpgCard directly, but will instead access it through wrappers which utilise the RpgSwitchEnv protocol \RpgPage[p]{RpgSwitchEnv} to allow items to be typeset `normally', and in card-mode. 
+    We anticipate that users won't access RpgCard directly, but will instead access it through wrappers which utilise the RpgSwitchEnv protocol \RpgPage[p]{RpgSwitchEnv} to allow items to be typeset `normally', and in card-mode. The main power of the RpgCard is the ability to automatically \textit{cardbreak}, splitting large internal elements across multiple cards. 
 
-    The main power of the RpgCard is the ability to automatically \textit{cardbreak}, splitting large internal elements across multiple cards. 
-
-    \RpgMacro*{RpgCard}{\param{\paramO}}{Splits the contents across a number of playing-card sized units}{
-        
-            \cmd{begin}\param{RpgCard}[<key-value-opts>]
-
-            ~~~~~~<contents>
-
-            \cmd{end}\param{RpgCard}
+    \RpgMacro*{RpgCard}{\param{\paramO}}{Splits the contents across a number of playing-card sized units}{env-card
         }{
             Creates a card environment with a height and width defined either by \texttt{<opts>}, or the global variables. Text is automatically broken if it exceeds this height, creating multiple cards to hold the text.
 
@@ -79,54 +71,27 @@
     \RpgMacro[RpgCard!Reset]{RpgCard!Reset}{\param{}}{Resets changes made to card parameters back to the defalt value.}{}{}
     
     \colorlet{ForestGreen}{green!70!black}
-\begin{figure}
-  \begin{ExampleBlock}[RpgCard,footnote]{Simple RpgCard}
- 
- \begin{tikzpicture}%wrap in tikz so we can draw dimensions
-  
-    \node[anchor=south west,inner sep=0pt,outer sep=0pt] at (0,0) 
-    {
-    \begin{RpgCard}[hmargin=0.5cm,vmargin=0.5cm]
-  
-      \subsubsection{Text goes here}
-        It fits nicely into the card, wrapping over lines\footnote{We can also have a single footnote}.
-    \end{RpgCard}\ignorespaces
-    };
-    %% Draw the dimenions on top
-    %height and vmargin
-    \draw[red,<->] (0.7,0)-- node [fill=white, right, rotate=90, anchor=north]{height}++(0,8.8cm);
-    \draw[red,<->] (1.4,0)-- node [right]{vmargin}++(0,0.5cm);
-    \draw[red,<->] (1.4,8.3)-- node [right]{vmargin}++(0,0.5cm);
-    %width and hmargin
-    \draw[ForestGreen,<->] (0.5,2)-- node[below]{width}++(4.35,0);
-    \draw[ForestGreen,<->] (0,2.4)-- node[below, rotate=90, anchor=east]{hmargin}++(0.5,0);
-    \draw[ForestGreen,<->] (4.85,2.4)-- node[below, rotate=90, anchor=east]{hmargin}++(0.5,0);
-  \end{tikzpicture}
-  \end{ExampleBlock}
-  \caption{An example of a simple RpgCard with the dimensions overlayed}
-\end{figure}
+    \newcommand\widthLines[1]{
+        %width and hmargin
+        \draw[#1,<->] (0,2.4)-- node[below]{width}++(6.75,0);
+        \draw[#1,<->] (0,2)-- node[below, rotate=90, anchor=east]{hmargin}++(0.5,0);
+        \draw[#1,<->] (6.25,2)-- node[below, rotate=90, anchor=east]{hmargin}++(0.5,0);
+    }
+    \newcommand\heightLines[1]{
+        %height and vmargin
+        \draw[#1,<->] (0.7,0)-- node [right, rotate=90, anchor=north]{height}++(0,9.7cm);
+        \draw[#1,<->] (1.4,0)-- node [right]{vmargin}++(0,0.5cm);
+        \draw[#1,<->] (1.4,9.2)-- node [right]{vmargin}++(0,0.5cm);
+    }
+    \RpgGetExample{env-card-dimensions}
 
-\begin{figure}[H]
- \begin{ExampleBlock}[RpgCard,footnote]{Large RpgCard}
- \begin{RpgCard}
- \large {And if we add lots of text\footnote{Normally RpgCards stack side-by-side before breaking over lines -- here they've not got enough room, so it's vertically stacked.}}
- \blindtext
- \end{RpgCard}
- \end{ExampleBlock}
- \caption{An example of an RpgCard with the automatic cardbreaking.}
-\end{figure}
-
-
+\newpage
 \labelsection{RpgMap}
 
     The RpgMap environment is similar to the standard itemize/ description/ enumerate environments, providing a structured way to list elements in an arbitrarily nested fashion. The main difference from the standard list environments are that \texttt{RpgMap} (and \cmd{area}, the analogue to \cmd{item}) provide a more elaborate labelling system, useful when needing to enumerate the contents of a map. 
 
     \RpgMacro*{RpgMap}{RpgMap*, \param{{o}}}{Begins a nestable map-list environment and enables the \cmd{area} command for adding entries to the map.}{
-        \bs{}begin\param{RpgMap}[<opts>]
-
-        ~~~<contents>
-
-        \cmd{end}\param{RpgMap}				
+       env-map-basic			
     }{
         The starred version of the command is identical in function, with the exception that \cmd{area} calls \cmd{section*} instead of \cmd{section} (and so on.), suppressing the map elements from the table of contents. 
         
@@ -148,21 +113,7 @@
     }
     \RpgMacro[RpgMap!area]{area}{area, \param{\paramO \paramO}}
         {Adds an area entry into the current RpgMap. The appearance of the entry depends on the current map depth.\index{area|see {RpgMap, area}} }
-        {
-              \cmd{area}[area-name][<manual-label>]
-
-            ~
-
-            Or
-
-            ~
-
-             \cmd{begin}\param{area}[area-name][manual-label]
-
-            ~~~\ldots <nested-contents>
-
-            \cmd{end}\param{area}
-        }{
+        { env-map-area}{
             Can be called either as a command (\cmd{area}), or as an environment (\cmd{begin\param{area}}), with slightly differing behaviours.
 
             \subsection{As a Command}
@@ -189,7 +140,7 @@
                
             \subsection{As an Environment}
 
-                Fig. \ref{F:MapNesting} shows that is possible to nest maps within an \cmd{area} by first adding an area, and then creating a map. We also provide an interface to do this automatically, if \texttt{area} is called as an environment.
+                It is possible to nest maps within an \cmd{area} by first adding an area, and then creating a map. We also provide an interface to do this automatically, if \texttt{area} is called as an environment.
 
                 The syntax and arguments remain identical to the command version, but the body of an \texttt{area} environment acts as if it was wrapped in a nested \texttt{RpgMap} call.
                 
@@ -215,45 +166,9 @@
                 \end{Code}
                 \end{minipage}
 
-                This is demonstrated in Fig. \ref{F:MapAreaNesting}. 
-
                 It is not possible to pass additional options to the internal \texttt{RpgMap} call when using the area environment; if the user wishes to vary the commands at different depths, they must use an explicit \texttt{RpgMap} environment. 
         }
-        \begin{figure}[t]
-        \begin{ExampleBlock}[RpgMap,area]{RpgMap with manual nesting}
-\begin{RpgMap}
-    \area[Test Zone]
-    A description
-    \begin{RpgMap}
-        \area[Sub Zone]
-        A sub-description
-        \begin{RpgMap}
-            \area[Arbitrary nested zone]
-            (we can keep nesting)
-        \end{RpgMap}
-    \end{RpgMap}
-    \area A nameless zone
-\end{RpgMap}
-        \end{ExampleBlock}\
-        \caption{An example of RpgMap with area-nesting}\label{F:MapNesting}
-        \end{figure}
-
-         \begin{figure}[!b]
-        \begin{ExampleBlock}[area,RpgMap]{RpgMap with manual nesting}
-\begin{RpgMap}
-    \begin{area}[Test Zone]
-    A description
-        \begin{area}[Sub Zone]
-            A sub-description
-            \area[Arbitrary nested zone]
-                (we can keep nesting)
-        \end{area}
-    \end{area}
-    \area[][nameless-ref] A nameless zone
-\end{RpgMap}
-        \end{ExampleBlock}\
-        \caption{An example of RpgMap with area-nesting}\label{F:MapAreaNesting}
-        \end{figure}
+        \RpgGetExample{env-map-nesting}
 
     \subsection{Map Labelling \& Referencing}
                     
@@ -294,24 +209,8 @@
         {
             It is not unheard of for a writer to lose track of the labelling name conventions - especially those which are autogenerated. This provides a useful debugging tool for those who don't want to go digging into the aux files.				
         }
-
-                                                
-
- \begin{ExampleBlock}[RpgMapShowRefs,tomb-ref]{Example RpgMap with labelling.}
- 
-  \RpgMapShowRefs{}
-   \begin{RpgMap}
-    \begin{area}[Test Zone]
-    A description
-        \begin{area}[Sub Zone]
-            A sub-description
-            \area[Arbitrary nested zone]
-                (we can keep nesting)
-        \end{area}
-    \end{area}
-    \area[][nameless-ref] A nameless zone
-\end{RpgMap}
- \end{ExampleBlock}
+                 
+    \RpgGetExample{env-map-refs}
 
     \labelsection{RpgSecret}
 
@@ -320,11 +219,7 @@
     \RpgMacro*{RpgSecret}{\param{\paramO m} }{
         A switchable environment \RpgPage[p]{S:SwitchEnv} associated with the switch \texttt{ShowSecrets}. When this key is true, the body of the environment is rendered; otherwise it is hidden. 
         }{
-            \cmd{begin}\param{RpgSecret}[<opts>]\param{<player-text>}
-
-            ~~~<GM-text>
-
-            \cmd{end}{RpgSecret}
+            env-secret-basic
         }{
             If the \texttt{ShowSecrets} switch has been set to false, then the \texttt<player-text> is inserted as plain text with nothing to suggest there's additional text being withheld.
 
@@ -345,70 +240,33 @@
     }
     }
 
-        \def\fmt{\color{gray!60}\small}
-\def\lorumIpsumOne{{\fmt{}Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit,
- vestibulum ut, placerat ac, adipiscing vitae, felis. Curabitur dictum gravida mauris. }}
- \def\lorumIpsumTwo{{\fmt{}Nam arcu libero, nonummy eget,
-consectetuer id, vulputate a, magna. Donec vehicula augue eu neque.
-Pellentesque habitant morbi tristique senectus et netus et malesuada
-fames ac turpis egestas. }}
-\def\lorumIpsumThree{{\fmt{}Mauris ut leo. Cras viverra metus rhoncus
-sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu
-tellus sit amet tortor gravida placerat. Integer sapien est, iaculis in,
-pretium quis, viverra ac, nunc. }}
-\begin{figure}[H]
-
- \begin{ExampleBlock}[false,RpgSecret,RpgSwitch]{RpgSecrets (in hide-mode)}
-  %%hide the juicy gossip
-  \RpgSwitch{ShowSecrets}{false}
-  
-  \lorumIpsumOne%Snippets of standard lorum ipsum
-  \begin{RpgSecret}{}
-    The players don't know it yet, but all this pseudo-latin text is a hint that devils are involved!  
-  \end{RpgSecret}
-   \lorumIpsumTwo{}
-   \begin{RpgSecret}{
-     Logos kykloforia, thelxis kai ethos, tyrannis kai epilysis. Aei thera plaka, kyrios meion egestas, anagkas proin eira kai thera.
-     }
+    \def\fmt{\color{gray!60}\small}
+    \def\lorumIpsumOne{{\fmt{}Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit,
+    vestibulum ut, placerat ac, adipiscing vitae, felis. Curabitur dictum gravida mauris. }}
+    \def\lorumIpsumTwo{{\fmt{}Nam arcu libero, nonummy eget,
+    consectetuer id, vulputate a, magna. Donec vehicula augue eu neque.
+    Pellentesque habitant morbi tristique senectus et netus et malesuada
+    fames ac turpis egestas. }}
+    \def\lorumIpsumThree{{\fmt{}Mauris ut leo. Cras viverra metus rhoncus
+    sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu
+    tellus sit amet tortor gravida placerat. Integer sapien est, iaculis in,
+    pretium quis, viverra ac, nunc. }}
     
-     This bit of text is noteworthy - it's been added in after the fact
-  \end{RpgSecret}
-   \lorumIpsumThree
- \end{ExampleBlock}
-\end{figure}
-\begin{figure}[H]
- \begin{ExampleBlock}[true,RpgSecret,RpgShowSecrets]{RpgSecrets (in show-mode)}
-  %%exactly the same as above -- but reveal the secrets!
-  \RpgSecretVisible{true} 
-  \lorumIpsumOne
- 
-  \begin{RpgSecret}{}
-      The players don't know it yet, but all this pseudo-latin text is a hint that devils are involved! 
-  \end{RpgSecret}
- 
-   \lorumIpsumTwo{}
- 
-   \begin{RpgSecret}{Logos kykloforia, thelxis kai ethos, tyrannis kai epilysis. Aei thera plaka, kyrios meion egestas, anagkas proin eira kai thera.}
- 
-      This bit of text is noteworthy - it's been added in after the fact
-  \end{RpgSecret}
- 
-   \lorumIpsumThree{}
- \end{ExampleBlock}
-\end{figure}
+    \RpgGetExample{env-secret-hide}
+    \RpgGetExample{env-secret-show}
 
 
-
+\newpage
 \labelsection{RpgTable}
+    RpgTable is a wrapper for the \forcelink{https://ctan.org/pkg/tabularx}{tabularx} (or \forcelink{https://ctan.org/pkg/xltabular}{xltabular} or tabular-- see \texttt{breakable} and \texttt{simple}) environment, designed to provide attractive environments for the mainstay of RPG books since time immemorial: tables.
+
+    \RpgGetExample{env-table-standard}
+        
 
     \RpgMacro*{RpgTable}{\param{o m}}{Begins an environment for creating visually appealing and consistent tables. }{
-        \cmd{begin}\param{RpgTable}[<options>]\param{<column-specifications}
-
-        ~~~~{<table-contents>}
-
-        \cmd{end\param{RpgTable}}
+        env-table-basic
     }{
-        RpgTable is a wrapper for the \forcelink{https://ctan.org/pkg/tabularx}{tabularx} (or \forcelink{https://ctan.org/pkg/xltabular}{xltabular} -- see \texttt{breakable}) environment, and so accepts the standard set of column specifications:\{c,l,r,p{width},\@,\ldots{}\} and the extended set (i.e. X). It therefore acts almost identically to the standard tabular environment with a few stylistic differences.
+        In default mode, RpgTable accepts the standard set of column specifications:\{c,l,r,p{width},\@,\ldots{}\} and the extended tabularx set (i.e. X). It therefore acts almost identically to the standard tabular environment with a few stylistic differences.
         \subsection{Stylistic Changes}
             The RpgTable environment makes the following changes:
             \begin{enumerate}
@@ -429,48 +287,24 @@ pretium quis, viverra ac, nunc. }}
             \item[filigree] If present, wraps the table in an \envref{RpgFiligree} environment, producing ornamental tables 
         \end{description}
     }
-    \subsection{RpgTable Example}
-
-
-        This is the standard usage of the table, showing automatic formatting of the header rows and the word-wrapping abilities of the X-column:
- \begin{ExampleBlock}{Standard RpgTable}
- \begin{RpgTable}[width=0.75\linewidth, color=green!30!white]{lX}
- Header 1 & Header 2
- \\
- Text & Some text which fills up the space to 75\% of the line width then breaks
- \\
- Alternating & This row is transparent
- \\
- Colour & but this one is the colour we set in the header
- \end{RpgTable}
- \end{ExampleBlock}
- This example adds a title, but suppresses the header formatting. It also adds a filigree:
- \begin{ExampleBlock}{Header-Suppressed RpgTable}
- \begin{RpgTable}[title={Test Table},noheader, filigree]{XlX}
- Plain & Header & Text
- \\
- Now there's no & difference & between the header and the main
- \\
- body
- \end{RpgTable}
- \end{ExampleBlock}
-
-\labelsection{Text Boxes}
+   
+    
+\labelsection{RpgNarration, RpgSidebar and RpgTip}
 
    
 
-    \begin{RpgSidebar}{Which colorbox to use?}
-         \rpgtex{} defines three `colorbox' environments, which inherit from \tcref{}. These provide a consistent way for a writer to highlight and differentiate blocks of text on the page.
+    \rpgtex{} defines three `colorbox' environments, which inherit from \tcref{}: \cmd{RpgSidebar}, \cmd{RpgNarration} and \cmd{RpgTip}. These provide a consistent way for a writer to highlight and differentiate blocks of text on the page.
 
 
-        The choice between RpgSidebar and RpgTip is somewhat arbitrary --   although they have a mechanical difference by default (one being breakable, the other not) -- this can be overridden by themes. Instead, the intention is that they serve slightly different purposes:
+    \subsection{Which colorbox to use?}
+        The choice between these boxes (RpgSidebar and RpgTip especially) can be somewhat arbitrary -- any mechanical differentiation between them can be overriden by calls to the tcbox backend. Instead, the intention is that they serve slightly different purposes:
         
         \begin{description}
-                        \item[RpgSidebar] is used for `important information' -- key rules or summaries which readers \textit{should} pay attention to.
-                        \item[RpgTip] is for `helpful additions' -- tips, tricks and trivia that are not necessary, but which might be useful, and are too big to fit into a footnote or parenthetical.   
+            \item[RpgSidebar] is used for `important information' -- key rules or summaries which readers \textit{should} pay attention to.
+            \item[RpgTip] is for `helpful additions' -- tips, tricks and trivia that are not necessary, but which might be useful, and are too big to fit into a footnote or parenthetical. 
+            \item[RpgNarration] is used for `read aloud' sections, such as those found at the beginning of adventure modules, or descriptions of environments.  
         \end{description}
-    \end{RpgSidebar}
-
+    \RpgGetExample{env-text-boxes}
     All of the boxes inherit the standard `tcb' style interface, and so tcolorbox options may be passed by the user to control their appearance.
 
     \RpgMacro*{RpgNarration}{\param{{o}}}{A \tcref{} wrapper designed for text that is read aloud to players}
@@ -486,11 +320,7 @@ pretium quis, viverra ac, nunc. }}
             Themes may alter the appearance of the narration block using the tcb interface, calling \texttt{\bs{}tcbset\param{rpgnarration /.append~style={...}}} to overwrite the existing instructions.
         }
 
-   \begin{ExampleBlock}[RpgNarration]{RpgNarration}
-    \begin{RpgNarration}[color=blue!30!white]
-     This is text that you would read out loud to players, describing a scene. It will always be blue, even if the theme says otherwise -- because the optional argument takes priority.
-    \end{RpgNarration}
-   \end{ExampleBlock}
+  
 
     \RpgMacro*{RpgSidebar}{\param{{o m}}}{A decorated \tcref{} wrapper designed for information which is set outside the main text.}
         {
@@ -507,11 +337,7 @@ pretium quis, viverra ac, nunc. }}
 
             Themes may alter the appearance of the sidebar using the tcb interface, calling \texttt{\bs{}tcbset\param{rpgsidebar /.append~style={\ldots}}} to overwrite the existing instructions.
         }
-    \begin{ExampleBlock}[RpgSidebar]{RpgSidebar}
-    \begin{RpgSidebar}{A Sidebar}
-     This is an important block of text, that you should pay attention to.
-    \end{RpgSidebar}
-   \end{ExampleBlock}
+    
     \RpgMacro*{RpgTip}{\param{{o m}}}{A simple \tcref{} wrapper designed for information which is set outside the main text.}
         {
             \cmd{begin\param{RpgTip}[color=<color>,<tcbox-options>]\param{<title>}}
@@ -525,53 +351,25 @@ pretium quis, viverra ac, nunc. }}
             Themes may alter the appearance of the narration block using the tcb interface, calling \texttt{\bs{}tcbset\param{rpgnarration /.append~style={...}}} to overwrite the existing instructions.
     }
 
-    
-
-    \begin{ExampleBlock}[RpgTip]{RpgTip}
-    \begin{RpgTip}{A Tip}
-     This is some helpful - but not vital - text.
-    \end{RpgTip}
-    \end{ExampleBlock}
-
-    
+    \newpage
 \section{Filigree}
 
-    In design, Filigree is a decorative ribbon or other ornament around the outside of an element. We provide both a standard `RpgFiligree' environment and a 
+    In design, Filigree is a decorative ribbon or other ornament around the outside of an element. We provide both a standard `RpgFiligree' environment and a tcolorbox style which implements the filigree.
 
-    \RpgMacro*{rpgfiligree}{}{A prewritten \tcref{} style command that replaces the existing frame with a pre-defined overlay frame. }{
-        \cmd{begin}{<tcolorbox environment>}[rpgfiligree]
+    \RpgMacro*{rpgfiligree}{}{A \tcref{} style command that replaces the existing frame with a pre-defined overlay frame. }{
+        env-filigree-cmd
+    }{This command can be added to the options of any tcolorbox environment, and it will add the current filigree as the frame.}
 
-         ~~~~\texttt{<body>}
-            
-        \cmd{end\param{RpgFiligree}}
-    }{}
-
-    \RpgMacro*{RpgFiligree}{\param{o}}{A simple \tcref{} wrapper with a tikz overlay for producing intricate borders.}
+    \RpgMacro*{RpgFiligree}{\param{o}}{A 'default' tcolorbox with the \texttt{rpgfiligree} applied to the ourside.}
     {
-         \cmd{begin\param{RpgFiligree}[color=<color>,<tcbox-options>]}
-
-            ~~~~\texttt{<body>}
-            
-            \cmd{end\param{RpgFiligree}}
+        env-filigree-env
     }
     {
         This environment is equivalent to calling \envref{RpgTip} with the filigree option enabled. See that documentation for customisation options.
     }
 
-    \begin{ExampleBlock}[RpgFiligree,rpgfiligree,filigree]{Filigree}
-%% As environment
-\begin{RpgFiligree}
-    A basic filigree-wrapped tcbox.
-\end{RpgFiligree}
-
-
-%% As option
-\begin{RpgSidebar}[rpgfiligree, filigree-size=8pt]{Fancy Sidebar}
-    A very fancy sidebar
-\end{RpgSidebar}
-
-    \end{ExampleBlock}
-\section{RpgItem, RpgSpell, RpgFeat (etc.)}
+    \RpgGetExample{env-filigree-example}
+\section{RpgItem, RpgSpell, RpgFeat and the FeatureForge}
 
     The prior documented environments have almost entirely been \textit{rules agnostic}. That is, they have primarily been typesetting aids which could equally be used for notes on a whimsical, rules-lite game about squirrels in a forest, or a crunchy, table-heavy futuristic scifi game -- all the theme did was change the appearance of the individual elements. 
     
@@ -580,14 +378,13 @@ pretium quis, viverra ac, nunc. }}
     To this end, we have provided a powerful and flexible interface to allow a designer to create and customise environments. This is the subject of Chapter \ref{S:Forge}, and makes it somewhat difficult to robustly document the features - as they change behaviour depending on the theme that is being used! When using these functions, always consult the theme-specific documentation.
 
     
+    \begin{RpgSidebar}{Advanced Usage}
+        The functions listed below are the `basic interface' for the FeatureForge system; designed for those who are happy to use the format that a theme designer has set up for them. 
 
-\begin{RpgSidebar}{Advanced Usage}
-    The functions listed below are the `basic interface' for the FeatureForge system; designed for those who are happy to use the format that a theme designer has set up for them. 
+        Those wishing to have a more fine-grained control over the appearance of the objects should consult the full documentation on page \RpgPage[p]{S:Forge}.
+    \end{RpgSidebar}
 
-    Those wishing to have a more fine-grained control over the appearance of the objects should consult the full documentation on page \RpgPage[p]{S:Forge}.
-\end{RpgSidebar}
-
-    By default, all of these environments have the same behaviour (except where noted otherwise)
+    By default, all of these environments have the same behaviour.
 
 	\label{RpgItem}\label{RpgSpell}\label{RpgFeat}
     \RpgMacro*[RpgItem,RpgSpell,RpgFeat]{Rpg[X]}{{RpgItem},{RpgSpell},{RpgFeat},\param{\paramO{} m \paramO}}{A card-switching environment which renders the text either in normal text, or as an \envref{RpgCard} }
@@ -603,7 +400,6 @@ pretium quis, viverra ac, nunc. }}
         The main flexibility of the system is delivered through the \texttt{<cmd-opts>} argument, which accepts key/value pairs. The keys are determined by the theme (there are none by default), and define rules-based interactions (a D\&D theme might add an `armour-class' key, whilst a Forged in the Dark theme might add `tier'). Consult the theme-documentation for the present definition of the keys.
     }{}
 
-	%has to be outside environment for some reason
     \RpgMacro[RpgItem!ShowCard,RpgSpell!ShowCard,RpgFeat!ShowCard]{Rpg[X]ShowCard}{\param{m}}{Sets the card mode for all Rpg[X] environments. }{
         \cmd{Rpg[X]ShowCard\param{true/false}}
     }{
@@ -612,17 +408,9 @@ pretium quis, viverra ac, nunc. }}
 	
     \RpgMacro{getkey}{\param{m}}{Inserts the value passed to \texttt{key} in the \texttt{cmd-opts} args of the current [X]-environment}
         {
-            \cmd{begin}\param{Rpg[X]}\param{Test Object}[key1=value,key2=value]
-    
-            \{
-
-            ~~The value of key1 is \cmd{getkey}\param{key1}
-
-            \}
+            env-getkey
         }
         {\label{S:getkey1}
-            % The writer may then reference the parameters of the object they are creating from within the body text of the environment, preventing duplication of information. 
-            % 
             Recovers the value passed to the key (after any post-processing performed by the environment). This allows the user to access the key-values, as well as allowing them to be inserted into the expected formatting, without having to duplicate the information.
 
             See \RpgPage{S:getkey2} for more details.

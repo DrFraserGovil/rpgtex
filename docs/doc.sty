@@ -16,6 +16,7 @@
 \newcommand\kve[3]{\texttt{#1} & #2 & #3\\}
 \newcommand\labelsection[1]
 {
+	\color{black}
 	\section{#1}\label{S:#1}
 }
 
@@ -88,7 +89,7 @@
 		top=0pt,
 		bottom=0pt,
 		 attach~boxed~title~to~top~left=
-		{yshift=-\tcboxedtitleheight/2},
+		{yshift=-\tcboxedtitleheight/3},
 		coltext=black,
 		boxed~title~style={coltext=black,size=small,colback=black!10!white,coltext=red},
     % title={hi},
@@ -189,8 +190,8 @@ boxed~title~style={size=small,colback=gray!80}
 
 \NewDocumentEnvironment{Code}{O{}}
 {
-	\begin{tcolorbox}[colframe=gray!50,colback=black!10!white,boxsep=0pt, left=2pt,right=2pt,  top=5pt,bottom=4pt,    arc=1mm,#1]
-			\tt %\color{white} 
+	\begin{tcolorbox}[colframe=gray!50,colback=black!10!white,boxsep=0pt, left=2pt,right=2pt,  top=5pt,bottom=4pt,    arc=1mm,opacityback=0.6,enhanced~jigsaw,#1]
+			\small\tt %\color{white} 
 }
 {
 	\end{tcolorbox}
@@ -244,7 +245,7 @@ boxed~title~style={size=small,colback=gray!80}
 
 		 \str_if_empty:nF{#6}
 		{
-			\begin{Code}#6\end{Code}
+			\RpgGetExample{#6}
 		}
 		
 		\str_if_empty:nF{#7}

@@ -1,0 +1,188 @@
+% example=env-card
+% options = listing only
+    \begin{RpgCard}[<key-value-opts>]
+        <contents>
+    \end{RpgCard}
+
+% example=env-card-dimensions
+%highlight = RpgCard
+    \begin{tikzpicture}%wrap in tikz so we can draw dimensions
+    \node[anchor=south west,inner sep=0pt,outer sep=0pt] at (0,0) 
+    {
+        \begin{RpgCard}[hmargin=0.5cm, vmargin=0.5cm, height=9.7cm, width=6.75cm]
+            \subsubsection{Text goes here}
+                It fits nicely into the card, wrapping over lines\footnote{We can also have a single footnote}.
+        \end{RpgCard}\ignorespaces
+    };
+    %% Draw the dimenions on top; use macros to save space!
+    \heightLines{red}
+    \widthLines{ForestGreen}
+       
+    \end{tikzpicture}
+
+    \vspace{0.5cm}
+
+    %shrink so it fits in display area
+    \begin{RpgCard}[vmargin=0.1cm, hmargin=0.1cm, height=5.2cm, width=3.6cm]
+            \raggedright\footnotesize And if we add lots of text\footnote{And maybe a footnote too?}
+        \lipsum[2]
+    \end{RpgCard}
+
+%% example = env-map-basic
+%% options = listing only
+    \begin{RpgMap}[<options>]
+        <contents>
+    \end{RpgMap}
+
+%% example =env-map-area
+%% options = listing only
+    \area[area-name][manual-label] <body-text>
+    % or
+    \begin{area}[area-name][manual-label]
+        <body-text>
+    \end{area}
+
+%% example = env-map-nesting
+% title=Automated Map Nesting
+    \begin{RpgMap}
+    \begin{area}[Test Zone]
+        A description
+            \begin{area}[Sub Zone]
+                A sub-description
+                \area[Arbitrary nested zone]
+                    (we can keep nesting)
+            \end{area}
+        \end{area}
+        \area[][nameless-ref] A nameless zone
+    \end{RpgMap}
+
+%% example = env-map-refs
+%% title = Visible RpgMap labelling
+%% highlight = RpgMapShowRefs
+    \RpgMapShowRefs{}
+    \begin{RpgMap}
+        \begin{area}[Test Zone]
+        A description
+            \begin{area}[Sub Zone]
+                A sub-description
+                \area[Arbitrary nested zone]
+                    (we can keep nesting)
+            \end{area}
+        \end{area}
+        \area[][nameless-ref] A nameless zone
+    \end{RpgMap}
+
+%% example = env-secret-basic
+%%options = listing only
+    \begin{RpgSecret}[<opts>]{player-text}
+        <GM-text>
+    \end{RpgSecret}
+
+% example = env-secret-hide
+% highlight = RpgSecret,RpgSwitch
+%title = RpgSecret: Hidden
+    \RpgSwitch{ShowSecrets}{false}
+
+    \lorumIpsumOne%Snippets of standard lorum ipsum
+    \begin{RpgSecret}{}
+        The players don't know it yet, but all this pseudo-latin text is a hint that devils are involved!  
+    \end{RpgSecret}
+    \lorumIpsumTwo{}
+    \begin{RpgSecret}{
+        Logos kykloforia, thelxis kai ethos, tyrannis kai epilysis. Aei thera plaka, kyrios meion egestas, anagkas proin eira kai thera.
+        }
+        
+        This bit of text is noteworthy - it's been added in after the fact
+    \end{RpgSecret}
+    \lorumIpsumThree
+% example = env-secret-show
+%title = RpgSecret: Revealed
+    % highlight = RpgSecret,RpgSwitch
+
+    %%exactly the same as above, but reveal the secrets!
+    \RpgSwitch{ShowSecrets}{true}
+
+    \lorumIpsumOne%Snippets of standard lorum ipsum
+    \begin{RpgSecret}{}
+        The players don't know it yet, but all this pseudo-latin text is a hint that devils are involved!  
+    \end{RpgSecret}
+    \lorumIpsumTwo{}
+    \begin{RpgSecret}{
+        Logos kykloforia, thelxis kai ethos, tyrannis kai epilysis. Aei thera plaka, kyrios meion egestas, anagkas proin eira kai thera.
+        }
+        
+        This bit of text is noteworthy - it's been added in after the fact
+    \end{RpgSecret}
+    \lorumIpsumThree
+
+%% example = env-table-basic
+% options = listing only
+    \begin{RpgTable}[<options>]{<column-specifier}
+        <table-contents>
+    \end{RpgTable}
+
+%% example = env-table-standard
+    \begin{RpgTable}[width=0.85\linewidth, color=green!30!white]{lX}
+        Header 1 & Header 2
+        \\
+        Text & Text fills up to 85\% of the line width then breaks
+        \\
+        Alternating & This row is transparent
+        \\
+        Colour & but this one is green
+    \end{RpgTable}
+
+    %suppress header formatting, add title and filigree:
+    \begin{RpgTable}[title={Test Table},noheader, filigree]{XlX}
+        Plain & Header & Text
+        \\
+        Now there's no & difference & between the header and the main
+        \\
+        body
+    \end{RpgTable}
+
+% example = env-text-boxes
+% title = The Three Text Boxes
+     \begin{RpgNarration}[color=blue!30!white]
+        This is text that you would read out loud to players, describing a scene. It will always be blue, even if the theme says otherwise -- because the optional argument takes priority.
+    \end{RpgNarration}
+
+    \begin{RpgSidebar}{A Sidebar}
+        This is an important block of text, that you should pay attention to.
+    \end{RpgSidebar}
+
+    \begin{RpgTip}{A Tip}
+        This is some helpful - but not vital - text.
+    \end{RpgTip}
+
+% example = env-filigree-cmd
+%options = listing only
+% highlight = rpgfiligree
+    \begin{any-tcbox-env}[rpgfiligree]
+        <body>
+    \end{any-tcbox-env}
+% example = env-filigree-env
+%options = listing only
+    \begin{RpgFiligree}[color=<color>,<tcb-options>]
+        <body>
+    \end{RpgFiligree}
+
+% example = env-filigree-example
+    %% As environment
+    \begin{RpgFiligree}
+        A basic filigree-wrapped tcbox.
+    \end{RpgFiligree}
+
+
+    %% As option
+    \begin{RpgSidebar}[rpgfiligree, filigree-size=8pt]{Fancy Sidebar}
+        A very fancy sidebar
+    \end{RpgSidebar}
+
+
+% example = env-getkey
+%options = listing only
+%highlight = getkey
+    \begin{Rpg[X]}{Test Object}[key1 = value1, key2 = value2]
+        The value of key1 is \getkey{key1}
+    \end{Rpg[X]}

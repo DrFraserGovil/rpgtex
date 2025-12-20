@@ -10,8 +10,8 @@
 		{
 			Saves an image path to the variable \texttt{\bs{}@cover}, automatically used by \texttt{\bs{}maketitle} as the background image.
 		}{
-			\bs{}cover\{path/to/cover\} 
-		}{
+            cmd-cover
+        }{
 			If \cmdref{RpgUseCoverPage} has been set to true, then the image at this path will be used as a full-page image in the background of the page created by \texttt{maketitle}.
 
 			The default value is empty (\texttt{\bs{}cover\param{}}), which draws no image.
@@ -20,23 +20,9 @@
 		{	
 			When called, creates theme-defined title pages using a custom format.
 		}{
-			\bs{}title\{A title\}
-
-			\bs{}subtitle\{The subtitle\} \%optional
-
-			\bs{}cover\{path/to/cover\} \%optional
-
-			\bs{}author\{Dr. W. Riter\} \%optional
-
-			~
-
-			\bs{}begin\{document\}
-
-			~~\bs{}maketitle{}
-			
-			~~(\ldots)
+			cmd-maketitle
 		}{
-			\cmd{maketitle} has been completely defined, so commands such as \texttt{titlepage} won't work as expected. Instead, the appearance of the title page (or title header) are set by the theme, or user calls to either \cmdref{RpgSetCover} or \cmdref{RpgSetSimpleTitle}. Which of the two title `modes' is active is controlled by \cmdref{RpgSetCoverMode}.
+			\cmd{maketitle} has been completely redefined, so commands such as \texttt{titlepage} won't work as expected. Instead, the appearance of the title page (or title header) are set by the theme, or user calls to either \cmdref{RpgSetCover} or \cmdref{RpgSetSimpleTitle}. Which of the two title `modes' is active is controlled by \cmdref{RpgSetCoverMode}.
 
 			If `cover-mode' has been set, then the image stored in \texttt{\bs{}{@}cover} (if there is one) is automatically used as a full-page background image. This is independent of the drawing commands, and occurs before that function is called -- all subsequent drawing occurs over the top of the cover image.
 		}
@@ -81,28 +67,34 @@
     % In addition to the fundamental typeface alterations \rpgtex{} includes a number of commands to turn text into decorative elements.
 	\RpgMacro{emph}{\param{m},\cmd{key},\param{m}}{Uses the \texttt{RpgFontEmphasis} font to emphasise text.\index{key}}
 		{
-			\cmd{emph}\param{text}
-
-			\cmd{key}\param{text}
+			cmd-emph
 		}
 		{
-			The \cmd{emph} command is usually a `context aware' emphasis command: equal to \cmd{textit} normally, \cmd{textbf} when the surrounding text is italics etc. 
-
-			However, for RPGs, it is convenient to be able to identify \emph{keywords} in a consistent fashion. The \cmd{emph} command has therefore been redefined to use the \texttt{RpgFontEmphasis} font which can be configured to give a desired `keyword formatting'.
+			The \cmd{emph} command is usually a `context aware' emphasis command: equal to \cmd{textit} normally, \cmd{textbf} when the surrounding text is italics etc. However, for RPGs, it is convenient to be able to identify {keywords} in a consistent fashion. The \cmd{emph} command has therefore been redefined to use the \texttt{RpgFontEmphasis} font which can be configured to give a desired `keyword formatting'.
 			
 			The command \cmd{key} has also been provided, as a direct alias for \cmd{emph}.
 		}
 	\RpgMacro{RpgContour}{\param{\paramO{} m}}
 		{	
-			Renders text with a \RpgContour[inner=red,outer=black]{contour effect}. The color and style are set through key/value pairs.
+			Renders text with a \RpgContour[inner=red,outer=black]{contour effect}. 
 		}
 		{
-			\bs{}RpgContour[inner=<color>,outer=<color>,style=<code>]\param{<text>}
+			\bs{}RpgContour[key/vals]\param{<text>}
 		}
 		{
-			The \texttt{style} command is applied to the text, whilst the optional \texttt{inner} and \texttt{outer} commands set the base text colour and the external contour color respectively. If the colors are not set, the default values are the \texttt{contourinnercolor} and \texttt{contouroutercolor} values defined by the theme \RpgPage[p]{S:Colors}.
+            The optional argument accepts the following key/value pairs which alter the appearance of the contouring:
+            \begin{RpgTable}{llX}
+                Key & Argument Type & Effect
+                \\
+                inner & tikz color & Sets the color of the inner text
+                \\
+                outer & tikz color & Sets the color of the outer contour around the outside
+                \\
+                style & code & A style command (such as \cmd{bfseries}) which is applied to the text before contouring begins.
+            \end{RpgTable}
+			If the colors are not set, the default values are the \texttt{contourinnercolor} and \texttt{contouroutercolor} values defined by the theme \RpgPage[p]{S:Colors}.
 			
-			The contour does not automatically linebreak, but can be controlled manually with a \texttt{\newline} command (not \texttt{\\} or \texttt{\textbackslash{}par})
+			The contour does not automatically linebreak, but can be controlled manually with a \cmd{newline} command (not \cmd{\textbackslash} or \texttt{\textbackslash{}par})
 			
 			\begin{RpgTable}{lX}
 				Example & Output \\
@@ -129,16 +121,14 @@
 			Creates a decorative `drop cap' letter to begin a new chapter with, and modifies the following text.
 		}
 		{
-				\bs{}RpgDropCap[<lettrine-args>]{<letter>}{<text>}
+				\bs{}RpgDropCap[<lettrine-args>]\param{<letter>}\param{<text>}
 		}{
 			This command uses \forcelink{https://texdoc.org/serve/lettrine/0}{the lettrine package} and the \forcelink{https://ctan.org/pkg/magaz?lang=en}{magaz} package to create an easy-to-use environment in which the first letter is enlarged (and stylised in the \texttt{RpgFontDropCap} font). The second argument formats \textit{up to the first line} of text in the \texttt{RpgFontDropCapInternal} font (usually a simple \texttt{scshape} command).
 
 			This command can be a little fragile -- lettrine does not usually play well with the `FirstLine' command provided by magaz -- and we've used a few workarounds to allow both linebreaking, and the formatting of only the first line of text. There may need to be a small amount of manual calibration, but it is better than the default.					
 
 		}
- \begin{ExampleBlock}[RpgDropCap]{RpgDropCap}
- \raggedright \RpgDropCap{T}{he example: this text runs over the first line, and then revert back to the normal font. It almost works! However, because it's wrapped in a text box, it goes slightly over the edges.}
- \end{ExampleBlock}
+        \RpgGetExample{cmd-drop-cap}
         
 
     
@@ -178,7 +168,7 @@
             Evaluates expressions of the form $n\mathrm{d}x \pm m$, and outputs using a theme-dependent layout.
         }
         {
-            \bs{}RpgDice{<dice-expression>}
+            \bs{}RpgDice\param{<dice-expression>}
         }{
             Uses regular expressions to extract and simplify the \texttt{dice-expression}, which must follow the following format:
             \begin{RpgSidebar}{Dice format}

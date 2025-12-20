@@ -1,0 +1,24 @@
+% example = cmd-cover
+% options = listing only
+    \cover{path-to-covery}
+
+% example = cmd-maketitle
+%highlight = maketitle
+% options = listing only
+    \title{title-name}
+    \subtitle{subtitle-name}    % optional
+    \cover{path/to/cover}       % optional
+    \author{Dr. W. Riter}       % optional
+
+    \begin{document}
+        \maketitle
+        ...
+
+% example = cmd-emph
+    \emph{text}
+
+    \key{more-text}
+
+
+% example = cmd-drop-cap
+    \RpgDropCap{T}{he example: this text runs over the first line, and then revert back to the normal font. It almost works! However, because it's wrapped in a text box, it goes slightly over the edges.}
