@@ -1,0 +1,36 @@
+% highlight = RpgSpell
+\begin{ExampleBlock}[RpgSpell][listing side text]{}
+\RpgSpellShowCard{false}
+\begin{RpgSpell}{Firebolt}[
+    school=Evocation,
+    level = 0,
+    casting-time=1 action,
+    range=120ft,
+    components = VS,
+    duration=Instantaneous,
+    source=Free Basic Rules (2014)
+]
+    You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried.
+
+    \RpgCantripScaling{1d10}{2d10} {3d10}{4d10}
+\end{RpgSpell}
+
+\vspace{1cm}
+
+\RpgSpellShowCard{true}
+\begin{RpgSpell}{Cone of Cold}[
+    school=Evocation,
+    level = 5,
+    casting-time=1 action,
+    range=self (60ft cone),
+    components = VSM\footnote{A small crystal or glass cone},
+    duration=Instantaneous,
+    source=Free Basic Rules (2014)
+]
+       A blast of cold air erupts from your hands. Each creature in a 60-foot cone must make a Constitution saving throw. A creature takes 8d8 cold damage on a failed save, or half as much damage on a successful one. A creature killed by this spell becomes a frozen statue until it thaws.
+
+    \RpgSpellUpcast{1d8}
+\end{RpgSpell}
+
+
+\end{ExampleBlock}

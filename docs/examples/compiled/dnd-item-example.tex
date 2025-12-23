@@ -1,0 +1,28 @@
+% highlight = RpgItem
+% title = RpgItem In Action
+\begin{ExampleBlock}[RpgItem][listing side text]{RpgItem In Action}
+\RpgItemShowCard{false}
+\begin{RpgItem}{Joyeuse}[
+   rarity=Rare,
+   type=weapon (sword),
+   requires-attunement,   %just a flag, no value
+   image={../example/img/joyeuse}
+]
+   The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+\end{RpgItem}
+
+\vspace{0.5cm}\hrule\vspace{0.5cm}
+
+%now the card version
+\RpgItemShowCard{true}
+\begin{RpgItem}{Joyeuse}[
+   rarity=Rare,
+   type=weapon (sword),
+   requires-attunement={by a Paladin of France},   %now has a value...
+   image={../example/img/joyeuse}
+]
+   The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+\end{RpgItem}
+
+
+\end{ExampleBlock}
