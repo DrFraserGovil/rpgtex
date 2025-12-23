@@ -78,43 +78,19 @@
 
         \subsection{RpgDice}\index{RpgDice}
             
-            Following the syntax found in D\&D monster statblocks, RpgDice shows the average of the roll:
+            Following the syntax found in D\&D monster statblocks, RpgDice shows the average of the roll, and automatically converts 'dx' into '1dx':
             \RpgGetExample{dnd-dice}
 
         \subsection{Filigree}\label{S:DndFiligree}
 
             The dnd implemenation of \envref{RpgFiligree} is designed to mimic the decorative elements seen around the class tables in the Player's Handbook:
             
-\begin{ExampleBlock}{D\&D Filigree}
-    \begin{RpgFiligree}
-        Some decorative text
-    \end{RpgFiligree}
-
-    \vspace{1cm}
-
-    \begin{RpgTable}[filigree]{lX}
-        Header 1 & Header 2
-        \\
-        Body 1 & Body 2
-        \\
-        Body 3 & Body 4
-    \end{RpgTable}
-\end{ExampleBlock}
-
+            \RpgGetExample{dnd-filigree}
     \newpage
     \section{RpgItem}\label{S:DndItem}
 
         \RpgMacro[RpgItem!Theme!dnd]{RpgItem}{\param{\paramO m \paramO}}{The dnd-specialisation of the \envref{RpgItem} environment, used to describe physical objects and equipment.}
-        {
-            \cmd{RpgItemShowCard\param{true/false}} \% set the card mode
-
-            \cmd{begin}\param{RpgItem}[card-opts]\param{Item Name}[key-values]
-
-            ~~<body text>
-
-            \cmd{end}\param{RpgItem}
-
-        }
+        {dnd-item}
         {As with all FeatureForge environments, RpgItem has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgItemShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
         
         The \texttt{dnd} theme defines the following keys for the RpgItem object:
@@ -130,47 +106,13 @@
             image & \param{} & If non-empty, define an image path which is used when in card-mode.
         \end{RpgTable}}
     The card-variant  renders the title in a 'flag ribbon' which expands to fit the title (and shrinks the font size if it would spill over the card boundary)
-    \begin{ExampleBlock}{Default RpgItem}
-    \RpgItemShowCard{false}
-    \begin{RpgItem}{Joyeuse}[
-        rarity=Rare,
-        type=weapon (sword),
-        %just a flag, no value
-        requires-attunement, 
-        image={../example/img/joyeuse}
-    ]
-        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
-    \end{RpgItem}
-
-    \vspace{0.5cm}\hrule\vspace{0.5cm}
-
-    %now the card version
-    \RpgItemShowCard{true}
-    \begin{RpgItem}{Joyeuse}[
-        rarity=Rare,
-        type=weapon (sword),
-        %now add a value...
-        requires-attunement={by a Paladin of France}, 
-        image={../example/img/joyeuse}
-    ]
-        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
-    \end{RpgItem}
-    \end{ExampleBlock}
     
+    \RpgGetExample{dnd-item-example}
     
 \section{RpgFeat}\label{S:DndFeat}\index{RpgFeat!Theme!default}
 
     \RpgMacro[RpgFeat!Theme!dnd]{RpgFeat}{\param{\paramO m \paramO}}{ The dnd-specialisation of the \envref{RpgFeat} environment, used to describe abilities and character features and choices.}
-        {
-            \cmd{RpgFeatShowCard\param{true/false}} \% set the card mode
-
-            \cmd{begin}\param{RpgFeat}[card-opts]\param{Feat Name}[key-values]
-
-            ~~<body text>
-
-            \cmd{end}\param{RpgFeat}
-
-        }
+        {dnd-feat}
         {
         As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgFeatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. The \texttt{dnd} RpgFeat is largely the same as the default, using the same `requires' key, and adding an alias:
             \begin{RpgTable}{llX}
@@ -182,44 +124,17 @@
             \end{RpgTable}
         }
 
-        \def\grapplerText{  You've developed the skills necessary to hold your own in close--quarters grappling. You gain the following benefits:
-     \begin{itemize}
-       \item You have advantage on attack rolls against a creature you are grappling.
-       \item You can use your action to try to pin a creature grappled by you. To do so, make another grapple check. If you succeed, you and the creature are both restrained until the grapple ends.
-     \end{itemize}
-}
-     \begin{ExampleBlock}{Dnd RpgFeat}
-    \RpgFeatShowCard{false}
-    \begin{RpgFeat}{Grappler}[
-         requires={Strength 13 or higher},
-              ]
-        \grapplerText %predefined to save space. Just plain text!
-    \end{RpgFeat}
-
-    \vspace{0.25cm}\hrule\vspace{0.25cm}
-
-    %now the card version
-    \RpgFeatShowCard{true}
-    %demonstrate card-opts
-    \begin{RpgFeat}[color=DmgLilac]{Grappler}[
-        %%alias in action; could use 'requires' for same effect
-         prerequisite={Strength 13 or higher},
-            ]
-       \grapplerText
-    \end{RpgFeat}
-    \end{ExampleBlock}
+    \def\grapplerText{  You've developed the skills necessary to hold your own in close-quarters grappling. You gain the following benefits:
+    \begin{itemize}
+    \item You have advantage on attack rolls against a creature you are grappling.
+    \item You can use your action to try to pin a creature grappled by you. To do so, make another grapple check. If you succeed, you and the creature are both restrained until the grapple ends.
+    \end{itemize}
+    }
+    \RpgGetExample{dnd-feat-full}
 \section{RpgSpell}
 
     \RpgMacro*[RpgSpell!Theme!dnd]{RpgSpell}{\param{\paramO m \paramO}}{ The dnd configuration of the \envref{RpgSpell} environment, used to describe magical spells or spell-like abilities.}
-        {
-            \cmd{RpgSpellShowCard\param{true/false}} \% set the card mode
-
-            \cmd{begin}\param{RpgSpell}[card-opts]\param{Spell Name}[key-values]
-
-            ~~<body text>
-
-            \cmd{end}\param{RpgSpell}
-        }
+        {dnd-spell}
         {As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgSpellShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. The RpgSpell formats the components of a D\&D spell by defining the following keys:
                \begin{RpgTable}{llX}
                 Key & Default Value & Effect
@@ -256,50 +171,16 @@
     }
     {
         The default `benefit' text is ``\textit{The damage increases by}''; with the expectation that the mandatory argument is a damage increase (such as 1d6). The slots-per-increase is an integer value (default 1), indicating the number of level gains per increase.
+
+        This function can only be called within an \texttt{RpgSpell} environemnt, as it relies on the local value of \cmd{l\_\_rpg\_dnd\_spell\_level\_tl}.
     }
     \ExplSyntaxOn
     \tl_set:Nn\l__rpg_dnd_spell_level_tl{3}
     \ExplSyntaxOff
-    \begin{ExampleBlock}{Spell Helper Functions}
-     \RpgCantripScaling[\# of Beams]{1} {3} {5}{9d10}
+    
+    \RpgGetExample{dnd-spell-helper}
 
-     \vspace{0.5cm}
-
-     \RpgSpellUpcast[The duration increases by]{1 minute}[2]
-    \end{ExampleBlock}
-\begin{ExampleBlock}[RpgSpell]{Example Spells}
-    \RpgSpellShowCard{false}
-    \begin{RpgSpell}{Firebolt}[
-        school=Evocation,
-        level = 0,
-        casting-time=1 action,
-        range=120ft,
-        components = VS,
-        duration=Instantaneous,
-        source=Free Basic Rules (2014)
-       ]
-    You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried.
-
-        \RpgCantripScaling{1d10}{2d10} {3d10}{4d10}
-    \end{RpgSpell}
-
-    \vspace{1cm}
-
-    \RpgSpellShowCard{true}
-    \begin{RpgSpell}{Cone of Cold}[
-        school=Evocation,
-        level = 5,
-        casting-time=1 action,
-        range=self (60ft cone),
-        components = VSM\footnote{A small crystal or glass cone},
-        duration=Instantaneous,
-        source=Free Basic Rules (2014)
-       ]
-     A blast of cold air erupts from your hands. Each creature in a 60-foot cone must make a Constitution saving throw. A creature takes 8d8 cold damage on a failed save, or half as much damage on a successful one. A creature killed by this spell becomes a frozen statue until it thaws.
-
-        \RpgSpellUpcast{1d8}
-    \end{RpgSpell}
-\end{ExampleBlock}
+    \RpgGetExample{dnd-spell-full}
 \clearpage
 \section{RpgStat: D\&D Monsters}
 

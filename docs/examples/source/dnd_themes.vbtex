@@ -7,6 +7,8 @@
 % highlight = RpgDice
 	\RpgDice{3d8 -5 +2}
 
+	\RpgDice{d8 + 0}
+
 % example = dnd-filigree
 % highlight = RpgFiligree, filigree
 	\begin{RpgFiligree}
@@ -22,6 +24,124 @@
         \\
         Body 3 & Body 4
     \end{RpgTable}
+
+% example = dnd-item
+% options = listing only
+% highlight = RpgItem
+	\RpgItemShowCard{true/false} % set the card mode
+	
+	\begin{RpgItem}[card-opts]{Item Name}[key-values]
+		<body text>
+	\end{RpgItem}
+
+% example = dnd-item-example
+% highlight = RpgItem
+% title = RpgItem In Action
+	 \RpgItemShowCard{false}
+    \begin{RpgItem}{Joyeuse}[
+        rarity=Rare,
+        type=weapon (sword),
+        requires-attunement,   %just a flag, no value
+        image={../example/img/joyeuse}
+    ]
+        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+    \end{RpgItem}
+
+    \vspace{0.5cm}\hrule\vspace{0.5cm}
+
+    %now the card version
+    \RpgItemShowCard{true}
+    \begin{RpgItem}{Joyeuse}[
+        rarity=Rare,
+        type=weapon (sword),
+        requires-attunement={by a Paladin of France},   %now has a value...
+        image={../example/img/joyeuse}
+    ]
+        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+    \end{RpgItem}
+
+% example = dnd-feat
+% options = listing only
+	\RpgFeatShowCard{true/false} % set the card mode
+	
+	\begin{RpgFeat}[card-opts]{Feat Name}[key-values]
+		<body text>
+	\end{RpgFeat}
+
+%example = dnd-feat-full
+%title = D\&D RpgFeat
+% highlight = RpgFeat
+
+	\RpgFeatShowCard{false}
+    
+	\begin{RpgFeat}{Grappler}[
+         requires={Strength 13 or higher},
+              ]
+        \grapplerText %predefined to save space. Just plain text!
+    \end{RpgFeat}
+
+    \vspace{0.25cm}\hrule\vspace{0.25cm}
+
+    %now the card version
+    \RpgFeatShowCard{true}
+    
+    \begin{RpgFeat}[color=DmgLilac]{Grappler}[
+         prerequisite={Strength 13 or higher},
+            ]
+       \grapplerText
+    \end{RpgFeat}
+
+% example = dnd-spell
+% options = listing only
+% highlight = RpgSpell
+	\RpgSpellShowCard{true/false} % set the card mode
+	\begin{RpgSpell}[card-opts]{Spell Name}[key-values]
+		<body text>
+	\end{RpgSpell}
+
+% example = dnd-spell-helper
+% highlight = RpgCantripScaling, RpgSpellUpcast
+
+	\RpgCantripScaling[\# of Beams]{1} {3} {5}{9d10}
+
+	\vspace{0.5cm}
+
+	%% assume being called within a 3rd level spell...
+	\RpgSpellUpcast[The duration increases by]{1 minute}[2]
+
+% example = dnd-spell-full
+% highlight = RpgSpell
+	\RpgSpellShowCard{false}
+    \begin{RpgSpell}{Firebolt}[
+        school=Evocation,
+        level = 0,
+        casting-time=1 action,
+        range=120ft,
+        components = VS,
+        duration=Instantaneous,
+        source=Free Basic Rules (2014)
+	]
+    	You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried.
+
+        \RpgCantripScaling{1d10}{2d10} {3d10}{4d10}
+    \end{RpgSpell}
+
+    \vspace{1cm}
+
+    \RpgSpellShowCard{true}
+    \begin{RpgSpell}{Cone of Cold}[
+        school=Evocation,
+        level = 5,
+        casting-time=1 action,
+        range=self (60ft cone),
+        components = VSM\footnote{A small crystal or glass cone},
+        duration=Instantaneous,
+        source=Free Basic Rules (2014)
+    ]
+   		A blast of cold air erupts from your hands. Each creature in a 60-foot cone must make a Constitution saving throw. A creature takes 8d8 cold damage on a failed save, or half as much damage on a successful one. A creature killed by this spell becomes a frozen statue until it thaws.
+
+        \RpgSpellUpcast{1d8}
+    \end{RpgSpell}
 
 % EXAMPLE = dnd-stat-card
 %options=listing only
