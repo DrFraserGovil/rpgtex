@@ -186,3 +186,24 @@
     \begin{Rpg[X]}{Test Object}[key1 = value1, key2 = value2]
         The value of key1 is \getkey{key1}
     \end{Rpg[X]}
+
+%% example = env-full-featureforge
+%highlight = TestObject, RpgMakeFeature, TestObjectAddProperty
+    %% Test object does not exist before this moment.
+    %%See FeatureForge for documentation
+    \RpgMakeFeature{TestObject}{TestCard}{test}
+
+    \TestObjectAddProperty{test-key} {\testKeyValue} {default}
+
+    %card mode defaults to false, so get plain text output:
+    \begin{TestObject}{An Example}
+        This is the body text, I can see that my key is `\getkey{test-key}'
+    \end{TestObject}
+
+    \vspace{0.5cm}
+
+    %%Then activate the card mode (and change the test-key value)
+    \TestObjectShowCard{true}
+    \begin{TestObject} {An Example} [test-key=alacrity]
+        This is the body text, I can see that my key is `\getkey{test-key}'
+    \end{TestObject}

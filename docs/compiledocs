@@ -4,4 +4,4 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 cd $SCRIPT_DIR
 ./examples/examplemake
-rpglatex documentation.tex
+rpglatex documentation.tex --show 0

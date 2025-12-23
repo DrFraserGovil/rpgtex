@@ -369,7 +369,7 @@
     }
 
     \RpgGetExample{env-filigree-example}
-\section{RpgItem, RpgSpell, RpgFeat and the FeatureForge}
+\section{RpgItem, RpgSpell, RpgFeat: The FeatureForge}
 
     The prior documented environments have almost entirely been \textit{rules agnostic}. That is, they have primarily been typesetting aids which could equally be used for notes on a whimsical, rules-lite game about squirrels in a forest, or a crunchy, table-heavy futuristic scifi game -- all the theme did was change the appearance of the individual elements. 
     
@@ -417,22 +417,4 @@
         }
     
     
-        
-        \begin{ExampleBlock}[TestObject]{Feature Forge Example}
-%% Test object does not exist before this moment.
-%%See FeatureForge for documentation
-\RpgMakeFeature{TestObject}{TestCard}{test}
-\TestObjectAddProperty{test-key} {\testKeyValue} {default}
-
-
-%card mode defaults to false, so get plain text output:
-\begin{TestObject}{An Example}
-    This is the body text, I can see that my key is `\getkey{test-key}'
-\end{TestObject}
-
-%%Then activate the card mode (and change the test-key value)
-\TestObjectShowCard{true}
-\begin{TestObject} {An Example} [test-key=alacrity]
-    This is the body text, I can see that my key is `\getkey{test-key}'
-\end{TestObject}
-        \end{ExampleBlock}
+    \RpgGetExample{env-full-featureforge}
