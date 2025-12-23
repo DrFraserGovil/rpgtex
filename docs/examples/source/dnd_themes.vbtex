@@ -1,3 +1,8 @@
+% example = dnd-section-headers
+	\section*{Example} %starred so not added to toc; otherwise the same
+    \subsection{Another Example}
+    \subsubsection{More Examples!}
+
 
 % EXAMPLE = dnd-stat-card
 %options=listing only
