@@ -3,6 +3,25 @@
     \subsection{Another Example}
     \subsubsection{More Examples!}
 
+% example = dnd-dice
+% highlight = RpgDice
+	\RpgDice{3d8 -5 +2}
+
+% example = dnd-filigree
+% highlight = RpgFiligree, filigree
+	\begin{RpgFiligree}
+        Some decorative text
+    \end{RpgFiligree}
+
+    \vspace{1cm}
+
+    \begin{RpgTable}[filigree]{lX}
+        Header 1 & Header 2
+        \\
+        Body 1 & Body 2
+        \\
+        Body 3 & Body 4
+    \end{RpgTable}
 
 % EXAMPLE = dnd-stat-card
 %options=listing only
