@@ -1,11 +1,183 @@
 \RpgSetTheme{default}
 \chapter{\texttt{default} Theme}\label{Theme:Default}
 
+    As the name suggests, the \texttt{default} theme is the theme which is loaded if no arguments are passed to \texttt{theme} when loading the \rpgtex{} package. As such, it is largely a re-statement of the default \LaTeX{} values. This is important, as most other themes begin by first re-inserting the default theme; thereby resetting everything into a `known state'. This means that they only need to define formatting which differs from the default. 
+    
+    The majority of this document has been typeset in a rpgbook class \RpgPage[p]{S:bookClass} using the default theme.
 
-	\section{RpgItem: default}\label{S:DefaultItem}\index{RpgItem!Theme!default}
+    \section{Appearance}
+        \subsection{Fonts}
+            The default format defines only a single font: the Latin Modern Roman font, the standard \LaTeX{} font. For consistency with the rest of the library (which uses fontspec-defined fonts), we have used an OTF version of LMR which is bundled with the package.
+            
+            \RpgMacro{lrfont}{}{The name given to the Latin Modern Roman font-family (extended with a small-caps font; Latin Modern Roman Caps) defined by the default theme}{}{}{}
 
-		The default value of the \envref{RpgItem}
-	
-	\section{RpgFeat: default}\index{RpgFeat!Theme!default}
-	
-	\section{RpgSpell: default}\index{RpgSpell!Theme!default}
+             The values assigned to the font elements areas follows (note that \verb|\normalfont| is aliased to the value of RpgFontBody).
+
+            \InsertFontTable{}
+            
+        \subsection{Colors}
+
+            The default theme colors are largely monochromatic:
+
+            \DefaultSwatches{}
+
+        \subsection{Backgrounds \& Footers}
+            The default theme defines no background or headers (and clears any existing ones). The footer consists of the chapter name and a page number, using the appropriate fonts (\cmd{RpgFontFooter} and \cmd{RpgFontPageNumber}). 
+
+
+        \subsection{Text Boxes}
+
+            The default text boxes are very simple in design:
+
+            \begin{multicols}{3}
+                
+                \begin{RpgSidebar}{The RpgSidebar}
+                    Has minor decorations at the top and bottom to distinguish it from an RpgTip
+                \end{RpgSidebar}
+                
+                \begin{RpgTip}{The RpgTip}
+                    Almost entirely undecorated
+                \end{RpgTip}
+
+                \begin{RpgNarration}
+                    RpgNarration is also simple; but uses the narration color
+                \end{RpgNarration}
+            \end{multicols}
+
+
+
+        \subsection{Section Headers}
+
+                Only chapters\footnote{If in an rpgbook / other class which support chapters} are numbered; all other section/subsections (etc.) are unnumbered. Otherwise there are no changes made to the titles aside from minor spacing changes, and the assignment of the relevant fonts.
+          
+
+              \begin{ExampleBlock}{Section Headers}
+    \section*{Example} %starred so not added to toc; otherwise the same
+    \subsection{Another Example}
+    \subsubsection{More Examples!}
+            \end{ExampleBlock}
+
+        \subsection{RpgDice}\index{RpgDice}
+            
+            The default RpgDice format is $n\mathrm d x + m$:
+            \begin{ExampleBlock}{Default Dice}
+            \RpgDice{3d8 -5 +2}
+            \end{ExampleBlock}
+
+    \newpage
+    \section{RpgItem}\label{S:DefaultItem}
+
+		\RpgMacro[RpgItem!Theme!default]{RpgItem}{\param{\paramO m \paramO}}{The default configuration of the \envref{RpgItem} environment, used to describe physical objects and equipment.}
+			{
+				\cmd{RpgItemShowCard\param{true/false}} \% set the card mode
+
+				\cmd{begin}\param{RpgItem}[card-opts]\param{Item Name}[key-values]
+
+				~~<body text>
+
+				\cmd{end}\param{RpgItem}
+			}
+			{
+			As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgItemShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+			
+			The \texttt{default} theme defines two keys for the RpgItem object:
+			\begin{RpgTable}{llX}
+				Key & Default Value & Effect
+				\\
+				description & \param{} & An italicised byline used to summarise the item
+				\\
+				image & \param{} & If non-empty, define an image path which is used when in card-mode.
+			\end{RpgTable}
+			}
+    \begin{ExampleBlock}{Default RpgItem: Text Mode}
+    \RpgItemShowCard{false}
+    \begin{RpgItem}{Joyeuse}[
+        description={The Sword Jewellous},
+        image={../example/img/joyeuse}
+    ]
+        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+    \end{RpgItem}
+    \end{ExampleBlock}
+    \begin{ExampleBlock}{Default RpgItem: Card Mode}
+    \RpgItemShowCard{true}
+    \begin{RpgItem}{Joyeuse}[
+        description={The Sword Jewellous},
+        image={../example/img/joyeuse}
+    ]
+        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+    \end{RpgItem}
+    \end{ExampleBlock}
+
+\newpage
+\section{RpgFeat}
+	\RpgMacro*[RpgFeat!Theme!default]{RpgFeat}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgFeat} environment, used to describe abilities and character features and choices.}
+		{
+			\cmd{RpgFeatShowCard\param{true/false}} \% set the card mode
+
+			\cmd{begin}\param{RpgFeat}[card-opts]\param{Feat Name}[key-values]
+
+			~~<body text>
+
+			\cmd{end}\param{RpgFeat}
+		}
+		{As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgFeatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+				
+			The \texttt{default} theme defines only a single key for the RpgFeat object:
+			\begin{RpgTable}{llX}
+			Key & Default Value & Effect
+			\\
+			requires & \param{} & If non-empty, an italicised note is added, indicating the prerequisites for acquiring the ability.
+			\end{RpgTable}
+		}
+    \begin{ExampleBlock}{Default RpgFeat: Text Mode}
+    \RpgFeatShowCard{false}
+    \begin{RpgFeat}{Hyperattack}[
+         requires={Mega-attack},
+    ]
+
+        You can unleash superhuman speed against your enemies. Once per day, make \RpgDice{3d10} additional attacks.
+    \end{RpgFeat}
+    \end{ExampleBlock}
+    \begin{ExampleBlock}{Default RpgFeat: Card Mode}
+    \RpgFeatShowCard{true}
+    \begin{RpgFeat}{Hyperattack}[
+        requires={Mega-attack},
+    ]
+
+        You can unleash superhuman speed against your enemies. Once per day, make \RpgDice{3d10} additional attacks.
+    \end{RpgFeat}
+    \end{ExampleBlock}
+\newpage
+\section{RpgSpell}
+
+	\RpgMacro*[RpgSpell!Theme!default]{RpgSpell}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgSpell} environment, used to describe magical spells or spell-like abilities.}
+		{
+			\cmd{RpgSpellShowCard\param{true/false}} \% set the card mode
+
+			\cmd{begin}\param{RpgSpell}[card-opts]\param{Spell Name}[key-values]
+
+			~~<body text>
+
+			\cmd{end}\param{RpgSpell}
+		}
+		{As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgSpellShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+				
+			The \texttt{default} RpgSpell is a placeholder; it defines no keys, and defines no special formatting for RpgSpell; on the assumption that `spells' are so system dependent as to make an attempt to make a default would be pointless.
+		}
+
+\section{RpgStat}
+
+	\RpgMacro*[RpgStat!Theme!default]{RpgStat}{\param{\paramO m \paramO}}{ The dnd configuration of the \envref{RpgStat} environment, used to describe monsters and enemies via a \textit{statblock}}
+		{
+			\cmd{RpgStatShowCard\param{true/false}} \% set the card mode
+
+			\cmd{begin}\param{RpgStat}[card-opts]\param{Creature Name}[key-values]
+
+			~~<body text>
+
+			\cmd{end}\param{RpgStat}
+		}
+		{As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+				
+			The \texttt{default} RpgStat is a placeholder; it defines no keys, and defines no special formatting; on the assumption that `statblocks' are so system dependent as to make an attempt to make a default would be pointless.
+		}

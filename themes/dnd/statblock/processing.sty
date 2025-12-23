@@ -1,0 +1,364 @@
+\ExplSyntaxOn
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define D&D Variables
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	%%we do some looping over the 6 stats; so define them in a list here
+	\seq_const_from_clist:Nn \g__dnd_stats {str,dex,con,int,wis,cha}
+
+	\prop_const_from_keyval:Nn\g__dnd_skills
+	{
+			{athletics}={\l__str_mod},
+			{acrobatics}={\l__dex_mod},
+			{sleight~of~hand}={\l__dex_mod},
+			{stealth}={\l__dex_mod},
+			{arcana}={\l__int_mod},
+			{history}={\l__int_mod},
+			{investigation}={\l__int_mod},
+			{nature}={\l__int_mod},
+			{religion}={\l__int_mod},
+			{animal~handling}={\l__wis_mod},
+			{insight}={\l__wis_mod},
+			{medicine}={\l__wis_mod},
+			{perception}={\l__wis_mod},
+			{survival}={\l__wis_mod},
+			{deception}={\l__cha_mod},
+			{intimidation}={\l__cha_mod},
+			{performance}={\l__cha_mod},
+			{persuasion}={\l__cha_mod},
+	}
+
+	\prop_const_from_keyval:Nn\g__dnd_stats_names
+	{
+		str={Strength},
+		dex={Dexterity},
+		con={Constitution},
+		int={Intelligence},
+		wis={Wisdom},
+		cha={Charisma},
+	}
+
+	%now programatically generate some variables...
+	\seq_map_inline:Nn{\g__dnd_stats}{
+		\int_new:c{l__#1_mod} %%defines \l__[stat]_mod for each stat
+		\tl_new:c{l__#1_save} %%defines \l__[stat]_save for each stat 
+	} 
+
+	% Some helper variables....
+	\msg_new:nnn{rpg}{bad-ability}{Cannot~parse~#1~as~a~valid~ability~score}		
+	\bool_new:N \l__search_perception 
+	\seq_new:N \l__seq_holder
+	\tl_new:N \l__box_options
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Environment Options
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
+	%% Appearance
+		\RpgStatAddProperty{color}					{ \l__stat_color}		{rulecolor}
+		\RpgStatAddProperty{outline-color}			{ \statOutlineColor}{\tl_use:N\l__stat_color!80!white}
+		\RpgStatAddBoolean{filigree}{\l__stat_filigree}
+		\RpgStatAddBoolean{filigree-match}{\l__stat_filigree_outline}
+		\RpgStatAddBoolean{twocolumn}{\l__stat_twocol}
+		\RpgStatAddProperty{float}{\l__stat_float}{}
+		\RpgStatAddProperty{float-type}{\l__stat_float_type}{figure}
+
+	%% Top block
+		\RpgStatAddProperty	{nickname}				{\l__rpg_stat_name}		{}
+		\RpgStatAddProperty	{type}					{ \l__crtype_tl}		{}
+		\RpgStatAddProperty	{armor-class}[ac,AC]	{ \l__armor_class_tl}	{10}
+		\RpgStatAddProperty	{hit-points}[HP,hp]		{\l__hit_points_tl}		{\RpgDice{1d8}}
+		\RpgStatAddProperty {speed}					{\l__speed_tl}			{30ft}
+		\RpgStatAddProperty {initiative}			{\l__initiative_bonus_tl}{}
+		
+		
+		%% Attributes
+		%%define the hooks for stats and save-bools
+		%% do so by looping over the names and constructing them fancily 
+		\seq_map_inline:Nn{\g__dnd_stats}{
+			\exp_args:Nnc\RpgStatAddProperty{#1}{l__#1_tl}{10}
+			\exp_args:Nnc\RpgStatAddBoolean{#1-save}{l__#1_save_proficient_bool}
+			}
+		%% Bottom block
+		\tl_new:N \l__processed_skills %%storage for skills (& expertise) after processing
+		\RpgStatAddProperty{skills}				{\l__raw_skills_tl}			{}
+		\RpgStatAddProperty{skills-expertise}	{\l__raw_skills_expertise_tl}{}
+		\RpgStatAddProperty{languages}			{\l__languages_tl}		{}
+		\RpgStatAddProperty{senses}				{\l__senses_tl}			{}
+		\RpgStatAddProperty{passive-perception}	{\l__passive_perception_tl}{}
+		\RpgStatAddProperty {proficiency-bonus}[proficiency,pb]{\g__rpg_proficiency_bonus_int}{}
+		\RpgStatAddProperty{challenge}[cr,CR]	{\l__challenge_tl}		{}
+		\RpgStatAddProperty {xp}			{\l__xp_reward}{}
+		\RpgStatAddProperty{damage-vulnerabilities}{\l__damage_vulnerabilities_tl}{}
+		\RpgStatAddProperty{damage-resistances}	{\l__damage_resistances_tl}{}
+		\RpgStatAddProperty{condition-immunities}	{\l__condition_immunities_tl}{}
+		\RpgStatAddProperty{damage-immunities}	{\l__damage_immunities_tl}{}
+
+	
+%%%%%%%%%%%%%%%%%%%%%%%
+%% Preprocessing
+%%%%%%%%%%%%%%%%%%%%%%%
+	% computes ability scores, save mods, skil bonuses etc. 
+	\cs_new_protected_nopar:Npn \__rpg_stat_preprocessing:
+	{
+		% see if cr/prof provided, otherwise generate them
+		\__rpg_check_cr_and_proficiency:
+
+		% compute mods and saves
+		\seq_map_inline:Nn{\g__dnd_stats}
+		{
+			\__rpg_store_ability_score_modifier:n{##1}
+			\__rpg_store_save_modifier:n{##1}
+		}
+		% compute skill bonuses
+		\__rpg_stat_process_skills:
+
+		% check if values provided; otherwise compute from default assumptions
+		\__rpg_check_initiative:
+		\__rpg_check_passive_perception:
+	}
+
+	% Defines a bunch of commands; or redefines existing ones; within the statblock scope
+	% Use 'Provide' so no conflicts with pre-existing definitions
+	\cs_new_protected_nopar:Npn\__rpg_remap_functions:
+	{
+		%alias a command that definitely exists
+		\RenewDocumentCommand{		\section}{m}		{\RpgStatSection{##1}}
+		
+		%provide short names that are likely to collide. 
+		%'Provide' ensures that if a command with that name exists, the local version is used 
+		\ProvideDocumentCommand		{\action}	{O{} m}		{\RpgStatAction[##1]{##2}}
+		\ProvideDocumentCommand		{\trait}	{O{} m}		{\RpgStatAction[##1]{##2}}
+		\ProvideDocumentCommand		{\reaction}{m m}		{\RpgStatReaction{##1}{##2}}
+		\ProvideDocumentCommand		{\name}{}			{\l__rpg_stat_name}
+		\ProvideDocumentCommand		{\stat}{m}			{\RpgStatGet{##1}}
+		\ProvideDocumentCommand		{\save}{m O{}}		{\RpgSavingThrow{##1}[##2]}
+		%attacks
+		\ProvideDocumentCommand		{\attack}{m O{}}	{\RpgStatAttack{##1}[##2]}
+		\ProvideDocumentCommand		{\melee}{m O{}}		{\RpgStatAttack{##1}[##2,distance=melee]}
+		\ProvideDocumentCommand		{\ranged}{m O{}}	{\RpgStatAttack{##1}[##2,distance=ranged]}
+		%spellss
+		\ProvideDocumentEnvironment	{spells}{O{}}		{\begin{RpgStatSpellcasting}[##1]}{\end{RpgStatSpellcasting}}
+		\ProvideDocumentCommand		{\slot}{o o m}		{\RpgStatSpellSlots[##1][##2]{##3}}
+		\ProvideDocumentCommand		{\innate}{O{} m}	{\RpgStatSpellList[##1]{##2}}
+
+	}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% String Manipulation
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+	
+
+	% A toggle-item for descriptions; if the body is empty, the item is not added 
+	\cs_new_protected_nopar:Npn \__maybe_item:nn #1#2
+	{
+		\tl_if_empty:oF {#2}{ \item [#1] #2 }
+	}
+
+	% Format signed integers for display
+	\cs_new_protected_nopar:Npn \__rpg_format_signed_integer:N #1
+	{
+		\int_compare:nNnTF {#1} < {0}
+		{ - }
+		{+}
+		\int_abs:n {#1}
+	}
+
+	% If string 2 is not present in token list #1; append it
+	% Useful for ensuring, i.e. distances always end in 'ft'.
+	\cs_new_protected:Npn \__rpg_append_if_missing:nn#1#2
+	{
+		\regex_match:nVF{#2}{#1}
+		{
+			\tl_set:Ne#1{#1#2}
+		}
+	}
+
+	%% If no nickname set, use the 'main name'
+	\cs_new_protected_nopar:Npn\__rpg_check_nickname:n#1
+	{
+		\tl_if_empty:eT{\l__rpg_stat_name}
+		{
+			\tl_set:Ne\l__rpg_stat_name{#1}
+		}
+	}
+
+	%% If no senses provided, just uses passive, otherwise put other senses first
+	\cs_new_protected_nopar:Npn \__rpg_construct_perception:
+	{
+		\tl_if_blank:eF{\l__senses_tl}
+		{
+			\l__senses_tl,~
+		}
+		passive~Perception~ \l__passive_perception_tl
+	}
+
+	%% Checks if a manual initiative value was passed
+	\cs_new_protected_nopar:Npn \__rpg_check_initiative:
+	{
+		\tl_if_blank:eT{\l__initiative_bonus_tl}
+		{
+			\tl_set:Ne\l__initiative_bonus_tl{\__rpg_format_signed_integer:N \l__dex_mod}
+		}
+	}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Modifiers
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+	% given (str/dex/etc), retrieves the assigned score, and then saves
+	% the modifier (floor(x-10)/2) to the associated modifier variable
+	\cs_new_protected_nopar:Npn \__rpg_store_ability_score_modifier:n#1
+	{
+		%have to do a bit roundabout way to get the expansion to work
+		\tl_set_eq:Nc\l_tmpa_tl{l__#1_tl}
+		\int_set:Nn\l_tmpa_int{\l_tmpa_tl}
+		%now check if the string and the int are the same -- if not, then the argument wasn't an integer!
+		\str_compare:eNeF{\int_use:N\l_tmpa_int}{=}{\l_tmpa_tl}
+		{
+			\msg_error:nne{rpg}{bad-ability}{'\l_tmpa_tl'}
+		}
+		\int_set:cn{l__#1_mod}{ \fp_eval:n {  floor( (\l_tmpa_int - 10)  / 2) } }
+
+	}
+
+	%% Checks the save bool, and either constructs the modifier into a formatted tl
+	%% or (if bool=false), empties the token list. This means only proficient saves
+	%% appear in the table
+	\cs_new_protected_nopar:Npn \__rpg_store_save_modifier:n#1
+	{
+		\bool_if:cT{l__#1_save_proficient_bool}
+		{
+			\tl_set:ce{l__#1_save}{\__rpg_format_signed_integer:N{\int_eval:n{\int_use:c{l__#1_mod} + \g__rpg_proficiency_bonus_int}}}
+		}
+		{
+			\tl_set:ce{l__#1_save}{}
+		}
+	}
+	
+	
+	%% Checks if a passive perception was passed
+	\cs_new_protected_nopar:Npn \__rpg_check_passive_perception:
+	{
+		\tl_if_blank:eTF{\l__passive_perception_tl}
+		{
+			\tl_set:Ne\l__passive_perception_tl{\int_eval:n{10+\l__wis_mod}}
+			\bool_set_true:N\l__search_perception
+		}
+		{
+			\bool_set_false:N\l__search_perception
+		}
+	}
+
+	%% Checks if a manual proficiency bonus /challenge rating was passed
+	\cs_new_protected_nopar:Npn \__rpg_check_cr_and_proficiency:
+	{
+		\tl_if_blank:eTF{\g__rpg_proficiency_bonus_int}
+		{
+			\tl_if_blank:eTF{\l__challenge_tl}
+			{
+				%% no values provided; assume cr 0
+				\tl_set:Nn{\g__rpg_proficiency_bonus_int}{2}
+				\tl_set:Nn{\l__challenge_tl}{0}
+			}
+			{
+				%% no PB provided, compute from cr
+				\tl_set:Nn{\g__rpg_proficiency_bonus_int}{\fp_eval:n{2+max(0,floor((\l__challenge_tl-1)/4))}}
+			}
+		}
+		{
+			\tl_if_blank:eT{\l__challenge_tl}
+			{
+				%% no CR provided, compute from PB
+				\tl_set:Nn{\l__challenge_tl}{\int_eval:n{4*\g__rpg_proficiency_bonus_int-7}}
+			}
+
+			%%the fourth option is both CR and PB provided; in which case we do nothing -- just use the user's values
+		}
+
+		\tl_if_blank:eT{\l__xp_reward}
+		{
+			%%an approximate formula for xp gain (accurate to +/- 100xp until cr16)
+			\fp_compare:nNnTF{\fp_eval:n{round(\l__challenge_tl)}}{>}{0}
+			{
+				\int_set:Nn{\l_tmpa_int}{\l__challenge_tl/7}
+				\tl_set:Ne{\l__xp_reward}{\int_eval:n{100+50*((\l__challenge_tl)*(\l__challenge_tl)+(\l__challenge_tl)+2*(\l__challenge_tl)*\l_tmpa_int-7*\l_tmpa_int*\l_tmpa_int - 5 * \l_tmpa_int)}}
+			}
+			{
+				\tl_set:Ne{\l__xp_reward}{\fp_eval:n{100*\l__challenge_tl}}
+			}
+		}
+	}
+
+	%%Executes the code in the True block if any of the save bools are true
+	\cs_new_protected_nopar:Npn \__rpg_if_any_saves:T#1
+	{
+		\bool_set_false:N\l_tmpa_bool
+		
+		\seq_map_inline:Nn{\g__dnd_stats}
+		{
+			\bool_if:cT{l__##1_save_proficient_bool}
+			{
+				\bool_set_true:N\l_tmpa_bool
+			}
+		}
+		\bool_if:nT{\l_tmpa_bool}
+		{
+			#1
+		}
+	}
+
+	
+%%%%%%%%%%%%%%%%%%%%%%%
+% Compute Skills
+%%%%%%%%%%%%%%%%%%%%%%%
+	
+	%% check if each skill is in the list, and if so, compute the modifier
+	\cs_new_protected:Npn \__rpg_stat_compute_skill_bonus:nn#1#2
+	{
+		\tl_set:Nn \l_tmpa_tl {\prop_item:Ne\g__dnd_skills{\str_lowercase:f{#1}}}
+		
+		\tl_if_empty:eTF\l_tmpa_tl
+		{
+			%if not in the list, either a `non D&D skill', or a manual override
+			% in either case, just insert the text
+			#1
+		}
+		{
+			%otherwise, compute mod + n * prof; and make sure it has a +/- sign
+			\tl_set:Ne\l_tmpa_tl{\__rpg_format_signed_integer:N{\fp_eval:n{\l_tmpa_tl + +#2*\g__rpg_proficiency_bonus_int}}}
+			#1~(\l_tmpa_tl)
+		}
+		
+		\bool_if:NT{\l__search_perception}
+		{
+			\str_compare:eNeT{\str_lowercase:f{#1}}{=}{perception}
+			{
+				\tl_set:Ne{\l__passive_perception_tl}{\fp_eval:n{\l__passive_perception_tl +#2*\g__rpg_proficiency_bonus_int}}
+			}
+		}
+	}
+
+	%% Iterates through the skills comma-list, and tries to compute the modifier
+	%% If a 'bad skill' is passed (or a manual override), it just inserts the plain text
+	\cs_new_protected:Npn \__rpg_stat_process_skills:
+	{
+		\seq_clear:N \l__seq_holder
+
+		%%do expertise first (2x prof)
+		\clist_map_inline:Nn\l__raw_skills_expertise_tl
+		{
+			\seq_put_right:Nn\l__seq_holder{\text_titlecase_all:n{\__rpg_stat_compute_skill_bonus:nn{##1}{2}}}
+		}
+
+		%%then normal skills (1x prof)
+		\clist_map_inline:Nn\l__raw_skills_tl
+		{
+			\seq_put_right:Nn\l__seq_holder{\text_titlecase_all:n{\__rpg_stat_compute_skill_bonus:nn{##1}{1}}}
+		}
+
+		%%save the sequence as a string; use seq to automatically format the list delimiters
+		\tl_set:Nn{\l__processed_skills}{\seq_use:Nn{\l__seq_holder}{,~}}
+	}

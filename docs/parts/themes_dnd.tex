@@ -1,79 +1,395 @@
 \RpgSetTheme{dnd}
-\chapter{\texttt{dnd} Theme}
+\chapter{\texttt{dnd} Theme}\label{Theme:dnd}
+
+    The \texttt{dnd} theme is designed to mimic the Appearance of the \textit{Dungeons \& Dragons} source books. The specific parameters used to replicate the D\&D books are mostly derived from the original DnD-5e-Latex-Template package, with some additional updates in line with the changes made with the 2024 rules update.
+
+    \section{Appearance}
+        \subsection{Fonts}
+            The dnd theme defines a number of font families which are used throughout the theme.
+            
+            \RpgMacro{bookman}{}{The {Bookman Old Style STd} typeface, used as the main body text.}{}{}{}
+            \RpgMacro{keplerserif}{}{\keplerserif The {KpRoman} font, used for \textbf{emphasis}}{}{}{}
+            \RpgMacro{kepler}{}{\kepler The {KpSans} font, primarily used in headers and titles}{}{}{}
+            \RpgMacro{gillius}{}{\gillius The Gillius ADF No. 2 Font, used as a lighter sans-serif font, often in the body of environments where \cmd{kepler} was used as the title.}{}{}{}
+            \RpgMacro{Royal}{}{{\Royal A DECORATIVE FONT}, unsuited for blocks of text. Used for drop-caps}{}{}
+
+             The values assigned to the font elements areas follows (note that \verb|\normalfont| is aliased to the value of RpgFontBody).
+
+            \InsertFontTable{}
+            
+        \subsection{Colors}\label{S:DndColor}
+
+            The theme provides a large number of colors:
+
+            \noindent\DefaultSwatches{}
+
+            \noindent\ignorespaces\Swatch[default narration]{bgtan}
+            \Swatch[pagenumbers \& footer]{pagegold}
+            \Swatch[title font \& default contour-inner]{titlered}
+            \Swatch[default contour-outer]{contourgray}
+            \Swatch[title rules]{titlegold}
+            \Swatch[statblock triangles]{rulecolor}
+            \Swatch{statblockribbon}
+            \Swatch{statblockbg}
+            \Swatch[Basic Rules]{BrGreen}
+            \Swatch[PHB Part 1]{PhbLightGreen}
+            \Swatch[PHB Part 2]{PhbLightCyan}
+            \Swatch[PHB Part 3]{PhbMauve}
+            \Swatch[PHB Appendix]{PhbTan}
+            \Swatch[DMG Part 1]{DmgLavender}
+            \Swatch[DMG Part 2]{DmgCoral}
+            \Swatch[DMG Part 3]{DmgSlateGray}
+            \Swatch[DMG Appendix]{DmgLilac}
+
+            The colors from BrGreen through DmgLilac are chosen so that, when set as the \texttt{themecolor} (using \cmdref{RpgSetThemeColor}), the appearance of the tables and sidebars is the same as the corresponding part in either the Basic Rules, the Players' Handbook, and the Dungeon Master's Guide.
+        \subsection{Backgrounds \& Footers}
+
+            The dnd theme uses a paper-like image as the background, and places a `scroll' on the footer\footnote{The scroll alternates direction in \texttt{twoside} documents; this document is written in oneside mode, so there is no alternating.}. The chapter name is placed in the footer (in \texttt{pagegold} color). The page number is positioned to lie in a divot of the scroll.
+
+        \subsection{Text Boxes}
+
+            The dnd theme modifies the text boxes to give them the following appearance:
+
+            \begin{multicols}{3}
+                
+                \begin{RpgSidebar}{The RpgSidebar}
+                   
+                    Horizontal `ribbons' and sharp corners differentiate it from RpgTip.
+                \end{RpgSidebar}
+                
+                \begin{RpgTip}{The RpgTip}
+                    Almost entirely undecorated, with rounded corners.
+                \end{RpgTip}
+
+                \begin{RpgNarration}
+                    RpgNarration has `bars' on the side.
+                \end{RpgNarration}
+            \end{multicols}
 
 
-	\section{RpgItem: dnd Version}\label{S:DndItem}
-	\index{RpgItem!Theme!dnd}
 
-		The \texttt{dnd} theme defines an override for the generic \envref{RpgItem}
+        \subsection{Section Headers}
 
-	\labelsection{RpgSpell: dnd Version}\index{{RpgSpell!Theme!dnd}}
+            As in the default mode, only chapters\footnote{If in an rpgbook / other class which support chapters} are numbered; all other section/subsections (etc.) are unnumbered. 
 
-	\section{RpgStatblock: dnd Version}\index{RpgStatblock!Theme!dnd}
+            Chapters are rendered using a \cmd{RpgContour} (with the default colors). The subsection environment is embellished with a \cmd{hrule} (in the \texttt{titlegold} color) which stretches across the page.
 
-		The dnd theme defines a special command which mimics the appearance of a monster statblock - particularly those in the more modern D\&D 2024 iteration. 
+            \RpgGetExample{dnd-section-headers}
 
-		\begin{RpgStat}{A Monster}
-			 \RpgStatType{Medium aberration, lawful evil}
+        \subsection{RpgDice}\index{RpgDice}
+            
+            Following the syntax found in D\&D monster statblocks, RpgDice shows the average of the roll, and automatically converts 'dx' into '1dx':
+            \RpgGetExample{dnd-dice}
 
-				  \RpgStatBasics[
-						armor-class = {9 (12 with \emph{mage armor})},
-						hit-points  = {\RpgDice{3d8 + 3}},
-						speed       = {30 ft., fly 30 ft.},
-						proficiency=2,
-						str = 12,
-						dex = 8,
-						con = 13,
-						int = 10,
-						wis = 14,
-						cha = 15,
-						str_save,
-						cha_save,
-					]
+        \subsection{Filigree}\label{S:DndFiligree}
 
-				\RpgStatDetails[
-					%saving-throws = {Str +0, Dex +0, Con +0, Int +0, Wis +0, Cha +0},
-					%skills = {Acrobatics +0, Animal Handling +0, Arcana +0, Athletics +0, Deception +0, History +0, Insight +0, Intimidation +0, Investigation +0, Medicine +0, Nature +0, Perception +0, Performance +0, Persuasion +0, Religion +0, Sleight of Hand +0, Stealth +0, Survival +0},
-					%damage-vulnerabilities = {cold},
-					%damage-resistances = {bludgeoning, piercing, and slashing from nonmagical attacks},
-					%damage-immunities = {poison},
-					%condition-immunities = {poisoned},
-					senses = {darkvision 60 ft., passive Perception 12},
-					languages = {\LaTeX},
-					challenge = 1,
-					% proficiency-bonus, % = +2
-				]
-		\end{RpgStat}
-		\RpgStatShowCard{true}
-		\begin{RpgStat}{A Monster}
-			 \RpgStatType{Medium aberration, lawful evil}
+            The dnd implemenation of \envref{RpgFiligree} is designed to mimic the decorative elements seen around the class tables in the Player's Handbook:
+            
+            \RpgGetExample{dnd-filigree}
+    \newpage
+    \section{RpgItem}\label{S:DndItem}
 
-				  \RpgStatBasics[
-						armor-class = {9 (12 with \emph{mage armor})},
-						hit-points  = {\RpgDice{3d8 + 3}},
-						speed       = {30 ft., fly 30 ft.},
-						proficiency=2,
-						str = 12,
-						dex = 8,
-						con = 13,
-						int = 10,
-						wis = 14,
-						cha = 15,
-						str_save,
-						cha_save,
-					]
+        \RpgMacro[RpgItem!Theme!dnd]{RpgItem}{\param{\paramO m \paramO}}{The dnd-specialisation of the \envref{RpgItem} environment, used to describe physical objects and equipment.}
+        {dnd-item}
+        {As with all FeatureForge environments, RpgItem has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgItemShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
+        
+        The \texttt{dnd} theme defines the following keys for the RpgItem object:
+        \begin{RpgTable}{llX}
+            Key & Default Value & Effect
+            \\
+            rarity & \param{} & Common / Uncommon / Rare etc.
+            \\
+            type & \param{} & A descriptor such as `weapon' or `wondrous item'
+            \\
+             requires-attunement & \texttt{none} & Can either be used as a flag (i.e. a key with no value) in which case the phrase `Requires attunement' is added. If a value is assigned, it is appended immediately afterwards.
+             \\
+            image & \param{} & If non-empty, define an image path which is used when in card-mode.
+        \end{RpgTable}}
+    The card-variant  renders the title in a 'flag ribbon' which expands to fit the title (and shrinks the font size if it would spill over the card boundary)
+    
+    \RpgGetExample{dnd-item-example}
+    
+\section{RpgFeat}\label{S:DndFeat}\index{RpgFeat!Theme!default}
 
-				\RpgStatDetails[
-					%saving-throws = {Str +0, Dex +0, Con +0, Int +0, Wis +0, Cha +0},
-					%skills = {Acrobatics +0, Animal Handling +0, Arcana +0, Athletics +0, Deception +0, History +0, Insight +0, Intimidation +0, Investigation +0, Medicine +0, Nature +0, Perception +0, Performance +0, Persuasion +0, Religion +0, Sleight of Hand +0, Stealth +0, Survival +0},
-					%damage-vulnerabilities = {cold},
-					%damage-resistances = {bludgeoning, piercing, and slashing from nonmagical attacks},
-					%damage-immunities = {poison},
-					%condition-immunities = {poisoned},
-					senses = {darkvision 60 ft., passive Perception 12},
-					languages = {\LaTeX},
-					challenge = 1,
-					% proficiency-bonus, % = +2
-				]
-		\end{RpgStat}
-		
+    \RpgMacro[RpgFeat!Theme!dnd]{RpgFeat}{\param{\paramO m \paramO}}{ The dnd-specialisation of the \envref{RpgFeat} environment, used to describe abilities and character features and choices.}
+        {dnd-feat}
+        {
+        As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgFeatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. The \texttt{dnd} RpgFeat is largely the same as the default, using the same `requires' key, and adding an alias:
+            \begin{RpgTable}{llX}
+                Key & Default Value & Effect
+                \\
+                requires & \param{} & If non-empty, an italicised note is added, indicating the prerequisites for acquiring the ability.
+                \\
+                prerequisite & \param{} & An alias for 'requires' (since this is what appears on screen).
+            \end{RpgTable}
+        }
+
+    \def\grapplerText{  You've developed the skills necessary to hold your own in close-quarters grappling. You gain the following benefits:
+    \begin{itemize}
+    \item You have advantage on attack rolls against a creature you are grappling.
+    \item You can use your action to try to pin a creature grappled by you. To do so, make another grapple check. If you succeed, you and the creature are both restrained until the grapple ends.
+    \end{itemize}
+    }
+    \RpgGetExample{dnd-feat-full}
+\section{RpgSpell}
+
+    \RpgMacro*[RpgSpell!Theme!dnd]{RpgSpell}{\param{\paramO m \paramO}}{ The dnd configuration of the \envref{RpgSpell} environment, used to describe magical spells or spell-like abilities.}
+        {dnd-spell}
+        {As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgSpellShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. The RpgSpell formats the components of a D\&D spell by defining the following keys:
+               \begin{RpgTable}{llX}
+                Key & Default Value & Effect
+                \\
+                school & \param{} & The spell school (conjuration etc.). Can be empty.
+                \\
+                level & 0 & The level of the spell, expressed as a single integer. 0 is converted into `Cantrip'.
+                \\
+                casting-time & 1 action & A plaintext field for the casting time (1 action, 1 reaction etc.) 
+                \\
+                range & self & The range of the spell.
+                \\
+                components & VSM & The Verbal/Somatic/Material components for casting the spell
+                \\
+                duration & Instantaneous & The duration of the spell (and its concentration status)
+                \\
+                source & \param{} & An optional field for declaring the source of the spell (i.e. the PHB).
+            \end{RpgTable}
+            All these fields support a \cmd{footnote}, but note that per the RpgCard documentation \RpgPage[p]{RpgCard}, only a single footnote can be included when in card-mode; successive footnotes override each other.
+
+            In addition to these keys, we also provide some commands for typesetting some `boilerplate language' found in D\&D spells:
+        }
+    \RpgMacro{RpgCantripScaling}{\param{O\param{Damage} m m m m}}{Provides a convenient interface for typesetting the `level scaling' of cantrips in D\&D}
+    {
+        \cmd{RpgCantripScaling}[benefit-name]\param{1st-lvl}\param{5th-lvl}\param{11th-level}\param{17th-level}
+    }
+    {
+        The command is typeset with some boilerplate text, followed by a \envref{RpgTable}, with each argument as an entry used as the corresponding level in the table.
+    }
+    
+    \RpgMacro{RpgSpellUpcast}{\param{O{} m O{}}}{Provides a convenient interface for typesetting the `upcasting' (increased benefits when using higher level spell slots) of spells in D\&D}
+    {
+        \cmd{RpgSpellUpcast}[benefit-of-upcasting]\param{benefit-per-increase}[slots-per-increase]
+    }
+    {
+        The default `benefit' text is ``\textit{The damage increases by}''; with the expectation that the mandatory argument is a damage increase (such as 1d6). The slots-per-increase is an integer value (default 1), indicating the number of level gains per increase.
+
+        This function can only be called within an \texttt{RpgSpell} environemnt, as it relies on the local value of \cmd{l\_\_rpg\_dnd\_spell\_level\_tl}.
+    }
+    \ExplSyntaxOn
+    \tl_set:Nn\l__rpg_dnd_spell_level_tl{3}
+    \ExplSyntaxOff
+    
+    \RpgGetExample{dnd-spell-helper}
+
+    \RpgGetExample{dnd-spell-full}
+\clearpage
+\section{RpgStat: D\&D Monsters}
+
+    Internally, the monster statblock is one of the most complex environments in the \rpgtex{} library; the upside being that it makes it quick and easy to generate a monster which follows the standard D\&D monster assumptions.
+
+    \RpgMacroExample*[RpgStat!Theme!dnd]{RpgStat}{RpgStat*,\param{\paramO m \paramO}}{ The dnd configuration of the \envref{RpgStat} environment, used to describe monsters and enemies, using the rules and parameters of spells in D\&D 5e. As with all FeatureForge environments, RpgStat has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. }
+        {dnd-stat-card}
+        {	
+             \begin{RpgSidebar}{RpgStat vs RpgStat*}
+                 \texttt{RpgStat*} is identical to the unstarred version, except it automatically activates the \texttt{twocolumn} mode, and sets \texttt{float-type = figure*} (see below). This makes it suitable for rendering 'boss' (i.e. large) stat blocks whilst writing twocolumn documents. 
+            \end{RpgSidebar}
+            We semantically split the standard \forcelink{https://media.wizards.com/2018/dnd/downloads/DnD_BasicRules_2018.pdf\#page=110}{D\&D statblock} into two parts:
+            \begin{enumerate}
+                \item The \textit{statistics} - hit points, armour class, stat modifiers, skill proficiencies and so on. These are highly structured and amount to 'form filling'. 
+                
+                \textbf{These are defined in the key-value options}.
+                \item The \textit{abilities} - including the traits, actions, bonus actions and so on. These are freeform and largely consist of plain text.
+                
+                \textbf{These are defined in the body of the environment}.
+            \end{enumerate}    
+            
+         
+        }
+        \begin{center}
+            \begin{tikzpicture}
+                \node[text width=0.45\linewidth] at (0,0) {
+                    \begin{RpgStat}{Commoner}[
+                        type={Medium or Small Humanoid; typically neutral},
+                        languages=Common
+                    ]
+                        \section{Traits}
+                            \action{Mob Mentality} If a Commoner is subjected to a mind-altering effect (such as the frightened condition, or a charm spell), all Commoners within 10ft are also subjected to this effect.
+                        \section{Actions}
+                            \melee{Club}
+                    \end{RpgStat}
+                };
+                \draw[decorate,decoration={brace,amplitude=10pt,raise=-7pt},ultra thick] (4.5,4.25)--++(0,-4.75) node[midway,anchor=west]{\bf ~~Statistics (key/values)};
+                \draw[decorate,decoration={brace,amplitude=10pt,raise=-7pt},ultra thick] (4.5,-0.6)--++(0,-3.75) node[midway,anchor=west]{\bf ~~Abilities (body text)};
+            \end{tikzpicture}
+        \end{center}
+          
+        \clearpage
+        \subsection{Statistics Options}
+
+            There are a large number of options that can be passed to the statistics. Where multiple key names are presented, these are aliased to the same value and behave identically. As with all expl3 keys, repeated values are sequentially overwritten, with only the final value retained.
+            \newcommand{\statkey}[4]{\\\parbox[t]{2.5cm}{\raggedright #1} & #2 & #3 & #4}
+            \newcommand{\statflag}[2]{\\\parbox[t]{2cm}{\raggedright #1} & (flag) & ~ & #2}
+            \newcommand{\catbreak}[1]{\\\multicolumn{4}{l}{\textit{#1}}}
+            \newcommand{\tablesection}[2]
+            {
+                \subsubsection{#1}
+                \begin{RpgTable}[breakable,vskip=2pt plus 2pt minus 2pt]{lllX}
+                Key & Value & Default Value &Effect 
+                #2
+                \end{RpgTable}
+            }
+            \tablesection{Appearance}
+            {
+                    \statkey{color}{tikz-color code}{rulered \RpgPage[p]{S:DndColor}}{The base color used by the environment. Several colors are automatically derived from this:
+                        \begin{itemize}
+                            \item The `triangle dividers' use this color
+                            \item The 'header text' color is 50\% darker\footnote{In the sense that it is defined as \texttt{color!50!black}}
+                            \item The border color is 20\% lighter (unless otherwise specified)
+                            \item The \texttt{themecolor} is temporarily set to a value 75\% lighter.
+                        \end{itemize}
+                        }
+                    \statkey{outline-color}{tikz-color code}{--empty--}{If non-empty, this color is used for the border of the environment, intstead of the one derived from 'color'. No effect when in Card mode.}
+                    \statflag{filigree}{If this flag is present, replaces the default border with filigree \RpgPage[p]{S:DndFiligree}, using the current \texttt{filigreecolor}. No effect when in Card mode.}
+                    \statflag{filigree-match}{If this flag is present, replaces the default border with filigree \RpgPage[p]{S:DndFiligree} and locally changes \texttt{filigreecolor} to be equal to the border color. If both \texttt{filigree-match} and \texttt{filigree} present, \texttt{filigree-match} takes priority. No effect when in card mode.}
+                    \statflag{twocolumn}{If this flag is present, the environment is rendered in twocolumns, suitable for breaking up statblocks which are full-page width (either when in a onecolumn document, or placed inside a full-width float). Automatically activated by RpgStat*. No effect when in card mode.}
+            }
+            \tablesection{Positioning}{
+                    \statkey{float}{!/h/t/b}{--empty--}{If non-empty, wraps the statblock in a float (of a type determined by \texttt{float-type}), with the float command equal to this value.
+                    
+                    \begin{RpgSidebar}{IMPORTANT!}
+                        Normally the `h' option does not work for \texttt{figure*} when in a twocolumn environment. We have implemented a workaround which uses the \texttt{strip} environment to simulate a ``immediate full width image''. \textbf{This is very fragile!} It is likely to throw compilation errors when on the same page as other floats, or when there is insufficient text before or after the environment begins. Use with extreme caution!
+                    \end{RpgSidebar}
+
+                    No effect when in card mode.
+                    }
+                    \statkey{float-type}{environment name}{figure}{The environment which wraps the statblock if a float command is given; setting this to \texttt{figure*} creates a full-width statblock when in a twocolumn document.}
+            }
+            \clearpage
+            \tablesection{Basic Description}{
+                    \statkey{nickname}{text}{<title value>}{A shorter or alternative version of the `main name' which appears at the top of the statblock; this is the value returned by \cmdref{RpgStatName}, and used automatically in several places. Useful when you want to give the statblock a grand title, but don't want ``\textit{Gorgenhar Haluavin, the Devourer of Worlds} makes three attacks''.}
+                    \statkey{type}{text}{(empty)}{This text is placed in italics underneath the main title. Usually used for size and alignment declarations.}
+                    \statkey{armor-class / ac / AC}{text}{10}{The value given as the armour class of the monster. Can accept strings explaining the armour such as `15 (Natural Armour)' or `10 (13 with \textit{mage armor})'}
+                    \statkey{hit-points / hp / HP}{text}{\cmd{RpgDice\param{1d8}}}{The value given as the total HP of the monster. The value given is usually as a \cmdref{RpgDice} command. This value is expanded after the modifiers are computed, so it is possible to use (i.e.) the consitution modifier as a variable: \texttt{hp=\cmd{RpgDice}\param{8d10 + 8*\cmd{stat}\param{con}}} will be correctly computed.}
+                    \statkey{speed}{text}{30ft}{Value given as the monster's movement speed. If the substring `ft' is not found in the input, then it is appended to the end; i.e. \texttt{speed=30} will render as '30ft'.}
+                    \statkey{initiative}{text}{}{If this value is non-empty, it is used (without further formatting) as the initiative of the creature. If the value is empty, the computed dexterity modifier is used instead.}
+
+            }
+            \tablesection{Abilities \& Saves}{
+                    \statkey{proficiency-bonus / proficiency / pb}{integer}{(empty)}{If a value is provided, this is used as the proficiency bonus for all save bonus, skill bonuses and to-hit values. If not provided, a value is computed based on the challenge rating.}
+                    \statkey{str}{integer}{10}{Sets the value of the Strength Score. The associated modifier is automatically computed} 
+                    \statkey{dex}{integer}{10}{Sets the value of the Dexterity Score. The associated modifier is automatically computed} 
+                    \statkey{con}{integer}{10}{Sets the value of the Constitution Score. The associated modifier is automatically computed} 
+                    \statkey{int}{integer}{10}{Sets the value of the Intelligence Score. The associated modifier is automatically computed} 
+                    \statkey{wis}{integer}{10}{Sets the value of the Wisdom Score. The associated modifier is automatically computed} 
+                    \statkey{cha}{integer}{10}{Sets the value of the Charisma Score. The associated modifier is automatically computed} 
+                    \statflag{str-save}{If present, this flag indicates the monster is proficient in Strength saving throws.}
+                    \statflag{dex-save}{If present, this flag indicates the monster is proficient in Dexterity saving throws.}
+                    \statflag{con-save}{If present, this flag indicates the monster is proficient in Constitution saving throws.}
+                    \statflag{int-save}{If present, this flag indicates the monster is proficient in Intelligence saving throws.}
+                    \statflag{wis-save}{If present, this flag indicates the monster is proficient in Wisdom saving throws.}
+                    \statflag{cha-save}{If present, this flag indicates the monster is proficient in Charisma saving throws.}
+            }
+            \clearpage
+            \tablesection{Skills \& Details}{
+                \statkey{skills}{comma-separated list}{(empty)}{Each skill in this list is iterated over - if the value is one of the 18 D\&D skills, it is matched with its usual ability modifier, and a skill bonus is computed in the normal fashion. This bonus is appended to the skill name in the list when displayed.
+                
+                \begin{RpgSidebar}{Manual Skills}
+                    The automated computing assumes that skills will always be paired with their normal attribute. If a monster uses a variant pairing (i.e. Strength (Intimidation)) then this will need to be manually declared. 
+
+                    The automation only occurs if the string exactly matches\footnote{Whitespace and variant capitalisation count as `exact matches'} the names of the skills; so \texttt{athletics, Acrobatics (+25)} will cause the `athletics' to be computed automatically, but the Acrobatics will not count as a match, so will keep its manual bonus declaration.  
+                \end{RpgSidebar}
+                }
+                \statkey{skills-expertise}{comma-separated list}{(empty)}{Exactly as with the \texttt{skills} key, except the automated bonus adds twice the proficiency bonus. Expertise-skills are listed before other skills in the rendered environemnt.}
+                \statkey{languages}{text}{(empty)}{Any languages spoken or understood by the creature. This is used as a simple string (no manipulation)}
+                \statkey{senses}{text}{(empty)}{Any special senses possed by the creature. Passive perception is handled separately.}
+                \statkey{passive-perception}{integer}{(empty)}{If empty, the passive perception is equal to the Wisdom (Perception) bonus (computed from the Wisdom modifier, and if the perception skill was declared as proficient or expertise). If this value is non-empty, override that value with the given one.}
+                \statkey{challenge / cr / CR}{number}{(special)}{If a value is provided, this sets the display value of the CR. If no value was provided to the CR, one is computed from the proficiency bonus using the usual formula. If no CR was provided and no PB, then the CR defaults to 0. 
+                
+                If both a CR and a proficiency bonus are manually provided, then no checks are performed to ensure they `make sense'. It is possible to have a CR0 creature with a +90 proficiency bonus, if the user manually sets those values.
+
+                Non-integer values are accepted (i.e. 1/4).
+                }
+                \statkey{xp}{integer}{(empty)}{If this value is non-empty, it is used as the XP gain defeat. 
+                
+                If left empty, the XP is manually computed from an approximate formula which is accurate to $\pm 100$xp up to CR16:
+                
+                $$\text{XP} = \begin{cases} 100 + 50\Big(\text{CR}^2 + \text{CR} + 2 \text{CR} \lfloor \frac{\text{CR}}{7}\rfloor  &  \text{CR} \geq 1 
+                    \\
+                    \quad\quad- 7  \lfloor \frac{\text{CR}}{7}\rfloor^2 - 5  \lfloor \frac{\text{CR}}{7}\rfloor\Big) &
+                    \\ 100 \times \text{CR} & \text{else}\end{cases}$$
+                
+
+                (This is a modified and analytically simplified version of the formula found on \forcelink{https://rpg.stackexchange.com/questions/192412/is-there-any-generalised-formula-for-converting-monster-cr-into-xp-in-dd-5e}{a helpful discussion online.})}
+
+                \statkey{condition-immunities}{text}{(empty)}{Any condition immunities possessed by the creature.}
+                \statkey{damage-immunities}{text}{(empty)}{Any damage immunities possessed by the creature.}
+                \statkey{damage-resistances}{text}{(empty)}{Any damage resistances possessed by the creature.}
+                \statkey{damage-vulnerabilities}{text}{(empty)}{Any damage vulnerabilities possessed by the creature.}
+            }
+    \subsection{Abilities, Attacks \& Spellcasting}
+
+        The body of the environment is where the user places the traits, abilities and attacks that the creature can use. In order to format these, we provide the following commands.
+
+        \subsubsection{Ability Interface}
+
+            \begin{RpgSidebar}{Global \& Local Names}
+                All of the commands we will introduce below follow the established syntax for the \rpgtex{} library: \cmd{RpgStat[Command]}. These are placed in the global namespace, and are accessible anywhere - a user may invoke RpgStat elements outside of the RpgStat environment.
+
+                This naming convention - though consistent and avoiding 'common name collisions' - can become cumbersome when used in a dense environment like the RpgStat. We therefore provide several \textit{local aliases}. These are macros which can only be used inside the RpgStat environment. 
+
+                With only one exception\footnote{\cmd{section}, because that will obviously already be defined!}, these aliases are created when the environment begins, using the \cmd{ProvideDocumentCommand} interface -- this means that the alias will only be created if a macro with that name \textit{doesn't exist}.
+
+                The local alias is given in \textcolor{red}{red text}.
+            \end{RpgSidebar}
+            \newcommand\statalias[1]
+            {
+                \textcolor{red}{\cmd{#1}}\index{#1}
+            }
+
+            \RpgMacroExample[RpgStat!Section]{RpgStatSection}{\statalias{section},\param{m}}{Creates a section header}{dnd-stat-section}
+            {
+                Although called a `section', the visual is most similar to the \cmd{subsection}, though with the text rendered in the \cmd{RpgFontStatBlockSection} font.
+            }
+
+            
+            
+            \RpgMacroExample[RpgStat!Action]{RpgStatAction}{\statalias{action},\statalias{trait},\param{\paramO{} m}}{Creates an action `paragraph' for declaring traits and actions}{dnd-stat-action}
+            {
+                If a non-empty optional argument is passed, it inserts ``[X] actions'' into the action name. This is useful for Legendary Actions which might have a variable cost.
+            }
+
+
+            \RpgMacroExample[RpgStat!Reaction]{RpgStatReaction}{\statalias{reaction},\param{m m}}{Creates an action `paragraph' with an additional `trigger', indicating when the reaction may be used.}{dnd-stat-reaction}
+            {}
+
+
+        \subsubsection{Attacks}
+            A thing!
+
+        \subsubsection{Spellcasting}
+
+        \subsubsection{Saving Throws}
+            
+        \RpgStatShowCard{false}
+\RpgGetExample{dnd-stat-main-example}
+
+    \subsection{Legacy Appearance}
+
+        The appearance and structure of the RpgStat block is based on the improvements made by the 2024 rules release (with a few modifications of our own). A version that closely aligns with the original 2014 version of the rules can be activated:
+
+        \RpgMacro{RpgStatLegacyMode}{}{Overrides the appearance of the RpgStat environment with 2014-style ones.}
+        {
+            \% call outside the environment
+
+
+            \cmd{RpgStatLegacyMode}\{\}
+
+    \% subsequent stats use the old visual style
+
+            \cmd{begin\param{RpgStat}} \dots 
+        }
+        {
+            The overrides are purely stylistic; the underlying computation remains the same. The changes persist within a local group.
+        }
+
+    \RpgStatShowCard{false}
+    \RpgGetExample{dnd-stat-legacy}

@@ -24,55 +24,51 @@
 	}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Narration box
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RpgFiligreeSet{
+  \coordinate (jp-tl) at ($(frame.north~west)+(\l_filigree_dim,0)$);
+  \coordinate (jp-tr) at ($(frame.north~east)+(-\l_filigree_dim,0)$);
+  \coordinate (jp-bl) at ($(frame.south~west)+(\l_filigree_dim,0)$);
+  \coordinate (jp-br) at ($(frame.south~east)+(-\l_filigree_dim,0)$);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Special command for magic items, traps, and the like.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand {\DndFeatHeader} { m o }
-  {
-    \subsection {#1}
-    \IfValueT{#2}
-      {
-        \textit {#2}
-        \par \vspace{3pt} \noindent \ignorespaces
-      }
+  \def\offset{{round(5*\l_filigree_dim)/10}}
+
+  %%simple line
+  \draw[rounded~corners=1pt] (jp-tl)--(jp-tr) %%top border
+  --++(0,\offset)--++(\l_filigree_dim,0)      %%top right outcrop
+  --($(frame.south~east)+(0,-\offset)$)       %%right border
+  --++(-\l_filigree_dim,0)--(jp-br)           %%bottom right outcrop
+  --(jp-bl)                                   %%bottom border
+  --++(0,-\offset)--++(-\l_filigree_dim,0)    %%bottom left outcrop
+  --($(frame.north~west)+(0,\offset)$)        %%left border
+  --++(\l_filigree_dim,0)                     %%top left outcrop
+  --cycle;        
+ 
+   \def\offset{{round(7*\l_filigree_dim)/10}}
+   \def\outcrop{2.5pt}
+   \def\vjump{{round(12*\l_filigree_dim)/10}}
+   
+   \draw[rounded~corners=1pt] (jp-tl)--++(0,\offset)--($(jp-tr)+(0,\offset)$)--(jp-tr)--($(frame.north~east)+(\outcrop,0)$)--++(-\outcrop,-\vjump)--($(frame.south~east)+(0,\vjump)$)--++(\outcrop,-\vjump)--(jp-br)--++(0,-\offset)--($(jp-bl)+(0,-\offset)$)--(jp-bl)--($(frame.south~west)+(-\outcrop,0)$)--++(\outcrop,\vjump)--($(frame.north~west)+(0,-\vjump)$)--++(-\outcrop,\vjump)
+   --cycle;
+}
+
+%%overwrite existing filigree defaults
+\tcbset{
+  rpg filigree/.style={
+     overlay = {
+      \begin{scope}[draw=filigreecolor,line~width=2.4pt]
+        \__rpg_filigree:
+      \end{scope}
+      \begin{scope}[draw=filigreecolor!30!black,line~width=1.1pt]
+        \__rpg_filigree:
+      \end{scope}
+    },
+    frame~hidden,
   }
+}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Special command for magic items, traps, and the like.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand {\DndItemHeader} { m m }
-  {
-    \subsubsection {#1}
-    \textit {#2}
-    \par \vspace{3pt} \noindent \ignorespaces
-  }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Special command for spells.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% #1 - Name
-% #2 - Level and school
-% #3 - Casting time
-% #4 - Range
-% #5 - Components
-% #6 - Duration
-\NewDocumentCommand {\DndSpellHeader} { m m m m m m }
-  {
-    \DndItemHeader {#1} {#2}
-
-    \begin{description}
-      [
-        nosep,
-        labelsep = \l__dnd_space_dim,
-        after    = { \vspace{4pt plus 1pt minus 1pt} },
-      ]
-      \item [ \spellcastingtimename : ] #3
-      \item [ \spellrangename       : ] #4
-      \item [ \spellcomponentsname  : ] #5
-      \item [ \spelldurationname    : ] #6
-    \end{description}
-  }
 
    \titleformat {\chapter}
     { \RpgFontChapter } % format

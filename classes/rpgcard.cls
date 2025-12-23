@@ -33,7 +33,10 @@
 	\prop_gput:Nnx \g__rpg_switch_prop { #1 } {\c_true_bool}
 }
 
-
+\msg_new:nnn{rpg}{rpg-card-title}{Cannot~set~title~in~rpgcard}
+\renewcommand{\maketitle}{
+	\msg_error:nn{rpg}{rpg-card-title}
+}
 \RpgSetTitleMode{header}
 \pagestyle{empty}
 

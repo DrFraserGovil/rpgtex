@@ -3,16 +3,57 @@
 \RpgItemAddProperty{image}{\RpgItemImage}{}
 
 \RpgItemCardFormat{
-    \subsection{#1}
+    \begin{center}
+    {\RpgFontCardTitle #1}\par\noindent
 
     \tl_if_blank:eF{\RpgItemDescription}
-    {
-        \textit{\RpgItemDescription} \par\noindent
+    { 
+        \vspace{-0.6em}
+        {\RpgFontCardHeader \RpgItemDescription} \par
     }
+    \end{center}
     \tl_if_blank:eF{\RpgItemImage}
     {
         {\hfil \includegraphics[width=\linewidth,height=3cm,keepaspectratio=true]{\RpgItemImage}\hfil }\par\noindent
     }
 
-    \footnotesize #2
+    \noindent\RpgFontCardBody #2
+}
+
+\RpgItemTextFormat{
+     \subsection{#1}
+    \tl_if_blank:eF{\RpgItemDescription}
+    {
+        \vspace{-0.6em}
+        \textit{Requires: \RpgItemDescription} \par\vspace{0.5em} \noindent
+    }   
+
+    #2
+}
+
+\RpgFeatAddProperty{requires}{\l__rpgfeat_prereq}{}
+\RpgFeatTextFormat{
+    \subsection{#1}
+
+      \tl_if_blank:eF{\l__rpgfeat_prereq}
+    {
+        % \vspace{-0.6em}
+        {\RpgFontCardHeader Requires:~\l__rpgfeat_prereq} \par\vspace{0.5em} \noindent
+    }   
+
+    #2
+   
+}
+\RpgFeatCardFormat{
+    \subsection{#1}
+
+    {\RpgFontCardBody #2}
+
+    \tl_if_blank:eF{\l__rpgfeat_prereq}
+    {
+
+         \vfill
+
+    {\RpgFontCardHeader Requires:~\l__rpgfeat_prereq}
+    }   
 }

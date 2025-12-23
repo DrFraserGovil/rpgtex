@@ -1,0 +1,26 @@
+%highlight = RpgCard
+\begin{ExampleBlock}[RpgCard][listing side text]{}
+\begin{tikzpicture}%wrap in tikz so we can draw dimensions
+\node[anchor=south west,inner sep=0pt,outer sep=0pt] at (0,0) 
+{
+    \begin{RpgCard}[hmargin=0.5cm, vmargin=0.5cm, height=9.7cm, width=6.75cm]
+        \subsubsection{Text goes here}
+            It fits nicely into the card, wrapping over lines\footnote{We can also have a single footnote}.
+    \end{RpgCard}\ignorespaces
+};
+%% Draw the dimenions on top; use macros to save space!
+\heightLines{red}
+\widthLines{ForestGreen}
+       
+\end{tikzpicture}
+
+\vspace{0.5cm}
+
+%shrink so it fits in display area
+\begin{RpgCard}[vmargin=0.1cm, hmargin=0.1cm, height=5.2cm, width=3.6cm]
+        \raggedright\footnotesize And if we add lots of text\footnote{And maybe a footnote too?}
+    \lipsum[2]
+\end{RpgCard}
+
+
+\end{ExampleBlock}

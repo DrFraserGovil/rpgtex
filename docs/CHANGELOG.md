@@ -5,6 +5,30 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+
+### Added
+
+* The `rpgdeck` and `rpgcard` classes have been realised (finally). RpgCard is a neat standalone environment, whilst deck is similar to the `rpghandout`, but automatically enters cardmode, and has the aility to use `standalone` package to aggregate `rpgcard` documents - hence `deck`.
+* Theme documentation (including tweaking some of the parameters as they were explicitly used for the first time.) 
+	* Provided a convenient interface for fully documenting the fonts dynamically: the font-tables will always display the values assigned to each element at the time of compiling.
+	* Color-swatches added for full visualisation
+	* default fully documented
+	* dnd almost completed
+* Provided the default values for RpgItem, RpgFeat, RpgSpell and RpgStat
+* dnd RpgFeat and RpgItem finalised
+* The dnd version of RpgSpell now has some helper functions which print the upcasting and cantrip scaling 
+
+
+## Changed
+
+* RpgPlural modified to have a starred version which omits the counter number.
+* RpgTable has an argument added (vskip) which enables modifying the vertical space above and below
+* Rpg[X]AddProperty and Rpg[X]AddBoolean now have the ability to include aliases for the same toggle
+
+<!-- ## Removed -->
+
 ## 0.5.0 (2025-11-16)
 
 ### Major Renaming Effort

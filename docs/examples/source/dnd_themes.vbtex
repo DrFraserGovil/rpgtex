@@ -1,0 +1,227 @@
+% example = dnd-section-headers
+	\section*{Example} %starred so not added to toc; otherwise the same
+    \subsection{Another Example}
+    \subsubsection{More Examples!}
+
+% example = dnd-dice
+% highlight = RpgDice
+	\RpgDice{3d8 -5 +2}
+
+	\RpgDice{d8 + 0}
+
+% example = dnd-filigree
+% highlight = RpgFiligree, filigree
+	\begin{RpgFiligree}
+        Some decorative text
+    \end{RpgFiligree}
+
+    \vspace{1cm}
+
+    \begin{RpgTable}[filigree]{lX}
+        Header 1 & Header 2
+        \\
+        Body 1 & Body 2
+        \\
+        Body 3 & Body 4
+    \end{RpgTable}
+
+% example = dnd-item
+% options = listing only
+% highlight = RpgItem
+	\RpgItemShowCard{true/false} % set the card mode
+	
+	\begin{RpgItem}[card-opts]{Item Name}[key-values]
+		<body text>
+	\end{RpgItem}
+
+% example = dnd-item-example
+% highlight = RpgItem
+% title = RpgItem In Action
+	 \RpgItemShowCard{false}
+    \begin{RpgItem}{Joyeuse}[
+        rarity=Rare,
+        type=weapon (sword),
+        requires-attunement,   %just a flag, no value
+        image={../example/img/joyeuse}
+    ]
+        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+    \end{RpgItem}
+
+    \vspace{0.5cm}\hrule\vspace{0.5cm}
+
+    %now the card version
+    \RpgItemShowCard{true}
+    \begin{RpgItem}{Joyeuse}[
+        rarity=Rare,
+        type=weapon (sword),
+        requires-attunement={by a Paladin of France},   %now has a value...
+        image={../example/img/joyeuse}
+    ]
+        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+    \end{RpgItem}
+
+% example = dnd-feat
+% options = listing only
+	\RpgFeatShowCard{true/false} % set the card mode
+	
+	\begin{RpgFeat}[card-opts]{Feat Name}[key-values]
+		<body text>
+	\end{RpgFeat}
+
+%example = dnd-feat-full
+%title = D\&D RpgFeat
+% highlight = RpgFeat
+
+	\RpgFeatShowCard{false}
+    
+	\begin{RpgFeat}{Grappler}[
+         requires={Strength 13 or higher},
+              ]
+        \grapplerText %predefined to save space. Just plain text!
+    \end{RpgFeat}
+
+    \vspace{0.25cm}\hrule\vspace{0.25cm}
+
+    %now the card version
+    \RpgFeatShowCard{true}
+    
+    \begin{RpgFeat}[color=DmgLilac]{Grappler}[
+         prerequisite={Strength 13 or higher},
+            ]
+       \grapplerText
+    \end{RpgFeat}
+
+% example = dnd-spell
+% options = listing only
+% highlight = RpgSpell
+	\RpgSpellShowCard{true/false} % set the card mode
+	\begin{RpgSpell}[card-opts]{Spell Name}[key-values]
+		<body text>
+	\end{RpgSpell}
+
+% example = dnd-spell-helper
+% highlight = RpgCantripScaling, RpgSpellUpcast
+
+	\RpgCantripScaling[\# of Beams]{1} {3} {5}{9d10}
+
+	\vspace{0.5cm}
+
+	%% assume being called within a 3rd level spell...
+	\RpgSpellUpcast[The duration increases by]{1 minute}[2]
+
+% example = dnd-spell-full
+% highlight = RpgSpell
+	\RpgSpellShowCard{false}
+    \begin{RpgSpell}{Firebolt}[
+        school=Evocation,
+        level = 0,
+        casting-time=1 action,
+        range=120ft,
+        components = VS,
+        duration=Instantaneous,
+        source=Free Basic Rules (2014)
+	]
+    	You hurl a mote of fire at a creature or object within range. Make a ranged spell attack against the target. On a hit, the target takes 1d10 fire damage. A flammable object hit by this spell ignites if it isn't being worn or carried.
+
+        \RpgCantripScaling{1d10}{2d10} {3d10}{4d10}
+    \end{RpgSpell}
+
+    \vspace{1cm}
+
+    \RpgSpellShowCard{true}
+    \begin{RpgSpell}{Cone of Cold}[
+        school=Evocation,
+        level = 5,
+        casting-time=1 action,
+        range=self (60ft cone),
+        components = VSM\footnote{A small crystal or glass cone},
+        duration=Instantaneous,
+        source=Free Basic Rules (2014)
+    ]
+   		A blast of cold air erupts from your hands. Each creature in a 60-foot cone must make a Constitution saving throw. A creature takes 8d8 cold damage on a failed save, or half as much damage on a successful one. A creature killed by this spell becomes a frozen statue until it thaws.
+
+        \RpgSpellUpcast{1d8}
+    \end{RpgSpell}
+
+% EXAMPLE = dnd-stat-card
+%options=listing only
+	\RpgStatShowCard{true/false} % set the card mode
+	\begin{RpgStat}[card-opts]{Creature Name}[key-values]
+		<body text>
+	\end{RpgStat}
+
+%%EXAMPLE=dnd-stat-section
+% highlight = RpgStatSection
+	\RpgStatSection{title-text} body-text
+
+
+%%EXAMPLE=dnd-stat-action
+%highlight=RpgStatAction
+	\RpgStatAction{Trait} body-text
+
+	\RpgStatAction[<cost>]{Action} body-text
+
+% example=dnd-stat-reaction
+%highlight=RpgStatReaction
+	\RpgStatReaction{Reaction}{<trigger>} body-text  
+	\RpgStatReaction{Reaction}{} body-text
+	%empty trigger text does not render the colon   
+
+
+% example = dnd-stat-legacy
+%highlight = RpgStatLegacyMode
+	%new style active before these braces
+	{
+		\RpgStatLegacyMode{}
+		\begin{RpgStat}{Commoner}[
+			type={Medium or Small Humanoid; typically neutral},
+			languages=Common
+		]
+			\section{Traits}
+				\action{Mob Mentality} If a Commoner is subjected to a mind-altering effect (such as the frightened condition, or a charm spell), all Commoners within 10ft are also subjected to this effect.
+			\section{Actions}
+				\melee{Club}
+		\end{RpgStat}
+
+		% legacy style persists within these braces
+	}
+
+	%outside the changes revert to the new style
+
+% example = dnd-stat-main-example
+% title = test
+% highlight = RpgStat,trait,save,action,RpgStatLegendarySection,RpgLegendaryDefiance,melee
+    \begin{RpgStat}{Bom Tombadil}[
+			%basics
+			type={Medium Celestial, Chaotic Good},
+			armor-class = {14},
+			hp  = {\RpgDice{12d12 + 40}},
+			speed       = {35 ft.},
+			%stats
+			str=10,  dex=  13,  con = 15,  int=9,  wis = 24, cha  = 22,
+			cha-save, wis-save,
+			%skills etc.
+			proficiency=8,
+			skills={nature (+8)},
+			skills-expertise={Performance},
+			damage-immunities={all damage inflicted by creatures with the \textit{Beast} type.},
+       	]
+		\section{Traits}		
+			\trait{Pacifist} \RpgStatName{} cannot deal lethal damage. A creature reduced to 0HP by \RpgStatName{} does not die, but instead falls \textit{unconscious}, even if they are immune to this condition.
+		\section{Actions}
+			\save{Lullaby}[
+				modifier=wis,
+				dc=22,
+				target=sphere,
+				size=30ft,
+				failure= {Fall \textit{unconscious} for \RpgDice{1d4} hours, until they take damage, or a creature uses an action to shake them awake.},
+			] Creatures with the \textit{deafened} condition or \textit{charm} immunity are unaffected.
+			\melee{Begone!}[
+				type=spell, modifier=cha,
+				dmg=\RpgDice{3d4+\stat{cha}}, dmg-type=force,
+				extra={A creature not native to the current plane must make a DC 22 Charisma saving throw or be banished to their native plane}
+			]
+		\RpgStatLegendarySection{}
+			\RpgLegendaryDefiance{}
+			\action{Rebuke the Violent} A creature which took hostile action in the preceeding turn takes \RpgDice{2d10} psychic damage.
+    \end{RpgStat}

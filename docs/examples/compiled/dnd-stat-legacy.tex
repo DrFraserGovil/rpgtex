@@ -1,0 +1,22 @@
+%highlight = RpgStatLegacyMode
+\begin{ExampleBlock}[RpgStatLegacyMode][listing side text]{}
+%new style active before these braces
+{
+    \RpgStatLegacyMode{}
+    \begin{RpgStat}{Commoner}[
+        type={Medium or Small Humanoid; typically neutral},
+        languages=Common
+    ]
+        \section{Traits}
+            \action{Mob Mentality} If a Commoner is subjected to a mind-altering effect (such as the frightened condition, or a charm spell), all Commoners within 10ft are also subjected to this effect.
+        \section{Actions}
+            \melee{Club}
+    \end{RpgStat}
+
+    % legacy style persists within these braces
+}
+
+%outside the changes revert to the new style
+
+
+\end{ExampleBlock}

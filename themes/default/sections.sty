@@ -97,95 +97,35 @@
 	rounded~corners,
   }
 }
-\ExplSyntaxOn
-\RpgLayoutOnly{
-  % Set spacing around floats
-  \setlength{\textfloatsep}{11pt plus 4pt minus 4pt}
-  \setlength{\intextsep}{11pt plus 4pt minus 4pt}
-  \setlength{\dbltextfloatsep}{11pt plus 4pt minus 4pt}
+%% filigree
 
-  % Remove Numbering (If you want Numbering set secnumdepth to the appropriate depth)
-  \setcounter{secnumdepth}{0}
+\RpgFiligreeSet{
+  % \draw[dotted] (frame.north~west) rectangle (frame.south~east);
+  \foreach \m in {0.2,0.6,1,1.4}
+  {
+    \draw[thin] ($(frame.north~west)+(0,-{\m*\l_filigree_dim})$) to[out=60,in=-150] ($(frame.north~west)+({\m*\l_filigree_dim},0)$);
+    \draw[thin] ($(frame.south~west)+(0,{\m*\l_filigree_dim})$)  to[out=60,in=-150]($(frame.south~west)+({\m*\l_filigree_dim},0)$);
+    \draw[thin] ($(frame.north~east)+(0,-{\m*\l_filigree_dim})$)  to[out=60,in=-150] ($(frame.north~east)+({-\m*\l_filigree_dim},0)$);
+    \draw[thin] ($(frame.south~east)+(0,{\m*\l_filigree_dim})$) to[out=-120,in=30]($(frame.south~east)+({-\m*\l_filigree_dim},0)$);
 
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % Section formatting
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % Part
+  }
+  % \fill ($(frame.north~west)+(0,-\l_filigree_dim)$)--++(0,\l_filigree_dim)--++(\l_filigree_dim,0)--cycle;
 
-
-  % Chapter
-  \titleformat {\chapter}
-    { \RpgFontChapter } % format
-    { {\chaptertitlename\ \thechapter :} } % label
-    { \wordsep } % sep
-    {  } % before-code
-
-  \titlespacing* {\chapter}
-    { 0pt }  % left
-    { .3ex }  % before-sep
-    { 2.8ex } % after-sep
-
-  % Section
-  \titleformat {\section}
-    { \RpgFontSection } % format
-    { \thesection } % label
-    { 1em } % sep
-    { \nopagebreak } % before-code
-
-  \titlespacing* { \section }
-    { 0pt } % left
-    { 3ex plus .43ex minus .43ex } % before-sep
-    { 1ex plus .43ex minus .43ex } % after-sep
-
-  % Subsection
-  \titleformat {\subsection}
-    { \RpgFontSubsection } % format
-    { \thesubsection } % label
-    { 1em } % sep
-    { \nopagebreak } % before-code
-
-  \titlespacing*{ \subsection }
-    { 0pt } % left
-    { 1.4ex plus .47ex minus .47ex } % before-sep
-    { 1.2ex } % after-sep
-
-  % Subsubsection
-  \titleformat {\subsubsection}
-    { \RpgFontSubsubsection } % format
-    { \thesubsubsection } % label
-    { 1em } % sep
-    { \nopagebreak } % before-code
-
-  \titlespacing* { \subsubsection }
-    { 0pt } % left
-  { 2ex plus .67ex minus .67ex } % before-sep
-    { .2ex } % after-sep
-
-  % Paragraph
-  \titleformat {\paragraph} [runin]
-    { \RpgFontParagraph } % format
-    { \theparagraph \quad } % label
-    {0pt} % sep
-    {}    % before-code
-    [.]   % after-code
-
-  \titlespacing* {\paragraph}
-    {0pt}      % left
-    {\the\dimexpr\parskip+5pt\relax} % before-sep
-    {\wordsep} % after-sep
-
-  % Subparagraph
-  \titleformat {\subparagraph} [runin]
-    { \RpgFontSubparagraph } % format
-    { \thesubparagraph \quad } % label
-    {pt} % sep
-    {}    % before-code
-    [.]   % after-code
-
-  \titlespacing* {\subparagraph}
-    {\parindent} % left
-    {\the\dimexpr\parskip+5pt\relax}   % before-sep
-    {\wordsep}   % after-sep
+  % \fill ($(frame.south~west)+(0,\l_filigree_dim)$)--++(0,-\l_filigree_dim)--++(\l_filigree_dim,0)--cycle;
+  % \fill ($(frame.south~east)+(0,\l_filigree_dim)$)--++(0,-\l_filigree_dim)--++(-\l_filigree_dim,0)--cycle;
+  % \fill ($(frame.north~east)+(0,-\l_filigree_dim)$)--++(0,\l_filigree_dim)--++(-\l_filigree_dim,0)--cycle;
 }
-
+\ExplSyntaxOn
+\tcbset{
+  rpg filigree/.style={
+    top=2pt,
+    left=2pt,
+    right=2pt,
+    overlay = {
+      \begin{scope}[draw=filigreecolor,line~width=1pt]
+        \__rpg_filigree:
+      \end{scope}
+    },
+  }
+}
 \ExplSyntaxOff

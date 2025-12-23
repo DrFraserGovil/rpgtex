@@ -6,8 +6,9 @@
 \usepackage{blindtext}
 \usepackage{splitidx} %use rather than imakeidx because it gets hyperrefs right!
 \usepackage{pifont}
-
-
+\usepackage{idxlayout}
+\usepackage{multicol}
+\usetikzlibrary{decorations.pathreplacing}
 \usepackage[official]{eurosym} %%used for the euro in item examle
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
@@ -19,8 +20,6 @@
 \title{The rpgtex Package}
 \subtitle{A package for generating beautiful RPG documents}
 \author{Jack Fraser-Govil}
-
-
 
 \NewDocumentCommand{\cmdidx}{ o m }{
 	\foreach \m in {#2}
@@ -43,6 +42,8 @@
 	\texttt{#1}~\RpgPage[p]{#1}
 }
 
+ \input{parts/themes_fontprocessor.tex}
+\input{examples/examples.tex}
 \begin{document}
 	\frontmatter
 	\maketitle{}
@@ -80,16 +81,14 @@
 	
 	\mainmatter{}
 	
-	
+	%
 	
 	\part{rpgtex For Users}
 		\input{parts/options.tex}
 		\input{parts/commands.tex}
 		\input{parts/environments.tex}
 	\part{Classes \& Themes}
-		\input{parts/class_book.tex}
-		\input{parts/class_handout.tex}
-		\input{parts/class_card.tex}
+		\input{parts/classes.tex}
 		\input{parts/themes_default.tex}
 		\input{parts/themes_dnd.tex}
 		\input{parts/themes_scifi.tex}
@@ -99,7 +98,12 @@
 		\input{parts/designer_commands.tex}
 		\input{parts/featureforge.tex}
 
-
+	{\footnotesize 
+	% \begin{multicols}{3}
+	\idxlayout{columns=3}
 	\printindex
+	% \end{multicols}
+	}
+
 
 \end{document}

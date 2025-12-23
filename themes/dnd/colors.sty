@@ -4,17 +4,17 @@
 
 
 % Page
-\definecolor {bgtan}    {HTML} {F7F2E5}	% DndReadAloud background
-\definecolor {bgtan2018}{HTML} {F9EFD6} % lighter version of bgtan from the 2018 Basic Rules
+\definecolor {bgtan}{HTML} {F9EFD6} % lighter version of bgtan from the 2018 Basic Rules
 \definecolor {pagegold} {HTML} {B89A67} % pagenumbers and footer
 
 % Type
 \definecolor {titlered}    {HTML} {58180D} % titles
 \definecolor {titlegold}   {HTML} {C9AD6A} % titlerules
-\definecolor {rulered}     {HTML} {9C2B1B} % triangular rule in statsblock
 \definecolor {contourgray} {HTML} {CACCBE} % outline color in part & chapter font
 
-\definecolor {statblockoutline}    {HTML} {a6565d}
+\definecolor {rulecolor}     {HTML} {9C2B1B} % triangular rule in statsblock
+\colorlet {filigreecolor} {titlegold}
+\colorlet   {statblockcolor}    {rulecolor!40!black}
 \definecolor {statblockribbon} {HTML} {E69A28} % stat block top/bottom borders (gold)
 \definecolor {statblockbg}     {HTML} {FDF1DC} % stat block background (tan)
 
@@ -39,7 +39,7 @@
 
 % set main colors
 \RpgSetThemeColor{PhbLightGreen}
-
+\colorlet {narrationcolor} {bgtan} %Narration background
 %then the print mode contingencies
 
 % \ifnum\csPrintMode=1

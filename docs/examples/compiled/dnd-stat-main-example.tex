@@ -1,0 +1,38 @@
+% title = test
+% highlight = RpgStat,trait,save,action,RpgStatLegendarySection,RpgLegendaryDefiance,melee
+\begin{ExampleBlock}[RpgStat,trait,save,action,RpgStatLegendarySection,RpgLegendaryDefiance,melee][listing side text]{test}
+\begin{RpgStat}{Bom Tombadil}[
+        %basics
+        type={Medium Celestial, Chaotic Good},
+        armor-class = {14},
+        hp  = {\RpgDice{12d12 + 40}},
+        speed       = {35 ft.},
+        %stats
+        str=10,  dex=  13,  con = 15,  int=9,  wis = 24, cha  = 22,
+        cha-save, wis-save,
+        %skills etc.
+        proficiency=8,
+        skills={nature (+8)},
+        skills-expertise={Performance},
+        damage-immunities={all damage inflicted by creatures with the \textit{Beast} type.},
+       ]
+    \section{Traits}        
+        \trait{Pacifist} \RpgStatName{} cannot deal lethal damage. A creature reduced to 0HP by \RpgStatName{} does not die, but instead falls \textit{unconscious}, even if they are immune to this condition.
+    \section{Actions}
+        \save{Lullaby}[
+            modifier=wis,
+            dc=22,
+            target=sphere,
+            size=30ft,
+            failure= {Fall \textit{unconscious} for \RpgDice{1d4} hours, until they take damage, or a creature uses an action to shake them awake.},
+        ] Creatures with the \textit{deafened} condition or \textit{charm} immunity are unaffected.
+        \melee{Begone!}[
+            type=spell, modifier=cha,
+            dmg=\RpgDice{3d4+\stat{cha}}, dmg-type=force,
+            extra={A creature not native to the current plane must make a DC 22 Charisma saving throw or be banished to their native plane}
+        ]
+    \RpgStatLegendarySection{}
+        \RpgLegendaryDefiance{}
+        \action{Rebuke the Violent} A creature which took hostile action in the preceeding turn takes \RpgDice{2d10} psychic damage.
+\end{RpgStat}
+\end{ExampleBlock}

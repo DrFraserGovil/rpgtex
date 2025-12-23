@@ -1,0 +1,192 @@
+\ExplSyntaxOff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Tcolorbox wrapper & modification
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	%define the default tcolorbox which wraps the environemnt
+	% \tcbset{
+
+	% }
+	\DeclareTColorBox {RpgStatBox} { O{}}
+	{
+		enhanced jigsaw,
+		opacityback= 0.8,
+		before skip      = 6pt plus 3pt minus 3pt,
+		boxrule          = 2pt,
+		parbox           = false,
+		boxsep           = 2pt,
+		toptitle         = 8pt,
+		top              = 0pt,
+		left             = 2pt,
+		right            = 2pt,
+		bottom           = 7pt,
+		rounded corners,
+		arc=2mm,
+		oversize         = 0pt,
+		colback          = statblockbg,
+		colbacktitle     = statblockbg,
+		colframe         = \statOutlineColor,
+		fontupper        = \RpgFontStatBlockBody,
+		fontlower        = \RpgFontStatBlockBody,
+		#1,
+	}
+
+
+	\ExplSyntaxOn
+
+%% Appearance modification
+\cs_new_protected_nopar:Npn \__rpg_appearance_preprocessing:
+{
+	\bool_if:NF{\l__rpg_show_background_bool}
+	{
+		\colorlet{statblockbg}{white}
+	}
+	
+	%%set theme colors
+	\colorlet{rulecolor}{\l__stat_color}
+	\colorlet{statblockcolor}{\l__stat_color!50!black}
+	\RpgSetThemeColor{\l__stat_color!25!white}
+	
+	% change filigree color to
+	\tl_clear:N\l__box_options
+	\bool_if:NTF{\l__stat_filigree_outline}
+	{
+		\colorlet{filigreecolor}{\statOutlineColor}
+		\tl_set:Ne\l__box_options{rpgfiligree}
+	}
+	{
+		\bool_if:NT{\l__stat_filigree}
+		{
+			\tl_set:Ne\l__box_options{rpgfiligree}
+		}
+	}
+}
+
+
+%%Core stat environments
+
+	% Title and Italicized text appearing immediately afterwards
+	\NewDocumentCommand {\RpgStatTitle} {m}
+	{
+		\vspace{3pt}
+		{\RpgFontStatBlockTitle #1}
+		\tl_if_empty:eF{\l__crtype_tl}
+		{
+			\begin {hangingpar}
+				\textit {\l__crtype_tl}
+			\end {hangingpar}
+		}
+	}
+
+	%%Formats Speed, hp, ability scores etc
+	\NewDocumentCommand {\RpgHeaderBlock} {m}
+	{
+		\RpgStatTitle{#1}
+		\RpgStatLine
+		\__rpg_stat_basics:
+		\RpgStatLine
+		\__rpg_stat_ability_scores:
+		\RpgStatLine
+		\__rpg_stat_details:
+		% \RpgStatLine
+	}
+
+%% BASIC BLOCK -- HP / AC / etc.
+	\cs_new_protected_nopar:Npn \__rpg_stat_basics:
+	{
+		{
+			\color{statblockcolor}
+			\noindent
+			\begin{tabularx}{\linewidth}{lXlX}
+				\textbf{AC} & \l__armor_class_tl 
+				&
+				\textbf{Speed} &  \l__speed_tl
+				\\
+				\textbf{HP} &  \l__hit_points_tl 
+				&
+				\textbf{Initiative} &\l__initiative_bonus_tl
+			\end{tabularx}
+		}
+	}
+%% ABILITY SCORE BLOCK
+	%%Formatters for ability table
+	\cs_new:Npn \__rpg_format_mod_labels:n #1
+	{
+		\rotatebox[origin=c]{90}{\RpgFontStatBlockTitle\scriptsize \hspace{0.1cm} #1 \hspace{0.1cm}}
+	}
+	\cs_new:Npn \__rpg_format_stat_titles:nn #1#2
+	{
+		& \RpgFontStatBlockTitle \normalsize  {#1} ~{ (#2)} 
+	}
+	
+
+	\cs_new_protected_nopar:Npn \__rpg_stat_ability_scores:
+	{
+		%%define colours and spacings
+		\color {statblockcolor}
+		\setlength\topsep{0pt}
+		\setlength\tabcolsep{3pt}
+		
+		\begin{center}
+			\maxsizebox{\linewidth}{!}{
+				\begin{RpgTable}[simple,vskip=0pt]{rcccccc}
+					~
+					\seq_map_inline:Nn\g__dnd_stats
+					{
+						\__rpg_format_stat_titles:nn{\text_uppercase:n{##1}}{\use:c{l__##1_tl}}
+					}
+					\\
+					\__rpg_format_mod_labels:n{mod}
+					\seq_map_inline:Nn\g__dnd_stats
+					{
+						& \__rpg_format_signed_integer:N{\use:c{l__##1_mod}}
+					}
+		
+					%if any proficiencies set, then render the save row
+					\__rpg_if_any_saves:T
+					{
+						\\
+						\__rpg_format_mod_labels:n{save}
+						\seq_map_inline:Nn{\g__dnd_stats}
+						{
+							& \tl_use:c{l__##1_save} 	
+						}
+					}
+
+				\end{RpgTable}
+			}
+		\end{center}
+		\par \vspace{0.1cm} 
+	}
+%% DETAILS BLOCK -- languages/skilsl etc
+	\cs_new_protected_nopar:Npn \__rpg_stat_details:
+		{
+		%% Each item is wrapped in command that ensures it only appears 
+		%% if the value is non-empty
+		\begin {description}[
+			before   = \color {statblockcolor},
+			font     = \RpgFontStatBlockBody\color {statblockcolor},
+			labelsep = \l__rpg_space_dim,
+			nosep]
+		
+			\__maybe_item:nn {Skills}					{\l__processed_skills}                 
+			\__maybe_item:nn {Damage~Vulnerabilities}	{\l__damage_vulnerabilities_tl} 
+			\__maybe_item:nn {Damage~Resistances}		{\l__damage_resistances_tl}     
+			\__maybe_item:nn {Damage~Immunities}		{\l__damage_immunities_tl}      
+			\__maybe_item:nn {Condition~Immunities}		{\l__condition_immunities_tl}  
+			\__maybe_item:nn {Senses}					{\__rpg_construct_perception:}   
+			\__maybe_item:nn {Languages}				{\l__languages_tl}   
+			\__maybe_item:nn {Challenge}				{\l__challenge_tl{}~(\l__xp_reward{}xp,~ proficiency:~\__rpg_format_signed_integer:N {\g__rpg_proficiency_bonus_int})}   
+		\end {description}
+	}
+
+% Fancy DnD 5e stat block rule
+	\NewDocumentCommand {\RpgStatLine} {}
+	{
+		\par \vspace{-2pt} \noindent
+		\begin {tikzpicture}
+		\fill [rulecolor ] ( 0, 0 ) -- ( 0, 0.1 ) -- ( \linewidth, 0.05 );
+		\end {tikzpicture}
+		\par
+	}
+	

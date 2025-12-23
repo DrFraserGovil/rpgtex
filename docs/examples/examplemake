@@ -1,0 +1,202 @@
+#!/usr/bin/python3
+import glob
+import os
+import re
+
+#set file root relative to script location, no matter where it is called from
+example_root = os.path.abspath(os.path.dirname(__file__))
+
+example_pattern = re.compile(
+   r"^\s*%+\s*EXAMPLE\s*=\s*(.+)$", 
+    re.MULTILINE | re.IGNORECASE)
+name_pattern = re.compile(
+   r"^\s*%+\s*title\s*=\s*(.+)$", 
+    re.MULTILINE | re.IGNORECASE)
+highlight_pattern = re.compile(
+   r"^\s*%+\s*highlight\s*=\s*(.+)$", 
+    re.MULTILINE | re.IGNORECASE)
+options_pattern = re.compile(
+   r"^\s*%+\s*options\s*=\s*(.+)$", 
+    re.MULTILINE | re.IGNORECASE)
+begin_pattern = re.compile(
+  r".*\\begin\{ExampleBlock\}.*", 
+    re.MULTILINE | re.IGNORECASE)
+end_pattern = re.compile(
+  r".*\\end\{ExampleBlock\}.*", 
+    re.MULTILINE | re.IGNORECASE)
+
+def getFiles():
+    return glob.glob("**/*.vbtex",root_dir=example_root,recursive=True)
+    
+
+class Block:
+    def __init__(self,name="",parent=""):
+        self.Name = name
+        self.Text = ""
+        self.Parent = parent
+        self.File = ""
+        self.Lines = []
+    def AddLine(self,line):
+        self.Lines.append(line)        
+    def Process(self):
+        # print("preprocess:\n","".join(self.Lines))
+        s = ""
+        self.WrappingAndIndent()
+        
+
+        self.Text = "".join(self.Lines)
+
+    def MakeWrapper(self):
+        ## detect name and highlighting commands
+        title = ""
+        highlight = ""
+        listing = "listing side text"
+        begin = 0
+        for i,line in enumerate(self.Lines) :
+            detect_name = name_pattern.match(line)
+            if detect_name:
+                title=detect_name.group(1)
+                begin = max(begin+1,i)
+            detect_highlight = highlight_pattern.match(line)
+            if detect_highlight:
+                highlight = detect_highlight.group(1)
+                begin = max(begin+1,i)
+            detect_options = options_pattern.match(line)
+            if detect_options:
+                listing = detect_options.group(1)
+                begin = max(begin+1,i)
+
+        self.Lines[-1] += "\n"
+        self.Lines.insert(begin,f"\\begin{{ExampleBlock}}[{highlight}][{listing}]{{{title}}}\n")
+        self.Lines.append("\\end{ExampleBlock}")
+        self.beginIdx = [begin]
+        self.endIdx = [len(self.Lines)-1]
+        self.hasContent = [1] + self.hasContent + [1]
+    def DetectWrapper(self):
+        self.hasContent = [False]*len(self.Lines)
+        self.beginIdx = []
+        self.endIdx = []
+        for i,line in enumerate(self.Lines):
+            self.hasContent[i] = (len(line.strip()) > 0) #track non-empty lines
+            self.Lines[i] = self.Lines[i].replace("\t","    ") #convert tabs to spaces
+            if begin_pattern.match(line):
+                self.beginIdx.append(i)
+            if end_pattern.match(line):
+                self.endIdx.append(i)
+
+    def WrappingAndIndent(self):
+
+        # computes the positions of the wrapping \begin and \end commands
+        self.DetectWrapper()
+
+        # check nothing went wrong...
+        if len(self.beginIdx) > 1:
+            print(f"Warning: {self.Name} ({self.Parent}) contains {len(self.beginIdx)} ExampleBlocks, beginning at positions {self.beginIdx}")
+        if len(self.beginIdx)!=len(self.endIdx):
+            print(self.beginIdx,self.endIdx)
+            print(f"ERROR: {self.Name} ({self.Parent}) has unbalanced \\begin and \\end commands.")
+            exit(1)
+            
+
+        #if no ExampleBlock wrapping provided, make one
+        if len(self.beginIdx)==0:
+            self.MakeWrapper()
+           
+        
+        #now modify the indentation
+
+        for i,start_line in enumerate(self.beginIdx):
+            end_line = self.endIdx[i]
+            
+            firstNonEmpty = start_line +1
+            
+            while firstNonEmpty < self.hasContent[firstNonEmpty]: #no need to end-check as the end line is (by definition) non-empty
+                firstNonEmpty += 1
+            #the wrapping lines are at zero indent
+            if firstNonEmpty < end_line:
+                self.Lines[start_line] = self.Lines[start_line].lstrip() 
+                self.Lines[end_line] = self.Lines[end_line].lstrip()
+
+            #now compute the base indent of the contents - everything will be de-indented, but relative positions remian the same
+            baseIndent = len(self.Lines[firstNonEmpty]) - len(self.Lines[firstNonEmpty].lstrip())
+            for q in range(firstNonEmpty,end_line):
+                if len(self.Lines[q].strip()) > 0:
+                    orig = len(self.Lines[q])
+                    temp = self.Lines[q].lstrip()
+                    indent = orig - len(temp)
+                    protrusion = max(0,indent - baseIndent)
+                    suppresionFactor = 1
+                    protrusion = int(suppresionFactor*protrusion)
+                    self.Lines[q] = " "*protrusion + temp
+
+def processFiles():
+    fileList = getFiles()
+    blocks = []
+    for file in fileList:
+        print(file)
+        blockOpen = False
+        with open(example_root+"/"+file,"r") as f:
+            for line in f:
+
+                match = example_pattern.match(line.strip())
+                if match:
+                    if blockOpen:
+                        blocks.append(block)
+                    block = Block(match.group(1),file)
+                    blockOpen= True
+                elif blockOpen:
+                    block.AddLine(line)
+        if blockOpen:
+            blocks.append(block)
+    
+    for block in blocks:
+        print("Processing",block.Name)
+        block.Process()
+    writeTexOutput(blocks)
+def writeTexOutput(blocks):
+    #write to file after processing
+    for block in blocks:
+        block.File = f"compiled/{block.Name}.tex"
+        writefile = f"{example_root}/{block.File}"
+        with open(writefile,"w") as file:
+            file.write(block.Text+"\n")
+    
+    #write the retrieval function
+    with open(f"{example_root}/examples.tex","w") as file:
+        file.write(f"""%%This script was generated by examplemake. Do not manually edit it
+%%begin autogenerated code
+\\ExplSyntaxOn
+\\seq_new:N \\g__rpg_example_directory
+        
+\\msg_new:nnn{{rpg-docs}}{{bad-example}}{{(#1)~is~not~in~example~library}}
+\\NewDocumentCommand\\RpgGetExample{{+m}}{{
+    \\tl_set:Nn\\l_tmpa_tl{{\\tl_trim_spaces:n{{#1}}}}
+    \\seq_if_in:NeTF\\g__rpg_example_directory{{\\l_tmpa_tl}}
+    {{
+        \\input{{examples/compiled/\\l_tmpa_tl.tex}}  
+    }}
+    {{
+        \\begin{{Code}}
+        #1   
+        \\end{{Code}}
+    }}
+}}\n\n%Create registry for examples:\n""")
+
+
+        for block in blocks:
+            file.write(f"\\seq_push:Nn\\g__rpg_example_directory{{{block.Name}}}\n")
+        file.write("""\n\\ExplSyntaxOff
+%%end autogenerated code"""
+        )
+    
+
+
+
+if __name__=="__main__":
+    processFiles()
+
+    # b1 = Block
+    # b1.Name = "test"
+    # b1.Text = "humdrum"
+
+    # writeTexOutput([b1])

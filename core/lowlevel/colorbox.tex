@@ -3,10 +3,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Key for overriding colback/colbacktitle
-\keys_define:nn { rpg / colorboxes }
+% \keys_define:nn { rpg / colorboxes }
+% {
+% 	color .tl_set:N         = \l__rpg_box_color_tl,
+% 	color .value_required:n = true,
+
+% }
+
+\__rpg_add_tl_keys:Nn{rpg/colorboxes}
 {
-	color .tl_set:N         = \l__rpg_box_color_tl,
-	color .value_required:n = true,
+	\__rpg_tl_key:nnn{color}{\l__rpg_box_color_tl}{black}
+	\__rpg_tl_key:nnn{filigree-size}{\l_filigree_dim}{5pt}
 }
 
 % Forces the expansion of the tcb keys 

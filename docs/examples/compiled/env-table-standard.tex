@@ -1,0 +1,22 @@
+\begin{ExampleBlock}[][listing side text]{}
+\begin{RpgTable}[width=0.85\linewidth, color=green!30!white]{lX}
+    Header 1 & Header 2
+    \\
+    Text & Text fills up to 85\% of the line width then breaks
+    \\
+    Alternating & This row is transparent
+    \\
+    Colour & but this one is green
+\end{RpgTable}
+
+%suppress header formatting, add title and filigree:
+\begin{RpgTable}[title={Test Table},noheader, filigree]{XlX}
+    Plain & Header & Text
+    \\
+    Now there's no & difference & between the header and the main
+    \\
+    body
+\end{RpgTable}
+
+
+\end{ExampleBlock}

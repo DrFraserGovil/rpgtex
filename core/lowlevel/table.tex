@@ -13,25 +13,17 @@
   }
 
   % Table options
-\bool_new:N \l__rpg_table_breakable_bool
-\bool_new:N \l__rpg_table_noheader_bool
-\bool_new:N \l__rpg_table_simple_bool
-\keys_define:nn { rpg / table }
+\__rpg_add_tl_keys:Nn{rpg/table}
 {
-	color .tl_set:N            = \l__rpg_table_color_tl,
-	color .initial:n           = tablecolor,
-	color .value_required:n    = true,
-	title .tl_set:N           = \l__rpg_table_header_tl,
-	title .value_required:n   = true,
-	width .dim_set:N           = \l__rpg_table_width_dim,
-	width .value_required:n    = true,
-	width .initial:n			=\linewidth,
-	breakable .code:n			= {\bool_set_true:N\l__rpg_table_breakable_bool},
-	breakable .value_required:n = false,
-	noheader .code:n			= {\bool_set_true:N\l__rpg_table_noheader_bool},
-	noheader .value_required:n = false,
-	simple .code:n			={\bool_set_true:N\l__rpg_table_simple_bool},
-	simple .value_required:n =false,
+	\__rpg_tl_key:nnn{color}{\l__rpg_table_color_tl}{tablecolor}
+	\__rpg_tl_key:nnn{title}{\l__rpg_table_header_tl}{}
+	\__rpg_tl_key:nnn{width}{\l__rpg_table_width_dim}{\linewidth}
+	\__rpg_bool_key:nn{breakable}{\l__rpg_table_breakable_bool}
+	\__rpg_tl_key:nnn{vskip}{\l__table_vskip}{9pt plus 3pt minus 3pt}
+	\__rpg_bool_key:nn{noheader}{\l__rpg_table_noheader_bool}
+	\__rpg_bool_key:nn{simple}{\l__rpg_table_simple_bool}
+	\__rpg_bool_key:nn{filigree}{\l__rpg_table_filigree_bool}
+	\__rpg_tl_key:nnn{filigree-opacity}{\l__rpg_table_filigree_opacity}{1}
 }
 
 \cs_new_protected:Npn \__write_table_title:n #1
