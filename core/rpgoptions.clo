@@ -7,29 +7,30 @@
 \RequirePackage {l3keys2e} %key/value parsing
 
 
+
 % These booleans are not set directly by an option (i.e. instead set by .code)
-\bool_new:N \l__rpg_show_background_bool
-\bool_new:N \l__rpg_show_footer_scroll_bool
-\bool_new:N \l__rpg_justified_bool
-\bool_new:N \l__rpg_multitoc_bool
+\bool_new:N		\__rpg_ShowBackground
+\bool_new:N		\__rpg_ShowFooterScroll
+\bool_new:N		\__rpg_IsJustified
+\bool_new:N		\__rpg_HasMulticolToc
+\bool_new:N		\__rpg_OneSide
+\bool_new:N		\__rpg_OpenRight
+\tl_new:N		\__rpg_FontSize
+\tl_new:N		\__rpg_PageColumns
+
+\bool_set_false:N \__rpg_OneSide
+\bool_set_false:N \__rpg_OpenRight
+\bool_set_true:N \__rpg_HasMulticolToc
+
+%% Theme Values
+\tl_new:N		\__rpg_Theme
+\tl_new:N		\__rpg_ThemePath
+\bool_new:N		\__rpg_ThemePathModified
+\bool_set_false:N \__rpg_ThemePathModified
+
 \bool_new:N \l__rpg_layout_bool
-\bool_new:N \l__rpg_oneside_bool
-\tl_new:N \l__rpg_font_size_tl
-\tl_new:N \l__rpg_cols_tl
-\bool_new:N \l__rpg_openright_bool
-\bool_set_false:N \l__rpg_oneside_bool
-\bool_set_false:N \l__rpg_openright_bool
-\bool_set_true:N \l__rpg_multitoc_bool
 \bool_set_eq:NN \l__rpg_layout_bool \c__rpg_isclass_bool
 
-\tl_if_exist:NF\l__rpg_onecol_override
-{
-	\tl_set:Nn \l__rpg_onecol_override {onecolumn}
-}
-\tl_if_exist:NF\l__rpg_twocol_override
-{
-	\tl_set:Nn \l__rpg_twocol_override {twocolumn}
-}
 \RequirePackage{core/theme_engine} %%need this for theme path switching
 
 
@@ -37,86 +38,93 @@
 % Standard latex classes fail silently if they don't recognise an option, so I reason it's fine for me to do that too.
 \keys_define:nn { rpg / options }
 {
-    % Large-scale styling choice
-    bg .choice:,
-    bg / full .code:n =
-      {
-        \bool_set_true:N \l__rpg_show_background_bool
-        \bool_set_true:N \l__rpg_show_footer_scroll_bool
-      },
-    bg / print .code:n =
-      {
-        \bool_set_false:N \l__rpg_show_background_bool
-        \bool_set_true:N \l__rpg_show_footer_scroll_bool
-      },
-    bg / none .code:n =
-      {
-        \bool_set_false:N \l__rpg_show_background_bool
-        \bool_set_false:N \l__rpg_show_footer_scroll_bool
-      },
-    bg .initial:n = full,
+	% Large-scale styling choice
+	bg .choice:,
+	bg / full .code:n =
+		{
+			\bool_set_true:N \__rpg_ShowBackground
+			\bool_set_true:N \__rpg_ShowFooterScroll
+		},
+	bg / print .code:n =
+		{
+			\bool_set_false:N \__rpg_ShowBackground
+			\bool_set_true:N \__rpg_ShowFooterScroll
+		},
+	bg / none .code:n =
+		{
+			\bool_set_false:N \__rpg_ShowBackground
+			\bool_set_false:N \__rpg_ShowFooterScroll
+		},
+	bg .initial:n = full,
 
-    % Justified text
-    justified .code:n =
-      {
-        \bool_set_true:N \l__rpg_justified_bool
-      },
-    justified .value_forbidden:n = true,
+	% Justified text
+	justified .code:n =
+		{
+			\bool_set_true:N \__rpg_IsJustified
+		},
+	justified .value_forbidden:n = true,
 
-    % Avoid multi-column toc
-    nomultitoc .code:n =
-      {
-        \bool_set_false:N \l__rpg_multitoc_bool
-      },
-    nomultitoc .value_forbidden:n = true,
+	% Disable multi-column toc
+	nomultitoc .code:n =
+		{
+			\bool_set_false:N \__rpg_HasMulticolToc
+		},
+	nomultitoc .value_forbidden:n = true,
 
-    % Theme selection key
-    theme .code:n =
-      {
-        \tl_set:Nn \l__rpg_theme_tl { #1 }
-      },
-    theme .initial:n = default, % Default to D&D theme
+	% Theme selection
+	theme .code:n =
+		{
+			\tl_set:Nn \__rpg_Theme { #1 }
+		},
+	theme .initial:n = default,
+	theme .value_required = true,
 
-
-	%% Standard document options (used for classes without pass-through)
+	% Theme Path modification
+	themepath .code:n 	={
+			\tl_set:Nn \__rpg_ThemePath{ #1 }
+			\bool_set_true:N \__rpg_ThemePathModified
+		},
+	themepath .value_required:n = true,
 
 	% Font size
 	size .code:n = {
-        \tl_set:Nn \l__rpg_font_size_tl { #1 }
-    },
-    size .default:n = { 10pt },
+			\tl_set:Nn \__rpg_FontSize { #1 }
+		},
+	size .default:n = { 10pt },
+	size .value_required=true,
 
 	% Columns
 	columns .choice:,
-	columns / 1 .code:n = { \tl_set:Ne \l__rpg_cols_tl { \l__rpg_onecol_override } },
-	columns / 2 .code:n = { \tl_set:Ne \l__rpg_cols_tl { \l__rpg_twocol_override} },
+	columns / 1 .code:n = {
+			\tl_set:Ne \__rpg_PageColumns { onecolumn }
+		},
+	columns / 1 .code:n = {
+			\tl_set:Ne \__rpg_PageColumns { twocolumn }
+		},
 	columns .initial:n = 2,
-	% cols .initial:n = {onecolumn}
 
 	%Use openany
-    openright .code:n =
-      {
-        \bool_set_true:N \l__rpg_openright_bool
-      },
-    openright .value_forbidden:n = false,
+	openright .code:n =
+		{
+			\bool_set_true:N \__rpg_OpenRight
+		},
+	openright .value_forbidden:n = false,
 
-	%set oneside forcibly
-	oneside .code:n = {\bool_set_true:N \l__rpg_oneside_bool},
+	%Set one-sided
+	oneside .code:n = {
+			\bool_set_true:N \__rpg_OneSide
+		},
 	oneside .value_forbidden:n = true,
 
-	themepath .code:n 	={\RpgSetThemeP4ath{#1}},
-	themepath .value_required:n = true,
-  }
+}
 
-
-
-%%now check the command line options
-
+% Set the values provided in the file
 \ProcessKeysOptions { rpg / options }
 
-%then override with command line
-\providecommand{\RpgCMD}{}
-\keys_set:nV {rpg/options}{\RpgCMD}
+%then override with command line if present
+\ifcsname\RpgCMD\endcsname
+	\keys_set:nV {rpg/options}{\RpgCMD}
+\fi
 
 
 
@@ -126,7 +134,7 @@
 {
 
 	\PassOptionsToClass{ \tl_use:N \l__rpg_font_size_tl }{\g__rpg_base_class_tl }
-    \PassOptionsToClass{ \tl_use:N \l__rpg_cols_tl }{ \g__rpg_base_class_tl }
+	\PassOptionsToClass{ \tl_use:N \l__rpg_cols_tl }{ \g__rpg_base_class_tl }
 
 	\bool_if:NTF \l__rpg_openright_bool
 	{

@@ -2,7 +2,7 @@
 %% This allows it to be used flexibly
 
 \RequirePackage{expl3}
-\ProvidesExplPackage{rpg}{2025/10/09} {0.0.0} { Template for RPG material }
+\ProvidesExplPackage{rpg}{2026/09/15} {0.0.0} { Template for RPG material }
 
 
 \ExplSyntaxOn
@@ -13,22 +13,22 @@
 
 %Am I loaded by a class?
 \cs_if_exist:NTF \c__rpg_isclass_bool
-    {
-    % The variable already (loaded from a class, or a user being annoying)
-    }
-    {
-    % Doesn't exist -- loaded by a barebones class, or as a standalone package
-    \bool_new:N \c__rpg_isclass_bool
-    \bool_set_false:N \c__rpg_isclass_bool
+{
+	% The variable already (loaded from a class, or a user being annoying)
+}
+{
+	% Doesn't exist -- loaded by a barebones class, or as a standalone package
+	\bool_new:N \c__rpg_isclass_bool
+	\bool_set_false:N \c__rpg_isclass_bool
 
 	\input {core/rpgoptions.clo}
-    }
+}
 
 
 \tl_if_exist:NF \g__rpg_base_class_tl
 {
-    % 1. Create the variable (necessary before setting it)
-    \tl_new:N \g__rpg_base_class_tl
+	% 1. Create the variable (necessary before setting it)
+	\tl_new:N \g__rpg_base_class_tl
 }
 
 %%Load the core definitions (which may reference the theme definitions)
