@@ -8,6 +8,7 @@ It is helpful to enforce some consistent styling rules to be used throughout thi
 
 * All global-scope user-facing code begins with the prefix `\Rpg`
 * Exceptions are allowed for locally redefined functions (the `\area` function/environment for RpgMaps, for example)
+* All functions used to modify the theme (i.e. those called by designers, not by users) begin with the prefix `RpgTheme`
 
 ### Internal Code
 

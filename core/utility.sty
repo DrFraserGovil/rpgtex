@@ -1,32 +1,9 @@
 \ExplSyntaxOn
 
-\input{core/lowlevel/regex}
 \input{core/lowlevel/ordinal.tex}
 \input{core/lowlevel/misc}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Dice macro
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\cs_new:Nn \__rpg_dice_formatter:nnn{#1d#2#3}
-
-\DeclareDocumentCommand{ \RpgDiceFormat} {m}
-{
-	%Arguments: #1: Dice Number, #2: Dice Sides, #3: Modifier
-
-	\cs_set:Nn  \__rpg_dice_formatter:nnn{#1}
-}
-
-\DeclareDocumentCommand { \RpgDice } { m }
-{
-	%%Parses input of the form { #d# | d# | #d# ± # | d# ± #}
-	%%Final argument (the ± term) can be arbitrary arithmetic statements
-	%%Passes the output to RpgDiceFormat
-	
-	\__rpg_dice_parse:n {#1}
-	
-	%%Parsing function defined in lowlevel/regex
-}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Text Formatting
@@ -61,8 +38,8 @@
 % internal functions defined in lowlevel/ordinal.tex
 \NewExpandableDocumentCommand{\RpgOrdinal}{o m}
 {
-    % Output the number first
-    \int_to_arabic:n { #2 }
+	% Output the number first
+	\int_to_arabic:n { #2 }
 	%then the calculated suffix
 	\IfNoValueTF{#1}
 	{
@@ -80,17 +57,17 @@
 
 \NewDocumentCommand{\RpgPage}{O{t} m}
 {
-    % O{t}: Optional argument #1 (default is 't' for standard 'text' style)
-    % m: Mandatory argument #2 (the label)
+	% O{t}: Optional argument #1 (default is 't' for standard 'text' style)
+	% m: Mandatory argument #2 (the label)
 
-    \def\temp@content{page~\pageref{#2}}
+	\def\temp@content{page~\pageref{#2}}
 
 	\str_case:nnF {#1}
 	{
 		{p}{(\temp@content)}
-		{b}{[\temp@content]}
-		{c}{\{\temp@content\}}
-		{t}{\temp@content}
+			{b}{[\temp@content]}
+			{c}{\{\temp@content\}}
+			{t}{\temp@content}
 	}
 	{
 		?\temp@content?

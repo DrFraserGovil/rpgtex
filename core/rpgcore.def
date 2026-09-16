@@ -74,6 +74,7 @@
 % \input{core/lowlevel/internal_utility} %% provides some general expl3 macros we use in multiple places
 \RequirePackage {core/modules/themes}
 \RequirePackage {core/modules/colors}
+\RequirePackage {core/modules/dice}
 %
 % \RequirePackage {core/utility}   % utility functions
 % \RequirePackage {core/fonts}	    % font definitions
