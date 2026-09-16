@@ -1,4 +1,4 @@
-% \ExplSyntaxOn
+\ExplSyntaxOff
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Package Dependencies
@@ -26,7 +26,6 @@
 \RequirePackage {xparse} % \NewDocumentCommand and expl3
 \RequirePackage[hidelinks] {hyperref}
 
-\ExplSyntaxOff
 \usetikzlibrary{calc}
 \ExplSyntaxOn
 
@@ -36,14 +35,19 @@
   }
 
 
+\NewDocumentCommand \RpgLayoutOnly { +m }
+{
+	\bool_if:NT \__rpg_IsClass
+	  {
+			#1
+	  }
+}
 %% force layout changes -- but only if layout option triggered by class
-\bool_if:NT \l__rpg_layout_bool
-  {
-    \RequirePackage {geometry}
+\RpgLayoutOnly{
     \RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
     \RequirePackage {ragged2e}
 
-    \bool_if:NT \l__rpg_multitoc_bool
+    \bool_if:NT \__rpg_HasMulticolToc
       { \RequirePackage [toc] {multitoc} }
 
    
@@ -56,7 +60,7 @@
     \hbadness         = 10000
 
     % Set left justification if not justified
-    \bool_if:NF \l__rpg_justified_bool
+	\bool_if:NF \__rpg_IsJustified
       { \RaggedRight }
 
     % Customize itemize environment.
@@ -67,24 +71,25 @@
 % % % Load other modules of this package after all dependencies to avoid load order
 % % % conflicts (e.g., package options).
 % % % Low-level modules first.
-\input{core/lowlevel/internal_utility} %% provides some general expl3 macros we use in multiple places
-
-\RequirePackage {core/utility}   % utility functions
-\RequirePackage {core/colors}	% color definitions
-\RequirePackage {core/fonts}	    % font definitions
-\RequirePackage {core/environments/switchenv}
-
-% % % Main modules in alphabetical order
-\RequirePackage {core/environments/card}
-\RequirePackage {core/environments/colorboxes}    % inline tip, narration and sidebar boxes
-\RequirePackage {core/environments/featureforge}
-\RequirePackage {core/environments/map}   % section styling and special section headers
-\RequirePackage {core/environments/secret}
-\RequirePackage {core/environments/table}      % tables
+% \input{core/lowlevel/internal_utility} %% provides some general expl3 macros we use in multiple places
+  \RequirePackage{core/theme_engine}
 %
- % %% packages which do nothing but alter geometry/page settings, and so are ignored if the header layout setting is not active
-\RpgLayoutOnly{
-	\RequirePackage {core/titles}
-	\RequirePackage {core/headerdecorations}     % fancy headers and footers
-	\RequirePackage {core/sections}   % section styling and special section headers
-}
+% \RequirePackage {core/utility}   % utility functions
+% \RequirePackage {core/colors}	% color definitions
+% \RequirePackage {core/fonts}	    % font definitions
+% \RequirePackage {core/environments/switchenv}
+%
+% % % % Main modules in alphabetical order
+% \RequirePackage {core/environments/card}
+% \RequirePackage {core/environments/colorboxes}    % inline tip, narration and sidebar boxes
+% \RequirePackage {core/environments/featureforge}
+% \RequirePackage {core/environments/map}   % section styling and special section headers
+% \RequirePackage {core/environments/secret}
+% \RequirePackage {core/environments/table}      % tables
+% %
+%  % %% packages which do nothing but alter geometry/page settings, and so are ignored if the header layout setting is not active
+% \RpgLayoutOnly{
+% 	\RequirePackage {core/titles}
+% 	\RequirePackage {core/headerdecorations}     % fancy headers and footers
+% 	\RequirePackage {core/sections}   % section styling and special section headers
+% }

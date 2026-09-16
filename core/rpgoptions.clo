@@ -18,20 +18,16 @@
 \tl_new:N		\__rpg_FontSize
 \tl_new:N		\__rpg_PageColumns
 
-\bool_set_false:N \__rpg_OneSide
-\bool_set_false:N \__rpg_OpenRight
-\bool_set_true:N \__rpg_HasMulticolToc
 
 %% Theme Values
 \tl_new:N		\__rpg_Theme
 \tl_new:N		\__rpg_ThemePath
-\bool_new:N		\__rpg_ThemePathModified
-\bool_set_false:N \__rpg_ThemePathModified
 
-\bool_new:N \l__rpg_layout_bool
-\bool_set_eq:NN \l__rpg_layout_bool \c__rpg_isclass_bool
+%% Set the defaults (which aren't set by the keys)
+\bool_set_false:N	\__rpg_OneSide
+\bool_set_false:N	\__rpg_OpenRight
+\bool_set_true:N	\__rpg_HasMulticolToc
 
-\RequirePackage{core/theme_engine} %%need this for theme path switching
 
 
 % Note that there is no 'unknown value' handling -- rpgtex passes *all* keys to the parent class first.
@@ -77,28 +73,25 @@
 			\tl_set:Nn \__rpg_Theme { #1 }
 		},
 	theme .initial:n = default,
-	theme .value_required = true,
 
 	% Theme Path modification
 	themepath .code:n 	={
 			\tl_set:Nn \__rpg_ThemePath{ #1 }
-			\bool_set_true:N \__rpg_ThemePathModified
 		},
-	themepath .value_required:n = true,
+	themepath .initial:n = themes,
 
 	% Font size
 	size .code:n = {
 			\tl_set:Nn \__rpg_FontSize { #1 }
 		},
 	size .default:n = { 10pt },
-	size .value_required=true,
 
 	% Columns
 	columns .choice:,
 	columns / 1 .code:n = {
 			\tl_set:Ne \__rpg_PageColumns { onecolumn }
 		},
-	columns / 1 .code:n = {
+	columns / 2 .code:n = {
 			\tl_set:Ne \__rpg_PageColumns { twocolumn }
 		},
 	columns .initial:n = 2,
@@ -122,30 +115,31 @@
 \ProcessKeysOptions { rpg / options }
 
 %then override with command line if present
-\ifcsname\RpgCMD\endcsname
-	\keys_set:nV {rpg/options}{\RpgCMD}
+\ifcsname{RpgCMD}\endcsname
+\keys_set:nV {rpg/options}{\RpgCMD}
 \fi
 
 
 
 
 %then insert the saved arguments into the parent class
-\bool_if:NT \c__rpg_isclass_bool
+\bool_if:NT \__rpg_IsClass
 {
 
-	\PassOptionsToClass{ \tl_use:N \l__rpg_font_size_tl }{\g__rpg_base_class_tl }
-	\PassOptionsToClass{ \tl_use:N \l__rpg_cols_tl }{ \g__rpg_base_class_tl }
+	\PassOptionsToClass{\__rpg_FontSize}{\__rpg_BaseClass}
+	\PassOptionsToClass{\__rpg_PageColumns}{\__rpg_BaseClass}
 
-	\bool_if:NTF \l__rpg_openright_bool
+	\bool_if:NTF \__rpg_OpenRight
 	{
-		\PassOptionsToClass{ openright }{\g__rpg_base_class_tl }
+		\PassOptionsToClass{ openright }{\__rpg_BaseClass }
 	}
 	{
-		\PassOptionsToClass{ openany }{\g__rpg_base_class_tl }
+		\PassOptionsToClass{ openany }{\__rpg_BaseClass }
 	}
-	\bool_if:NT \l__rpg_oneside_bool
+
+	\bool_if:NT \__rpg_OneSide
 	{
-		\PassOptionsToClass{ oneside }{\g__rpg_base_class_tl }
+		\PassOptionsToClass{ oneside }{\__rpg_BaseClass }
 	}
 }
 
