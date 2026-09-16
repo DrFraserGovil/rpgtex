@@ -1,0 +1,28 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Colo(u)rs of the standard elements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Individual colours can be modified by the usual \colorlet syntax
+%% We also provide a basic interface to bulk-change the 'coupled colours'
+
+\colorlet {ThemeColor}	{white!60!black}	% A general colour which many elements inherit from.
+\colorlet {TipColor}	{themecolor}		% Tip background
+\colorlet {SidebarColor}{themecolor}		% Sidebar background
+\colorlet {TableColor}  {themecolor}		% Table even row background
+
+% Assign a new value to all the co-varying elements
+%%If you don't want to co-vary all elements at once, manually use colorlet on the elements to change color
+\NewDocumentCommand {\RpgSetThemeColor} { m }
+{
+	\colorlet {ThemeColor}  {#1}
+	\colorlet {TipColor}	{#1}
+	\colorlet {SidebarColor}{#1}
+	\colorlet {TableColor}  {#1}
+}
+
+
+\definecolor{FiligreeBackColor}	{rgb}	{1,1,1}	 % Background colour of a filigree box
+\definecolor{FiligreeColor}		{rgb}	{0,0,0}	 % Colour used to draw the filigree
+\definecolor{NarrationColor}	{HTML}	{F7F2E5} % Narration background
+\colorlet	{ContourOuterColor} {white!50!black} % Colour of the outer layer of a contoured text
+\colorlet	{ContourInnerColor} {black}			 % Colour of the inner core of a contoured text

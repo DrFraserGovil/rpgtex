@@ -1,18 +1,11 @@
+%%%%%% Theme switching
 \ExplSyntaxOn
 
-%%%%%% Theme switching
 
-\msg_new:nnn { rpg } { theme_missing } {Could~not~locate~theme~#1~directly,~and~is~not~on~theme~path(#2)}
-
+%% The function used to switch themes. Immediately loads in the new overloads, overloading any previous definitions
+%% I
 \NewDocumentCommand\RpgSetTheme { m }
 {
-	\RpgLayoutOnly
-	{
-		\str_if_eq:eeF{\__rpg_BaseClass}{standalone}
-		{
-			\clearpage
-		}
-	}
 
 	%%%first try looking in the package themes
 	\def\temp@themePath{\__rpg_ThemePath/#1/#1.cfg}
@@ -27,6 +20,7 @@
 			\input{#1}
 		}
 		{
+			\msg_new:nnn { rpg } { theme_missing } {Could~not~locate~theme~##1~directly,~and~is~not~on~theme~path(##2)}
 			\msg_error:nnxx { rpg } { theme_missing } { #1 } { \temp@themePath }
 		}
 	}
@@ -35,5 +29,5 @@
 
 \NewDocumentCommand\RpgSetThemePath { m }
 {
-	\tl_set:Nn \l__rpg_ThemePath {#1}
+	\tl_set:Nn \__rpg_ThemePath {#1}
 }

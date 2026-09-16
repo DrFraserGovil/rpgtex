@@ -30,52 +30,52 @@
 \ExplSyntaxOn
 
 \sys_if_engine_luatex:T
-  {
-    \RequirePackage {luacolor}
-  }
+{
+	\RequirePackage {luacolor}
+}
 
 
 \NewDocumentCommand \RpgLayoutOnly { +m }
 {
 	\bool_if:NT \__rpg_IsClass
-	  {
-			#1
-	  }
+	{
+		#1
+	}
 }
 %% force layout changes -- but only if layout option triggered by class
 \RpgLayoutOnly{
-    \RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
-    \RequirePackage {ragged2e}
+	\RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
+	\RequirePackage {ragged2e}
 
-    \bool_if:NT \__rpg_HasMulticolToc
-      { \RequirePackage [toc] {multitoc} }
+	\bool_if:NT \__rpg_HasMulticolToc
+	{ \RequirePackage [toc] {multitoc} }
 
-   
-    
 
-    % Restrict hyphenation
-    \tolerance        = 1
-    \emergencystretch = \maxdimen
-    \hyphenpenalty    = 10000
-    \hbadness         = 10000
 
-    % Set left justification if not justified
+
+	% Restrict hyphenation
+	\tolerance        = 1
+	\emergencystretch = \maxdimen
+	\hyphenpenalty    = 10000
+	\hbadness         = 10000
+
+	% Set left justification if not justified
 	\bool_if:NF \__rpg_IsJustified
-      { \RaggedRight }
+	{ \RaggedRight }
 
-    % Customize itemize environment.
-    \setlist{leftmargin=1em}
-    \setitemize{noitemsep,topsep=0.5ex,label=\footnotesize{\textbullet}}
-  }
+	% Customize itemize environment.
+	\setlist{leftmargin=1em}
+	\setitemize{noitemsep,topsep=0.5ex,label=\footnotesize{\textbullet}}
+}
 
 % % % Load other modules of this package after all dependencies to avoid load order
 % % % conflicts (e.g., package options).
 % % % Low-level modules first.
 % \input{core/lowlevel/internal_utility} %% provides some general expl3 macros we use in multiple places
-  \RequirePackage{core/theme_engine}
+\RequirePackage {core/modules/themes}
+\RequirePackage {core/modules/colors}
 %
 % \RequirePackage {core/utility}   % utility functions
-% \RequirePackage {core/colors}	% color definitions
 % \RequirePackage {core/fonts}	    % font definitions
 % \RequirePackage {core/environments/switchenv}
 %

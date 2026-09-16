@@ -20,7 +20,7 @@
 	\bool_new:N \__rpg_IsClass
 	\bool_set_false:N \__rpg_IsClass
 
-	\tl_new:N \__rpg_BaseClass % TODO: Is this still needed?
+	% \tl_new:N \__rpg_BaseClass % TODO: Is this still needed?
 
 	\input {core/rpgoptions.clo}
 }
@@ -29,7 +29,6 @@
 % %%Load the core definitions (which may reference the theme definitions)
 \input {core/rpgcore.def}
 
-\RpgSetThemePath{\__rpg_ThemePath}
-\RpgSetTheme{\__rpg_Theme}
+% \RpgSetTheme{\__rpg_Theme} % TODO: Re-enable this
 
 \ExplSyntaxOff
