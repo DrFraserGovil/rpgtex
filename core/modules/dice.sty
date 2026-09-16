@@ -16,7 +16,7 @@
 
 %% Set the function used for formatting RpgDice
 %% Arguments: #1: Dice Number, #2: Dice Sides, #3: Modifier
-\DeclareDocumentCommand{ \RpgThemeDiceFormat} {m}
+\DeclareDocumentCommand{ \RpgThemeDiceFormat} {m} % BUG: This name has changed from the previous iteration: themes will set the wrong value
 {
 	\cs_set:Nn  \__rpg_DiceFormatter:nnn{#1}
 }

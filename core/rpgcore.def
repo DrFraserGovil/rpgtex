@@ -75,8 +75,9 @@
 \RequirePackage {core/modules/themes}
 \RequirePackage {core/modules/colors}
 \RequirePackage {core/modules/dice}
+\RequirePackage {core/modules/lengths}
+\RequirePackage {core/modules/textFormat}
 %
-% \RequirePackage {core/utility}   % utility functions
 % \RequirePackage {core/fonts}	    % font definitions
 % \RequirePackage {core/environments/switchenv}
 %

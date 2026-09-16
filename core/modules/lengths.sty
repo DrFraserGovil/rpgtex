@@ -1,0 +1,11 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Dimensions and lengths
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn{}
+
+% Gets the width of a space
+\box_new:N		\l__rpg_space_box
+\dim_new:N		\l__rpg_space_dim
+\hbox_set:Nn	\l__rpg_space_box {~}
+\dim_set:Nn		\l__rpg_space_dim { \box_wd:N \l__rpg_space_box }
+
