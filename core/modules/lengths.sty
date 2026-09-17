@@ -4,8 +4,8 @@
 \ExplSyntaxOn{}
 
 % Gets the width of a space
-\box_new:N		\l__rpg_space_box
-\dim_new:N		\l__rpg_space_dim
-\hbox_set:Nn	\l__rpg_space_box {~}
-\dim_set:Nn		\l__rpg_space_dim { \box_wd:N \l__rpg_space_box }
+\box_new:N		\__rpg_spaceBox
+\dim_new:N		\__rpg_SpaceDim
+\hbox_set:Nn	\__rpg_spaceBox {~}
+\dim_set:Nn		\__rpg_SpaceDim { \box_wd:N \__rpg_spaceBox }
 

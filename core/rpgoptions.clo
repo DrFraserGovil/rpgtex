@@ -17,7 +17,7 @@
 \bool_new:N		\__rpg_OpenRight
 \tl_new:N		\__rpg_FontSize
 \tl_new:N		\__rpg_PageColumns
-
+\bool_new:N		\__rpg_OverrideEmph
 
 %% Theme Values
 \tl_new:N		\__rpg_Theme
@@ -27,6 +27,7 @@
 \bool_set_false:N	\__rpg_OneSide
 \bool_set_false:N	\__rpg_OpenRight
 \bool_set_true:N	\__rpg_HasMulticolToc
+\bool_set_true:N	\__rpg_OverrideEmph
 
 
 
@@ -109,6 +110,11 @@
 		},
 	oneside .value_forbidden:n = true,
 
+	%% Override the \emph command
+	noemph .code:n = {
+			\bool_set_false:N \__rpg_OverrideEmph
+		},
+	noemph .value_forbidden:n = true,
 }
 
 % Set the values provided in the file
