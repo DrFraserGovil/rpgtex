@@ -1,0 +1,51 @@
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % RpgContour 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+\NewDocumentCommand{\RpgContour}{O{} m}
+{
+	\group_begin:
+	\keys_set:nn {rpg/contour}{#1}
+
+	\exp_args:Nf \__rpg_contour_split_lines:n {#2}
+
+	\group_end:
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Internal functions for contour
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%define the key/values used within the contour command
+\keys_define:nn {rpg/contour}
+{
+	inner .tl_set:N = \__rpg_contourInnerColor,
+	inner .initial:n = {ContourInnerColor},
+	inner .value_required:n = true,
+
+	outer .tl_set:N = \__rpg_contourOuterColor,
+	outer .initial:n = {ContourOuterColor},
+	outer .value_required:n = true,
+
+	style .tl_set:N = \__rpg_contourStyle,
+	style .initial:n = {},
+	style .value_required:n = true,
+}
+
+%%splits the command up by word, and contours each word individually
+\cs_new_protected:Npn \__rpg_contour_preserve_space:n #1
+{
+	\group_begin:
+	\seq_set_split:Nnn \l_tmpa_seq { ~ } { #1 }
+	\seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n {\__rpg_contourStyle\contour{\__rpg_contourOuterColor}{\color{\__rpg_contourInnerColor}##1}} }
+	\seq_use:Nn \l_tmpb_seq { ~ }
+	\group_end:
+}
+
+%%splits the command up at \newline, and then contours each line individually
+\cs_new_protected:Npn \__rpg_contour_split_lines:n #1
+{
+	\seq_set_split:Nnn \l_tmpa_seq { \newline } { #1 }
+	\seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n {\__rpg_contour_preserve_space:n{##1}} }
+	\seq_use:Nn \l_tmpb_seq { \newline }
+}

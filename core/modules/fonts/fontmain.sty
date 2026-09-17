@@ -1,0 +1,25 @@
+
+\RequirePackage{fontspec} %%for xelatex fontss
+\RequirePackage[T1]{fontenc}
+\RequirePackage{lettrine} %%fancy drop cap
+\RequirePackage{Royal} %%Used for fancy drop caps
+\RequirePackage{contour} %%for outlining text
+\RequirePackage{relsize} %%used for bigger/smaller
+\RequirePackage{magaz} %% used for dropcap
+
+\ExplSyntaxOn
+
+% Spit out a warning if wrong compiler used
+\sys_if_engine_pdftex:T
+{
+	\msg_new:nnn { rpg } { wrong-compiler }{#1}
+	\msg_error:nnx { rpg } { wrong-compiler }
+	{
+		rpgtex~requires~compilation~with~xelatex~or~luatex
+	}
+}
+
+\RequirePackage{modules/fonts/defineFonts}
+\RequirePackage{modules/fonts/commands}
+\RequirePackage{modules/fonts/dropcap}
+\RequirePackage{modules/fonts/contour}

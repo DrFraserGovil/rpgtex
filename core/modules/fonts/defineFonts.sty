@@ -1,0 +1,103 @@
+\ExplSyntaxOn
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Automatic font generation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%This function allows a user to enter a font specification into the registry with a single line of code
+%%It can then be modified with RpgSetFont and accessed using the assigned name
+%%Note that we explicitly do not provide any default values: that's a job for the theme.
+
+\NewDocumentCommand{\RpgThemeCreateFont}{m m}
+{
+	%%Add entries into the registry
+	%%Dynamically creates cs-sequences
+	\exp_args:Ne\keys_define:nn{rpg/fonts}
+	{
+		#2-family .tl_set:c = ___rpg_font_#2_family,
+		#2-family .value_required:n = true,
+		#2-family .initial:n = {},
+		#2-style .tl_set:c = __rpg_font_#2_style,
+		#2-style .value_required:n = true,
+		#2-style .initial:n = {},
+	}
+
+	%%Create the font-access command from the provided name
+	\NewDocumentCommand{#1}{}{
+		\use:c {__rpg_font_#2_family} \use:c{__rpg_font_#2_style}
+	}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%Available font elements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%
+%%Main body
+%%%%%%%%%%%%
+\RpgThemeCreateFont{\RpgFontBody}{main-body}
+\RpgThemeCreateFont{\RpgFontEmphasis}{emph}
+
+%%%%%%%%%%%%
+%%Sections
+%%%%%%%%%%%%
+\RpgThemeCreateFont{\RpgFontTitle}{title}
+\RpgThemeCreateFont{\RpgFontSubTitle}{subtitle}
+\RpgThemeCreateFont{\RpgFontPart}{part}
+\RpgThemeCreateFont{\RpgFontChapter}{chapter}
+\RpgThemeCreateFont{\RpgFontSection}{section}
+\RpgThemeCreateFont{\RpgFontSubsection}{subsection}
+\RpgThemeCreateFont{\RpgFontSubsubsection}{subsubsection}
+\RpgThemeCreateFont{\RpgFontParagraph}{paragraph}
+\RpgThemeCreateFont{\RpgFontSubparagraph}{subparagraph}
+
+%%%%%%%%%%%%
+%%Environments
+%%%%%%%%%%%%
+\RpgThemeCreateFont{\RpgFontTableTitle}{table-title}
+\RpgThemeCreateFont{\RpgFontTableHeader}{table-header}
+\RpgThemeCreateFont{\RpgFontTableBody}{table-body}
+\RpgThemeCreateFont{\RpgFontTipTitle}{tip-title}
+\RpgThemeCreateFont{\RpgFontTipBody}{tip-body}
+\RpgThemeCreateFont{\RpgFontSidebarTitle}{sidebar-title}
+\RpgThemeCreateFont{\RpgFontSidebarBody}{sidebar-body}
+\RpgThemeCreateFont{\RpgFontNarration}{narration}
+\RpgThemeCreateFont{\RpgFontAbstractTitle}{abstract-title}
+\RpgThemeCreateFont{\RpgFontAbstractBody}{abstract-body}
+\RpgThemeCreateFont{\RpgFontSecretTitle}{secret-title}
+
+%%%%%%%%%%%%
+%%Cards
+%%%%%%%%%%%%
+\RpgThemeCreateFont{\RpgFontCardTitle}{card-title}
+\RpgThemeCreateFont{\RpgFontCardHeader}{card-header}
+\RpgThemeCreateFont{\RpgFontCardBody}{card-body}
+
+%%%%%%%%%%%%
+%%TOC
+%%%%%%%%%%%%
+\RpgThemeCreateFont{\RpgFontTocPart}{toc-part}
+\RpgThemeCreateFont{\RpgFontTocChapter}{toc-chapter}
+\RpgThemeCreateFont{\RpgFontTocSection}{toc-section}
+
+%%%%%%%%%%%%
+%%Statblocks
+%%%%%%%%%%%%
+\RpgThemeCreateFont{\RpgFontStatBlockTitle}{stat-block-title}
+\RpgThemeCreateFont{\RpgFontStatBlockBody}{stat-block-body}
+\RpgThemeCreateFont{\RpgFontStatBlockSection}{stat-block-section}
+
+%%%%%%%%%%%%
+%%Decoration
+%%%%%%%%%%%%
+\RpgThemeCreateFont{\RpgFontFooter}{footer}
+\RpgThemeCreateFont{\RpgFontPageNumber}{page-number}
+\RpgThemeCreateFont{\RpgFontDropCap}{drop-cap}
+\RpgThemeCreateFont{\RpgFontDropCapAfter}{drop-cap-after}
+
+
+
+
+%ensure the assigned normalfont is loaded when document begins
+\AtBeginDocument{
+	\normalfont
+}

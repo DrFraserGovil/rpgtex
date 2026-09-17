@@ -1,0 +1,41 @@
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% % RpgDropCap
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+\renewcommand{\LettrineFontHook} { \RpgFontDropCap} %feed the desired font into the lettrine pipeline
+\renewcommand{\LettrineTextFont}{\RpgFontDropCapAfter}
+
+% Usage: rpgDropCapLine[<lettrine options>]{<first letter>}{<small caps line>}
+%    It takes trial and error to get the 2nd argument to align with
+%    the linebreak. See the lettrine package for options.
+\NewDocumentCommand{\RpgDropCap}{ O{} m m }
+{
+	\lettrine[
+		lines   = \__rpg_DropCapHeight,
+		depth   = 0,
+		findent = \RpgDropCapSeparation,
+		nindent = 0pt,
+		#1
+	]
+	{#2}{#3}
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Global lettring parameters
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% horizontal length after lettrine (modify with \setlength) 
+\newlength\RpgDropCapSeparation
+\setlength{\RpgDropCapSeparation}{\dim_use:N \__rpg_SpaceDim}
+
+% integer count of lines taken up by drop cap
+\int_new:N \__rpg_DropCapHeight
+
+%% user interface for setting the line count
+\NewDocumentCommand{\RpgThemeDropCapHeight}{ m }
+{
+	\int_set:Nn\__rpg_DropCapHeight{#1}
+}
+\RpgThemeDropCapHeight{4}

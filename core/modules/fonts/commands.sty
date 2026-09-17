@@ -1,0 +1,35 @@
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %Set font values
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+\NewDocumentCommand { \RpgThemeFont } { m }
+{
+	\keys_set:nn { rpg / fonts } { #1 }
+
+	%% Call some global overrides to ensure everything remains in-sync
+	\renewcommand\normalfont\RpgFontBody
+	\renewcommand{\FirstLineFont}{\RpgFontDropCapFirstLine}
+	\normalfont
+}
+
+%ensure the assigned normalfont is loaded when document begins
+\AtBeginDocument{
+	\normalfont
+}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %Keywords & Emphasis
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NewDocumentCommand{\RpgKey}{m}
+{
+	{\RpgFontEmphasis #1}
+}
+
+\bool_if:NT \__rpg_OverrideEmph
+{
+	\RenewDocumentCommand{\emph}{m}
+	{
+		\RpgKey{#1}
+	}
+}
