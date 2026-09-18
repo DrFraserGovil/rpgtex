@@ -17,20 +17,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%define the key/values used within the contour command
-\keys_define:nn {rpg/contour}
-{
-	inner .tl_set:N = \__rpg_contourInnerColor,
-	inner .initial:n = {ContourInnerColor},
-	inner .value_required:n = true,
 
-	outer .tl_set:N = \__rpg_contourOuterColor,
-	outer .initial:n = {ContourOuterColor},
-	outer .value_required:n = true,
-
-	style .tl_set:N = \__rpg_contourStyle,
-	style .initial:n = {},
-	style .value_required:n = true,
-}
+\RpgThemeNewTLKey{rpg/contour}	{inner}	{\__rpg_contourInnerColor}	{ContourInnerColor}
+\RpgThemeNewTLKey{rpg/contour}	{outer}	{\__rpg_contourOuterColor}	{ContourOuterColor}
+\RpgThemeNewTLKey{rpg/contour}	{style}	{\__rpg_contourStyle}		{}
 
 %%splits the command up by word, and contours each word individually
 \cs_new_protected:Npn \__rpg_contour_preserve_space:n #1

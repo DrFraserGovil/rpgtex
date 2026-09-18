@@ -1,4 +1,3 @@
-
 \RequirePackage{fontspec} %%for xelatex fontss
 \RequirePackage[T1]{fontenc}
 \RequirePackage{lettrine} %%fancy drop cap
@@ -19,7 +18,11 @@
 	}
 }
 
-\RequirePackage{modules/fonts/defineFonts}
-\RequirePackage{modules/fonts/commands}
-\RequirePackage{modules/fonts/dropcap}
-\RequirePackage{modules/fonts/contour}
+\input{core/modules/fonts/define_fonts.rpg-code.tex}
+\input{core/modules/fonts/commands.rpg-code.tex}
+\input{core/modules/fonts/dropcap.rpg-code.tex}
+\input{core/modules/fonts/contour.rpg-code.tex}
+%ensure the assigned normalfont is loaded when document begins
+\AtBeginDocument{
+	\normalfont
+}

@@ -7,26 +7,26 @@
 % Helps prevent option clash with other packages that include xcolor
 \PassOptionsToPackage {table} {xcolor}
 
-\RequirePackage {array}
-\RequirePackage {colortbl}
+% \RequirePackage {array}
+% \RequirePackage {colortbl}
 \RequirePackage {enumitem}
-\RequirePackage {etoolbox}
-\RequirePackage {hang} % hanging paragraphs
-\RequirePackage {tabularx} % variable-width table columns
-\RequirePackage {xltabular} % breakable tables
-\RequirePackage [breakable,skins,xparse]{tcolorbox} % styled text boxes
-\RequirePackage {tikz} % drawing ornaments and lines
+% \RequirePackage {etoolbox}
+% \RequirePackage {hang} % hanging paragraphs
+% \RequirePackage {tabularx} % variable-width table columns
+% \RequirePackage {xltabular} % breakable tables
+% \RequirePackage [breakable,skins,xparse]{tcolorbox} % styled text boxes
+% \RequirePackage {tikz} % drawing ornaments and lines
 \RequirePackage {xcolor}
-\RequirePackage{float}
-\RequirePackage [titles] {tocloft} % multi-column toc
-\RequirePackage [newparttoc] {titlesec}  % Used to adjust (sub)section, part, and table of contents formatting
-\RequirePackage{titletoc}
-\RequirePackage{fancyhdr}
-\RequirePackage{dblfloatfix}
-\RequirePackage {xparse} % \NewDocumentCommand and expl3
-\RequirePackage[hidelinks] {hyperref}
+% \RequirePackage{float}
+% \RequirePackage [titles] {tocloft} % multi-column toc
+% \RequirePackage [newparttoc] {titlesec}  % Used to adjust (sub)section, part, and table of contents formatting
+% \RequirePackage{titletoc}
+% \RequirePackage{fancyhdr}
+% \RequirePackage{dblfloatfix}
+% \RequirePackage {xparse} % \NewDocumentCommand and expl3
+% \RequirePackage[hidelinks] {hyperref}
 
-\usetikzlibrary{calc}
+% \usetikzlibrary{calc}
 \ExplSyntaxOn
 
 \sys_if_engine_luatex:T
@@ -71,13 +71,14 @@
 % % % Load other modules of this package after all dependencies to avoid load order
 % % % conflicts (e.g., package options).
 % % % Low-level modules first.
-% \input{core/lowlevel/internal_utility} %% provides some general expl3 macros we use in multiple places
-\RequirePackage {core/modules/themes}
-\RequirePackage {core/modules/colors}
-\RequirePackage {core/modules/dice}
-\RequirePackage {core/modules/lengths}
-\RequirePackage {core/modules/textFormat}
-\RequirePackage {core/modules/fonts/fontmain}
+
+\input {core/modules/helpers.rpg-code.tex}
+\input {core/modules/themes.rpg-code.tex}
+\input {core/modules/colors.rpg-code.tex}
+\input {core/modules/dice.rpg-code.tex}
+\input {core/modules/lengths.rpg-code.tex}
+\input {core/modules/text_utility.rpg-code.tex}
+\input {core/modules/fonts/fonts.rpg-code.tex}
 %
 % \RequirePackage {core/fonts}	    % font definitions
 % \RequirePackage {core/environments/switchenv}

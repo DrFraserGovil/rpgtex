@@ -90,10 +90,10 @@
 	% Columns
 	columns .choice:,
 	columns / 1 .code:n = {
-			\tl_set:Ne \__rpg_PageColumns { onecolumn }
+			\tl_set:Nx \__rpg_PageColumns { onecolumn }
 		},
 	columns / 2 .code:n = {
-			\tl_set:Ne \__rpg_PageColumns { twocolumn }
+			\tl_set:Nx \__rpg_PageColumns { twocolumn }
 		},
 	columns .initial:n = 2,
 

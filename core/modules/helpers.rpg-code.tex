@@ -1,0 +1,123 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Internal Helper Functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+
+%% Inserts a new boolean key into the chosen keylist
+%% Arguments:	#1: Starred? Unstarred default to false, become true. Starred defaults ot true, becomes false	
+%%				#2: keylist name
+%%				#3 key name
+%%				#4 variable to assign to
+\NewDocumentCommand\RpgThemeNewBoolKey{ s m m m }
+{
+	%% creates the tokenlist (not strictly necessary, but good form)
+	\bool_if_exist:NF{#4}
+	{
+		\bool_new:N #4
+	}
+
+	\IfBooleanTF{#1}
+	{	%% If starred
+		\bool_set_true:N #4
+		\exp_args:Ne\keys_define:nn{#2}{
+			#3 .code:n = {\bool_set_false:N #4},
+			#3 .value_forbidden:n = true
+		}
+	}
+	{
+		\bool_set_false:N #4
+		\exp_args:Ne\keys_define:nn{#2}{
+			#3 .code:n = {\bool_set_true:N #4},
+			#3 .value_forbidden:n = true
+		}
+	}
+}
+
+%% Inserts a new token-list type key into the chosen keylist
+%% A TLKey can take any string-value input
+%% Arguments:	#1: keylist name
+%%				#2 key name
+%%				#3 variable to assign to
+%%				#4 default value
+\NewDocumentCommand\RpgThemeNewTLKey{m m m m}
+{
+	%% creates the tokenlist (not strictly necessary, but good form)
+	\tl_if_exist:NF{#3}
+	{
+		\tl_new:N #3
+	}
+	\exp_args:Ne\keys_define:nn{#1}{
+		#2 .tl_set:N = #3,
+		#2 .initial:n = {#4},
+		#2 .value_required:n = true
+	}
+}
+
+
+%% Inserts a new TL-choice key into the chosen keylist
+%% A TLKey is a string value which must be one of a set of pre-determined choices
+%% Arguments:	#1: keylist name
+%%				#2 key name
+%%				#3 variable to assign to
+%%				#4 a comma-separated list of the available choices
+%%				#5 default value
+\NewDocumentCommand\RpgThemeNewTLChoiceKey{m m m m m}
+{
+	%% creates the tokenlist (not strictly necessary, but good form)
+	\tl_if_exist:NF{#3}
+	{
+		\tl_new:N #3
+	}
+	\exp_args:Ne\keys_define:nn{#1}{
+		#2 .choice:,
+		#2 .choices:nn =
+			{#4}
+			{ \tl_set:Ne #3{\l_keys_choice_tl} },
+		#2 .initial:n = #5
+	}
+}
+
+
+%% Inserts a new TL-choice key into the chosen keylist, but where the output is then mapped to a second list
+%% A TLKey is a string value which must be one of a set of pre-determined choices
+%% Arguments:	#1: keylist name
+%%				#2 key name
+%%				#3 variable to assign to
+%%				#4 a comma-separated list of the available choices
+%%				#5 a comma-separated list of the choices that the output is mapped to, such that #4[i] = #5[i]
+%%				#6 The default choice (from the list #4)
+\NewDocumentCommand\RpgThemeNewTLMapKey{m m m m m m}
+{
+	%% creates the tokenlist (not strictly necessary, but good form)
+	\tl_if_exist:NF{#3}
+	{
+		\tl_new:N #3
+	}
+	\exp_args:Ne\keys_define:nn{#1}{
+		#2 .choice:,
+		#2 .choices:nn =
+			{#4}
+			{
+				\clist_set:Nn \l_tmpa_clist {#5}
+				\tl_set:Ne #3 { \clist_item:Nn \l_tmpa_clist { \int_eval:n {\l_keys_choice_int } } }
+			},
+		#2 .initial:n = #6
+	}
+
+}
+
+\NewDocumentCommand\RpgThemeKeys{mm}
+{
+	\NewDocumentCommand\RpgThemeBoolKey{s m m}
+	{
+		\IfBooleanTF{##1}
+		{
+			\RpgThemeNewBoolKey*{#1}{##2}{##3}
+		}
+		{
+			\RpgThemeNewBoolKey{#1}{##2}{##3}
+		}
+	}
+
+	#2
+}

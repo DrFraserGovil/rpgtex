@@ -4,7 +4,7 @@
 \RequirePackage {expl3}
 \ProvidesExplClass{rpgbook}{2025/10/09} {0.0.0} { Book Template for RPG material }
 
-
+\ExplSyntaxOn
 \bool_new:N \__rpg_IsClass
 \bool_set_true:N \__rpg_IsClass
 \tl_new:N \__rpg_BaseClass
@@ -33,3 +33,4 @@
 \setlength {\parindent}            {1em}
 \setlength {\RaggedRightRightskip} {0pt plus 1em}
 \setlength {\RaggedRightParindent} {\parindent}
+\ExplSyntaxOff
