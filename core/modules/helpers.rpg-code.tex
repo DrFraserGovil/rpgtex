@@ -1,4 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% Internal Helper Functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \ExplSyntaxOn
@@ -105,9 +106,25 @@
 	}
 
 }
+\NewDocumentCommand\RpgThemeNewCodeMapKey{m m m m m}
+{
+	%% creates the tokenlist (not strictly necessary, but good form)
+	\exp_args:Ne\keys_define:nn{#1}{
+		#2 .choice:,
+		#2 .choices:nn =
+			{#3}
+			{
+				\clist_set:Nn \l_tmpa_clist {#4}
+				\clist_item:Nn \l_tmpa_clist { \int_eval:n {\l_keys_choice_int } }
+			},
+		#2 .initial:n = #5
+	}
+
+}
 
 \NewDocumentCommand\RpgThemeKeys{mm}
 {
+	%  Define versions of the New_Keys which insert into the active group
 	\NewDocumentCommand\RpgThemeBoolKey{s m m}
 	{
 		\IfBooleanTF{##1}
@@ -118,6 +135,30 @@
 			\RpgThemeNewBoolKey{#1}{##2}{##3}
 		}
 	}
+	\NewDocumentCommand\RpgThemeTLKey{m m m}
+	{
+		\RpgThemeNewTLKey{#1}{##1}{##2}{##3}
+	}
+	\NewDocumentCommand\RpgThemeTLChoiceKey{m m m m}
+	{
+		\RpgThemeNewTLChoiceKey{#1}{##1}{##2}{##3}{##4}
+	}
+	\NewDocumentCommand\RpgThemeTLMapKey{m m m m m}
+	{
+		\RpgThemeNewTLMapKey{#1}{##1}{##2}{##3}{##4}{##5}
+	}
+	\NewDocumentCommand\RpgThemeCodeMapKey{m m m m}
+	{
+		\RpgThemeNewCodeMapKey{#1}{##1}{##2}{##3}{##4}
+	}
+
 
 	#2
+	%% Then undefine the functions
+	\cs_undefine:N \RpgThemeBoolKey
+	\cs_undefine:N \RpgThemeTLKey
+	\cs_undefine:N \RpgThemeTLChoiceKey
+	\cs_undefine:N \RpgThemeTLMapKey
+	\cs_undefine:N \RpgThemeCodeMapKey
+
 }

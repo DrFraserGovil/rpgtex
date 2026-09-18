@@ -1,0 +1,40 @@
+\ExplSyntaxOn
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Custom papers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{eso-pic}
+\RequirePackage{graphicx}
+
+%% Assign a basic background colour to each subsequent page
+\NewDocumentCommand\RpgThemePaperColor{ m }
+{
+	\bool_if:NT\__rpg_ShowBackground
+	{
+		\colorlet{PaperColor}{#1}
+		\pagecolor{#1}
+	}
+}
+
+%% pagecolor does not keep a 'live track' of the PaperColor, so need to call this in case the user simply does a \colorlet
+\AtBeginDocument{
+	\RpgThemePaperColor{PaperColor}
+}
+
+
+
+\NewDocumentCommand\RpgThemePaperImage{ m }
+{
+	\bool_if:NT\__rpg_ShowBackground
+	{
+		\AddToShipoutPictureBG{\includegraphics[width=\paperwidth,height=\paperheight]{#1}}
+	}
+}
+
+
+
+
+
+
+

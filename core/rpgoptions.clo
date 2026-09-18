@@ -6,115 +6,36 @@
 
 \RequirePackage {l3keys2e} %key/value parsing
 
+%% Define the nice simple key-wrappers
+\input {core/modules/helpers.rpg-code.tex}
 
-
-% These booleans are not set directly by an option (i.e. instead set by .code)
-\bool_new:N		\__rpg_ShowBackground
-\bool_new:N		\__rpg_ShowFooterScroll
-\bool_new:N		\__rpg_IsJustified
-\bool_new:N		\__rpg_HasMulticolToc
-\bool_new:N		\__rpg_OneSide
-\bool_new:N		\__rpg_OpenRight
-\tl_new:N		\__rpg_FontSize
-\tl_new:N		\__rpg_PageColumns
-\bool_new:N		\__rpg_OverrideEmph
-
-%% Theme Values
-\tl_new:N		\__rpg_Theme
-\tl_new:N		\__rpg_ThemePath
-
-%% Set the defaults (which aren't set by the keys)
-\bool_set_false:N	\__rpg_OneSide
-\bool_set_false:N	\__rpg_OpenRight
-\bool_set_true:N	\__rpg_HasMulticolToc
-\bool_set_true:N	\__rpg_OverrideEmph
-
-
-
-% Note that there is no 'unknown value' handling -- rpgtex passes *all* keys to the parent class first.
-% Standard latex classes fail silently if they don't recognise an option, so I reason it's fine for me to do that too.
-\keys_define:nn { rpg / options }
+%% Use the key-wrappers to define the available options
+%% BoolKey: false by default -> true if present
+%% BoolKey*: true by default -> false if present
+\RpgThemeKeys{ rpg / options }
 {
-	% Large-scale styling choice
-	bg .choice:,
-	bg / full .code:n =
-		{
-			\bool_set_true:N \__rpg_ShowBackground
-			\bool_set_true:N \__rpg_ShowFooterScroll
-		},
-	bg / print .code:n =
-		{
-			\bool_set_false:N \__rpg_ShowBackground
-			\bool_set_true:N \__rpg_ShowFooterScroll
-		},
-	bg / none .code:n =
-		{
-			\bool_set_false:N \__rpg_ShowBackground
-			\bool_set_false:N \__rpg_ShowFooterScroll
-		},
-	bg .initial:n = full,
+	\RpgThemeBoolKey	{justified} {\__rpg_IsJustified}
+	\RpgThemeBoolKey	{openright}	{\__rpg_OpenRight}
+	\RpgThemeBoolKey	{oneside}	{\__rpg_OneSide}
+	\RpgThemeBoolKey*	{noemph}	{\__rpg_OverrideEmph}
+	\RpgThemeBoolKey*	{nomultitoc}{\__rpg_HasMulticolToc}
 
-	% Justified text
-	justified .code:n =
-		{
-			\bool_set_true:N \__rpg_IsJustified
-		},
-	justified .value_forbidden:n = true,
+	\RpgThemeTLKey		{size}		{\__rpg_FontSize}	{10pt}
+	\RpgThemeTLKey		{themepath}	{\__rpg_ThemePath}	{themes}
+	\RpgThemeTLKey		{theme}		{\__rpg_Theme}		{default}
 
-	% Disable multi-column toc
-	nomultitoc .code:n =
-		{
-			\bool_set_false:N \__rpg_HasMulticolToc
-		},
-	nomultitoc .value_forbidden:n = true,
+	\RpgThemeTLMapKey	{columns}	{\__rpg_PageColumns}	{1,2}	{onecolumn,twocolumn} {2}
 
-	% Theme selection
-	theme .code:n =
-		{
-			\tl_set:Nn \__rpg_Theme { #1 }
-		},
-	theme .initial:n = default,
-
-	% Theme Path modification
-	themepath .code:n 	={
-			\tl_set:Nn \__rpg_ThemePath{ #1 }
-		},
-	themepath .initial:n = themes,
-
-	% Font size
-	size .code:n = {
-			\tl_set:Nn \__rpg_FontSize { #1 }
-		},
-	size .default:n = { 10pt },
-
-	% Columns
-	columns .choice:,
-	columns / 1 .code:n = {
-			\tl_set:Nx \__rpg_PageColumns { onecolumn }
-		},
-	columns / 2 .code:n = {
-			\tl_set:Nx \__rpg_PageColumns { twocolumn }
-		},
-	columns .initial:n = 2,
-
-	%Use openany
-	openright .code:n =
-		{
-			\bool_set_true:N \__rpg_OpenRight
-		},
-	openright .value_forbidden:n = false,
-
-	%Set one-sided
-	oneside .code:n = {
-			\bool_set_true:N \__rpg_OneSide
-		},
-	oneside .value_forbidden:n = true,
-
-	%% Override the \emph command
-	noemph .code:n = {
-			\bool_set_false:N \__rpg_OverrideEmph
-		},
-	noemph .value_forbidden:n = true,
+	\RpgThemeCodeMapKey	{bg}		{full,print,none} {
+		\bool_set_true:N \__rpg_ShowBackground
+		\bool_set_true:N \__rpg_ShowFooterScroll
+		,
+		\bool_set_false:N \__rpg_ShowBackground
+		\bool_set_true:N \__rpg_ShowFooterScroll
+		,
+		\bool_set_false:N \__rpg_ShowBackground
+		\bool_set_false:N \__rpg_ShowFooterScroll
+	}{full}
 }
 
 % Set the values provided in the file
@@ -124,8 +45,6 @@
 \ifcsname{RpgCMD}\endcsname
 \keys_set:nV {rpg/options}{\RpgCMD}
 \fi
-
-
 
 
 %then insert the saved arguments into the parent class

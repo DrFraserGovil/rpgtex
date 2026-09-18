@@ -1,0 +1,10 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Code for assigning whole-page images
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand\RpgWholePageImage{ O{} m }
+{
+	\clearpage
+	#1
+	\AddToShipoutPictureFG*{\includegraphics[width=\paperwidth,height=\paperheight]{#2}}
+	\clearpage
+}
