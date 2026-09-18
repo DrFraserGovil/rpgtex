@@ -122,6 +122,9 @@
 
 }
 
+%% Used to define a bunch of keys at once without needing to repeat the first argument
+%% Defines versions of the above functions (without 'New' in their name) which take one less argument (the group name)
+%% Arguments: #1 The group name to insert to all enclosed arguments #2 a set of \RpgTheme[X]Key values
 \NewDocumentCommand\RpgThemeKeys{mm}
 {
 	%  Define versions of the New_Keys which insert into the active group
