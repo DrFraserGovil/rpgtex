@@ -27,6 +27,16 @@
 	}
 }
 
+%% Accepts key-value arguments corresponding to the 
+\NewDocumentCommand { \RpgThemeFont } { m }
+{
+	\keys_set:nn { rpg / fonts } { #1 }
+
+	%% Call some global overrides to ensure everything remains in-sync
+	\renewcommand\normalfont\RpgFontBody
+	\renewcommand{\FirstLineFont}{\RpgFontDropCapFirstLine}
+	\normalfont
+}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Available font elements
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

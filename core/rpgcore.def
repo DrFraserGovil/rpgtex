@@ -79,8 +79,6 @@
 \input {core/modules/lengths.rpg-code.tex}
 \input {core/modules/text_utility.rpg-code.tex}
 \input {core/modules/fonts/fonts.rpg-code.tex}
-%
-% \RequirePackage {core/fonts}	    % font definitions
 % \RequirePackage {core/environments/switchenv}
 %
 % % % % Main modules in alphabetical order

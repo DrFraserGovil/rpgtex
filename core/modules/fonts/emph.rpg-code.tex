@@ -1,0 +1,17 @@
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %Keywords & Emphasis
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NewDocumentCommand{\RpgKey}{m}
+{
+	{\RpgFontEmphasis #1}
+}
+
+\bool_if:NT \__rpg_OverrideEmph
+{
+	\RenewDocumentCommand{\emph}{m}
+	{
+		\RpgKey{#1}
+	}
+}

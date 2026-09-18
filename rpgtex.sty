@@ -7,14 +7,11 @@
 
 
 %%Do I know where I am?
-\input{core/lowlevel/validatePackage.sty}
+\input{core/validate.rpg-code.tex}
 
 \ExplSyntaxOn
 %Am I loaded by a class?
-\cs_if_exist:NTF \__rpg_IsClass
-{
-	% The variable already (loaded from a class, or a user being annoying)
-}
+\cs_if_exist:NF \__rpg_IsClass
 {
 	% Doesn't exist -- loaded by a barebones class, or as a standalone package
 	\bool_new:N \__rpg_IsClass
@@ -26,9 +23,10 @@
 }
 
 
-% %%Load the core definitions (which may reference the theme definitions)
+%% Load the core definitions 
 \input {core/rpgcore.def}
 
+%% Then set the theme (if none set as option, go to Default)
 \RpgSetTheme{\__rpg_Theme}
 
 \ExplSyntaxOff

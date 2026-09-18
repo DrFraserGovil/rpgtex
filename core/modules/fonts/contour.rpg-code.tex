@@ -22,6 +22,14 @@
 \RpgThemeNewTLKey{rpg/contour}	{outer}	{\__rpg_contourOuterColor}	{ContourOuterColor}
 \RpgThemeNewTLKey{rpg/contour}	{style}	{\__rpg_contourStyle}		{}
 
+%%splits the command up at \newline, and then contours each line individually
+\cs_new_protected:Npn \__rpg_contour_split_lines:n #1
+{
+	\seq_set_split:Nnn \l_tmpa_seq { \newline } { #1 }
+	\seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n {\__rpg_contour_preserve_space:n{##1}} }
+	\seq_use:Nn \l_tmpb_seq { \newline }
+}
+
 %%splits the command up by word, and contours each word individually
 \cs_new_protected:Npn \__rpg_contour_preserve_space:n #1
 {
@@ -32,10 +40,3 @@
 	\group_end:
 }
 
-%%splits the command up at \newline, and then contours each line individually
-\cs_new_protected:Npn \__rpg_contour_split_lines:n #1
-{
-	\seq_set_split:Nnn \l_tmpa_seq { \newline } { #1 }
-	\seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n {\__rpg_contour_preserve_space:n{##1}} }
-	\seq_use:Nn \l_tmpb_seq { \newline }
-}
