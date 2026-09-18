@@ -3,30 +3,30 @@
 
 % Left-even page footer
 \fancyfoot[LE]{%
-    \RpgFontFooter \leftmark
+	\RpgFontFooter \leftmark
 
 	\RpgSetFooterDecoration[
 		keepaspectratio,
 		reverse,
 		tikz-insert={
-			\node[inner~sep=0pt,anchor=south,xshift=.28in,yshift=.39in] at (current~page.south~west) {\RpgFontPageNumber \thepage};
-		},
+				\node[inner~sep=0pt,anchor=south,xshift=.28in,yshift=.39in] at (current~page.south~west) {\RpgFontPageNumber \thepage};
+			},
 	]{themes/dnd/img/footerscroll}
 
-  }
+}
 
 % Right-odd page footer
 \fancyfoot[RO]{%
-    \RpgFontFooter \leftmark
+	\RpgFontFooter \leftmark
 	\RpgSetFooterDecoration[
 		keepaspectratio,
 		tikz-insert={
-			\node[inner~sep=0pt,anchor=south,xshift=-.28in,yshift=.39in] at (current~page.south~east) {\RpgFontPageNumber \thepage};
-		},
+				\node[inner~sep=0pt,anchor=south,xshift=-.28in,yshift=.39in] at (current~page.south~east) {\RpgFontPageNumber \thepage};
+			},
 	]{themes/dnd/img/footerscroll}
- 
-  }
 
-  % Clear the current definition of 'plain' footers/headers
+}
+
+% Clear the current definition of 'plain' footers/headers
 \fancypagestyle{plain}{}
 

@@ -8,6 +8,8 @@
 
 %% Define the nice simple key-wrappers
 \input {core/modules/helpers.rpg-code.tex}
+\bool_new:N \__rpg_ShowBackground
+\bool_new:N \__rpg_ShowFooterDecoration
 
 %% Use the key-wrappers to define the available options
 %% BoolKey: false by default -> true if present
@@ -28,13 +30,13 @@
 
 	\RpgThemeCodeMapKey	{bg}		{full,print,none} {
 		\bool_set_true:N \__rpg_ShowBackground
-		\bool_set_true:N \__rpg_ShowFooterScroll
+		\bool_set_true:N \__rpg_ShowFooterDecoration
 		,
 		\bool_set_false:N \__rpg_ShowBackground
-		\bool_set_true:N \__rpg_ShowFooterScroll
+		\bool_set_true:N \__rpg_ShowFooterDecoration
 		,
 		\bool_set_false:N \__rpg_ShowBackground
-		\bool_set_false:N \__rpg_ShowFooterScroll
+		\bool_set_false:N \__rpg_ShowFooterDecoration
 	}{full}
 }
 
