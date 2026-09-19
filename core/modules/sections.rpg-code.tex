@@ -1,0 +1,57 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Section manipulation
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% These are section-related commands, not about the formatting of sections (that belongs in the Themes)
+
+\setcounter{secnumdepth}{0}
+
+\def\RpgChapterName{~}
+\def\RpgSectionName{~}
+\def\RpgSubsectionName{~}
+\def\RpgSubsubsectionName{~}
+
+\ExplSyntaxOn
+\msg_new:nnn{rpg}{bad-section}{#1~is~not~a~valid~name~for~\RpgGetName}
+\NewDocumentCommand{\RpgGetName}{m}
+{
+	\str_case:enF{#1}
+	{
+		{chapter} {\RpgChapterName}
+			{section} {\RpgSectionName}
+			{subsection} {\RpgSubsectionName}
+			{subsubsection} {\RpgSubsubsectionName}
+	}
+	{
+		\msg_error:nnn{rpg}{bad-section}{#1}
+	}
+}
+
+% \begin{noindent}
+\NewDocumentCommand\RpgFake{m m}
+{
+	\phantomsection
+	\addcontentsline{toc}{#1}{#2}
+	\str_case:enF{#1}
+	{
+		{chapter}{\chaptermark{#2}}
+		{section}{\sectionmark{#2}}
+		{subsection}{\subsectionmark{#2}}
+		{subsubsection}{\subsubsectionmark{#2}}
+	}
+}
+
+%% Overload '[x]mark' commands to store the names in the names as well 
+
+\let\__rpg_chaptermark\chaptermark
+\let\__rpg_sectionmark\sectionmark
+\let\__rpg_subsectionmark\subsectionmark
+\let\__rpg_subsubsectionmark\subsubsectionmark
+
+\def\chaptermark#1{\__rpg_chaptermark{#1}\def\RpgChapterName{#1}}
+\def\sectionmark#1{\__rpg_sectionmark{#1}\def\RpgSectionName{#1}}
+\def\subsectionmark#1{\__rpg_chaptermark{#1}\def\RpgSubSectionName{#1}}
+\def\subsubsectionmark#1{\__rpg_chaptermark{#1}\def\RpgSubsubsectionName{#1}}
+% \end{noindent}
+
+

@@ -24,7 +24,7 @@
 \RequirePackage{fancyhdr}
 \RequirePackage{dblfloatfix}
 \RequirePackage {xparse} % \NewDocumentCommand and expl3
-\RequirePackage[hidelinks] {hyperref}
+% \RequirePackage[hidelinks] {hyperref}
 
 % \usetikzlibrary{calc}
 \ExplSyntaxOn
@@ -35,15 +35,16 @@
 }
 
 
-\NewDocumentCommand \RpgLayoutOnly { +m }
+\NewDocumentCommand \RpgThemeLayoutOnly { +m }
 {
 	\bool_if:NT \__rpg_IsClass
 	{
 		#1
 	}
 }
+ 
 %% force layout changes -- but only if layout option triggered by class
-\RpgLayoutOnly{
+\RpgThemeLayoutOnly{
 	\RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
 	\RequirePackage {ragged2e}
 
@@ -78,8 +79,9 @@
 \input {core/modules/	lengths			.rpg-code.tex}
 \input {core/modules/	text_utility	.rpg-code.tex}
 \input {core/modules/	fonts/fonts		.rpg-code.tex}
-\input {core/modules/	paper.			rpg-code.tex} 
+\input {core/modules/	paper			.rpg-code.tex} 
 \input {core/modules/	images			.rpg-code.tex} 
+\input {core/modules/	sections		.rpg-code.tex} 
 % \RequirePackage {core/environments/switchenv}
 %
 % % % % Main modules in alphabetical order
