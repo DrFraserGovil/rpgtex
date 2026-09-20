@@ -1,0 +1,100 @@
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Titles 
+%%%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+
+
+%%Add new commands in vein of \title, \author etc.
+
+% Defines a subtitle to add to the title
+\NewDocumentCommand{\subtitle}{m} { \gdef\@subtitle{#1} }
+
+% Defines an image path to use for cover pages
+\NewDocumentCommand{\cover}{m} { \gdef\@cover{#1} }
+
+% Returns the title set by \title 
+% Unstarred: applies the \RpgFontTitle, Starred returns as raw string
+\NewDocumentCommand{\RpgGetTitle}{s}{
+	\IfBooleanTF{#1}
+	{\@title}
+	{ \RpgFontTitle \@title }
+}
+
+% Returns the title set by \subtitle 
+% Unstarred: applies the \RpgFontSubTitle, Starred returns as raw string
+\NewDocumentCommand{\RpgGetSubtitle}{s}{
+	\IfBooleanTF{#1}
+	{\@subtitle}
+	{ \RpgFontSubTitle \@subtitle }
+}
+
+% Returns the title set by \author 
+% Unstarred: applies the \RpgFontSubTitle, Starred returns as raw string
+\NewDocumentCommand{\RpgGetAuthor}{s}{
+	\IfBooleanTF{#1}
+	{\@author}
+	{ \RpgFontSubTitle \@author }
+}
+
+% Toggles which version of the title will be rendered
+% #1 if `cover', sets a cover page, if `header', uses a simple header title
+\NewDocumentCommand{\RpgThemeTitleMode}{m}{
+	\str_case:enF{#1}
+	{
+		{cover} {\bool_set_false:N \__rpg_UseSimpleTitle}
+			{header} {\bool_set_true:N \__rpg_UseSimpleTitle}
+	}
+	{
+		\msg_new:nnn{rpg}{bad-cover-set}{Title~mode~input~must~be~(header/cover),~not~'#1'}
+		\msg_error:nnn{rpg}{bad-cover-set}{#1}
+	}
+}
+
+%% A new maketitle overload
+\let\__rpg_OriginalMakeTitle\maketitle
+\RenewDocumentCommand\maketitle{}
+{
+	\RpgMakeTitle{}
+}
+
+%% Shouldn't need this, but it acts as our \maketitle in case this is overloaded by another package
+\NewDocumentCommand\RpgMakeTitle{}
+{
+	\bool_if:NTF\__rpg_UseSimpleTitle
+	{\__rpg_SimpleTitle:}
+	{\__rpg_CoverPage:}
+}
+
+%% The Theme-writer function for setting the header-title
+%% #1	The function to be called when \maketitle is called with \RpgThemeTitleMode{header}
+\NewDocumentCommand\RpgThemeTitleHeader{+m}
+{
+	\cs_set:Nn \__rpg_SimpleTitle:{ #1 }
+}
+%% The Theme-writer function for setting the cover-title
+%% #1	The function to be called when \maketitle is called with \RpgThemeTitleMode{cover}
+%% This code must be eso-pic (or \RpgPut) code which is overlaid on top of the \cover
+\NewDocumentCommand\RpgThemeTitleCover{+m}
+{
+	\cs_set:Nn\__rpg_CoverPage:{
+		\str_if_empty:NTF{\@cover}
+		{
+			\clearpage
+			\AddToShipoutPictureFG*{#1}
+			\mbox{}
+			\clearpage
+		}
+		{
+			\RpgWholePageImage[#1]{\@cover}
+		}
+
+	}
+}
+%% Define registers & set default values
+\bool_new:N \__rpg_UseSimpleTitle
+\bool_set_true:N\__rpg_UseSimpleTitle
+\cs_new_protected:Nn\__rpg_SimpleTitle:{\__rpg_OriginalMakeTitle}
+\cs_new_protected:Nn\__rpg_CoverPage:{\__rpg_OriginalMakeTitle}
+\subtitle{}
+\cover{}
+

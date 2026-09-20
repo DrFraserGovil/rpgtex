@@ -42,7 +42,7 @@
 		#1
 	}
 }
- 
+
 %% force layout changes -- but only if layout option triggered by class
 \RpgThemeLayoutOnly{
 	\RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
@@ -79,9 +79,10 @@
 \input {core/modules/	lengths			.rpg-code.tex}
 \input {core/modules/	text_utility	.rpg-code.tex}
 \input {core/modules/	fonts/fonts		.rpg-code.tex}
-\input {core/modules/	paper			.rpg-code.tex} 
-\input {core/modules/	images			.rpg-code.tex} 
-\input {core/modules/	sections		.rpg-code.tex} 
+\input {core/modules/	paper			.rpg-code.tex}
+\input {core/modules/	images			.rpg-code.tex}
+\input {core/modules/	sections		.rpg-code.tex}
+\input {core/modules/	titles			.rpg-code.tex}
 % \RequirePackage {core/environments/switchenv}
 %
 % % % % Main modules in alphabetical order

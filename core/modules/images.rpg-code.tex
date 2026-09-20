@@ -1,10 +1,34 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Code for assigning whole-page images
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand\RpgWholePageImage{ O{} m }
+
+%% Places an image occupying the entirety of the next page, calling \clearpage on either side
+%% Arguments:	#1 Any eso-pic put commands to go on top of the image
+%%				#2 The path to the image
+\NewDocumentCommand\RpgWholePageImage{ +O{} +m}
 {
-	\clearpage
-	#1
-	\AddToShipoutPictureFG*{\includegraphics[width=\paperwidth,height=\paperheight]{#2}}
-	\clearpage
+\clearpage
+\AddToShipoutPictureFG*{%
+	\AtPageLowerLeft{%
+		\put(0,0){\makebox(0,0)[bl]{\includegraphics[width=\paperwidth,height=\paperheight]{#2}}}
+		#1
+	}%
+}
+\mbox{}
+\clearpage
+}
+
+
+%% A wrapper for eso-pic put commands. Places a \parbox at the specified coordinates
+%% The coordinates refer to the centre of the element
+%%	[#1]The width of the element (for linewrapping purposes, default: \linewidth)
+%%	[#2]The formatting applied to the element (default: \centering)
+%%	#3	The x-distance of the centre of the element from the left marging
+%%	#4	The y-distance of the centre of the element from the bottom of the page
+%%	#5	The contents of the box (paragraph)	
+\NewDocumentCommand\RpgPut{O{\linewidth} O{\centering} m m +m}
+{
+	\put(\LenToUnit{#3},\LenToUnit{#4}){
+		\makebox(0,0){\parbox[t]{#1}{#2 #5}}
+	}
 }
