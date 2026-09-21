@@ -6,6 +6,7 @@
 
 \setcounter{secnumdepth}{0}
 
+\def\RpgPartName{~}
 \def\RpgChapterName{~}
 \def\RpgSectionName{~}
 \def\RpgSubsectionName{~}
@@ -17,7 +18,8 @@
 {
 	\str_case:enF{#1}
 	{
-		{chapter} {\RpgChapterName}
+		{part} {\RpgPartName}
+			{chapter} {\RpgChapterName}
 			{section} {\RpgSectionName}
 			{subsection} {\RpgSubsectionName}
 			{subsubsection} {\RpgSubsubsectionName}

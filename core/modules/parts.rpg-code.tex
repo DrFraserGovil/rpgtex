@@ -1,0 +1,75 @@
+%%%%%%%%%%%%%%%%%%%
+% Parts
+%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+
+%%% Parts
+
+% my editor gets confused and tries to indent on each mention of 'part', so disable latexindent. This is purely visual 
+% \begin{noindent}
+
+
+%% Override the part command
+\let\__rpg_OriginalPart\part
+
+
+%% A new part command
+%%		#1: If starred, uses the original \part
+%%		#2:	An image path to use (overrides DefaultPartImage)
+%%		#3: The name of the part
+\RenewDocumentCommand{\part}{s O{} m}{
+	\bool_if:NTF{#1}
+	{
+		\__rpg_OriginalPart{#3}
+	}
+	{
+		\stepcounter{part}
+		\str_if_empty:nTF{#2}
+		{
+			\tl_if_empty:NTF{\__rpg_AllPartImage}	
+			{
+				\clearpage
+				\AddToShipoutPictureFG*{\__rpg_PartPage:n{#3}}
+				\mbox{}
+				\clearpage	
+			}
+			{
+				\RpgWholePageImage[\__rpg_PartPage:n{#3}]{\__rpg_AllPartImage}
+			}
+		}
+		{
+			\RpgWholePageImage[\__rpg_PartPage:n{#3}]{#2}
+		}
+	}
+}
+	\cs_new_protected:Nn\__rpg_PartPage:n{}
+
+
+
+\tl_new:N\__rpg_AllPartImage
+%% Sets a default part image which is used whenever a part image is not supplied
+\NewDocumentCommand{\RpgDefaultPartImage}{ m }
+{
+	\tl_set:Nn{\rpg_AllPartImage}{#1}
+}
+ 
+\NewDocumentCommand\RpgThemePartPage{ +m }
+{
+	\cs_set:Nn\__rpg_PartPage:n{#1}
+}
+\RpgThemePartPage{
+	\RpgPut{0.5\paperwidth}{0.5\paperheight}{\RpgFontPart Part~\thepart \\#1} 
+}
+
+% \end{noindent}
+
+
+
+
+
+
+
+
+
+
+

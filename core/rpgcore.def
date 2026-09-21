@@ -82,6 +82,7 @@
 \input {core/modules/	paper			.rpg-code.tex}
 \input {core/modules/	images			.rpg-code.tex}
 \input {core/modules/	sections		.rpg-code.tex}
+\input {core/modules/	parts			.rpg-code.tex}
 \input {core/modules/	titles			.rpg-code.tex}
 % \RequirePackage {core/environments/switchenv}
 %
