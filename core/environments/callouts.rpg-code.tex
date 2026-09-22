@@ -38,7 +38,8 @@
 	\group_begin:
 	\tl_set:Nn{\__rpg_boxColor}{NarrationColor}	
 	\keys_set_known:nnN{rpg/callouts}{#1}{\l_tmpa_tl} 
-	\begin{__RpgTip}[colback = \__rpg_boxColor, colbacktitle = \__rpg_boxColor, \l_tmpa_tl ]
+	\bool_if:NTF{\__rpg_boxUseFiligree}{\tl_set:Nn{\l_tmpb_tl}{rpgfiligree}} { \tl_set:Nn{\l_tmpb_tl}{} }
+	\begin{__RpgTip}[colback = \__rpg_boxColor, colbacktitle = \__rpg_boxColor, \l_tmpa_tl,\l_tmpb_tl ]
 }
 {
 	\end{__RpgTip}
@@ -50,7 +51,8 @@
 	\group_begin:
 	\tl_set:Nn{\__rpg_boxColor}{SidebarColor}	
 	\keys_set_known:nnN{rpg/callouts}{#1}{\l_tmpa_tl} 
-	\begin{__RpgTip}[colback = \__rpg_boxColor, colbacktitle = \__rpg_boxColor, title=#2, \l_tmpa_tl ]
+	\bool_if:NTF{\__rpg_boxUseFiligree}{\tl_set:Nn{\l_tmpb_tl}{rpgfiligree}} { \tl_set:Nn{\l_tmpb_tl}{} }
+	\begin{__RpgTip}[colback = \__rpg_boxColor, colbacktitle = \__rpg_boxColor, title=#2, \l_tmpa_tl, \l_tmpb_tl]
 }
 {
 	\end{__RpgTip}
