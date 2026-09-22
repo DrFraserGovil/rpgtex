@@ -23,9 +23,11 @@
 
 \NewDocumentEnvironment {RpgFiligree} { O{} }
 {
-	\begin{RpgTip}[color=FiligreeBackColor,#1,rpgfiligree]{}
-		}
-		{
+	% \begin{RpgTip}[color=FiligreeBackColor,#1,rpgfiligree]{}
+	\tl_set:Nn\__rpg_filigreeArgs{color=FiligreeBackColor,#1,rpgfiligree}
+	\__rpg_ExpandBegin:nV{RpgTip}{\__rpg_filigreeArgs}{}
+}
+{
 	\end{RpgTip}
 }
 

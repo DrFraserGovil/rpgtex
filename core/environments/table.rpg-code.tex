@@ -34,7 +34,9 @@
 	%%% If in filigree mode, initialise the wrapper
 	\bool_if:NT{\__rpg_tableFiligree}
 	{
-		\begin{RpgFiligree}[left=\__rpg_tableFiligreeHGap, right=\__rpg_tableFiligreeHGap]
+		% \tl_set:Nn\__rpg_tableArgs{left=\__rpg_tableFiligreeHGap, right=\__rpg_tableFiligreeHGap}
+		% \__rpg_ExpandBegin:nV{RpgFiligree}{\__rpg_tableArgs}
+		\begin{RpgFiligree}
 	}
 
 			#3
