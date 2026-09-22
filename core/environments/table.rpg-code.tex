@@ -7,10 +7,14 @@
 	%% Appearance
 	\RpgThemeTLKey	{color}	{\__rpg_tableColor}	{TableColor}
 	\RpgThemeTLKey	{title}	{\__rpg_tableTitle}	{}
+	\RpgThemeTLKey	{intro}	{\__rpg_tableIntro}	{}
+	\RpgThemeBoolKey{color-both}{\__rpg_tableBothColored}
+	\RpgThemeBoolKey{color-odd}{\__rpg_tableOddColored}
 
 	%% Variant modes
 	\RpgThemeBoolKey{noheader}	{\__rpg_tableNoHeader}
 	\RpgThemeBoolKey{simple}	{\__rpg_tableSimpleMode}
+	\RpgThemeBoolKey{breakable}	{\__rpg_tableBreakable}
 	\RpgThemeBoolKey{filigree}	{\__rpg_tableFiligree}
 	\RpgThemeTLKey	{filigree-opacity}{\__rpg_tableFiligreeOpacity}{1}
 	\RpgThemeTLKey	{filigree-hgap}{\__rpg_tableFiligreeHGap}{1pt}
@@ -18,7 +22,24 @@
 	%% Dimensions
 	\RpgThemeTLKey	{width}	{\__rpg_tableWidth}	{\linewidth}
 	\RpgThemeTLKey	{vskip}	{\__rpg_tableVSkip} {9pt plus 3pt minus 3pt}
+	\RpgThemeTLKey	{headskip}	{\__rpg_tableHeadSkip} {5pt plus 2pt minus 2pt}
+	\RpgThemeTLKey	{introskip}	{\__rpg_tableIntroSkip} {5pt plus 2pt minus 2pt}
 }
+
+%% Centred X column
+\newcolumntype {Y} { > {\centering\arraybackslash } X } %% 
+
+%% Column types and overloads for UK TeX FAQ 282 auto-formatting
+\newcolumntype {`} { > {\global\let\currentrowstyle\relax } }
+\newcolumntype {^} { > {\currentrowstyle} }
+\newcommand{\rowstyle}[1]
+{
+	\gdef\currentrowstyle{#1}#1\ignorespaces
+}
+% Matches {, }, >,  , and any other character
+\regex_const:Nn \c__preamble_regex {\|+|>\s*{.*}\s*\S|\S}
+
+
 
 % \begin{noindent}
 \NewDocumentEnvironment{RpgTable}{ O{} m +b }
@@ -27,6 +48,24 @@
 	\tl_set:Nn{\__rpg_tableWidth}{\linewidth} %% have to reset each time in case lw has changed
 	\keys_set:nn { rpg/table } { #1 }
 
+	%%% set the row colors
+	\bool_if:NTF\__rpg_tableBothColored
+	{
+		\tl_set:Nn\__rpg_tableEvenColor{\__rpg_tableColor}
+		\tl_set:Nn\__rpg_tableOddColor{\__rpg_tableColor}
+	}
+	{
+		\bool_if:NTF\__rpg_tableOddColored
+		{
+			\tl_set:Nn\__rpg_tableEvenColor{}
+			\tl_set:Nn\__rpg_tableOddColor{\__rpg_tableColor}
+		}
+		{
+			\tl_set:Nn\__rpg_tableEvenColor{\__rpg_tableColor}
+			\tl_set:Nn\__rpg_tableOddColor{}
+		}
+	}
+
 
 	%%% Vertical spacer
 	\par \vspace{ \__rpg_tableVSkip } \noindent
@@ -34,12 +73,28 @@
 	%%% If in filigree mode, initialise the wrapper
 	\bool_if:NT{\__rpg_tableFiligree}
 	{
-		% \tl_set:Nn\__rpg_tableArgs{left=\__rpg_tableFiligreeHGap, right=\__rpg_tableFiligreeHGap}
-		% \__rpg_ExpandBegin:nV{RpgFiligree}{\__rpg_tableArgs}
-		\begin{RpgFiligree}
+		\tl_set:Nn\__rpg_tableArgs{opacityback=\__rpg_tableFiligreeOpacity,left=\__rpg_tableFiligreeHGap, right=\__rpg_tableFiligreeHGap}
+		\begin{RpgFiligree}{\__rpg_tableArgs}\noindent
 	}
 
-			#3
+	\__rpg_tableMakeTitle:n{\__rpg_tableTitle}
+	\__rpg_tableMakeIntro:n{\__rpg_tableIntro}
+
+
+	\bool_if:NTF{\__rpg_tableSimpleMode}
+	{
+		\__rpg_tableMakeSimple:nn{#2}{#3}
+	}
+	{
+		\bool_if:NTF {\__rpg_tableBreakable}
+		{
+			\__rpg_tableMakeFancy:nnn{xltabular}{#2}{#3}
+		}
+		{
+			\__rpg_tableMakeFancy:nnn{tabularx}{#2}{#3}
+		}
+
+	}
 }{ % after
 
 	%%% If in filigree mode, then end the wrapper
@@ -47,7 +102,103 @@
 	{
 		\end{RpgFiligree}
 	}
+	\par\vspace{\__rpg_tableVSkip}
 	 
 	\group_end:
+}
+
+
+%%%%%%%%%%%%
+% Helpers
+%%%%%%%%%%%%
+
+%% Writes a title (if present)
+\cs_new_protected:Npn \__rpg_tableMakeTitle:n #1
+{
+	 \tl_if_empty:NF #1
+    {
+      \group_begin:
+        \RpgFontTableTitle #1 \nopagebreak
+		\par \vspace{\__rpg_tableHeadSkip} \noindent
+      \group_end:
+    }
+}
+
+%% Writes an intro (if present)
+\cs_new_protected:Npn \__rpg_tableMakeIntro:n #1
+{
+	 \tl_if_empty:NF #1
+    {
+      \group_begin:
+        \normalfont #1 \nopagebreak
+		\par \vspace{\__rpg_tableIntroSkip} \noindent
+      \group_end:
+    }
+}
+
+%% Initialises a basic tabular environment with specified row colors
+\cs_new_protected:Npn \__rpg_tableMakeSimple:nn#1#2
+{
+	{\RpgFontTableBody
+
+	\exp_args:NNee\rowcolors {1}{\__rpg_tableOddColor}{\__rpg_tableEvenColor}	
+		\begin{tabular}{#1}
+			#2
+		\end{tabular}
+	}
+}
+
+%% Initialises a more complex tabular, and tries to apply formatting to the first line
+\cs_new_protected:Npn \__rpg_tableMakeFancy:nnn#1#2#3
+{
+	{\RpgFontTableBody
+
+	%% Apply the row colors
+	\exp_args:NNee\rowcolors {1}{\__rpg_tableOddColor}{\__rpg_tableEvenColor}	
+
+	%% determine how to open the table environment
+	\bool_if:NTF \__rpg_tableNoHeader
+	{
+		\begin{#1} {\__rpg_tableWidth} {#2}
+	}
+	{
+		%%% Uses a regex to automatically parse the column specifiers and apply UK TeX FAQ fix 282 to a row
+		%%% This allows automatic formatting of the entire first row 
+		%%% This is inspired by but rewritten from the original DnD-Latex-5e-Template package to allow i.e. "|"
+		\regex_extract_all:NnNTF \c__preamble_regex {#2} \l_tmpa_seq
+		{
+			\bool_set_true:N \l__rpg_table_firstcol_bool
+				\seq_map_inline:Nn \l_tmpa_seq
+				{
+					\regex_match:nnTF {^\|+$} {##1}
+					{
+						% a rule token — pass through completely untouched
+						\seq_put_right:Nn \l_tmpb_seq {##1}
+					}
+					{
+						% a real column
+						\bool_if:NTF \l__rpg_table_firstcol_bool
+						{
+							\seq_put_right:Nn \l_tmpb_seq {`##1}
+							\bool_set_false:N \l__rpg_table_firstcol_bool
+						}
+						{
+							\seq_put_right:Nn \l_tmpb_seq {^##1}
+						}
+					}
+				}
+				\tl_set:Nn \l_tmpa_tl {\seq_use:Nn \l_tmpb_seq {}}
+				\use:x { \exp_not:n {\begin}{#1}{\__rpg_tableWidth}{\l_tmpa_tl} }
+				\rowstyle{\RpgFontTableHeader}
+		}
+		{
+			%% If we can't parse the table, then the formatting is not applied
+			\begin{#1} {\__rpg_tableWidth} {#2}
+		}
+	}
+		%%table contents!
+		#3
+	\end{#1}
+	}
 }
 % \end{noindent}
