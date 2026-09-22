@@ -1,0 +1,25 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Tables
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+\RpgThemeKeys{rpg/table}
+{
+	\RpgThemeTLKey	{color}	{\__rpg_tableColor}	{TableColor}
+	\RpgThemeTLKey	{title}	{\__rpg_tableTitle}	{}
+	\RpgThemeTLKey	{width}	{\__rpg_tableWidth}	{\linewidth}
+
+	\RpgThemeBoolKey{noheader}	{\__rpg_tableNoHeader}
+	\RpgThemeBoolKey{simple}	{\__rpg_tableSimpleMode}
+	\RpgThemeBoolKey{filigree}	{\__rpg_tableFiligree}
+}
+
+
+\NewDocumentEnvironment{RpgTable}{ O{} m +b }
+{ 	%before
+	\group_begin:
+
+}
+{ % after
+
+	\group_end:
+}

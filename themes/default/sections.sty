@@ -1,131 +1,131 @@
 %%% Sidebar
 \ExplSyntaxOn
 \tcbset{
-  rpg sidebar/.style={
-  before~upper     =
-      {
-        \RpgLayoutOnly{
-            \bool_if:NF \l__rpg_justified_bool
-              {\RaggedRight}
-          }
-      },
-    code={\linespread{.9}},
-    frame~hidden,
-    boxrule          = 0pt,
-    enhanced,
-    before~skip      = 13pt plus 4pt minus 4pt,
-    toptitle         = 2pt,
-    boxsep           = 3pt,
-    left             = 6pt,
-    right            = 6pt,
-    top              = 0pt,
-    bottom           = 2pt,
-    fonttitle        = \RpgFontSidebarTitle,
-    fontupper        = \RpgFontSidebarBody,
-    fontlower        = \RpgFontSidebarBody,
-    sharp~corners,
-    parbox           = false,
-    borderline~north = {1pt} {-0.5pt} {black},
-    borderline~south = {1pt} {-0.5pt} {black},
-    coltitle         = black,
-    fuzzy~shadow     = {0mm} {-3.5pt} {-0.5pt} {0.4mm} {black!60!white},
-    after~skip       = 14pt plus 4pt minus 4pt,
-  }
+rpg sidebar/.style={
+before~upper     =
+{
+% \RpgLayoutOnly{ HACK: Undo this
+% 	\bool_if:NF \l__rpg_justified_bool
+% 	{\RaggedRight}
+% }
+},
+code={\linespread{.9}},
+frame~hidden,
+boxrule          = 0pt,
+enhanced,
+before~skip      = 13pt plus 4pt minus 4pt,
+toptitle         = 2pt,
+boxsep           = 3pt,
+left             = 6pt,
+right            = 6pt,
+top              = 0pt,
+bottom           = 2pt,
+fonttitle        = \RpgFontSidebarTitle,
+fontupper        = \RpgFontSidebarBody,
+fontlower        = \RpgFontSidebarBody,
+sharp~corners,
+parbox           = false,
+borderline~north = {1pt} {-0.5pt} {black},
+borderline~south = {1pt} {-0.5pt} {black},
+coltitle         = black,
+fuzzy~shadow     = {0mm} {-3.5pt} {-0.5pt} {0.4mm} {black!60!white},
+after~skip       = 14pt plus 4pt minus 4pt,
+}
 }
 
 %% narration
 
 \tcbset{
-  rpg narration/.style={
-	    before~upper    =
-      {
-        \RpgLayoutOnly{
-            \bool_if:NF \l__rpg_justified_bool
-              {\RaggedRight}
-          }
-      },
-    code            = {\linespread {1.1} },
-    enhanced~jigsaw,
-    frame~hidden,
-    boxrule         = 0pt,
-    breakable,
-    enhanced,
-    before~skip     = 13pt plus 4pt minus 4pt,
-    boxsep          = 8pt,
-    top             = 0pt,
-    left            = 0pt,
-    right           = 0pt,
-    bottom          = 0pt,
-    sharp~corners,
-    parbox          = false,
-    fontupper       = \RpgFontNarration,
-    fontlower       = \RpgFontNarration,
-    after~skip      = 13pt plus 4pt minus 4pt,
-  }
+rpg narration/.style={
+before~upper    =
+{
+% \RpgLayoutOnly{ HACK: ANd this
+% 	\bool_if:NF \l__rpg_justified_bool
+% 	{\RaggedRight}
+% }
+},
+code            = {\linespread {1.1} },
+enhanced~jigsaw,
+frame~hidden,
+boxrule         = 0pt,
+breakable,
+enhanced,
+before~skip     = 13pt plus 4pt minus 4pt,
+boxsep          = 8pt,
+top             = 0pt,
+left            = 0pt,
+right           = 0pt,
+bottom          = 0pt,
+sharp~corners,
+parbox          = false,
+fontupper       = \RpgFontNarration,
+fontlower       = \RpgFontNarration,
+after~skip      = 13pt plus 4pt minus 4pt,
+}
 }
 
 %% tip
 \tcbset{
-  rpg tip/.style={
-	 before~upper =
-      {
-         \RpgLayoutOnly{
-            \bool_if:NF \l__rpg_justified_bool
-              { \RaggedRight }
-          }
-      },
-    code         = {\linespread{.9}},
-    frame~hidden,
-    boxrule      = 0pt,
-    breakable,
-    enhanced,
-    before~skip  = 13pt plus 4pt minus 4pt,
-    toptitle     = 2pt,
-    boxsep       = 3pt,
-    left         = 6pt,
-    right        = 6pt,
-    top          = 0pt,
-    bottom       = 2pt,
-    sharp~corners,
-    fonttitle    = \RpgFontTipTitle,
-    fontupper    = \RpgFontTipBody,
-    fontlower    = \RpgFontTipBody,
-    parbox       = false,
-    coltitle     = black,
-    after~skip   = 13pt plus 4pt minus 4pt,
-	arc={2mm},
-	rounded~corners,
-  }
+rpg tip/.style={
+before~upper =
+{
+% \RpgLayoutOnly{ HACK: And this
+% 	\bool_if:NF \l__rpg_justified_bool
+% 	{ \RaggedRight }
+% }
+},
+code         = {\linespread{.9}},
+frame~hidden,
+boxrule      = 0pt,
+breakable,
+enhanced,
+before~skip  = 13pt plus 4pt minus 4pt,
+toptitle     = 2pt,
+boxsep       = 3pt,
+left         = 6pt,
+right        = 6pt,
+top          = 0pt,
+bottom       = 2pt,
+sharp~corners,
+fonttitle    = \RpgFontTipTitle,
+fontupper    = \RpgFontTipBody,
+fontlower    = \RpgFontTipBody,
+parbox       = false,
+coltitle     = black,
+after~skip   = 13pt plus 4pt minus 4pt,
+arc={2mm},
+rounded~corners,
+}
 }
 %% filigree
 
-\RpgFiligreeSet{
-  % \draw[dotted] (frame.north~west) rectangle (frame.south~east);
-  \foreach \m in {0.2,0.6,1,1.4}
-  {
-    \draw[thin] ($(frame.north~west)+(0,-{\m*\l_filigree_dim})$) to[out=60,in=-150] ($(frame.north~west)+({\m*\l_filigree_dim},0)$);
-    \draw[thin] ($(frame.south~west)+(0,{\m*\l_filigree_dim})$)  to[out=60,in=-150]($(frame.south~west)+({\m*\l_filigree_dim},0)$);
-    \draw[thin] ($(frame.north~east)+(0,-{\m*\l_filigree_dim})$)  to[out=60,in=-150] ($(frame.north~east)+({-\m*\l_filigree_dim},0)$);
-    \draw[thin] ($(frame.south~east)+(0,{\m*\l_filigree_dim})$) to[out=-120,in=30]($(frame.south~east)+({-\m*\l_filigree_dim},0)$);
+\RpgThemeSetFiligree{
+	% \draw[dotted] (frame.north~west) rectangle (frame.south~east);
+	\foreach \m in {0.2,0.6,1,1.4}
+		{
+			\draw[thin] ($(frame.north~west)+(0,-{\m*\__rpg_filigreeSize})$) to[out=60,in=-150] ($(frame.north~west)+({\m*\__rpg_filigreeSize},0)$);
+			\draw[thin] ($(frame.south~west)+(0,{\m*\__rpg_filigreeSize})$)  to[out=60,in=-150]($(frame.south~west)+({\m*\__rpg_filigreeSize},0)$);
+			\draw[thin] ($(frame.north~east)+(0,-{\m*\__rpg_filigreeSize})$)  to[out=60,in=-150] ($(frame.north~east)+({-\m*\__rpg_filigreeSize},0)$);
+			\draw[thin] ($(frame.south~east)+(0,{\m*\__rpg_filigreeSize})$) to[out=-120,in=30]($(frame.south~east)+({-\m*\__rpg_filigreeSize},0)$);
 
-  }
-  % \fill ($(frame.north~west)+(0,-\l_filigree_dim)$)--++(0,\l_filigree_dim)--++(\l_filigree_dim,0)--cycle;
+		}
+	% \fill ($(frame.north~west)+(0,-\__rpg_filigreeSize)$)--++(0,\__rpg_filigreeSize)--++(\__rpg_filigreeSize,0)--cycle;
 
-  % \fill ($(frame.south~west)+(0,\l_filigree_dim)$)--++(0,-\l_filigree_dim)--++(\l_filigree_dim,0)--cycle;
-  % \fill ($(frame.south~east)+(0,\l_filigree_dim)$)--++(0,-\l_filigree_dim)--++(-\l_filigree_dim,0)--cycle;
-  % \fill ($(frame.north~east)+(0,-\l_filigree_dim)$)--++(0,\l_filigree_dim)--++(-\l_filigree_dim,0)--cycle;
+	% \fill ($(frame.south~west)+(0,\__rpg_filigreeSize)$)--++(0,-\__rpg_filigreeSize)--++(\__rpg_filigreeSize,0)--cycle;
+	% \fill ($(frame.south~east)+(0,\__rpg_filigreeSize)$)--++(0,-\__rpg_filigreeSize)--++(-\__rpg_filigreeSize,0)--cycle;
+	% \fill ($(frame.north~east)+(0,-\__rpg_filigreeSize)$)--++(0,\__rpg_filigreeSize)--++(-\__rpg_filigreeSize,0)--cycle;
 }
 \ExplSyntaxOn
 \tcbset{
-  rpg filigree/.style={
-    top=2pt,
-    left=2pt,
-    right=2pt,
-    overlay = {
-      \begin{scope}[draw=filigreecolor,line~width=1pt]
-        \__rpg_filigree:
-      \end{scope}
-    },
-  }
+rpg filigree/. append~style={
+top=2pt,
+left=2pt,
+right=2pt,
+% overlay = {
+% 		\begin{scope}[draw=FiligreeColor,line~width=1pt]
+% 			\__rpg_Filigree:
+% 		\end{scope}
+% 	},
+}
 }
 \ExplSyntaxOff

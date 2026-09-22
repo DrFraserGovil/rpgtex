@@ -1,0 +1,56 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Callouts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Callouts are boxed text that highlight information to the reader
+\ExplSyntaxOn
+
+\DeclareTColorBox	{__RpgTip}		{o} { rpgtip, #1		}
+\DeclareTColorBox	{__RpgNarration}{o} { rpgnarration, #1	}
+\DeclareTColorBox	{__RpgSidebar}	{o} { rpgsidebar, #1	}
+\tcbset{rpgtip/.style={}}
+\tcbset{rpgnarration/.style={}}
+\tcbset{rpgsidebar/.style={}}
+
+
+\RpgThemeNewTLKey{ rpg / callouts } {color} { \__rpg_boxColor }{black}
+
+% \begin{noindent}
+\NewDocumentEnvironment {RpgTip}	{ O{} m }
+{
+	\group_begin:
+	\tl_set:Nn{\__rpg_boxColor}{TipColor}	
+	\keys_set_known:nnN{rpg/callouts}{#1}{\l_tmpa_tl} 
+	\begin{__RpgTip}[colback = \__rpg_boxColor, colbacktitle = \__rpg_boxColor, title=#2, \l_tmpa_tl ]
+}
+{
+	\end{__RpgTip}
+	\group_end:
+
+}
+\NewDocumentEnvironment {RpgNarration}	{ O{} }
+{
+	\group_begin:
+	\tl_set:Nn{\__rpg_boxColor}{NarrationColor}	
+	\keys_set_known:nnN{rpg/callouts}{#1}{\l_tmpa_tl} 
+	\begin{__RpgTip}[colback = \__rpg_boxColor, colbacktitle = \__rpg_boxColor, \l_tmpa_tl ]
+}
+{
+	\end{__RpgTip}
+	\group_end:
+
+}
+\NewDocumentEnvironment {RpgSidebar}	{ O{} m }
+{
+	\group_begin:
+	\tl_set:Nn{\__rpg_boxColor}{SidebarColor}	
+	\keys_set_known:nnN{rpg/callouts}{#1}{\l_tmpa_tl} 
+	\begin{__RpgTip}[colback = \__rpg_boxColor, colbacktitle = \__rpg_boxColor, title=#2, \l_tmpa_tl ]
+}
+{
+	\end{__RpgTip}
+	\group_end:
+
+}
+
+% \end{noindent}

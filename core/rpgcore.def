@@ -14,6 +14,7 @@
 \RequirePackage {hang} % hanging paragraphs
 \RequirePackage {tabularx} % variable-width table columns
 \RequirePackage {xltabular} % breakable tables
+\RequirePackage {supertabular} % long tables
 \RequirePackage [breakable,skins,xparse]{tcolorbox} % styled text boxes
 \RequirePackage {tikz} % drawing ornaments and lines
 \RequirePackage {xcolor}
@@ -26,7 +27,7 @@
 \RequirePackage {xparse} % \NewDocumentCommand and expl3
 % \RequirePackage[hidelinks] {hyperref}
 
-% \usetikzlibrary{calc}
+\usetikzlibrary{calc}
 \ExplSyntaxOn
 
 \sys_if_engine_luatex:T
@@ -84,6 +85,9 @@
 \input {core/modules/	sections		.rpg-code.tex}
 \input {core/modules/	parts			.rpg-code.tex}
 \input {core/modules/	titles			.rpg-code.tex}
+
+\input {core/environments/	callouts		.rpg-code.tex}
+\input {core/environments/	filigree		.rpg-code.tex}
 % \RequirePackage {core/environments/switchenv}
 %
 % % % % Main modules in alphabetical order

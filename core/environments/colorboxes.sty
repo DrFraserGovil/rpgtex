@@ -49,7 +49,7 @@
 
 \NewDocumentEnvironment {RpgSidebar} {o m}
 {
-	\group_begin: 
+	\group_begin:
 	\__rpg_begin_box:nnnn{__rpg_sidebar}{sidebarcolor}{#1}{#2}
 }
 {
@@ -74,13 +74,13 @@
 }
 
 \tcbset{
-  rpg filigree/.style={
-	\begin{scope}[draw=black,line~width=1pt]
-        \__rpg_filigree:
-      \end{scope}
-	  enhanced,
-	  frame~hidden,
-  }}
+	rpg filigree/.style={
+			\begin{scope}[draw=black,line~width=1pt]
+				\__rpg_filigree:
+			\end{scope}
+			enhanced,
+			frame~hidden,
+		}}
 
 \NewDocumentEnvironment {RpgFiligree} {O{}}
 {
