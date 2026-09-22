@@ -88,6 +88,7 @@
 
 \input {core/environments/	callouts		.rpg-code.tex}
 \input {core/environments/	filigree		.rpg-code.tex}
+\input {core/environments/	table			.rpg-code.tex}
 % \RequirePackage {core/environments/switchenv}
 %
 % % % % Main modules in alphabetical order

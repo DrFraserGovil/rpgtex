@@ -4,22 +4,48 @@
 \ExplSyntaxOn
 \RpgThemeKeys{rpg/table}
 {
+	%% Appearance
 	\RpgThemeTLKey	{color}	{\__rpg_tableColor}	{TableColor}
 	\RpgThemeTLKey	{title}	{\__rpg_tableTitle}	{}
-	\RpgThemeTLKey	{width}	{\__rpg_tableWidth}	{\linewidth}
 
+	%% Variant modes
 	\RpgThemeBoolKey{noheader}	{\__rpg_tableNoHeader}
 	\RpgThemeBoolKey{simple}	{\__rpg_tableSimpleMode}
 	\RpgThemeBoolKey{filigree}	{\__rpg_tableFiligree}
+	\RpgThemeTLKey	{filigree-opacity}{\__rpg_tableFiligreeOpacity}{1}
+	\RpgThemeTLKey	{filigree-hgap}{\__rpg_tableFiligreeHGap}{1pt}
+
+	%% Dimensions
+	\RpgThemeTLKey	{width}	{\__rpg_tableWidth}	{\linewidth}
+	\RpgThemeTLKey	{vskip}	{\__rpg_tableVSkip} {9pt plus 3pt minus 3pt}
 }
 
-
+% \begin{noindent}
 \NewDocumentEnvironment{RpgTable}{ O{} m +b }
 { 	%before
 	\group_begin:
+	\tl_set:Nn{\__rpg_tableWidth}{\linewidth} %% have to reset each time in case lw has changed
+	\keys_set:nn { rpg/table } { #1 }
 
-}
-{ % after
 
+	%%% Vertical spacer
+	\par \vspace{ \__rpg_tableVSkip } \noindent
+
+	%%% If in filigree mode, initialise the wrapper
+	\bool_if:NT{\__rpg_tableFiligree}
+	{
+		\begin{RpgFiligree}[left=\__rpg_tableFiligreeHGap, right=\__rpg_tableFiligreeHGap]
+	}
+
+			#3
+}{ % after
+
+	%%% If in filigree mode, then end the wrapper
+	\bool_if:NT{\__rpg_tableFiligree}
+	{
+		\end{RpgFiligree}
+	}
+	 
 	\group_end:
 }
+% \end{noindent}
