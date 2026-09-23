@@ -7,24 +7,26 @@
 % Helps prevent option clash with other packages that include xcolor
 \PassOptionsToPackage {table} {xcolor}
 
-\RequirePackage {array}
-\RequirePackage {colortbl}
-\RequirePackage {enumitem}
-\RequirePackage {etoolbox}
-\RequirePackage {hang} % hanging paragraphs
-\RequirePackage {tabularx} % variable-width table columns
-\RequirePackage {xltabular} % breakable tables
-\RequirePackage {supertabular} % long tables
+\RequirePackage {array}						% Array operations 
+\RequirePackage {enumitem}					% Manipulate lists
+\RequirePackage {hang}						% hanging paragraphs
+\RequirePackage {tabularx}					% variable-width table columns
+\RequirePackage {xltabular}					% breakable tables
+\RequirePackage {supertabular}				% long tables
 \RequirePackage [breakable,skins,xparse]{tcolorbox} % styled text boxes
-\RequirePackage {tikz} % drawing ornaments and lines
-\RequirePackage {xcolor}
-\RequirePackage{float}
-\RequirePackage [titles] {tocloft} % multi-column toc
-\RequirePackage [newparttoc] {titlesec}  % Used to adjust (sub)section, part, and table of contents formatting
-\RequirePackage{titletoc}
-\RequirePackage{fancyhdr}
-\RequirePackage{dblfloatfix}
-\RequirePackage {xparse} % \NewDocumentCommand and expl3
+\RequirePackage {tikz}						% drawing ornaments and lines
+\RequirePackage {xcolor}					% Nice colo(u)rs
+\RequirePackage [titles] {tocloft}			% multi-column toc
+\RequirePackage [newparttoc] {titlesec}		% Used to adjust (sub)section, part, and table of contents formatting
+\RequirePackage{titletoc}					%% Title manipulation
+\RequirePackage{fancyhdr}					%% For headers and footers
+\RequirePackage{float}						%% Better floats
+\RequirePackage{dblfloatfix}				%% Float fixes for twocolumn environments
+\RequirePackage{cuted}						%% For \strip environment
+\RequirePackage {xparse}					% expl3 programming layer
+
+%% Might be needed later, so leave commented
+% \RequirePackage {etoolbox}					% Tools like \At
 % \RequirePackage[hidelinks] {hyperref}
 
 \usetikzlibrary{calc}
@@ -89,6 +91,7 @@
 \input {core/environments/	callouts		.rpg-code.tex}
 \input {core/environments/	filigree		.rpg-code.tex}
 \input {core/environments/	table			.rpg-code.tex}
+\input {core/environments/	abstract		.rpg-code.tex}
 % \RequirePackage {core/environments/switchenv}
 %
 % % % % Main modules in alphabetical order

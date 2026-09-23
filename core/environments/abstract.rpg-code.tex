@@ -1,0 +1,48 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Abstract/Summary
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Redefine the abstract environment to produce identical behaviour between 1 and 2 column modes
+% Arguments:	#1 The title of the block
+%				#2 The environment contents
+
+
+\NewDocumentEnvironment{RpgAbstract} {O{Abstract} O{0.7\linewidth} O{15pt} +b}
+{
+	%put the contents into a box	
+	\def\contents{
+		\centering %center the box in the page
+		\parbox[t]{#2}{
+
+			\tl_if_blank:eF{#1}{{\centering \RpgFontAbstractTitle{} #1\par}}
+
+			{\RpgFontAbstractBody{} #4}}
+	}
+
+	%%now do some fiddling to get the gaps consistent
+	\def\gap{#3}
+	\setlength{\stripsep}{\gap}
+	\str_case:Nn \__rpg_PageColumns
+	{
+		{onecolumn}{\vspace{\gap}\contents\\[\gap] } %%if in on col mode, just put the box into the page
+			{twocolumn}{\begin{strip}\contents\end{strip}} %% if in twocol, wrap it in a split
+	}
+}{}
+
+
+
+\DeclareDocumentEnvironment{abstract}{O{Abstract} O{0.7\linewidth} O{15pt} }
+{
+	\begin{RpgAbstract}[#1][#2][#3]
+		}
+		{
+	\end{RpgAbstract}
+}
+%%Simple redefinition with a different default value
+\NewDocumentEnvironment{summary}{O{Summary} O{0.7\linewidth} O{15pt}}
+{
+	\begin{RpgAbstract}[#1][#2][#3]
+		}
+		{
+	\end{RpgAbstract}
+}
