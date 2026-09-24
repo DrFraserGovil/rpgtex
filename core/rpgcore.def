@@ -92,6 +92,7 @@
 \input {core/environments/	filigree		.rpg-code.tex}
 \input {core/environments/	table			.rpg-code.tex}
 \input {core/environments/	abstract		.rpg-code.tex}
+\input {core/environments/	map				.rpg-code.tex}
 % \RequirePackage {core/environments/switchenv}
 %
 % % % % Main modules in alphabetical order
