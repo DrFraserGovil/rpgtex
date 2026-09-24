@@ -16,15 +16,12 @@
 	\RpgThemeTLKey	{label}			{\__rpg_areaLabel}		{}
 }
 
-\newcounter{RpgAreaDepth} %Tracks how many nestings we have
-\newcounter{RpgArea}	  %Tracks area names
-\setcounter{RpgAreaDepth}{0}
-\setcounter{RpgArea}{0}
-
+%% Activates an environment designed for describing map areas
+%% Complexity comes from the nesting behaviour for names 
 \NewDocumentEnvironment{RpgMap}{ O{} }
 {
 	\group_begin:
-	\stepcounter{RpgAreaDepth}
+	\stepcounter{RpgAreaDepth}			%% Increment nesting depth
 	\keys_set:nn{ rpg / map }{#1}
 	\int_compare:nT {\value{RpgAreaDepth} = 1 }
 	{
@@ -35,15 +32,21 @@
 	}
 	\__rpg_mapMakePrefix:{}
 
+	%%%%%%%%%%%%
+	% \area
+	%%%%%%%%%%%%
+	% Inside a map, can use \area like you would \item in a list.
 	\DeclareDocumentCommand{\area}{O{} g}{\__RpgArea{##1}{##2}}
 }
 {	\seq_gpop_right:NN \__rpg_MapStack {\l__map_tmp} %%remove the final element from the stack
-	\addtocounter{RpgAreaDepth}{-1}
+	\addtocounter{RpgAreaDepth}{-1}		%% Decrement nesting depth
 
 	\group_end:
 }
 
-
+%% Access refs (a wrapper for \ref/\nameref)
+%% #1 If starred, call ref, else call nameref
+%% #2 The map reference to access
 \NewDocumentCommand\RpgMapRef{s m}
 {
 	\IfBooleanTF{#1}
@@ -55,11 +58,17 @@
 	}
 }
 
+%% Theme setter function for setting the name formatting system (i.e. 1A-ii)
+%% Args: #1 the current nesting depth
+%%		 #2 the number to format
 \NewDocumentCommand\RpgThemeMapFormat{ +m }
 {
 	\cs_set:Nn \__rpg_mapFormatAtDepth:nn {#1}
 }
 
+%% A nesting environment, equivalent to calling \area[]{} \begin{RpgMap} \end{RpgMap}
+%%	#1	Label name for the top level area
+%%	#2	Display name for the top level area
 \NewDocumentEnvironment{RpgArea}{O{} g}
 {
 	\int_compare:nT{ \value{RpgAreaDepth} = 0}
@@ -76,9 +85,18 @@
 %% Helper Functions
 %%%%%%%%%%%%%%%%%%%%
 
+\newcounter{RpgAreaDepth} %Tracks how many nestings we have
+\newcounter{RpgArea}	  %Tracks area references
+\setcounter{RpgAreaDepth}{0}
+\setcounter{RpgArea}{0}
+
 \seq_new:N \__rpg_MapStack %% The length of this array is the nesting depth, the value at each element is the current no. of elements at that depth
 \msg_new:nnn{rpg}{bad-map}{Cannot~activate~an~area~without~an~RpgMap~environment}
+
 % \begin{noindent}
+%% Dispatch function for \area and RpgArea
+%%	#1	Label name for the area
+%%	#2	Display name for the area
 \NewDocumentCommand\__RpgArea{m m}
 {
 	\__rpg_mapIncrementStack:
@@ -89,6 +107,8 @@
 	\group_end:
 }
 % \end{noindent}
+
+%% Each area constructs a parent prefix used for descending 
 \cs_new_protected:Npn \__rpg_mapMakePrefix:
 {
 	%% If level = 1, then we're at the top level of a new map, so clear the stack
@@ -108,27 +128,29 @@
 	\seq_gput_right:Nn \__rpg_MapStack {0} %% no elements at this depth, so counter starts at 0
 }
 
-\cs_new_protected:Npn \__rpg_mapFormatAtDepth:nn {}
 
+%% Using \RpgThemeMapFormat to set the default 
+\cs_new_protected:Npn \__rpg_mapFormatAtDepth:nn {}
 \RpgThemeMapFormat{
-	\int_case:nnF{ \int_mod:nn{#1 - 1} { 4 } }
+	\int_case:nnF{ \int_mod:nn{#1 - 1} { 3 } }
 	{
 		{0}{	\int_to_arabic:n{#2}	}
 			{1}{	\int_to_Alph:n{#2}	}
-			{2}{	\int_to_alph:n{#2}	}
-			{3}{	\int_to_roman:n{#2}	}
+			{2}{	-\int_to_roman:n{#2}	}
 	}
 	{}
 }
+
+%Extract the current-depth counter, increment it, and then insert the new value
+%(Weirdly is the most optimal way to increment a value in a sequence)
 \cs_new_protected:Npn \__rpg_mapIncrementStack:
 {
-	%Extract the current-depth counter, increment it, and then insert the new value
-	%(Weirdly is the most optimal way to increment a value in a sequence)
 	\seq_gpop_right:NN \__rpg_MapStack \l__tmpa_tl
 	\tl_set:Ne \__rpg_MapCurrentDepth { \int_eval:n {1 + \l__tmpa_tl} }
 	\seq_gput_right:Ne \__rpg_MapStack {\__rpg_MapCurrentDepth}
 }
 
+% Creates the area heading (or sets a default name)
 \cs_new_protected:Npn \__rpg_mapMakeHeader:n#1
 {
 	\tl_set:Ne{\__rpg_mapElementID}{\__rpg_mapParentName\__rpg_mapFormatAtDepth:nn{\arabic{RpgAreaDepth}}{\__rpg_MapCurrentDepth}}
@@ -143,11 +165,12 @@
 		\def\__rpg_labelName{\__rpg_mapEmptyPrefix \__rpg_mapElementID}
 	}
 
+	%% Actually write the headings -- getting smaller as the nesting increases
 	\__rpg_mapRenderHeadings:nn{\arabic{RpgAreaDepth} + \__rpg_mapHeaderOffset}{\__rpg_mapElementName}
-
 }
 
 
+%% Choose which \section/\subsection to write the header with
 % \begin{noindent}
 \cs_new_protected:Npn \__rpg_mapRenderHeadings:nn#1#2
 {
@@ -167,13 +190,12 @@
 	\rpgtmp*{#2}\__rpg_inserter
 }
 
-\RequirePackage{nameref}
-\newcounter{RpgAreaCounter}
+%% Generate the labels so the \ref and \nameref work as expected
 \cs_new_protected:Npn \__rpg_mapMakeLabels:nn#1#2
 {
 	\tl_if_empty:eF{#1}
 	{
-		\refstepcounter{RpgAreaCounter}
+		\refstepcounter{RpgArea}
 		\tl_set:Ne \@currentlabelname{#2}
 		\tl_set:Ne\@currentlabel{\__rpg_mapElementID}
 		\label{#1}	 

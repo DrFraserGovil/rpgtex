@@ -23,6 +23,7 @@
 \RequirePackage{float}						%% Better floats
 \RequirePackage{dblfloatfix}				%% Float fixes for twocolumn environments
 \RequirePackage{cuted}						%% For \strip environment
+\RequirePackage{nameref}					%% For \nameref command
 \RequirePackage {xparse}					% expl3 programming layer
 
 %% Might be needed later, so leave commented
