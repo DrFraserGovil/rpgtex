@@ -88,12 +88,14 @@
 \input {core/modules/	sections		.rpg-code.tex}
 \input {core/modules/	parts			.rpg-code.tex}
 \input {core/modules/	titles			.rpg-code.tex}
+\input {core/modules/	switch			.rpg-code.tex}
 
 \input {core/environments/	callouts		.rpg-code.tex}
 \input {core/environments/	filigree		.rpg-code.tex}
 \input {core/environments/	table			.rpg-code.tex}
 \input {core/environments/	abstract		.rpg-code.tex}
 \input {core/environments/	map				.rpg-code.tex}
+\input {core/environments/	ifEnv			.rpg-code.tex}
 % \RequirePackage {core/environments/switchenv}
 %
 % % % % Main modules in alphabetical order
