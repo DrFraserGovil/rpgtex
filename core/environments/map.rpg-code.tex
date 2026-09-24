@@ -62,6 +62,10 @@
 
 \NewDocumentEnvironment{RpgArea}{O{} g}
 {
+	\int_compare:nT{ \value{RpgAreaDepth} = 0}
+	{
+		\msg_error:nn{rpg}{bad-map}
+	}
 	\area[#1]{#2}
 	\begin{RpgMap}
 		}{
@@ -73,14 +77,12 @@
 %%%%%%%%%%%%%%%%%%%%
 
 \seq_new:N \__rpg_MapStack %% The length of this array is the nesting depth, the value at each element is the current no. of elements at that depth
-
-
+\msg_new:nnn{rpg}{bad-map}{Cannot~activate~an~area~without~an~RpgMap~environment}
 % \begin{noindent}
 \NewDocumentCommand\__RpgArea{m m}
 {
 	\__rpg_mapIncrementStack:
 	\group_begin:
-	% \keys_set:nn{ rpg/area}{#1}
 	
 	\__rpg_mapMakeHeader:n{#2}
 	\__rpg_mapMakeLabels:nn{#1}{\__rpg_labelName}
