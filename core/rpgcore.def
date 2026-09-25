@@ -96,6 +96,7 @@
 \input {core/environments/	abstract		.rpg-code.tex}
 \input {core/environments/	map				.rpg-code.tex}
 \input {core/environments/	ifEnv			.rpg-code.tex}
+\input {core/environments/	secret			.rpg-code.tex}
 % \RequirePackage {core/environments/switchenv}
 %
 % % % % Main modules in alphabetical order
