@@ -22,6 +22,7 @@
 \RequirePackage{fancyhdr}					%% For headers and footers
 \RequirePackage{float}						%% Better floats
 \RequirePackage{dblfloatfix}				%% Float fixes for twocolumn environments
+\RequirePackage{adjustbox}					%% For RpgCard boxes
 \RequirePackage{cuted}						%% For \strip environment
 \RequirePackage{nameref}					%% For \nameref command
 \RequirePackage {xparse}					% expl3 programming layer
@@ -97,6 +98,7 @@
 \input {core/environments/	map				.rpg-code.tex}
 \input {core/environments/	ifEnv			.rpg-code.tex}
 \input {core/environments/	secret			.rpg-code.tex}
+\input {core/environments/	card			.rpg-code.tex}
 % \RequirePackage {core/environments/switchenv}
 %
 % % % % Main modules in alphabetical order

@@ -1,0 +1,243 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Printout-Cards
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ExplSyntaxOn
+
+\NewDocumentEnvironment{RpgCard}{ O{} +b }
+{
+	%% Do this before group because it does set a global flag
+
+	\group_begin:
+	\__rpg_card_EntryCheck:
+	\RpgCardSet{#1}
+
+	\tl_gclear:N \__rpg_card_fontState
+	\tl_gclear:N \__rpg_card_footnote
+	\RenewDocumentCommand{\cardbreak}{}{ \par \penalty -10000 \mbox{} } %% HACK: mbox or vspace?
+	\RenewDocumentCommand{\footnote}{m}{ \__rpg_card_footnoteChar\tl_gset:Nn{\__rpg_card_footnote}{##1} }
+
+
+	\__rpg_card_processContents:n{#2}
+}
+{
+	\group_end:
+}
+
+%%%%%%%%%%%%%%%
+% Options
+%%%%%%%%%%%%%%%
+
+
+%% For a single-source-of-truth on defaults, we leave them blank here, and set them in the Reset command
+\RpgThemeKeys{ rpg / card}
+{
+	\RpgThemeTLKey{width}{\__rpg_card_width}{}
+	\RpgThemeTLKey{height}{\__rpg_card_height}{}
+	\RpgThemeTLKey{hmargin}{\__rpg_card_hmargin}{}
+	\RpgThemeTLKey{vmargin}{\__rpg_card_vmargin}{}
+	\RpgThemeTLKey{cardsep}{\__rpg_card_cardsep}{}
+	\RpgThemeTLKey{footnote}{\__rpg_card_footnoteChar}{*}
+
+	\RpgThemeBoolKey{vcentre}{\__rpg_card_vcentre}
+	\RpgThemeBoolKey{vcenter}{\__rpg_card_vcentre}
+	%% appearance
+	\RpgThemeTLKey{color}{\__rpg_card_color}{}
+	\RpgThemeTLKey{opacity}{\__rpg_card_opacity}{}
+}
+
+% \begin{noindent}
+\NewDocumentCommand\RpgCardReset{}
+{
+	\tcbset{rpgcard-composite/.style={rpgcard}} %% resets the composite back to the baseline
+	\RpgCardSet{
+		width=6.75cm,
+		height=9.7cm,
+		hmargin=0.2cm,
+		vmargin=0.2cm,
+		color=white,
+		cardsep=5pt,
+		opacity=1,
+	}
+}
+\tcbset{rpgcard/.style={
+			valign=center,
+			halign=left,
+			colframe=black,
+			size=tight,
+			arc=1mm,
+			auto~outer~arc,
+			enhanced~jigsaw,
+		}}
+
+\NewDocumentCommand\RpgCardSet{+m}
+{
+	%%intercept the known values
+	\keys_set_known:nnN {rpg/card}{#1}{\l__tmpa_tl}
+
+	%%insert the rest in a specific order to ensure the correct resolution (color overrides colback etc)
+	%%Rule out titles from being inserted (they break the card splitting rules)
+	\exp_args:Nx \tcbset
+	{
+		rpgcard/.append~style={
+		\l__tmpa_tl, 
+		title={},
+		colback=\__rpg_card_color,
+		opacityback=\__rpg_card_opacity,
+		width=\__rpg_card_width,
+		height=\__rpg_card_height,
+		} 
+	}
+
+
+	%%% now set the text box size 
+
+	\dim_set:Nn \__rpg_card_textWidth{
+		\dim_eval:n { \__rpg_card_width - (\__rpg_card_hmargin * 2) }
+	}
+	\dim_set:Nn \__rpg_card_textHeight{
+		\dim_eval:n { \__rpg_card_height - (\__rpg_card_vmargin * 2) }
+	}
+
+	%% Now check nothing went negative
+	\dim_compare:nT{\__rpg_card_textWidth <= 0pt}
+	{
+		\msg_error:nneeee {rpg}{card-dimensions}{hmargin}{\__rpg_card_hmargin}{\dim_eval:n{\__rpg_card_width /2}}{width}
+	}
+	\dim_compare:nT{\__rpg_card_textHeight <= 0pt}
+	{
+		\msg_error:nneeee {rpg}{card-dimensions}{vmargin}{\__rpg_card_vmargin}{\dim_eval:n{\__rpg_card_height /2}}{height}
+	}
+
+}
+
+%\end{noindent}
+
+\tcbset{rpgcard-composite/.style={}}
+\newtcolorbox{__RpgCard}[1][]{
+	rpgcard,
+	#1
+}
+
+
+%%%%%%%%%%%%%%%%%
+%% Helpers
+%%%%%%%%%%%%%%%%%
+\bool_new:N \__rpg_card_isNested
+\bool_set_false:N \__rpg_card_isNested
+\msg_new:nnn {rpg}{card-nested}{Cannot~nest~RpgCard~inside~RpgCard}
+\cs_new_protected:Npn \__rpg_card_EntryCheck:{
+	\bool_if:NT \__rpg_card_isNested
+	{
+		\msg_error:nnn{rpg}{card-nested}{}
+	}
+	\bool_set_true:N \__rpg_card_isNested
+}
+
+
+%%%%%%%%%%%%%%%%%
+% Page splitting
+%%%%%%%%%%%%%%%%%
+
+\NewDocumentCommand{\cardbreak}{}{} %% command does nothing until redefined in an RpgCard env.
+\dim_new:N \__rpg_card_textWidth
+\dim_new:N \__rpg_card_textHeight
+\msg_new:nnn { rpg } { card-dimensions}{~\\Dimension~error!\\The~#1~is~too~large~(\dim_eval:n{#2}).~It~cannot~exceed~#3~(half~the~#4).}
+\bool_new:N \__rpg_card_isFirstPage
+\box_new:N \__rpg_card_contents
+\box_new:N \__rpg_card_subContents
+\box_new:N \__rpg_card_tmpbox
+
+\cs_new_protected:Npn \__rpg_card_processContents:n#1
+{
+	%% places the contents of the card into a mega-card (\__rpg_card_contents)
+	\__rpg_card_buildBoundingBox:n{#1}
+
+	\ignorespaces\noindent\leavevmode
+
+	%% now we do the iteration
+	\bool_set_true:N \__rpg_card_isFirstPage
+	\bool_do_until:nn {\box_if_empty_p:N \__rpg_card_contents}
+	{
+		\splittopskip=0pt
+
+		%%split off a chunk of the megabox to be our single-card
+		\vbox_set_split_to_ht:NNn \__rpg_card_subContents \__rpg_card_contents { \__rpg_card_textHeight }
+		\bool_if:NTF \__rpg_card_isFirstPage
+		{
+			\bool_set_false:N \__rpg_card_isFirstPage
+		}
+		{
+			\hskip\__rpg_card_cardsep
+		}
+
+		\bool_if:NTF \__rpg_card_vcentre
+		{
+			\def\insert{}
+			\vbox_set:Nn \__rpg_card_tmpbox
+			{
+				\unvbox \__rpg_card_subContents
+				\unskip
+				\unkern
+			}
+
+			% Repack into fixed target height with centering glues
+			\vbox_set_to_ht:Nnn \__rpg_card_subContents { \__rpg_card_textHeight }
+			{
+				\vfill
+				\box_use_drop:N \__rpg_card_tmpbox
+				\vfill
+			}
+		}
+		{
+			\def\insert{\vspace{\__rpg_card_vmargin}}
+		}
+		\hbox{
+			\begin{__RpgCard}
+				%% insert the previous font state
+				\__rpg_card_fontState
+
+				\hfil {{\box_use:N \__rpg_card_subContents} }\hfil
+
+				%% capture the current font state
+				\tl_gset:Nn \__rpg_card_fontState{\the\font}
+
+			\end{__RpgCard}
+		}
+
+	}
+
+
+
+}
+\cs_new_protected:Npn \__rpg_card_buildBoundingBox:n#1
+{
+	\vbox_set:Nn \__rpg_card_contents{
+		\hsize = \__rpg_card_textWidth
+		\linewidth = \hsize
+
+		\RpgFontCardBody
+
+		#1
+
+
+		\tl_if_empty:eF{\__rpg_card_footnote}
+		{
+			\vfil
+			\vbox{
+				\hrule
+				\vspace{0.5em}
+
+				\noindent \__rpg_card_footnoteChar~\__rpg_card_footnote
+			}
+		}
+
+	}
+}
+
+
+
+%%%%% And at the very end....
+
+\RpgCardReset{} %(place it into a default state after everything has been declared)
+
