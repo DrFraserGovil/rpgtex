@@ -99,6 +99,7 @@
 \input {core/environments/	ifEnv			.rpg-code.tex}
 \input {core/environments/	secret			.rpg-code.tex}
 \input {core/environments/	card			.rpg-code.tex}
+\input {core/environments/	make-env		.rpg-code.tex}
 % \RequirePackage {core/environments/switchenv}
 %
 % % % % Main modules in alphabetical order

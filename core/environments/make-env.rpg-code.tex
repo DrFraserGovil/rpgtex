@@ -1,0 +1,103 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Simple Interface for Complex Environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+
+\NewDocumentCommand\RpgThemeNewRuleEnv{O{Rpg} m}
+{
+	\__RpgBuildEnv{}{#1}{#2}{#1#2}
+	\__RpgMakeKeys{#1}{#2}
+}
+
+\NewDocumentCommand\RpgThemeNewCardableRuleEnv{O{Rpg} m m O{} O{}}
+{
+	\__RpgBuildEnv{__}{#1}{#2}{#1#2}
+	\__RpgBuildEnv{__}{#1}{#2Card}{#1#2}
+	\__RpgMakeKeys{#1}{#2}
+
+
+	\RenewDocumentEnvironment{__#1#2Card}{O{} m O{} +b}
+	{
+		\keys_set:nn{rpg/rule/#1#2}{##3}
+		\begin{RpgCard}[##1]
+			\use:c{__#1#2Card_format:nn}{##2}{##4}
+		\end{RpgCard}
+	}{}
+
+	\RpgNewSwitch{#3}
+
+	\NewDocumentEnvironment{#1#2}{O{#4} m O{#5} +b}
+	{
+		\begin{RpgIfEnv}{#3}[##1]{__#1#2Card}{__#1#2}{##2}[##3]
+			##4
+		\end{RpgIfEnv}
+	}{}
+}
+
+\NewDocumentCommand\RpgGetKey{m}
+{
+	\msg_error:nnn{rpg}{bad-getkey}{#1}
+}
+%%%%%%%%%%%%%%
+%% Helpers
+%%%%%%%%%%%%%%
+
+\msg_new:nnn{rpg}{bad-getkey}{Cannot~get~key~(#1)~when~not~in~environment}
+\NewDocumentCommand\__RpgBuildEnv{m m m m}
+{
+
+	\cs_new:cpn{__#2#3_format:nn}{}
+
+	\NewDocumentEnvironment{#1#2#3}{m O{} +b}
+	{
+		\RenewDocumentCommand\RpgGetKey{m}{  { \prop_item:cn{__rpg_#4_properties}{##1}}; ####1}
+		\keys_set:nn{rpg/rule/#4}{##2}
+		\use:c{__#2#3_format:nn}{##1}{##3}
+	}{}
+
+
+	\cs_new:cpn{#2Theme#3Format} ##1
+	{
+		\cs_set:cn{__#2#3_format:nn}{##1}
+	}
+
+	% \begin{noindent}
+	\use:c{#2Theme#3Format}{\subsection{##1} ##2}
+	% \end{noindent}
+}
+
+\NewDocumentCommand\__RpgMakeKeys{m m}
+{
+	\prop_new:c{__rpg_#1#2_properties}
+
+	\exp_args:Nc\NewDocumentCommand{#1Theme#2AddProperty}{m o m m}
+	{
+		\RpgThemeNewTLKey{rpg/rule/#1#2}{##1}{##3}{##4}
+		\prop_put:cnn{__rpg_#1#2_properties}{##1}{##3}
+	}
+	\exp_args:Nc\NewDocumentCommand{#1Theme#2AddBoolean}{s m o m}
+	{
+		\IfBooleanTF{##1}
+		{
+			\RpgThemeNewBoolKey*{rpg/rule/#1#2}{##2}{##4}
+		}
+		{
+			\RpgThemeNewBoolKey{rpg/rule/#1#2}{##2}{##4}
+		}
+		\prop_put:cnn{__rpg_#1#2_properties}{##2}{##4}
+	}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Declare the Common RuleEnvs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RpgThemeNewCardableRuleEnv{Item}{UseItemCard}
+\RpgThemeNewCardableRuleEnv{Spell}{UseSpellCard}
+\RpgThemeNewCardableRuleEnv{Feat}{UseFeatCard}
+\RpgThemeNewCardableRuleEnv{Stat}{UseStatCard}
+
+
+
