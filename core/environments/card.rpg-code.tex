@@ -14,7 +14,7 @@
 
 	\tl_gclear:N \__rpg_card_fontState
 	\tl_gclear:N \__rpg_card_footnote
-	\RenewDocumentCommand{\cardbreak}{}{ \par \penalty -10000 \mbox{} } %% HACK: mbox or vspace?
+	\RenewDocumentCommand{\cardbreak}{}{ \par \penalty -10000 \mbox{} }
 	\RenewDocumentCommand{\footnote}{m}{ \__rpg_card_footnoteChar\tl_gset:Nn{\__rpg_card_footnote}{##1} }
 
 
