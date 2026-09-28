@@ -1,13 +1,12 @@
 %%% Sidebar
+
 \ExplSyntaxOn
 \tcbset{
 rpg sidebar/.style={
 before~upper     =
 {
-% \RpgLayoutOnly{ HACK: Undo this
-% 	\bool_if:NF \l__rpg_justified_bool
-% 	{\RaggedRight}
-% }
+\bool_if:NF \__rpg_IsJustified
+{\raggedright}
 },
 code={\linespread{.9}},
 frame~hidden,
@@ -39,10 +38,8 @@ after~skip       = 14pt plus 4pt minus 4pt,
 rpg narration/.style={
 before~upper    =
 {
-% \RpgLayoutOnly{ HACK: ANd this
-% 	\bool_if:NF \l__rpg_justified_bool
-% 	{\RaggedRight}
-% }
+\bool_if:NF \__rpg_IsJustified
+{\raggedright}
 },
 code            = {\linespread {1.1} },
 enhanced~jigsaw,
@@ -69,10 +66,8 @@ after~skip      = 13pt plus 4pt minus 4pt,
 rpg tip/.style={
 before~upper =
 {
-% \RpgLayoutOnly{ HACK: And this
-% 	\bool_if:NF \l__rpg_justified_bool
-% 	{ \RaggedRight }
-% }
+\bool_if:NF \__rpg_IsJustified
+{ \RaggedRight }
 },
 code         = {\linespread{.9}},
 frame~hidden,
@@ -100,7 +95,6 @@ rounded~corners,
 %% filigree
 
 \RpgThemeSetFiligree{
-	% \draw[dotted] (frame.north~west) rectangle (frame.south~east);
 	\foreach \m in {0.2,0.6,1,1.4}
 		{
 			\draw[thin] ($(frame.north~west)+(0,-{\m*\__rpg_filigreeSize})$) to[out=60,in=-150] ($(frame.north~west)+({\m*\__rpg_filigreeSize},0)$);
@@ -109,11 +103,6 @@ rounded~corners,
 			\draw[thin] ($(frame.south~east)+(0,{\m*\__rpg_filigreeSize})$) to[out=-120,in=30]($(frame.south~east)+({-\m*\__rpg_filigreeSize},0)$);
 
 		}
-	% \fill ($(frame.north~west)+(0,-\__rpg_filigreeSize)$)--++(0,\__rpg_filigreeSize)--++(\__rpg_filigreeSize,0)--cycle;
-
-	% \fill ($(frame.south~west)+(0,\__rpg_filigreeSize)$)--++(0,-\__rpg_filigreeSize)--++(\__rpg_filigreeSize,0)--cycle;
-	% \fill ($(frame.south~east)+(0,\__rpg_filigreeSize)$)--++(0,-\__rpg_filigreeSize)--++(-\__rpg_filigreeSize,0)--cycle;
-	% \fill ($(frame.north~east)+(0,-\__rpg_filigreeSize)$)--++(0,\__rpg_filigreeSize)--++(-\__rpg_filigreeSize,0)--cycle;
 }
 \ExplSyntaxOn
 \tcbset{
@@ -121,11 +110,6 @@ rpg filigree/. append~style={
 top=2pt,
 left=2pt,
 right=2pt,
-% overlay = {
-% 		\begin{scope}[draw=FiligreeColor,line~width=1pt]
-% 			\__rpg_Filigree:
-% 		\end{scope}
-% 	},
 }
 }
 \ExplSyntaxOff
