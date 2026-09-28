@@ -5,12 +5,23 @@
 %% Places an image occupying the entirety of the next page, calling \clearpage on either side
 %% Arguments:	#1 Any eso-pic put commands to go on top of the image
 %%				#2 The path to the image
-\NewDocumentCommand\RpgWholePageImage{ +O{} +m}
+\NewDocumentCommand\RpgWholePageImage{ +O{}  +m o}
 {
 \clearpage
 \AddToShipoutPictureFG*{%
 	\AtPageLowerLeft{%
 		\put(0,0){\makebox(0,0)[bl]{\includegraphics[width=\paperwidth,height=\paperheight]{#2}}}
+		\IfValueT{#3}
+		{
+			\put(0,0){%
+				\begin{pgfpicture}
+					\pgfsetfillopacity{#3}
+					\pgfsetfillcolor{white}
+					\pgfpathrectangle{\pgfpointorigin}{\pgfqpoint{\paperwidth}{\paperheight}}
+					\pgfusepath{fill}
+				\end{pgfpicture}%
+			}
+		}
 		#1
 	}%
 }

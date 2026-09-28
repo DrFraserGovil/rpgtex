@@ -35,11 +35,11 @@
 				\clearpage	
 			}
 			{
-				\RpgWholePageImage[\__rpg_PartPage:n{#3}]{\__rpg_AllPartImage}
+				\RpgWholePageImage[\__rpg_PartPage:n{#3}]{\__rpg_AllPartImage}[\__rpg_partTransparency]
 			}
 		}
 		{
-			\RpgWholePageImage[\__rpg_PartPage:n{#3}]{#2}
+			\RpgWholePageImage[\__rpg_PartPage:n{#3}]{#2}[\__rpg_partTransparency]
 		}
 	}
 }
@@ -47,7 +47,11 @@
 	\cs_new_protected:Nn\__rpg_PartPage:n{}
 
  
-
+\NewDocumentCommand\RpgPartTransparency{m}
+{
+	\tl_set:Nn{\__rpg_partTransparency}{\fp_eval:n #1}
+}
+\RpgPartTransparency{0}
 
 \tl_new:N\__rpg_AllPartImage
 %% Sets a default part image which is used whenever a part image is not supplied

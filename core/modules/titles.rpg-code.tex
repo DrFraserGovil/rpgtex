@@ -88,11 +88,18 @@
 			\clearpage
 		}
 		{
-			\RpgWholePageImage[#1]{\@cover}
+			\RpgWholePageImage[#1]{\@cover}[\__rpg_coverTransparency]
 		}
 
 	}
 }
+
+\NewDocumentCommand\RpgCoverTransparency{m}
+{
+	\tl_set:Nn \__rpg_coverTransparency{\fp_eval:n{#1}}
+}
+\RpgCoverTransparency{0}
+
 %% Define registers & set default values
 \bool_new:N \__rpg_UseSimpleTitle
 \bool_set_true:N\__rpg_UseSimpleTitle

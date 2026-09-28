@@ -20,12 +20,15 @@
 \RequirePackage [newparttoc] {titlesec}		% Used to adjust (sub)section, part, and table of contents formatting
 \RequirePackage{titletoc}					%% Title manipulation
 \RequirePackage{fancyhdr}					%% For headers and footers
+\RequirePackage{transparent}
 \RequirePackage{float}						%% Better floats
 \RequirePackage{dblfloatfix}				%% Float fixes for twocolumn environments
 \RequirePackage{adjustbox}					%% For RpgCard boxes
 \RequirePackage{cuted}						%% For \strip environment
 \RequirePackage{nameref}					%% For \nameref command
 \RequirePackage {xparse}					% expl3 programming layer
+\RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
+\RequirePackage {ragged2e}
 
 %% Might be needed later, so leave commented
 % \RequirePackage {etoolbox}					% Tools like \At
@@ -50,8 +53,6 @@
 
 %% force layout changes -- but only if layout option triggered by class
 \RpgThemeLayoutOnly{
-	\RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
-	\RequirePackage {ragged2e}
 	% \def\raggedright\RaggedRight
 
 	\bool_if:NT \__rpg_HasMulticolToc
