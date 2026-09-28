@@ -128,7 +128,7 @@
 \NewDocumentCommand\RpgThemeKeys{ m m }
 {
 	%  Define versions of the New_Keys which insert into the active group
-	\NewDocumentCommand\RpgThemeBoolKey{s m m}
+	\DeclareDocumentCommand\RpgThemeBoolKey{s m m}
 	{
 		\IfBooleanTF{##1}
 		{
@@ -138,19 +138,19 @@
 			\RpgThemeNewBoolKey{#1}{##2}{##3}
 		}
 	}
-	\NewDocumentCommand\RpgThemeTLKey{m m m}
+	\DeclareDocumentCommand\RpgThemeTLKey{m m m}
 	{
 		\RpgThemeNewTLKey{#1}{##1}{##2}{##3}
 	}
-	\NewDocumentCommand\RpgThemeTLChoiceKey{m m m m}
+	\DeclareDocumentCommand\RpgThemeTLChoiceKey{m m m m}
 	{
 		\RpgThemeNewTLChoiceKey{#1}{##1}{##2}{##3}{##4}
 	}
-	\NewDocumentCommand\RpgThemeTLMapKey{m m m m m}
+	\DeclareDocumentCommand\RpgThemeTLMapKey{m m m m m}
 	{
 		\RpgThemeNewTLMapKey{#1}{##1}{##2}{##3}{##4}{##5}
 	}
-	\NewDocumentCommand\RpgThemeCodeMapKey{m m m m}
+	\DeclareDocumentCommand\RpgThemeCodeMapKey{m m m m}
 	{
 		\RpgThemeNewCodeMapKey{#1}{##1}{##2}{##3}{##4}
 	}
@@ -159,9 +159,19 @@
 	#2
 	%% Then undefine the functions
 	\cs_undefine:N \RpgThemeBoolKey
+	\cs_undefine:c {RpgThemeBoolKey~code}
+	\cs_undefine:c {RpgThemeBoolKey~defaults}
 	\cs_undefine:N \RpgThemeTLKey
+	\cs_undefine:c {RpgThemeTLKey~code}
+	\cs_undefine:c {RpgThemeTLKey~defaults}
 	\cs_undefine:N \RpgThemeTLChoiceKey
+	\cs_undefine:c {RpgThemeTLChoiceKey~code}
+	\cs_undefine:c {RpgThemeTLChoiceKey~defaults}
 	\cs_undefine:N \RpgThemeTLMapKey
+	\cs_undefine:c {RpgThemeTLMapKey~code}
+	\cs_undefine:c {RpgThemeTLMapKey~defaults}
 	\cs_undefine:N \RpgThemeCodeMapKey
+	\cs_undefine:c {RpgThemeCodeMapKey~code}
+	\cs_undefine:c {RpgThemeCodeMapKey~defaults}
 
 }

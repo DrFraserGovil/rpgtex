@@ -13,6 +13,7 @@
 \let\__rpg_OriginalPart\part
 
 
+\RpgIfSections{
 %% A new part command
 %%		#1: If starred, uses the original \part
 %%		#2:	An image path to use (overrides DefaultPartImage)
@@ -42,8 +43,10 @@
 		}
 	}
 }
+}
 	\cs_new_protected:Nn\__rpg_PartPage:n{}
 
+ 
 
 
 \tl_new:N\__rpg_AllPartImage

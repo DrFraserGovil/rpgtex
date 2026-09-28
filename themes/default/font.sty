@@ -1,10 +1,7 @@
-% \ExplSyntaxOn
-
 %%%reactivate the original rm-font loaded
 \RpgIfFont{
-	\providefontfamily{\lrfont}{Latin~Modern~Roman}
-	[
-		SmallCapsFont=Latin~Modern~Roman~Caps
+	\providefontfamily{\lrfont}{Latin Modern Roman} [
+		SmallCapsFont=Latin Modern Roman Caps
 	]
 }
 
@@ -14,7 +11,6 @@
 \RpgThemeFont{
 	main-body-family = \lrfont,
 	main-body-style= {},
-
 	title-family         = \normalfont,
 	title-style         = \Huge,
 	% Subtitle

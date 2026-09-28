@@ -52,6 +52,7 @@
 \RpgThemeLayoutOnly{
 	\RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
 	\RequirePackage {ragged2e}
+	% \def\raggedright\RaggedRight
 
 	\bool_if:NT \__rpg_HasMulticolToc
 	{ \RequirePackage [toc] {multitoc} }
@@ -67,7 +68,7 @@
 
 	% Set left justification if not justified
 	\bool_if:NF \__rpg_IsJustified
-	{ \RaggedRight }
+	{ \raggedright }
 
 	% Customize itemize environment.
 	\setlist{leftmargin=1em}

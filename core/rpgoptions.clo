@@ -46,10 +46,11 @@
 	\RpgThemeBoolKey	{title}		{\__rpg_UseTitlesOption}
 }
 
-% Check the class defaultss
+
+% % Check the class defaultss
 \tl_if_exist:NT \__rpg_ClassDefaults
 {
-	\keys_set:nV {rpg / options}{\__rpg_ClassDefaults}
+	\exp_args:Nee\keys_set:nn {rpg / options}{\__rpg_ClassDefaults}
 }
 
 % Set the values provided in the file

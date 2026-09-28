@@ -10,7 +10,7 @@
 \tl_new:N \__rpg_BaseClass
 \tl_set:Nn \__rpg_BaseClass { extbook }
 
-% \tl_set:Nn \__rpg_ClassDefaults {font,paper,sections,title}
+\tl_set:Nn \__rpg_ClassDefaults {font,background,sections,title}
 
 \input {core/rpgoptions.clo}
 \LoadClass{ \__rpg_BaseClass }
