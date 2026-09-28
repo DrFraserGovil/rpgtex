@@ -4,7 +4,6 @@
 
 %% These are section-related commands, not about the formatting of sections (that belongs in the Themes)
 
-\setcounter{secnumdepth}{0}
 
 \def\RpgPartName{~}
 \def\RpgChapterName{~}
@@ -50,10 +49,13 @@
 \let\__rpg_subsectionmark\subsectionmark
 \let\__rpg_subsubsectionmark\subsubsectionmark
 
-\def\chaptermark#1{\__rpg_chaptermark{#1}\def\RpgChapterName{#1}}
-\def\sectionmark#1{\__rpg_sectionmark{#1}\def\RpgSectionName{#1}}
-\def\subsectionmark#1{\__rpg_chaptermark{#1}\def\RpgSubSectionName{#1}}
-\def\subsubsectionmark#1{\__rpg_chaptermark{#1}\def\RpgSubsubsectionName{#1}}
+\RpgIfSections{
+	\setcounter{secnumdepth}{0}
+	\def\chaptermark#1{\__rpg_chaptermark{#1}\def\RpgChapterName{#1}}
+	\def\sectionmark#1{\__rpg_sectionmark{#1}\def\RpgSectionName{#1}}
+	\def\subsectionmark#1{\__rpg_chaptermark{#1}\def\RpgSubSectionName{#1}}
+	\def\subsubsectionmark#1{\__rpg_chaptermark{#1}\def\RpgSubsubsectionName{#1}}
+}
 % \end{noindent}
 
 

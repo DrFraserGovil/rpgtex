@@ -25,17 +25,21 @@
 	\NewDocumentCommand{#1}{}{
 		\use:c {__rpg_font_#2_family} \use:c{__rpg_font_#2_style}
 	}
+	%%% We don't disable this command with RpgIfFont (that would be a lot of checks -- we just leave them blank)
 }
 
 %% Accepts key-value arguments corresponding to the 
-\NewDocumentCommand { \RpgThemeFont } { m }
+\NewDocumentCommand { \RpgThemeFont } { +m }
 {
-	\keys_set:nn { rpg / fonts } { #1 }
+	%%% We do disable this: if the font option is not passed, this command does nothing, so the fonts stay as default
+	\RpgIfFont{
+		\keys_set:nn { rpg / fonts } { #1 }
 
-	%% Call some global overrides to ensure everything remains in-sync
-	\renewcommand\normalfont\RpgFontBody
-	\renewcommand{\FirstLineFont}{\RpgFontDropCapFirstLine}
-	\normalfont
+		%% Call some global overrides to ensure everything remains in-sync
+		\renewcommand\normalfont\RpgFontBody
+		\renewcommand{\FirstLineFont}{\RpgFontDropCapFirstLine}
+		\normalfont
+	}
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%Available font elements

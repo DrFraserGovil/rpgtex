@@ -70,12 +70,12 @@
 {
 	\prop_new:c{__rpg_#1#2_properties}
 
-	\exp_args:Nc\NewDocumentCommand{#1Theme#2AddProperty}{m o m m}
+	\exp_args:Nc\NewDocumentCommand{#1#2AddProperty}{m o m m}
 	{
 		\RpgThemeNewTLKey{rpg/rule/#1#2}{##1}{##3}{##4}
 		\prop_put:cnn{__rpg_#1#2_properties}{##1}{##3}
 	}
-	\exp_args:Nc\NewDocumentCommand{#1Theme#2AddBoolean}{s m o m}
+	\exp_args:Nc\NewDocumentCommand{#1#2AddBoolean}{s m o m}
 	{
 		\IfBooleanTF{##1}
 		{

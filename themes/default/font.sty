@@ -1,10 +1,12 @@
-\ExplSyntaxOn
+% \ExplSyntaxOn
 
 %%%reactivate the original rm-font loaded
-\providefontfamily{\lrfont}{Latin~Modern~Roman}
-[
-	SmallCapsFont=Latin~Modern~Roman~Caps
-]
+\RpgIfFont{
+	\providefontfamily{\lrfont}{Latin~Modern~Roman}
+	[
+		SmallCapsFont=Latin~Modern~Roman~Caps
+	]
+}
 
 
 

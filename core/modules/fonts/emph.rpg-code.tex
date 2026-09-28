@@ -8,10 +8,12 @@
 	{\RpgFontEmphasis #1}
 }
 
-\bool_if:NT \__rpg_OverrideEmph
-{
-	\RenewDocumentCommand{\emph}{m}
+\RpgIfFont{
+	\bool_if:NT \__rpg_OverrideEmph
 	{
-		\RpgKey{#1}
+		\RenewDocumentCommand{\emph}{m}
+		{
+			\RpgKey{#1}
+		}
 	}
 }

@@ -10,14 +10,15 @@
 \tl_new:N \__rpg_BaseClass
 \tl_set:Nn \__rpg_BaseClass { extbook }
 
+% \tl_set:Nn \__rpg_ClassDefaults {font,paper,sections,title}
+
 \input {core/rpgoptions.clo}
 \LoadClass{ \__rpg_BaseClass }
 
 
 
 \RequirePackage{rpgtex}
-%
-% \RpgSetTitleMode{cover} : TODO: Re-enable this option
+\RpgThemeTitleMode{cover}
 %
 % % Set page geometry.
 \RequirePackage {geometry}

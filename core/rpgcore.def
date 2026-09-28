@@ -88,8 +88,8 @@
 \input {core/modules/	images			.rpg-code.tex}
 \input {core/modules/	sections		.rpg-code.tex}
 \input {core/modules/	parts			.rpg-code.tex}
-\input {core/modules/	titles			.rpg-code.tex}
 \input {core/modules/	switch			.rpg-code.tex}
+\input {core/modules/	titles			.rpg-code.tex}
 
 \input {core/environments/	callouts		.rpg-code.tex}
 \input {core/environments/	filigree		.rpg-code.tex}

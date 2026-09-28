@@ -52,9 +52,12 @@
 
 %% A new maketitle overload
 \let\__rpg_OriginalMakeTitle\maketitle
-\RenewDocumentCommand\maketitle{}
-{
-	\RpgMakeTitle{}
+
+\RpgIfTitle{
+	\RenewDocumentCommand\maketitle{}
+	{
+		\RpgMakeTitle{}
+	}
 }
 
 %% Shouldn't need this, but it acts as our \maketitle in case this is overloaded by another package

@@ -1,5 +1,18 @@
-\RequirePackage{fontspec} %%for xelatex fontss
-\RequirePackage[T1]{fontenc}
+% Spit out a warning if wrong compiler used
+\RpgIfFont{
+	\sys_if_engine_pdftex:T
+	{
+		\msg_new:nnn { rpg } { wrong-compiler }{#1}
+		\msg_error:nnx { rpg } { wrong-compiler }
+		{
+			rpgtex~requires~compilation~with~xelatex~or~luatex
+		}
+	}
+}
+\RpgIfFont{
+	\RequirePackage{fontspec} %%for xelatex fontss
+	\RequirePackage[T1]{fontenc}
+}
 \RequirePackage{lettrine} %%fancy drop cap
 \RequirePackage{Royal} %%Used for fancy drop caps
 \RequirePackage{contour} %%for outlining text
@@ -8,21 +21,12 @@
 
 \ExplSyntaxOn
 
-% Spit out a warning if wrong compiler used
-\sys_if_engine_pdftex:T
-{
-	\msg_new:nnn { rpg } { wrong-compiler }{#1}
-	\msg_error:nnx { rpg } { wrong-compiler }
-	{
-		rpgtex~requires~compilation~with~xelatex~or~luatex
-	}
-}
 
 \input{core/modules/fonts/define_fonts.rpg-code.tex}
 \input{core/modules/fonts/emph.rpg-code.tex}
 \input{core/modules/fonts/dropcap.rpg-code.tex}
 \input{core/modules/fonts/contour.rpg-code.tex}
- 
+
 %ensure the assigned normalfont is loaded when document begins
 \AtBeginDocument{
 	\normalfont

@@ -7,6 +7,12 @@
 \RequirePackage{eso-pic}
 \RequirePackage{graphicx}
 
+\bool_if:NF{\__rpg_UsePaperOption}
+{
+	\bool_set_false:N \__rpg_ShowBackground
+	\bool_set_false:N \__rpg_ShowFooterDecoration
+}
+
 %% Assign a basic background colour to each subsequent page
 \NewDocumentCommand\RpgThemePaperColor{ m }
 {
@@ -29,7 +35,10 @@
 	\bool_if:NT\__rpg_ShowBackground
 	{
 		\ClearShipoutPictureBG
-		\AddToShipoutPictureBG{\includegraphics[width=\paperwidth,height=\paperheight]{#1}}
+		\tl_if_empty:nF{#1}
+		{
+			\AddToShipoutPictureBG{\includegraphics[width=\paperwidth,height=\paperheight]{#1}}
+		}
 	}
 }
 

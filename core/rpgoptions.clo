@@ -38,10 +38,23 @@
 		\bool_set_false:N \__rpg_ShowBackground
 		\bool_set_false:N \__rpg_ShowFooterDecoration
 	}{full}
+
+	%% package inclusion options
+	\RpgThemeBoolKey	{font}		{\__rpg_UseFontOption}
+	\RpgThemeBoolKey	{background}{\__rpg_UsePaperOption}
+	\RpgThemeBoolKey	{sections}	{\__rpg_UseSectionsOption}
+	\RpgThemeBoolKey	{title}		{\__rpg_UseTitlesOption}
+}
+
+% Check the class defaultss
+\tl_if_exist:NT \__rpg_ClassDefaults
+{
+	\keys_set:nV {rpg / options}{\__rpg_ClassDefaults}
 }
 
 % Set the values provided in the file
 \ProcessKeysOptions { rpg / options }
+
 
 %then override with command line if present
 \ifcsname{RpgCMD}\endcsname
@@ -70,4 +83,32 @@
 	}
 }
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define Guards 
+% Deactivates some portions if arg not present
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\NewDocumentCommand\RpgIfFont{+m}{
+	\bool_if:NT{\__rpg_UseFontOption}
+	{
+		#1
+	}
+}
+\NewDocumentCommand\RpgIfTitle{+m}{
+	\bool_if:NT{\__rpg_UseTitlesOption}
+	{
+		#1
+	}
+}
+\NewDocumentCommand\RpgIfPaper{+m}{
+	\bool_if:NT{\__rpg_UsePaperOption}
+	{
+		#1
+	}
+}
+\NewDocumentCommand\RpgIfSections{+m}{
+	\bool_if:NT{\__rpg_UseSectionsOption}
+	{
+		#1
+	}
+}
