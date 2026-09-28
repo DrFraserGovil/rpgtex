@@ -25,6 +25,7 @@
 	}
 	{
 		\stepcounter{part}
+		\addcontentsline{toc}{part}{\protect\numberline{\thepart}#3}
 		\str_if_empty:nTF{#2}
 		{
 			\tl_if_empty:NTF{\__rpg_AllPartImage}	
