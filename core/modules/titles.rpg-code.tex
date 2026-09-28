@@ -107,4 +107,8 @@
 \cs_new_protected:Nn\__rpg_CoverPage:{\__rpg_OriginalMakeTitle}
 \subtitle{}
 \cover{}
-
+\newcommand\tocchapapp{}
+\g@addto@macro\appendix{%
+	\addtocontents{toc}{\protect\renewcommand{\protect\@chapapp}{Appendix}}%
+	\addtocontents{toc}{\protect\renewcommand{\protect\tocchapapp}{Appendix}}%
+}

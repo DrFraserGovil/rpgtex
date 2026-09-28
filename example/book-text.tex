@@ -13,9 +13,9 @@
 	\chapter{Introduction}
 
 
-	\RpgDropCap{H}{ello and welcome!} This package is designed to aid you in writing beautifully typeset documents for a variety of RPG documents. It is derived from {a D\&D-specific package}\footnote{\url{https://github.com/rpgtex/DND-5e-LaTeX-Template}}, but whilst we have retained much of the internal engine, we have adapted it to work with a variety of themes, thus making it a system-agnostic \verb|rpgtex|.
+		\RpgDropCap{H}{ello and welcome!} This package is designed to aid you in writing beautifully typeset documents for a variety of RPG documents. It is derived from {a D\&D-specific package}\footnote{\url{https://github.com/rpgtex/DND-5e-LaTeX-Template}}, but whilst we have retained much of the internal engine, we have adapted it to work with a variety of themes, thus making it a system-agnostic \verb|rpgtex|.
 
-	This document - along with a few others - serves as a showcase of the different themes and classes available. We begin with the basic framework for the book class, and then move on to demonstrate the theme-specific options.
+		This document - along with a few others - serves as a showcase of the different themes and classes available. We begin with the basic framework for the book class, and then move on to demonstrate the theme-specific options.
 
 	\chapter{Sections}
 		Sections follow the standard \LaTeX{} formatting; with the chapter formatting shown above.
@@ -39,126 +39,126 @@
 
 				Parts are often allowed to define a full-page image
 
-				{\color{red} Write this bit!}
-		% \section{Map Regions}
-		% 	The map region functions \verb|\RpgArea| and \verb|\RpgSubArea| provide automatic numbering of areas.
+					{\color{red} Write this bit!}
+				% \section{Map Regions}
+				% 	The map region functions \verb|\RpgArea| and \verb|\RpgSubArea| provide automatic numbering of areas.
 
 
-		% 	\RpgSetAreaOptions[area-label=village,area-num-header-offset=3]{}
-		% 	\RpgArea{Village of Hommlet}
-		% 	This is the village of hommlet.
-		% 	\RpgSetAreaOptions[area-label=villages,area-num-header-offset=3]{}
-		% 	\RpgSubArea{Inn of the Welcome Wench}
-		% 	Inside the village is the inn of the Welcome Wench.
+				% 	\RpgSetAreaOptions[area-label=village,area-num-header-offset=3]{}
+				% 	\RpgArea{Village of Hommlet}
+				% 	This is the village of hommlet.
+				% 	\RpgSetAreaOptions[area-label=villages,area-num-header-offset=3]{}
+				% 	\RpgSubArea{Inn of the Welcome Wench}
+				% 	Inside the village is the inn of the Welcome Wench.
 
-		% 	\RpgSubArea{Blacksmith's Forge}
-		% 	There's a blacksmith in town, too.
+				% 	\RpgSubArea{Blacksmith's Forge}
+				% 	There's a blacksmith in town, too.
 
-		% 	\RpgArea{Foo's Castle}
-		% 	This is foo's home, a hovel of mud and sticks.
+				% 	\RpgArea{Foo's Castle}
+				% 	This is foo's home, a hovel of mud and sticks.
 
-		% 	\RpgSubArea{Moat}
-		% 	This ditch has a board spanning it.
+				% 	\RpgSubArea{Moat}
+				% 	This ditch has a board spanning it.
 
-		% 	\RpgSubArea{Entrance}
-		% 	A five-foot hole reveals the dirt floor illuminated by a hole in the roof.
-
-
+				% 	\RpgSubArea{Entrance}
+				% 	A five-foot hole reveals the dirt floor illuminated by a hole in the roof.
 
 
-		% 	\subsection{Resetting Counters}
 
-		% 		The counters can be reset
-		% 	\RpgSetAreaOptions[area-label=space]{}
-		% 	\RpgResetAreas{}
-		% 	\RpgArea{Nyxia Subsector}
-		% 		A dangerous region of space, accessed only by calling \verb|\RpgReset{}|
-		% 		\RpgSubArea{Crescent Station}
-		% 			A lawless hub of trade and crime
-		% 		\RpgSubArea{Raxxla Penal Colony}
-		% 			An ice planet populated with criminals
 
-		% 	\RpgArea{Great Expanse}
-		% 		A void of nothingness
+				% 	\subsection{Resetting Counters}
 
-		% 	\subsection{Referencing Map Regions}
+				% 		The counters can be reset
+				% 	\RpgSetAreaOptions[area-label=space]{}
+				% 	\RpgResetAreas{}
+				% 	\RpgArea{Nyxia Subsector}
+				% 		A dangerous region of space, accessed only by calling \verb|\RpgReset{}|
+				% 		\RpgSubArea{Crescent Station}
+				% 			A lawless hub of trade and crime
+				% 		\RpgSubArea{Raxxla Penal Colony}
+				% 			An ice planet populated with criminals
 
-		% 		Map regions are referenceable; so \verb|\RpgAreaRef[area-label=village]{Village of Hommlet}| is ``\RpgAreaRef[area-label=village]{Village of Hommlet}''
+				% 	\RpgArea{Great Expanse}
+				% 		A void of nothingness
 
-		% 		When using reset-counters or otherwise ambiguous names, it is necessary to use \verb|\RpgSetAreaOptions[area-label={},sub-area-label={}]{}| to define prefixes to disambiguate.
+				% 	\subsection{Referencing Map Regions}
 
-		% 	\subsection{Area Depths}
+				% 		Map regions are referenceable; so \verb|\RpgAreaRef[area-label=village]{Village of Hommlet}| is ``\RpgAreaRef[area-label=village]{Village of Hommlet}''
 
-		% 		Map headers can be set to different `levels', using either section/subsection (etc.) for display purposes. The default value is \verb|\RpgSetAreaOptions[area-num-header-offset=2]{}| (subsection). For display purposes here, we used \verb|area-num-header-offset=3|
+				% 		When using reset-counters or otherwise ambiguous names, it is necessary to use \verb|\RpgSetAreaOptions[area-label={},sub-area-label={}]{}| to define prefixes to disambiguate.
+
+				% 	\subsection{Area Depths}
+
+				% 		Map headers can be set to different `levels', using either section/subsection (etc.) for display purposes. The default value is \verb|\RpgSetAreaOptions[area-num-header-offset=2]{}| (subsection). For display purposes here, we used \verb|area-num-header-offset=3|
 		\section{RpgTable}
 
 			\begin{RpgTable}[title=Box Colors]{lX}
-  Color            &  Description \\
-  |commentcolor|   & |DndComment| background \\
-  |readaloudcolor| & |DndReadAloud| background \\
-  |sidebarcolor|   & |DndSidebar| background \\
-  |tablecolor|     & background of even |DndTable| rows \\
-\end{RpgTable}
-\begin{RpgTable}{lX}
-  Color            &  Description \\
-  |commentcolor|   & |DndComment| background \\
-  |readaloudcolor| & |DndReadAloud| background \\
-  |sidebarcolor|   & |DndSidebar| background \\
-  |tablecolor|     & background of even |DndTable| rows \\
-\end{RpgTable}
-	\section{Text Boxes}
+				Color            &  Description \\
+				|commentcolor|   & |DndComment| background \\
+				|readaloudcolor| & |DndReadAloud| background \\
+				|sidebarcolor|   & |DndSidebar| background \\
+				|tablecolor|     & background of even |DndTable| rows \\
+			\end{RpgTable}
+			\begin{RpgTable}{lX}
+				Color            &  Description \\
+				|commentcolor|   & |DndComment| background \\
+				|readaloudcolor| & |DndReadAloud| background \\
+				|sidebarcolor|   & |DndSidebar| background \\
+				|tablecolor|     & background of even |DndTable| rows \\
+			\end{RpgTable}
+		\section{Text Boxes}
 
-	The module has three environments for setting text apart so that it is drawn to the reader's attention. |DndReadAloud| is used for text that a game master would read aloud.
-	\section{Tips \& Tricks}
-	The other two environments are the |DndComment| and the |DndSidebar|. The |DndComment| is breakable and can safely be used inline in the text.
+			The module has three environments for setting text apart so that it is drawn to the reader's attention. |DndReadAloud| is used for text that a game master would read aloud.
+		\section{Tips \& Tricks}
+			The other two environments are the |DndComment| and the |DndSidebar|. The |DndComment| is breakable and can safely be used inline in the text.
 
-	\begin{RpgTip}{This Is a Tip Box!}
-	A |RpgTip| is a box for minimal highlighting of text. It lacks the ornamentation of |DndSidebar|, but it can handle being broken over a column.
-	\end{RpgTip}
+			\begin{RpgTip}{This Is a Tip Box!}
+				A |RpgTip| is a box for minimal highlighting of text. It lacks the ornamentation of |DndSidebar|, but it can handle being broken over a column.
+			\end{RpgTip}
 
 
 
-	\section{Narration}
+		\section{Narration}
 
-	\begin{RpgNarration}
-		Narration doesn't get a title -- but that's ok, because you're reading this out loud!
-	\end{RpgNarration}
+			\begin{RpgNarration}
+				Narration doesn't get a title -- but that's ok, because you're reading this out loud!
+			\end{RpgNarration}
 
-	\begin{RpgSidebar}[]{Behold the DndSidebar!}
-  The |DndSidebar| is used as a sidebar. It does not break over columns and is best used with a figure environment to float it to one corner of the page where the surrounding text can then flow around it.
-\end{RpgSidebar}
+			\begin{RpgSidebar}[]{Behold the DndSidebar!}
+				The |DndSidebar| is used as a sidebar. It does not break over columns and is best used with a figure environment to float it to one corner of the page where the surrounding text can then flow around it.
+			\end{RpgSidebar}
 
-		% \RpgShowMapRefs{}
+			% \RpgShowMapRefs{}
 
-		% \begin{RpgMap*}[header-offset=0,title={RPG maps}]
-			
-			
+			% \begin{RpgMap*}[header-offset=0,title={RPG maps}]
 
-		% 	\begin{RpgNestedArea}[bob][prefix={Bob~}]{Bob's House}
-		% 		\RpgArea{Front Room} The TV is here, and it is on
-		% 		\RpgArea{Kitchen}
-		% 		\RpgArea[cot]{}
-		% 	\end{RpgNestedArea}
 
-		% 	\RpgArea{Karen's House} Karen lives here
-		% 	\RpgArea{}
-		% \end{RpgMap*}
 
-		% \begin{RpgMap}[header-offset=0,title={A test map}]
-			
-		% 	\RpgArea{Bob's House} Bob lives here
+			% 	\begin{RpgNestedArea}[bob][prefix={Bob~}]{Bob's House}
+			% 		\RpgArea{Front Room} The TV is here, and it is on
+			% 		\RpgArea{Kitchen}
+			% 		\RpgArea[cot]{}
+			% 	\end{RpgNestedArea}
 
-		% 	\begin{RpgMap}[prefix={}]
-		% 		\RpgArea{Front Room} The TV is here, and it is on
-		% 		\RpgArea{Kitchen}
-		% 		\RpgArea[cot]{}
-		% 	\end{RpgMap}
+			% 	\RpgArea{Karen's House} Karen lives here
+			% 	\RpgArea{}
+			% \end{RpgMap*}
 
-		% 	\RpgArea{Karen's House} Karen lives here
-		% 	\RpgArea{}
-		% \end{RpgMap}
-		
+			% \begin{RpgMap}[header-offset=0,title={A test map}]
 
-		~
+			% 	\RpgArea{Bob's House} Bob lives here
 
-		Let's test: \RpgMapRef*{Map:Front Room}
+			% 	\begin{RpgMap}[prefix={}]
+			% 		\RpgArea{Front Room} The TV is here, and it is on
+			% 		\RpgArea{Kitchen}
+			% 		\RpgArea[cot]{}
+			% 	\end{RpgMap}
+
+			% 	\RpgArea{Karen's House} Karen lives here
+			% 	\RpgArea{}
+			% \end{RpgMap}
+
+
+			~
+
+			Let's test: \RpgMapRef*{Map:Front Room}
