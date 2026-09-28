@@ -11,17 +11,17 @@
 \fancyhf {} % clear all headers and footers
 \fancypagestyle {plain} {}
 \fancypagestyle{empty} {\fancyhf {}}
-
+\fancyhfoffset[LE,RO,RE,LO]{0pt}
 
 % Left-even page footer
 \fancyfoot[LE]{%
-	\RpgFontFooter \leftmark \newline
+	\raggedright \RpgFontFooter \leftmark \par
 	{\RpgFontPageNumber~\thepage}
 }
 
 % Right-odd page footer
 \fancyfoot[RO]{%
-	\RpgFontFooter \leftmark \newline
+	\raggedleft \RpgFontFooter \leftmark \par
 	{\RpgFontPageNumber~\thepage}
 }
 
