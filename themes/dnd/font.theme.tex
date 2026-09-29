@@ -55,15 +55,19 @@
 %This is to prevent white text being used everywhere else!
 
 \RpgThemeCreateFont{\RpgFontStatBlockLegendary}{stat-block-legendary}
+\RpgThemeCreateFont{\RpgFontPartSubtitle}{part-subtitle}
 
 \RpgThemeFont{
 	main-body-family			={\bookman},
 	%Sections
 	title-family=		{\normalfont},
 	title-style			= {\bfseries\fontsize{30}{50}\selectfont\color{TitleRed}},
-	subtitle-family		={\scshape},
+	subtitle-family		={\gillius},
 	subtitle-style 		= {\LARGE\color{TitleRed} },
-	part-style			= {\color{TitleRed}\fontsize{50}{30}\selectfont},
+	part-family			= {\normalfont},
+	part-style			= {\color{TitleRed}\bfseries\fontsize{50}{30}\selectfont},
+	part-subtitle-family= {\kepler},
+	part-subtitle-style	= {\color{TitleRed}\Large\bfseries},
 	chapter-style		= {\titlemode\fontsize{30}{50}\selectfont},
 	section-style		= {\titlemode \Huge},,
 	subsection-style	= {\titlemode \huge},,
