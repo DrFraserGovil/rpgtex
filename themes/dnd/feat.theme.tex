@@ -1,0 +1,36 @@
+\ExplSyntaxOn
+%%Prerequisite already added by default version
+
+\RpgFeatAddProperty{prerequisite}{\__dnd_rpgfeat_prereq}{}
+\RpgFeatAddProperty{requires}{\__dnd_rpgfeat_prereq}{}
+
+
+% \begin{noindent}
+\RpgThemeFeatFormat
+{
+	\subsection{#1}
+	\tl_if_blank:eF{\__dnd_rpgfeat_prereq}
+	{
+		\textit{Prerequisite:~\__dnd_rpgfeat_prereq} \par
+	}
+	\noindent #2
+}
+
+\RpgThemeFeatCardFormat{
+	\subsubsection{#1}
+
+	\vspace{0.5cm}
+
+	{\RpgFontCardBody #2}
+
+	\tl_if_blank:eF{\__dnd_rpgfeat_prereq}
+	{
+
+		\vfill
+
+		{\begin{center} \RpgFontCardHeader Prerequisite:~\__dnd_rpgfeat_prereq \end{center}}
+	}
+}
+% \end{noindent}
+
+\ExplSyntaxOff
