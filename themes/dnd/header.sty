@@ -1,32 +1,22 @@
 
-\RpgSetPaper{\RpgPackagePath/themes/dnd/img/paper}
+\definecolor{PaperColor}{RGB}{241,230,210}
+\NewDocumentCommand\SetDndPaper{}
+{
+	\RpgThemePaperImage{\RpgPackagePath/themes/dnd/img/paper}
+}
 
 % Left-even page footer
 \fancyfoot[LE]{%
 	\RpgFontFooter \leftmark
 
-	\RpgSetFooterDecoration[
-		keepaspectratio,
-		reverse,
-		tikz-insert={
-				\node[inner~sep=0pt,anchor=south,xshift=.28in,yshift=.39in] at (current~page.south~west) {\RpgFontPageNumber \thepage};
-			},
-	]{themes/dnd/img/footerscroll}
+	\RpgThemeFooterDecoration{!}{\RpgPackagePath/themes/dnd/img/footerscroll}{\RpgThemePageNumberAt{0.28in}{0.29in}}
 
 }
-
-% Right-odd page footer
+% % Right-odd page footer
 \fancyfoot[RO]{%
 	\RpgFontFooter \leftmark
-	\RpgSetFooterDecoration[
-		keepaspectratio,
-		tikz-insert={
-				\node[inner~sep=0pt,anchor=south,xshift=-.28in,yshift=.39in] at (current~page.south~east) {\RpgFontPageNumber \thepage};
-			},
-	]{themes/dnd/img/footerscroll}
-
+	\RpgThemeFooterDecoration*{!}{\RpgPackagePath/themes/dnd/img/footerscroll}{\RpgThemePageNumberAt{\paperwidth-0.28in}{0.29in}}
 }
 
-% Clear the current definition of 'plain' footers/headers
+% % Clear the current definition of 'plain' footers/headers
 \fancypagestyle{plain}{}
-

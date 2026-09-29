@@ -1,164 +1,210 @@
 
-\frontmatter
+% \frontmatter
+\RpgCoverTransparency{0.5}
 \cover{example/img/typewriter}
 \maketitle
 
-\tableofcontents
+% \tableofcontents
+
+\NewDocumentCommand\cmd{m}{\texttt{\textbackslash{}#1}}
+
+% \mainmatter{}
 
 
-\mainmatter{}
-
-\part[engine_part]{Basic Commands}
-
-	\chapter{Introduction}
+\chapter{The RpgTeX Basics}
 
 
-		\RpgDropCap{H}{ello and welcome!} This package is designed to aid you in writing beautifully typeset documents for a variety of RPG documents. It is derived from {a D\&D-specific package}\footnote{\url{https://github.com/rpgtex/DND-5e-LaTeX-Template}}, but whilst we have retained much of the internal engine, we have adapted it to work with a variety of themes, thus making it a system-agnostic \verb|rpgtex|.
+	\RpgDropCap{H}{ello and welcome!} This package is designed to aid you in writing beautifully typeset documents for a variety of RPG documents. It is derived from {a D\&D-specific package}\footnote{\url{https://github.com/rpgtex/DND-5e-LaTeX-Template}}, but whilst we have retained much of the internal engine, we have adapted it to work with a variety of themes, thus making it a system-agnostic \verb|rpgtex|.
 
-		This document - along with a few others - serves as a showcase of the different themes and classes available. We begin with the basic framework for the book class, and then move on to demonstrate the theme-specific options.
+	This document is \textbf{not} intended to be the full documentation - merely a quick showcase.
 
-	\chapter{Sections}
-		Sections follow the standard \LaTeX{} formatting; with the chapter formatting shown above.
-		\section{Section}
-			Sections break up chapters into large groups of associated text.
+	\section{Fonts}
 
-			\subsection{Subsection}
-				Subsections further break down the information for the reader.
+		This document demonstrates a number of the fonts which have been automatically loaded by the chosen theme.
 
-				\subsubsection{Subsubsection}
-					Subsubsections are the furthest division of text that still have a block header. Below this level, headers are displayed inline.
+		\subsection{Emphasis}
 
-					\paragraph{Paragraph}
-					The paragraph format is seldom used in the core books, but is available if you prefer it to the ``normal'' style.
+			Unless the \texttt{noemph} option is passed, the \cmd{emph} command is altered to mirror the \cmd{RpgKey} command, this produces a distinctive \emph{keyword emphasis}.
 
-					\subparagraph{Subparagraph}
-					The subparagraph format with the paragraph indent is likely going to be more familiar to the reader.
-			\subsection{Parts}
+	\section{Paper \& Background}
 
-				The rpgbook class also defines a \verb|part| (seen in the prior pages).
+		The chosen theme automatically applies `paper effects' such as decorations and a background color, which you can see throughout this document.
 
-				Parts are often allowed to define a full-page image
+		This can be disabled by loading the documentclass with the \texttt{print} key (which disables the background coloration but leaves any footer decorations), or the \texttt{none} key, which disables all visual effects.
 
-					{\color{red} Write this bit!}
-				% \section{Map Regions}
-				% 	The map region functions \verb|\RpgArea| and \verb|\RpgSubArea| provide automatic numbering of areas.
+	\section{Sectioning}
+		Sections follow the standard \LaTeX{} formatting; with the \cmd{chapter} command demonstrated at the top of the page, and \cmd{section} above this paragraph. The other sectioning commands are demonstrated below.
 
+		\subsection{Subsection}
 
-				% 	\RpgSetAreaOptions[area-label=village,area-num-header-offset=3]{}
-				% 	\RpgArea{Village of Hommlet}
-				% 	This is the village of hommlet.
-				% 	\RpgSetAreaOptions[area-label=villages,area-num-header-offset=3]{}
-				% 	\RpgSubArea{Inn of the Welcome Wench}
-				% 	Inside the village is the inn of the Welcome Wench.
+			We can use subsections to further break up text.
 
-				% 	\RpgSubArea{Blacksmith's Forge}
-				% 	There's a blacksmith in town, too.
+			\subsubsection{Subsubsection}
 
-				% 	\RpgArea{Foo's Castle}
-				% 	This is foo's home, a hovel of mud and sticks.
+				Subsubsections are the smallest level that get an out-of-line header.
 
-				% 	\RpgSubArea{Moat}
-				% 	This ditch has a board spanning it.
+				\paragraph{Paragraph} A paragraph block lets you highlight something inline.
 
-				% 	\RpgSubArea{Entrance}
-				% 	A five-foot hole reveals the dirt floor illuminated by a hole in the roof.
+				\subparagraph{Subparagraph} Subparagraphs are formatted like this.
 
+	\section{Image Pages}
+		The RpgTeX package provides a convenient interface to fill an entire page with an image. This can be invoked manually (\cmd{RpgFullPageImage}), and forms the basis for the Title and Part pages.
 
+		\subsection{Title Pages}
+			You can see the formatting of the default cover page on Page 1. If the user supplies a \cmd{cover} (as they would a \cmd{title} or an \cmd{author}), the \cmd{maketitle} command has been altered to allow this to be used as the path to the background image.
 
+			A transparency effect can also be applied using \cmd{RpgCoverTransparency\{x\}} before \cmd{maketitle} is called - with 0 being the normal image, and 1 being a white page. The cover image of this document uses a value of 0.5.
 
-				% 	\subsection{Resetting Counters}
+		\subsection{Parts}
 
-				% 		The counters can be reset
-				% 	\RpgSetAreaOptions[area-label=space]{}
-				% 	\RpgResetAreas{}
-				% 	\RpgArea{Nyxia Subsector}
-				% 		A dangerous region of space, accessed only by calling \verb|\RpgReset{}|
-				% 		\RpgSubArea{Crescent Station}
-				% 			A lawless hub of trade and crime
-				% 		\RpgSubArea{Raxxla Penal Colony}
-				% 			An ice planet populated with criminals
+			In classes where \cmd{part} is available, a similar effect is possible. In this case, the user passes the image as an optional argument; \cmd{part[image/path]\{Part Title\}}.
 
-				% 	\RpgArea{Great Expanse}
-				% 		A void of nothingness
+			The transparency effect can be set by \cmd{RpgPartTransparency} which effects all part-pages going forwards. An example of a part page is shown below.
+	\section{Tables}
 
-				% 	\subsection{Referencing Map Regions}
+		RPGs rely on tables to display information, so having nicely formatted tables is essential: the \texttt{RpgTable} environment is your friend.
 
-				% 		Map regions are referenceable; so \verb|\RpgAreaRef[area-label=village]{Village of Hommlet}| is ``\RpgAreaRef[area-label=village]{Village of Hommlet}''
+		\begin{RpgTable}{l X}
+			d6 & Effect
+			\\
+			1 & You accidentally call \texttt{rm -rf --no-preserve-root}
+			\\
+			2 & Your document fails to compile with an error message no-one has ever seen before
+			\\
+			3 & Your document fails to compile, but you recognise the error message.
+			\\
+			4 & You mispelled \cmd{textit} as \cmd{tetxit} \textit{again}
+			\\
+			5 & Your document compiles with no errors
+			\\
+			6 & Your document compiles \textit{and} a cat comes and sits on your lap
+		\end{RpgTable}
 
-				% 		When using reset-counters or otherwise ambiguous names, it is necessary to use \verb|\RpgSetAreaOptions[area-label={},sub-area-label={}]{}| to define prefixes to disambiguate.
+		This automatically applies the header formatting, and the alternating row colors. The tables inherit from \texttt{tabularx} allowing the X-column (demonstrated above), as well as the Y-column (a centered variant of X).
 
-				% 	\subsection{Area Depths}
+	\section{Callouts}
+		We provide three separate callout boxes, which mainly differ in their default formatting (and if they take a title or not).
 
-				% 		Map headers can be set to different `levels', using either section/subsection (etc.) for display purposes. The default value is \verb|\RpgSetAreaOptions[area-num-header-offset=2]{}| (subsection). For display purposes here, we used \verb|area-num-header-offset=3|
-		\section{RpgTable}
+		\begin{RpgTip}{A Helpful Tip}
+			The \texttt{RpgTip} environmenmt is used to give helpful tips or tricks to the reader.
+		\end{RpgTip}
 
-			\begin{RpgTable}[title=Box Colors]{lX}
-				Color            &  Description \\
-				|commentcolor|   & |DndComment| background \\
-				|readaloudcolor| & |DndReadAloud| background \\
-				|sidebarcolor|   & |DndSidebar| background \\
-				|tablecolor|     & background of even |DndTable| rows \\
-			\end{RpgTable}
+		\begin{RpgSidebar}[]{Pay Attention to Sidebars!}
+			Sidebars are useful for highlighting information the reader must pay attention to.
+		\end{RpgSidebar}
+		\begin{RpgNarration}
+			As you read this document, you realise that this is a \texttt{RpgNarration}, a callout without a title designed to indicate text that the game master will read out loud to the players.
+		\end{RpgNarration}
+
+	\section{Filigree}
+
+		We also provide the \texttt{RpgFiligree} environment, which provides a decorated callout for arbitrary input:
+
+		\begin{RpgFiligree}
 			\begin{RpgTable}{lX}
-				Color            &  Description \\
-				|commentcolor|   & |DndComment| background \\
-				|readaloudcolor| & |DndReadAloud| background \\
-				|sidebarcolor|   & |DndSidebar| background \\
-				|tablecolor|     & background of even |DndTable| rows \\
+				Title & Contents
+				\\
+				A & Some text that is very nicely decorated
 			\end{RpgTable}
-		\section{Text Boxes}
+		\end{RpgFiligree}
 
-			The module has three environments for setting text apart so that it is drawn to the reader's attention. |DndReadAloud| is used for text that a game master would read aloud.
-		\section{Tips \& Tricks}
-			The other two environments are the |DndComment| and the |DndSidebar|. The |DndComment| is breakable and can safely be used inline in the text.
+		Callouts also accept the \texttt{filigree} argument to automatically decoated them:
+		\begin{RpgSidebar}[filigree]{Pay Attention to Sidebars!}
+			Especially when they have pretty filigree decorating them!
+		\end{RpgSidebar}
+	\section{Maps}
 
-			\begin{RpgTip}{This Is a Tip Box!}
-				A |RpgTip| is a box for minimal highlighting of text. It lacks the ornamentation of |DndSidebar|, but it can handle being broken over a column.
-			\end{RpgTip}
+		It is often useful to provide a structured way to label the regions on a map that the players are exploring. The \texttt{RpgMap} provides an itemise-like environment for providing nested descriptions of regions.
+
+		Each area can be labelled using optional arguments, and then referred to either with \cmd{ref} or the provided \cmd{RpgMapRef} (which returns the area name, not just the number)
+
+		\begin{RpgMap}[title={Mysterious House},header-offset=2]
+			This is a mysterious area that needs to be explored by brave(?) individuals.
+			\area{Entryway} Cobwebs drape everything. Doors leading to areas \ref{kitchen} and \ref{basement} branch off. A secret passage to area \ref{treasure} can only be accessed by saying a special incantation.
+
+			\area[kitchen]{Kitchen} There is a hole in the floor through which area \RpgMapRef*{wine} can be seen.
+
+			\begin{RpgArea}[basement]{Basement}
+				This large area is split up into several smaller blocks
+				\area[wine]{Wine Rack} Some lovely vintages here.
+				\begin{RpgArea}{Subbasement}
+					Even more areas are nested here
+					\area{Murder Room} We all have one of these downstairs. Nothing to see here!
+				\end{RpgArea}
+			\end{RpgArea}
+
+			\area[treasure]{Treasure Room} Wow, there's so much treasure in here!
+		\end{RpgMap}
+
+	\section{Secrets}
+
+		It can often be useful for a game master to keep secret notes on a document that might be shared with players. Rather than maintaining two documents, they can use the \texttt{RpgSecret} environment: so long as they only share the final PDF with players, the secret can be toggled in and out of view.
+
+		\subsection{Switched Off}
+			With \cmd{RpgSwith\{ShowSecrets\}\{off\}}, the block will appear as:
+
+			\RpgSwitch{ShowSecrets}{off}
+			\begin{RpgSecret}{This is some text that the players read, lah-de-dah, no secrets here! I love the intricate story my game master has woven for me!}
+				Oh but wait, there's a secret here! The players don't know that secretly I am making this all up as I go along!
+			\end{RpgSecret}
+		\subsection{Switched On}
+			With \cmd{RpgSwith\{ShowSecrets\}\{on\}}, the same block of code will appear as:
+
+			\RpgSwitch{ShowSecrets}{on}
+			\begin{RpgSecret}{This is some text that the players read, lah-de-dah, no secrets here! I love the intricate story my game master has woven for me!}
+				Oh but wait, there's a secret here! The players don't know that secretly I am making this all up as I go along!
+			\end{RpgSecret}
+
+			% \section{Map Regions}
+			% 	The map region functions \verb|\RpgArea| and \verb|\RpgSubArea| provide automatic numbering of areas.
+
+
+			% 	\RpgSetAreaOptions[area-label=village,area-num-header-offset=3]{}
+			% 	\RpgArea{Village of Hommlet}
+			% 	This is the village of hommlet.
+			% 	\RpgSetAreaOptions[area-label=villages,area-num-header-offset=3]{}
+			% 	\RpgSubArea{Inn of the Welcome Wench}
+			% 	Inside the village is the inn of the Welcome Wench.
+
+			% 	\RpgSubArea{Blacksmith's Forge}
+			% 	There's a blacksmith in town, too.
+
+			% 	\RpgArea{Foo's Castle}
+			% 	This is foo's home, a hovel of mud and sticks.
+
+			% 	\RpgSubArea{Moat}
+			% 	This ditch has a board spanning it.
+
+			% 	\RpgSubArea{Entrance}
+			% 	A five-foot hole reveals the dirt floor illuminated by a hole in the roof.
 
 
 
-		\section{Narration}
 
-			\begin{RpgNarration}
-				Narration doesn't get a title -- but that's ok, because you're reading this out loud!
-			\end{RpgNarration}
+			% 	\subsection{Resetting Counters}
 
-			\begin{RpgSidebar}[]{Behold the DndSidebar!}
-				The |DndSidebar| is used as a sidebar. It does not break over columns and is best used with a figure environment to float it to one corner of the page where the surrounding text can then flow around it.
-			\end{RpgSidebar}
+			% 		The counters can be reset
+			% 	\RpgSetAreaOptions[area-label=space]{}
+			% 	\RpgResetAreas{}
+			% 	\RpgArea{Nyxia Subsector}
+			% 		A dangerous region of space, accessed only by calling \verb|\RpgReset{}|
+			% 		\RpgSubArea{Crescent Station}
+			% 			A lawless hub of trade and crime
+			% 		\RpgSubArea{Raxxla Penal Colony}
+			% 			An ice planet populated with criminals
 
-			% \RpgShowMapRefs{}
+			% 	\RpgArea{Great Expanse}
+			% 		A void of nothingness
 
-			% \begin{RpgMap*}[header-offset=0,title={RPG maps}]
+			% 	\subsection{Referencing Map Regions}
 
+			% 		Map regions are referenceable; so \verb|\RpgAreaRef[area-label=village]{Village of Hommlet}| is ``\RpgAreaRef[area-label=village]{Village of Hommlet}''
 
+			% 		When using reset-counters or otherwise ambiguous names, it is necessary to use \verb|\RpgSetAreaOptions[area-label={},sub-area-label={}]{}| to define prefixes to disambiguate.
 
-			% 	\begin{RpgNestedArea}[bob][prefix={Bob~}]{Bob's House}
-			% 		\RpgArea{Front Room} The TV is here, and it is on
-			% 		\RpgArea{Kitchen}
-			% 		\RpgArea[cot]{}
-			% 	\end{RpgNestedArea}
+			% 	\subsection{Area Depths}
 
-			% 	\RpgArea{Karen's House} Karen lives here
-			% 	\RpgArea{}
-			% \end{RpgMap*}
-
-			% \begin{RpgMap}[header-offset=0,title={A test map}]
-
-			% 	\RpgArea{Bob's House} Bob lives here
-
-			% 	\begin{RpgMap}[prefix={}]
-			% 		\RpgArea{Front Room} The TV is here, and it is on
-			% 		\RpgArea{Kitchen}
-			% 		\RpgArea[cot]{}
-			% 	\end{RpgMap}
-
-			% 	\RpgArea{Karen's House} Karen lives here
-			% 	\RpgArea{}
-			% \end{RpgMap}
+			% 		Map headers can be set to different `levels', using either section/subsection (etc.) for display purposes. The default value is \verb|\RpgSetAreaOptions[area-num-header-offset=2]{}| (subsection). For display purposes here, we used \verb|area-num-header-offset=3|
 
 
-			~
 
-			Let's test: \RpgMapRef*{Map:Front Room}

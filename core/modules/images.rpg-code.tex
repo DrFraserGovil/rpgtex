@@ -8,6 +8,7 @@
 \NewDocumentCommand\RpgWholePageImage{ +O{}  +m o}
 {
 \clearpage
+\thispagestyle{empty}
 \AddToShipoutPictureFG*{%
 	\AtPageLowerLeft{%
 		\put(0,0){\makebox(0,0)[bl]{\includegraphics[width=\paperwidth,height=\paperheight]{#2}}}
