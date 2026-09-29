@@ -1,0 +1,91 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Define colors
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Page
+\definecolor {FooterGold}	{HTML} {B89A67} % pagenumbers and footer
+\definecolor {Papyrus}		{RGB}	{241,230,210}
+
+% Titles
+\definecolor {TitleRed}		{HTML}	{58180D} % titles
+\definecolor {TitleGold}	{HTML}	{C9AD6A} % titlerules
+\definecolor {ContourGray}	{HTML}	{CACCBE} % outline color in part & chapter font
+
+
+% Decoration colours
+\definecolor {BrGreen}      {HTML} {E8E6DC} % Basic Rules
+\definecolor {BrTan}		{HTML} {F9EFD6} % lighter version of bgtan from the 2018 Basic Rules
+\definecolor {PhbLightGreen}{HTML} {E0E5C1} % PHB Part 1
+\definecolor {PhbLightCyan} {HTML} {B5CEB8} % PHB Part 2
+\definecolor {PhbMauve}     {HTML} {DCCCC5} % PHB Part 3
+\definecolor {PhbTan}       {HTML} {E5D5AC} % PHB appendix
+\definecolor {DmgLavender}  {HTML} {E3CED3} % DMG Part 1
+\definecolor {DmgCoral}     {HTML} {F3D7C1} % DMG Part 2
+\definecolor {DmgSlateGray} {HTML} {DBE4E4} % DMG Part 3
+\definecolor {DmgPatina}	{HTML} {d1e0d1} % DMG appendix
+
+% Statblock
+\definecolor {RuleColor}	{HTML}	{9C2B1B} % triangular rule in statblock
+\definecolor {StatblockRibbon}{HTML}{E69A28} % stat block top/bottom borders (gold)
+\definecolor {StatblockBg}  {HTML}	{FDF1DC} % stat block background (tan)
+\colorlet	 {StatBlockColor}		{RuleColor!40!black}
+
+% aliases (for grey/gray typos)
+\colorlet {ContourGrey} {ContourGray}
+\colorlet {DmgSlateGrey} {DmgSlateGray}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Color Hooks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\colorlet	{PaperColor}		{Papyrus}
+\colorlet	{NarrationColor}	{BrTan}
+\colorlet	{ContourInnerColor}	{TitleRed}
+\colorlet	{ContourOuterColor}	{ContourGrey}
+\colorlet	{SecretColor}		{RuleColor}
+%% theme color set below...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Varying colour cycles
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RpgThemeOnPartChange{
+	\RpgAdvanceColors{}
+}
+
+\ExplSyntaxOn
+\NewDocumentCommand\RpgAdvanceColors{}
+{
+	\__rpg_checkColorList:
+
+	\seq_gpop_left:NN \__rpg_ColorCycle \l__tmpa_tl
+	\RpgSetThemeColor{\l__tmpa_tl}
+	\seq_gput_right:NV \__rpg_ColorCycle \l__tmpa_tl
+}
+
+\NewDocumentCommand\RpgThemeSetColorCycle{m}
+{
+	\seq_set_from_clist:Nn \__rpg_ColorCycle{#1}
+}
+\NewDocumentCommand\RpgSetPHBColors{}
+{
+	\RpgThemeSetColorCycle{PhbLightGreen, PhbLightCyan, PhbMauve, PhbTan,DmgLavender,DmgCoral,DmgSlateGray,DmgPatina}
+}
+\NewDocumentCommand\RpgSetDMGColors{}
+{
+	\RpgThemeSetColorCycle{DmgLavender,DmgCoral,DmgSlateGray,DmgPatina,PhbLightGreen, PhbLightCyan, PhbMauve, PhbTan}
+}
+\cs_new_protected:Npn\__rpg_checkColorList:
+{
+	\seq_if_empty:NT \__rpg_ColorCycle
+	{
+		\msg_error:nnn{rpg}{empty-colors}{}
+	}
+}
+\seq_new:N \__rpg_ColorCycle
+\msg_new:nnn {rpg}{empty-colors}{No~colors~in~color~cycle.~Call~RpgThemeSetColorCycle}
+
+\ExplSyntaxOff
+\RpgSetPHBColors{}
+\RpgAdvanceColors{}

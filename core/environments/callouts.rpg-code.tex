@@ -15,12 +15,13 @@
 
 \RpgThemeNewTLKey{ rpg / callouts } {color} { \__rpg_boxColor }{black}
 \RpgThemeNewBoolKey{ rpg / callouts}{filigree}{\__rpg_boxUseFiligree}
+\RpgThemeNewBoolKey{ rpg / callouts}{rpgfiligree}{\__rpg_boxUseFiligree}
 
 \cs_new_protected:Nn\__rpg_ExpandBegin:nn
 {
 	\begin{#1}[#2]
 }
-\cs_generate_variant:Nn\__rpg_ExpandBegin:nn{nV}
+\cs_generate_variant:Nn\__rpg_ExpandBegin:nn{nx}
 \tl_new:N \__rpg_boxArgs
 
 % \begin{noindent}
@@ -29,7 +30,6 @@
 	\group_begin:
 	\tl_set:Nn{\__rpg_boxColor}{TipColor}	
 	\keys_set_known:nnN{rpg/callouts}{#1}{\l_tmpa_tl} 
-	 
 	\tl_set:Nn\__rpg_boxArgs{
 		colback = \__rpg_boxColor,
 		colbacktitle=\__rpg_boxColor,
@@ -37,7 +37,7 @@
 		\l_tmpa_tl,
 		\bool_if:NT{\__rpg_boxUseFiligree}{rpgfiligree}	
 	}
-	\__rpg_ExpandBegin:nV{__RpgTip}{\__rpg_boxArgs}
+	\__rpg_ExpandBegin:nx{__RpgTip}{\__rpg_boxArgs}
 }
 {
 	\end{__RpgTip}
@@ -56,7 +56,7 @@
 		\l_tmpa_tl,
 		\bool_if:NT{\__rpg_boxUseFiligree}{rpgfiligree}	
 	}
-	\__rpg_ExpandBegin:nV{__RpgNarration}{\__rpg_boxArgs}	
+	\__rpg_ExpandBegin:nx{__RpgNarration}{\__rpg_boxArgs}	
 }
 {
 	\end{__RpgNarration}
@@ -76,7 +76,7 @@
 		\l_tmpa_tl,
 		\bool_if:NT{\__rpg_boxUseFiligree}{rpgfiligree}	
 	}
-	\__rpg_ExpandBegin:nV{__RpgSidebar}{\__rpg_boxArgs}
+	\__rpg_ExpandBegin:nx{__RpgSidebar}{\__rpg_boxArgs}
 }
 {
 	\end{__RpgSidebar}
