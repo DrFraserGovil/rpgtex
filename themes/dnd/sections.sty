@@ -1,77 +1,23 @@
 
+\RpgIfSections{
 
-\titleformat {\subsection}
-	{ \RpgFontSubsection } % format
-	{ \thesubsection } % label
-	{ 1em } % sep
-	{ \nopagebreak } % before-code
-	[ \vspace{-.3ex} \titleline{ \color{titlegold} \titlerule[1pt] } ] % after-code
+	% \begin{noindent}
+	 
+	%% Adds the gold underline for subsections 
+	\titleformat {\subsection}
+		{ \RpgFontSubsection } % format
+		{ \thesubsection } % label
+		{ 1em } % sep
+		{ \nopagebreak } % before-code
+		[ \vspace{-.3ex} \titleline{ \color{TitleGold} \titlerule[1pt] } ] % after-code
 
-
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%Narration box
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\ExplSyntaxOn
-	\tcbset{
-	rpg narration /.append~style={
-	borderline~west = {1pt} {-0.5pt} {titlered},
-	borderline~east = {1pt} {-0.5pt} {titlered},
-	overlay         =
-	{
-	\foreach\n ~ in ~ { north~east, north~west, south~east, south~west }
-	{\draw [ titlered, fill = titlered ] ( frame.\n ) circle (1.5pt); };
-	},
-	}
-	}
-
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	%Narration box
-	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-	\RpgFiligreeSet{
-		\coordinate (jp-tl) at ($(frame.north~west)+(\l_filigree_dim,0)$);
-		\coordinate (jp-tr) at ($(frame.north~east)+(-\l_filigree_dim,0)$);
-		\coordinate (jp-bl) at ($(frame.south~west)+(\l_filigree_dim,0)$);
-		\coordinate (jp-br) at ($(frame.south~east)+(-\l_filigree_dim,0)$);
-
-		\def\offset{{round(5*\l_filigree_dim)/10}}
-
-		%%simple line
-		\draw[rounded~corners=1pt] (jp-tl)--(jp-tr) %%top border
-		--++(0,\offset)--++(\l_filigree_dim,0)      %%top right outcrop
-		--($(frame.south~east)+(0,-\offset)$)       %%right border
-		--++(-\l_filigree_dim,0)--(jp-br)           %%bottom right outcrop
-		--(jp-bl)                                   %%bottom border
-		--++(0,-\offset)--++(-\l_filigree_dim,0)    %%bottom left outcrop
-		--($(frame.north~west)+(0,\offset)$)        %%left border
-		--++(\l_filigree_dim,0)                     %%top left outcrop
-		--cycle;
-
-		\def\offset{{round(7*\l_filigree_dim)/10}}
-		\def\outcrop{2.5pt}
-		\def\vjump{{round(12*\l_filigree_dim)/10}}
-
-		\draw[rounded~corners=1pt] (jp-tl)--++(0,\offset)--($(jp-tr)+(0,\offset)$)--(jp-tr)--($(frame.north~east)+(\outcrop,0)$)--++(-\outcrop,-\vjump)--($(frame.south~east)+(0,\vjump)$)--++(\outcrop,-\vjump)--(jp-br)--++(0,-\offset)--($(jp-bl)+(0,-\offset)$)--(jp-bl)--($(frame.south~west)+(-\outcrop,0)$)--++(\outcrop,\vjump)--($(frame.north~west)+(0,-\vjump)$)--++(-\outcrop,\vjump)
-		--cycle;
-	}
-
-	%%overwrite existing filigree defaults
-	\tcbset{
-		rpg filigree/.style={
-				overlay = {
-						\begin{scope}[draw=filigreecolor,line~width=2.4pt]
-							\__rpg_filigree:
-						\end{scope}
-						\begin{scope}[draw=filigreecolor!30!black,line~width=1.1pt]
-							\__rpg_filigree:
-						\end{scope}
-					},
-				frame~hidden,
-			}
-	}
-
-
+	%% Adds a contour (of the default ContourColor) around the chapter
 	\titleformat {\chapter}
-	{ \RpgFontChapter } % format
-	{ \RpgContour{\chaptertitlename\ \thechapter :} } % label
-	{ \wordsep } % sep
-	{ \RpgContour} % before-code
+		{ \RpgFontChapter } % format
+		{ \RpgContour{\chaptertitlename\ \thechapter :} } % label
+		{ \wordsep } % sep
+		{ \RpgContour} % before-code
+		 
+	% \end{noindent}
+}
+

@@ -1,0 +1,46 @@
+\ExplSyntaxOn
+
+%% Duplicate the filigree seen around class tables in the PHB
+\RpgThemeSetFiligree{
+	\coordinate (jp-tl) at ($(frame.north~west)+(\RpgFiligreeSize,0)$);
+	\coordinate (jp-tr) at ($(frame.north~east)+(-\RpgFiligreeSize,0)$);
+	\coordinate (jp-bl) at ($(frame.south~west)+(\RpgFiligreeSize,0)$);
+	\coordinate (jp-br) at ($(frame.south~east)+(-\RpgFiligreeSize,0)$);
+
+	\def\offset{{round(5*\RpgFiligreeSize)/10}}
+
+	%%simple line
+	\draw[rounded~corners=1pt] (jp-tl)--(jp-tr) %%top border
+	--++(0,\offset)--++(\RpgFiligreeSize,0)      %%top right outcrop
+	--($(frame.south~east)+(0,-\offset)$)       %%right border
+	--++(-\RpgFiligreeSize,0)--(jp-br)           %%bottom right outcrop
+	--(jp-bl)                                   %%bottom border
+	--++(0,-\offset)--++(-\RpgFiligreeSize,0)    %%bottom left outcrop
+	--($(frame.north~west)+(0,\offset)$)        %%left border
+	--++(\RpgFiligreeSize,0)                     %%top left outcrop
+	--cycle;
+
+	\def\offset{{round(7*\RpgFiligreeSize)/10}}
+	\def\outcrop{2.5pt}
+	\def\vjump{{round(12*\RpgFiligreeSize)/10}}
+
+	\draw[rounded~corners=1pt] (jp-tl)--++(0,\offset)--($(jp-tr)+(0,\offset)$)--(jp-tr)--($(frame.north~east)+(\outcrop,0)$)--++(-\outcrop,-\vjump)--($(frame.south~east)+(0,\vjump)$)--++(\outcrop,-\vjump)--(jp-br)--++(0,-\offset)--($(jp-bl)+(0,-\offset)$)--(jp-bl)--($(frame.south~west)+(-\outcrop,0)$)--++(\outcrop,\vjump)--($(frame.north~west)+(0,-\vjump)$)--++(-\outcrop,\vjump)
+	--cycle;
+}
+
+%%overwrite existing filigree defaults
+\tcbset{
+	rpg filigree/.style={
+			overlay = {
+					\begin{scope}[draw=FiligreeColor,line~width=2.4pt]
+						\rpg_Filigree:
+					\end{scope}
+					\begin{scope}[draw=FiligreeColor!30!black,line~width=1.1pt]
+						\rpg_Filigree:
+					\end{scope}
+				},
+			frame~hidden,
+		}
+}
+
+\ExplSyntaxOff

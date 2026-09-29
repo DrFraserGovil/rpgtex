@@ -1,13 +1,14 @@
+
 % \begin{noindent}
 
 \ExplSyntaxOn
-\NewDocumentCommand\ConditionalRagged{}
+\ProvideDocumentCommand\ConditionalRagged{}
 {
 	\bool_if:NF \__rpg_IsJustified {\RaggedRight}
 }
+%%% Sidebar
 \ExplSyntaxOff
  
-%%% Sidebar
 \tcbset{
 	rpgsidebar/.style={
 		before upper     = \ConditionalRagged{},
@@ -57,6 +58,13 @@
 		fontupper       = \RpgFontNarration,
 		fontlower       = \RpgFontNarration,
 		after skip      = 13pt plus 4pt minus 4pt,
+		borderline west = {1pt} {-0.5pt} {TitleRed},
+		borderline east = {1pt} {-0.5pt} {TitleRed},
+		overlay         =
+			{
+				\foreach\n   in   { {north east},{north west},{south east},{south west}}
+				{\draw [ TitleRed, fill = TitleRed ] ( frame.\n ) circle (1.5pt); };
+			},
 	}
 }
 
