@@ -1,0 +1,168 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Helpful user macros
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\NewDocumentCommand\RpgSpellUpcast{O{The~damage~increases~by} m  O{1}}
+{
+	\subparagraph{At~higher~levels} #1~#2~for~every~\str_compare:eNeF{#3}{=}{1}{#3~}\RpgPlural*{#3}{spell~level}~above~\RpgOrdinal{\__rpg_dndSpellLevel}~used~to~cast~this~spell.
+}
+\NewDocumentCommand\RpgCantripScaling{O{Damage} m m m m}
+{
+This~cantrip~improves~with~your~character~level:
+
+\RpgIfSwitch{UseSpellCard}
+{
+	\begin{RpgTable}{X c c c c }
+}{
+	\begin{RpgTable}{X Y Y Y Y }
+		}
+		{ Level} & 1st & 5th & 11th & 17th
+		\\
+		{\RpgFontTableHeader  #1} & #2 & #3 & #4 & #5
+	\end{RpgTable}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Internal key processing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+
+\RpgSpellAddProperty	{school}		{\__rpg_dndSpellSchool} 	{}
+\RpgSpellAddProperty	{level}			{\__rpg_dndSpellLevel}		{0}
+\RpgSpellAddProperty	{casting-time}	{\__rpg_dndSpellCastingTime}{1~action}
+\RpgSpellAddProperty	{range}			{\__rpg_dndSpellRange } 	{self}
+\RpgSpellAddProperty	{components}	{\__rpg_dndSpellComponents} {VSM}
+\RpgSpellAddProperty	{duration}		{\__rpg_dndSpellDuration}	{Instantaneous}
+\RpgSpellAddProperty	{source}		{\__rpg_dndSpellSource} 	{}
+\RpgSpellAddProperty	{area}			{\__rpg_dndSpellArea}	 	{}
+
+%%%%%%%%%%%%%%%%%%%%
+%% Text Format
+%%%%%%%%%%%%%%%%%%%%
+
+% \begin{noindent}
+\RpgThemeSpellFormat{
+	 
+	\subsubsection{#1}
+
+
+	%% Formats `3rd level conjuration' or `Evocation cantrip'
+	\textit{\__rpg_dnd_spell_header:}
+	\par \vspace{3pt} \noindent \ignorespaces
+
+	\__rpg_dnd_makeRangeOrArea:n{\ }
+	\begin{description}
+		[
+			nosep,
+			labelsep = \__rpg_SpaceDim,
+			after    = { \vspace{4pt plus 1pt minus 1pt} },
+		]
+		\item [ Casting~time : ] \RpgGetKey{casting-time}
+		\item [ \__rpg_dndSpellTmpTitle       : ] \__rpg_dndSpellTmp
+		\item [ Components  : ] \RpgGetKey{components}
+		\item [ Duration    : ] \RpgGetKey{duration}
+			 
+		%% add the source element if present
+		\tl_if_blank:eF {\__rpg_dndSpellSource}{\item [ Source      : ] \textit{\RpgGetKey{source}} }
+	\end{description}
+
+	%% spell body
+	#2
+}
+% \end{noindent}
+
+%% Formats `3rd level conjuration' or `Evocation cantrip'
+\cs_new_protected:Npn \__rpg_dnd_spell_header:
+{
+	%% GetKey doesn't expand very nicely, so call the macros by name 
+	\ignorespaces
+	\str_compare:eNeTF{\__rpg_dndSpellLevel}{=}{0}
+	{
+		\str_if_empty:nF{\__rpg_dndSpellSchool}{\__rpg_dndSpellSchool\ }Cantrip
+	}
+	{
+		\RpgOrdinal{\__rpg_dndSpellLevel}~level\str_if_empty:nF{\__rpg_dndSpellSchool}{~\__rpg_dndSpellSchool}
+	}
+}
+
+\cs_new_protected:Npn \__rpg_dnd_makeRangeOrArea:n#1
+{
+
+	\tl_if_empty:eTF{\__rpg_dndSpellArea}
+	{
+		\tl_set:Nn \__rpg_dndSpellTmpTitle{Range}
+		\tl_set:Nn \__rpg_dndSpellTmp{\__rpg_dndSpellRange}
+	}
+	{
+		\tl_set:Nn \__rpg_dndSpellTmpTitle{Area~of~Effect}
+		\tl_set:Nn \__rpg_dndSpellTmp{\__rpg_dndSpellArea#1(\__rpg_dndSpellRange)}
+	}
+}
+
+%%%%%%%%%%%%%%%%%%%
+%% Card Format
+%%%%%%%%%%%%%%%%%%%
+
+
+\RpgThemeSpellCardFormat
+{
+	\setlength{\parindent}{0pt}
+
+	\FormatSpellHeading{#1}
+
+	\\ \vspace{0.5em}
+	\rule{\linewidth}{0.4pt}
+	\par
+	\vspace{0.5em}
+
+	{
+		\RpgFontCardBody
+
+		#2}
+
+	\AddSpellSource{}
+
+}
+
+%% Format the structured data as a 2x2 grid 
+\NewDocumentCommand{\FormatSpellHeading}{m}
+{
+
+	{\centering
+
+			{
+				\RpgFontCardHeader\scriptsize
+				\__rpg_dnd_spell_header:
+			}
+			{\\\RpgFontCardTitle\color{TitleRed}\mbox{#1}}
+
+			\vspace{-0.5em} \\
+
+			\rule{\linewidth}{0.4pt} \\
+
+			\vspace{-0.25em}
+
+
+			\__rpg_dnd_makeRangeOrArea:n{\par}
+			{\RpgFontCardHeader
+				\begin{tabularx}{\linewidth}{YY}
+					\color{TitleRed}Casting~time & \color{TitleRed}\__rpg_dndSpellTmpTitle
+					\\
+					\__rpg_dndSpellCastingTime   & \__rpg_dndSpellTmp
+					\\
+					\color{TitleRed}Components   & \color{TitleRed} Duration
+					\\
+					\__rpg_dndSpellComponents    & \__rpg_dndSpellDuration
+				\end{tabularx}
+			}
+		}
+
+}
+\NewDocumentCommand{\AddSpellSource}{}{
+	\tl_if_blank:eF {\__rpg_dndSpellSource}{
+		\vfill
+		\hfil{\it  Source:~\__rpg_dndSpellSource} \hfil
+		%%For some reason \centering has no effect, so manually force centering via hfil
+	}
+}
+

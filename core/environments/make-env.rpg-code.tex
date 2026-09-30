@@ -34,7 +34,7 @@
 	}{}
 }
 
-\NewDocumentCommand\RpgGetKey{m}
+\NewExpandableDocumentCommand\RpgGetKey{m}
 {
 	\msg_error:nnn{rpg}{bad-getkey}{#1}
 }
@@ -50,7 +50,7 @@
 
 	\NewDocumentEnvironment{#1#2#3}{m O{} +b}
 	{
-		\RenewDocumentCommand\RpgGetKey{m}{  { \prop_item:cn{__rpg_#4_properties}{##1}}; ####1}
+		\RenewExpandableDocumentCommand\RpgGetKey{m}{  { \prop_item:cn{__rpg_#4_properties}{####1}}}
 		\keys_set:nn{rpg/rule/#4}{##2}
 		\use:c{__#2#3_format:nn}{##1}{##3}
 	}{}
