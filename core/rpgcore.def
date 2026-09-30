@@ -22,7 +22,8 @@
 \RequirePackage{fancyhdr}					%% For headers and footers
 \RequirePackage{transparent}
 \RequirePackage{float}						%% Better floats
-\RequirePackage{dblfloatfix}				%% Float fixes for twocolumn environments
+%\RequirePackage{dblfloatfix}				%% Float fixes for twocolumn environments
+\RequirePackage{stfloats}				%% Float fixes for twocolumn environments
 \RequirePackage{adjustbox}					%% For RpgCard boxes
 \RequirePackage{cuted}						%% For \strip environment
 \RequirePackage{nameref}					%% For \nameref command

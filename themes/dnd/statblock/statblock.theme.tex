@@ -1,0 +1,116 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Stat environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Stat block made to look like stat blocks in the PHB.
+% Some some modifications made to include 2024 updates
+
+\newcommand\statInclude[1]{\input{themes/dnd/statblock/#1}}
+
+\statInclude{processing.theme.tex}
+\statInclude{appearance.theme.tex}
+% \statInclude{interface.sty}
+% \statInclude{appearance_classic.sty}
+
+\ExplSyntaxOn
+
+\RpgThemeStatFormat{
+    \group_begin:
+
+    %%initial value processing
+    \__dnd_statPreprocessing:
+	
+    \__dnd_checkNickname:n{#1}
+
+    \__dnd_appearancePreprocessing:
+
+    %%define functions remappings inside environment
+	\__dnd_remap_functions:
+%
+%
+%
+    \__stat_begin:
+%         %% This is the main magic of the environment
+        \RpgHeaderBlock{#1}
+%
+        {\RpgFontStatBlockBody	#2}
+    \__stat_end:
+%
+    \group_end:
+}
+%
+% \RpgStatCardFormat{
+%
+%    \group_begin:
+%
+%     %%initial value processing
+%     \__rpg_stat_preprocessing:
+%     \__rpg_check_nickname:n{#1}
+%     \__rpg_appearance_preprocessing:
+%
+%     %%define functions remappings inside environment
+% 	\__rpg_remap_functions:
+%
+%     \RpgHeaderBlock{#1}
+%
+%     {\RpgFontStatBlockBody	#2}
+%
+%     \group_end:
+%
+% }
+
+\bool_set_false:N \__dnd_statIsBig
+
+
+
+\NewDocumentEnvironment{RpgStat*}{O{} m O{} +b}
+{
+	\bool_set_true:N \__dnd_statIsBig
+	\begin{RpgStat}[#1]{#2}[float-type=figure*,#3,twocolumn]
+		#4
+	\end{RpgStat}
+}
+{
+}
+
+%%%%%%%%%%%%%%%%%%%
+% Float management
+%%%%%%%%%%%%%%%%%%%
+
+% \begin{noindent}
+\cs_new_protected_nopar:Npn \__stat_begin:
+{
+
+
+	\tl_if_blank:eTF{\__dnd_statFloat}
+	{
+		\bool_if:NT \__dnd_statIsBig
+		{
+			\str_compare:eNeT{\__rpg_PageColumns}{=}{twocolumn}
+			{
+				\tl_set:Ne{\__dnd_statFloat}{-}	
+				\tl_set:Ne{\__dnd_statFloatType}{strip}
+				\begin{strip}
+			}
+		}
+	}
+	{
+		\edef\floatbegin{\noexpand\begin{\__dnd_statFloatType}[\__dnd_statFloat]}%
+		\floatbegin
+	}
+
+	\begin{RpgStatBox}[\__dnd_statBoxOptions]
+
+		\bool_if:NT\__dnd_statTwocol{ \begin{multicols}{2} }
+}
+
+\cs_new_protected_nopar:Npn\__stat_end:
+{
+		\bool_if:NT\__dnd_statTwocol { \end{multicols} } 
+	\end{RpgStatBox}
+	 
+	\tl_if_blank:eF{\__dnd_statFloat}
+	{
+		\expandafter\end\expandafter{\__dnd_statFloatType}
+	}
+}
+% \end{noindent}
