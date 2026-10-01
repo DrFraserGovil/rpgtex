@@ -1,0 +1,109 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Attacks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\RpgThemeKeys{rpg/stat/attack}
+{
+	\RpgThemeTLChoiceKey	{distance}	{\__dnd_attackDistance}	{both, melee, ranged}	{melee}
+	\RpgThemeTLMapKey		{type}		{\__dnd_attackType}		{weapon, spell}			{ {}, {\ Spell}} {weapon}
+	\RpgThemeTLKey			{bonus}		{\__dnd_attackBonus}	{0}
+	\RpgThemeTLKey			{reach} 	{\__dnd_attackReach}			{5}
+	\RpgThemeTLKey			{range}		{\__dnd_attackRange}			{20/60}
+
+	\RpgThemeTLChoiceKey	{modifier}		{\__dnd_attackStat}	{str, dex, con, int ,wis, cha}	{str}
+	%% upper case mapper
+	\RpgThemeTLMapKey		{modifier}		{\__dnd_attackStat}	{STR, DEX, CON, INT, WIS, CHA}{str, dex, con, int ,wis, cha}	{str}
+	\RpgThemeTLKey			{dmg}		{\__dnd_attackDmg}		{\RpgDice{1d4}}
+	\RpgThemeTLKey			{dmg-type}	{\__dnd_attackDmgType}	{bludgeoning}
+	\RpgThemeTLKey			{plus-dmg}	{\__dnd_attackPlusDmg}	{}
+	\RpgThemeTLKey			{plus-type}	{\__dnd_attackPlusType}	{slashing}
+	\RpgThemeTLKey			{or-dmg}	{\__dnd_attackOrDmg}	{}
+	\RpgThemeTLKey			{or-type}	{\__dnd_attackOrType}	{}
+	\RpgThemeTLKey			{or-when}	{\__dnd_attackOrWhen}	{}
+	\RpgThemeTLKey			{extra}		{\__dnd_attackExtra}	{}
+}
+
+
+%% Formats the attack into the standard form:
+%% Melee/Ranged (distance-in-ft): +x to hit. On hit [damage-calculation] damage, [optional plus] [optional or]. 
+
+%\begin{noindent}
+\NewDocumentCommand {\RpgStatAttack} {m O{}}
+{
+	\group_begin:
+	\keys_set:nn { rpg / stat / attack } {#2}
+
+	%%format the reach/range strings into the desired form
+	\__dnd_append_if_missing:nn{\__dnd_attackReach}{ft}
+	\__dnd_append_if_missing:nn{\__dnd_attackReach}{ft}
+
+	% %Compute the to-hit modifier
+	\__dnd_make_modifier:nnn{\__dnd_attackToHit}{\__dnd_attackStat}{\__dnd_attackBonus}
+
+	%%Typeset the main attack
+	\RpgStatAction{#1}~
+	\str_case_e:nn {\__dnd_attackDistance}
+	{
+		{ melee }   {\textit{Melee\__dnd_attackType{}~(\__dnd_attackReach):}~}
+			{ ranged }  {\textit{Ranged\__dnd_attackType{}~(\l__range_tl):}~}
+			{ both }    {\textit{Melee~(\__dnd_attackReach)\ or\ Ranged~(\__dnd_attackRange)\__dnd_attackType :}~}
+	}
+	{\__dnd_attackToHit}~to~hit.~
+
+	\tl_set:Nn\l_tmpa_tl{\__dnd_on_hit_text:}
+	\str_if_empty:NF {\l_tmpa_tl}
+	{
+	\textit { On~Hit : } ~ \l_tmpa_tl
+	}
+	\group_end:
+}
+% \end{noindent}
+
+\cs_new_protected_nopar:Npn \__dnd_make_modifier:nnn#1#2#3
+{
+	\tl_set:Ne#1{\__dnd_format_signed_integer:N{\int_eval:n{\__dnd_statPB+#3+\use:c{__dnd_#2 Mod}}}}
+}
+
+%%% Construct the `on hit' text
+\cs_new_protected:Npn \__dnd_on_hit_text:
+{
+	\tl_clear:N\l_tmpa_tl
+	\str_if_empty:NF {\__dnd_attackDmg}
+	{
+		\tl_set:Ne\l_tmpa_tl{
+			\RpgDice{\__dnd_attackDmg}\ \__dnd_attackDmgType\ damage
+			\__dnd_if_or_dmg:
+			\__dnd_if_plus_dmg:
+			.\
+		}
+	}
+	% `extra' is any special text that goes after the final damage; do not
+	% include the final full stop.
+	\str_if_empty:NF {\__dnd_attackExtra}
+	{
+		\tl_set:Ne\l_tmpa_tl{\l_tmpa_tl\__dnd_attackExtra .}
+	}
+
+	%%now place the output into the stream 	
+	\l_tmpa_tl
+}
+%%Formatters
+
+\cs_new_protected:Npn \__dnd_if_plus_dmg:
+{
+	\tl_if_empty:NF {\__dnd_attackPlusDmg}
+	{ ~ plus\ \__dnd_attackPlusDmg\ \__dnd_attackPlusType\ damage }
+}
+
+\cs_new_protected_nopar:Npn \__dnd_if_or_dmg:
+{
+	\tl_if_empty:NF {\__dnd_attackOrDmg}
+	{
+		, ~ or\ \__dnd_attackOrDmg\ \__dnd_attackOrType\ damage\ \__dnd_attackOrWhen
+
+		\tl_if_empty:NF {\__dnd_attackPlusDmg}
+		{,}
+	}
+}
+

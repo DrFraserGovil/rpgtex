@@ -8,55 +8,49 @@
 
 \statInclude{processing.theme.tex}
 \statInclude{appearance.theme.tex}
-% \statInclude{interface.sty}
+\statInclude{commands.theme.tex}
+\statInclude{attack.theme.tex}
 % \statInclude{appearance_classic.sty}
 
 \ExplSyntaxOn
 
 \RpgThemeStatFormat{
-    \group_begin:
+	\group_begin:
 
-    %%initial value processing
-    \__dnd_statPreprocessing:
-	
-    \__dnd_checkNickname:n{#1}
+	%%initial value processing
+	\__dnd_statPreprocessing:
+	\__dnd_checkNickname:n{#1}
+	\__dnd_appearancePreprocessing:
 
-    \__dnd_appearancePreprocessing:
-
-    %%define functions remappings inside environment
+	%%define functions remappings inside environment
 	\__dnd_remap_functions:
-%
-%
-%
-    \__stat_begin:
-%         %% This is the main magic of the environment
-        \RpgHeaderBlock{#1}
-%
-        {\RpgFontStatBlockBody	#2}
-    \__stat_end:
-%
-    \group_end:
+	\__stat_begin:
+	%% This is the main magic of the environment
+	\RpgHeaderBlock{#1}
+	{\RpgFontStatBlockBody	#2}
+	\__stat_end:
+	\group_end:
 }
 %
-% \RpgStatCardFormat{
-%
-%    \group_begin:
-%
-%     %%initial value processing
-%     \__rpg_stat_preprocessing:
-%     \__rpg_check_nickname:n{#1}
-%     \__rpg_appearance_preprocessing:
-%
-%     %%define functions remappings inside environment
-% 	\__rpg_remap_functions:
-%
-%     \RpgHeaderBlock{#1}
-%
-%     {\RpgFontStatBlockBody	#2}
-%
-%     \group_end:
-%
-% }
+\RpgThemeStatCardFormat{
+
+	\group_begin:
+
+	%%initial value processing
+	\__dnd_statPreprocessing:
+	\__dnd_checkNickname:n{#1}
+	\__dnd_appearancePreprocessing:
+
+	%%define functions remappings inside environment
+	\__dnd_remap_functions:
+
+	\RpgHeaderBlock{#1}
+
+	{\RpgFontStatBlockBody	#2}
+
+	\group_end:
+
+}
 
 \bool_set_false:N \__dnd_statIsBig
 
@@ -79,7 +73,6 @@
 % \begin{noindent}
 \cs_new_protected_nopar:Npn \__stat_begin:
 {
-
 
 	\tl_if_blank:eTF{\__dnd_statFloat}
 	{

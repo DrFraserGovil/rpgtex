@@ -1,7 +1,8 @@
-\documentclass[theme=dnd,size=10pt,columns=1,justified]{rpgbook}
+\documentclass[theme=dnd,size=10pt,columns=2,justified]{rpgbook}
 
 \usepackage[hidelinks]{hyperref}
 \usepackage{blindtext}
+\usepackage{lipsum}
 \RpgPartTransparency{0.5}
 % \RpgThemeSetDMGParts{}
 \title{TYPEMASTER'S GUIDE }
@@ -76,23 +77,36 @@
 				\clearpage
 
 				This is some text
+
+				% \RpgToggle{UseStatCard}
 				\begin{RpgStat*}{The Typesetter}[str=12,str-save,skills-expertise={athletics},
 						dex=15,
 						int-save,
-						float=t,
+						% float=t,
 						alignment=Chaotic Evil,
 						type=Beast,
-						challenge=25,
+						challenge=1,
 						wis=14,
 						skills={Perception}
 					]
 
-					Hi ther dfijo sdjoifjh sdoifh oisdhjf oisdhf oisdhj ifjh sdoifh oisdh foisdhoifh sdoifh oisdh fo;iusdh f;ujshd ;iujhds f;iujhd fiu;shd ;ouifh osiedhf opisdhj foijsdh f;oisdhfo;iuh
+					\section{Actions}
+						\action{Dig Bick} \RpgStatName{} does a fun thing. \RpgStatMod{wis}
+
+						\attack{Hi-yah}[modifier=CHA,dmg-type=fire,dmg={10d6 + \RpgStatMod{str}},
+							plus-dmg={1d6}
+						]
+
+						\attack{Dagger}[distance=both,type=spell,bonus=2,reach=10,dmg=1d7-2+\RpgStatMod{str}]
+
+						\reaction{Cry Out}{When something goes wrong}
 				\end{RpgStat*}
 
 
 
 				aihd oaiuhd oashoid haoshd oiaushd iuashgd liuasgh lidugas liudhgasi udgiuasg di;ugasiudgha
+
+				\lipsum[1-10]
 				%
 				% 			\begin{RpgMonster}{The Typesetter}
 				% 				 \RpgMonsterType{Medium aberration, lawful evil}
