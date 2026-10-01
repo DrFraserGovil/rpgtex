@@ -1,0 +1,89 @@
+\ExplSyntaxOn
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Saving Throw
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\RpgThemeKeys{ rpg/stat/save}
+{
+	\RpgThemeTLKey{text}			{\__dnd_statSaveText}	{}
+	\RpgThemeTLKey{dc}	{\__dnd_statSaveDC}	{10}
+	\RpgThemeTLChoiceKey{modifier}	{\__dnd_statSaveMod}	{str,dex,con,int,wis,cha} {dex}
+	\RpgThemeTLMapKey{modifier}		{\__dnd_statSaveMod}	{STR,DEX,CON,INT,WIS,CHA}{str,dex,con,int,wis,cha} {DEX}
+	\RpgThemeTLChoiceKey{shape}		{\__dnd_statSaveShape}	{single,cone,sphere,line,cube} {single}
+	\RpgThemeTLChoiceKey{target}	{\__dnd_statSaveTarget}	{creature,enemy} {creature}
+	\RpgThemeTLKey{size}			{\__dnd_statSaveSize}	{60}
+	\RpgThemeTLKey{origin}			{\__dnd_statSaveOrigin}	{}
+
+	\RpgThemeTLKey{failure}			{\__dnd_statSaveFail}	{}
+	\RpgThemeTLKey{fail}			{\__dnd_statSaveFail}	{}
+	\RpgThemeTLKey{success}			{\__dnd_statSaveSuccess}{}
+	\RpgThemeTLKey{succeed}			{\__dnd_statSaveSuccess}{}
+
+	% \RpgThemeTLKey{origin}			{\__dnd_statSaveOrigin}	{}
+
+
+}
+
+\NewDocumentCommand{\RpgStatSaveEffect}{m O{}}
+{
+	\keys_set:nn { rpg/stat/save}{#2}
+	\tl_set:Ne \__dnd_statSaveNiceName{\prop_item:Ne{\__dnd_StatNames}{\__dnd_statSaveMod}}
+	% \RpgStatAction{#1}\ Make\ a\ \__dnd_statSaveNiceName\ save.
+
+	\RpgStatAction{#1}\
+
+	\__dnd_statSaveMakeText:
+
+	\begin{description}[itemindent=2em]
+		\item[On~Failure:]\ \__dnd_statSaveFail
+		      \tl_if_empty:eF{\__dnd_statSaveSuccess}{\item[On~Success:]\ \__dnd_statSaveSuccess}
+	\end{description}
+}
+
+
+\cs_new_protected:Npn \__dnd_statSaveMakeText:
+{
+	\__dnd_statSaveText
+	\__dnd_append_if_missing:nn{\__dnd_statSaveSize}{ft}
+
+	\str_if_eq:eeTF{\__dnd_statSaveShape}{single}
+	{
+		One\ \__dnd_statSaveTarget\ within\ \__dnd_statSaveSize	}
+	{
+		\__dnd_statShapeText:
+	}
+	\dndSaveStringMustMake\ DC\__dnd_statSaveDC\ \__dnd_statSaveNiceName\ save.
+
+}
+
+\cs_new_protected:Npn \__dnd_statShapeText:
+{
+	\tl_if_empty:eF{\__dnd_statSaveOrigin}
+	{
+		Choose\ a\ point\ \__dnd_statSaveOrigin.\
+	}
+	All~
+	\str_case:en{\__dnd_statSaveTarget}
+	{
+		{creature}{creatures}
+			{enemy}{enemies}
+	}
+	\str_case:en{\__dnd_statSaveShape}
+	{
+		{cone}{\ within\ a\ \__dnd_statSaveSize\ cone}
+			{sphere}{\ within\ a\ \__dnd_statSaveSize\ sphere}
+			{line}{\ in\ a\ \__dnd_statSaveSize\ line}
+			{cube}{\ in\ a\ \__dnd_statSaveSize\ cube}
+	}
+
+
+}
+
+%%%%%%%%%%%%%%%%
+% String defs
+%%%%%%%%%%%%%%%%
+
+\ExplSyntaxOff
+\def\dndSaveStringMustMake{\ must make a}
+\def\dndSaveStringWithin{ within a}

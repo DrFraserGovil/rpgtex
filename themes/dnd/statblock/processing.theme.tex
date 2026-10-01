@@ -135,17 +135,17 @@
 	\ProvideDocumentCommand		{\action}	{O{} m}		{\RpgStatAction[##1]{##2}}
 	\ProvideDocumentCommand		{\trait}	{O{} m}		{\RpgStatAction[##1]{##2}}
 	\ProvideDocumentCommand		{\reaction}{m m}		{\RpgStatReaction{##1}{##2}}
-	\ProvideDocumentCommand		{\name}{}			{\l__dnd_stat_name}
+	\ProvideDocumentCommand		{\name}{}			{\RpgStatName{}}
 	\ProvideDocumentCommand		{\stat}{m}			{\RpgStatGet{##1}}
-	\ProvideDocumentCommand		{\save}{m O{}}		{\RpgSavingThrow{##1}[##2]}
+	\ProvideDocumentCommand		{\save}{m O{}}		{\RpgStatSaveEffect{##1}[##2]}
 	%attacks
 	\ProvideDocumentCommand		{\attack}{m O{}}	{\RpgStatAttack{##1}[##2]}
 	\ProvideDocumentCommand		{\melee}{m O{}}		{\RpgStatAttack{##1}[##2,distance=melee]}
 	\ProvideDocumentCommand		{\ranged}{m O{}}	{\RpgStatAttack{##1}[##2,distance=ranged]}
 	%spellss
 	\ProvideDocumentEnvironment	{spells}{O{}}		{\begin{RpgStatSpellcasting}[##1]}{\end{RpgStatSpellcasting}}
-	\ProvideDocumentCommand		{\slot}{o o m}		{\RpgStatSpellSlots[##1][##2]{##3}}
-	\ProvideDocumentCommand		{\innate}{O{} m}	{\RpgStatSpellList[##1]{##2}}
+	% \ProvideDocumentCommand		{\slot}{o o m}		{\RpgStatSpellSlots[##1][##2]{##3}}
+	% \ProvideDocumentCommand		{\innate}{O{} m}	{\RpgStatSpellList[##1]{##2}}
 
 	}
 
