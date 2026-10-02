@@ -2,24 +2,26 @@
 \ExplSyntaxOn
 
 
-\providefontfamily{\starTrek}{GalaxyEdge} % <--- Use Family + Style
-[Path=\RpgPackagePath/themes/scifi/fonts/]
+\RpgIfFont{
+	\providefontfamily{\starTrek}{GalaxyEdge} % <--- Use Family + Style
+	[Path=\RpgPackagePath/themes/scifi/fonts/]
 
-\providefontfamily{\scifi}{Orbitron}
-[
-	Path=\RpgPackagePath/themes/scifi/fonts/,
-	UprightFont = *-Bold,
-	BoldFont= *-ExtraBold,
-	ItalicFont=*-Bold,
-]
+	\providefontfamily{\scifi}{Orbitron}
+	[
+		Path=\RpgPackagePath/themes/scifi/fonts/,
+		UprightFont = *-Bold,
+		BoldFont= *-ExtraBold,
+		ItalicFont=*-Bold,
+	]
 
-\providefontfamily{\jura}{Jura}
-[
-	Path=\RpgPackagePath/themes/scifi/fonts/,
-	UprightFont = *-Regular,
-	BoldFont= *-Bold,
-	ItalicFont=EurostileBQ-Italic,
-]
+	\providefontfamily{\jura}{Jura}
+	[
+		Path=\RpgPackagePath/themes/scifi/fonts/,
+		UprightFont = *-Regular,
+		BoldFont= *-Bold,
+		ItalicFont=EurostileBQ-Italic,
+	]
+}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -27,7 +29,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%
 %The white color of the cover page in rpgbook mode is not set here, but in the \RpgDrawCoverPage command
 %This is to prevent white text being used everywhere else!
-\RpgSetFont{
+\RpgThemeFont{
 	main-body-family 	={\jura},
 	%Sections
 	title-family 		={\starTrek},
@@ -74,17 +76,17 @@
 	footer-style		= {\scifi\scriptsize\textcolor{SlateGray}},
 	page-number-style	= {\scifi\small\textcolor{SlateGray}},
 	drop-cap-family		= {\starTrek},
-	drop-cap-first-line-style = {\scifi},
+	% drop-cap-first-line-style = {\scifi},
 	emph-family = {\scifi},
 	emph-style = {\bfseries},
 }
 
-\str_if_eq:NNT \g__rpg_base_class_tl {article}
-{
-	\RpgSetFont{
-		title-style			= {\Huge\color{black}},
-		subtitle-style			= {\large\scifi\color{black}},
-	}
-	{}
-}
+% \str_if_eq:NNT \g__rpg_base_class_tl {article}
+% {
+% 	\RpgSetFont{
+% 		title-style			= {\Huge\color{black}},
+% 		subtitle-style			= {\large\scifi\color{black}},
+% 	}
+% 	{}
+% }
 \ExplSyntaxOff
