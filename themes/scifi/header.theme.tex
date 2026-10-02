@@ -1,0 +1,44 @@
+
+\ExplSyntaxOn
+
+%% Set the textured paper (off by default)
+\NewDocumentCommand\RpgSetScifiPaper{}
+{
+	\RpgThemePaperImage{\RpgPackagePath/themes/scifi/img/paper}
+}
+
+
+%% only load this if the paper option was set, since we're altering primitives here
+\RpgIfPaper{
+
+	\renewcommand*{\headrulewidth}{0pt} % no rule for header
+	\renewcommand*{\footrulewidth}{0pt} % no rule for footer
+	\fancyhf {} % clear all headers and footers
+	\fancypagestyle {plain} {  }
+	\fancypagestyle{empty} {\fancyhf {}}
+	\fancyhfoffset[LE,RO,RE,LO]{0pt}
+
+	\fancypagestyle{fancy}{
+		% Left-even page footer
+		\fancyfoot[LE]{%
+			\RpgFontFooter \leftmark
+
+			\RpgThemeFooterDecoration*{1.5cm}{\RpgPackagePath/themes/scifi/img/scifi_scroll}{
+				\RpgPut[\linewidth][\flushleft](l){0.1\paperwidth}{0.45in}{\RpgFontFooter \leftmark}
+				\RpgPut{0.43in}{0.15in}{\RpgFontPageNumber {\thepage}}
+			}
+
+		}
+		% % Right-odd page footer
+		\fancyfoot[RO]{%
+			\RpgThemeFooterDecoration{1.5cm}{\RpgPackagePath/themes/scifi/img/scifi_scroll}
+			{
+				\RpgPut[\linewidth][\flushright](r){0.9\paperwidth}{0.45in}{\RpgFontFooter \leftmark}
+				\RpgPut{\paperwidth-0.43in}{0.15in}{\RpgFontPageNumber {\thepage}}
+			}
+		}
+	}
+
+	\pagestyle{fancy}
+}
+\ExplSyntaxOff
