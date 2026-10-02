@@ -94,16 +94,16 @@
 {
 	\RpgStatTitle{#1}
 	\RpgStatLine
-	\__rpg_stat_basics:
+	\__dnd_stat_basics:
 	\RpgStatLine
-	\__rpg_stat_ability_scores:
+	\__dnd_stat_ability_scores:
 	\RpgStatLine
-	\__rpg_stat_details:
+	\__dnd_stat_details:
 	\RpgStatLine
 }
 
 %% BASIC BLOCK -- HP / AC / etc.
-\cs_new_protected_nopar:Npn \__rpg_stat_basics:
+\cs_new_protected_nopar:Npn \__dnd_stat_basics:
 {
 	{
 			\color{StatblockColor}
@@ -121,17 +121,17 @@
 }
 %% ABILITY SCORE BLOCK
 %%Formatters for ability table
-\cs_new:Npn \__rpg_format_mod_labels:n #1
+\cs_new:Npn \__dnd_format_mod_labels:n #1
 {
 	\rotatebox[origin=c]{90}{\RpgFontStatBlockTitle\scriptsize \hspace{0.1cm} #1 \hspace{0.1cm}}
 }
-\cs_new:Npn \__rpg_format_stat_titles:nn #1#2
+\cs_new:Npn \__dnd_format_stat_titles:nn #1#2
 {
 & \RpgFontStatBlockTitle \normalsize  {#1} ~{ (#2)}
 }
 
 
-\cs_new_protected_nopar:Npn \__rpg_stat_ability_scores:
+\cs_new_protected_nopar:Npn \__dnd_stat_ability_scores:
 {
 	%%define colours and spacings
 	\color {StatblockColor}
@@ -144,10 +144,10 @@
 				~
 				\seq_map_inline:Nn\__dnd_Stats
 				{
-					\__rpg_format_stat_titles:nn{\text_uppercase:n{##1}}{\use:c{__dnd_##1Score}}
+					\__dnd_format_stat_titles:nn{\text_uppercase:n{##1}}{\use:c{__dnd_##1Score}}
 				}
 				\\
-				\__rpg_format_mod_labels:n{mod}
+				\__dnd_format_mod_labels:n{mod}
 				\seq_map_inline:Nn\__dnd_Stats
 				{
 					& \__dnd_format_signed_integer:N{\use:c{__dnd_##1Mod}}
@@ -157,7 +157,7 @@
 				\__dnd_if_any_saves:T
 				{
 					\\
-					\__rpg_format_mod_labels:n{save}
+					\__dnd_format_mod_labels:n{save}
 					\seq_map_inline:Nn{\__dnd_Stats}
 					{
 						& \tl_use:c{__##1Save}
@@ -170,7 +170,7 @@
 	\par \vspace{0.1cm}
 }
 %% DETAILS BLOCK -- languages/skilsl etc
-\cs_new_protected_nopar:Npn \__rpg_stat_details:
+\cs_new_protected_nopar:Npn \__dnd_stat_details:
 {
 	%% Each item is wrapped in command that ensures it only appears 
 	%% if the value is non-empty
