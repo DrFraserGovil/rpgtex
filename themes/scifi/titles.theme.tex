@@ -1,0 +1,81 @@
+
+\ExplSyntaxOff
+
+\RpgIfSections{
+	\renewcommand{\thepart}{\arabic{part}}
+	\titlecontents{part}
+	[0pt] % left
+	{ \addvspace{.3cm} \titleline{ \color{black} \titlerule[1pt] } \addvspace{.1cm }  \RpgFontTocPart \centering } % above-code
+	{Part\ \thecontentslabel\\} % numbered-entry-format
+	{\centering} % numberless-entry-format
+	{} % filler-page-format
+	[  \addvspace{.1cm } \titleline{ \color{black} \titlerule[1pt] } ] % below-code
+}
+
+
+
+
+\RpgThemePartPage
+{
+	\RpgPut{0.5\paperwidth}{0.5\paperheight}{
+		\RpgContour[outer=white!50!TitleBlue,inner=TitleBlue,style=\RpgFontPart{}]
+		{
+			\MakeUppercase{Part    \thepart}
+		}
+
+		\vspace{1cm}
+
+
+		\RpgContour[outer=white!50!TitleBlue,inner=TitleBlue,style=\RpgFontPart\Huge]{{#1}}
+	}
+
+}
+
+\RpgThemeTitleCover
+{
+	\RpgPut[0.9\paperwidth]{0.5\paperwidth}{\paperheight-3cm}{
+		\RpgContour[outer=TitleBlue,inner=white,style= \RpgFontTitle]{\@title}
+	}
+
+	\RpgPut[0.9\paperwidth](b){0.5\paperwidth}{1cm}{
+
+		\begin{center}
+
+
+
+			\RpgIfColoursEqual{SubtitleInner}{SubtitleOuter}{
+				\RpgFontSubTitle \color{SubtitleInner} \@subtitle \par
+				\vspace{1cm}
+				\@author
+			}{
+				{\RpgContour[inner=SubtitleInner,outer=SubtitleOuter,style=\RpgFontSubTitle]{\@subtitle}}
+
+				\vspace{1cm}
+				{\RpgContour[inner=SubtitleInner,outer=SubtitleOuter,style=\RpgFontSubTitle]{\@author}}
+			}
+		\end{center}
+
+	}
+}
+
+
+%%%%%%%%%
+%% Color helpers
+%%%%%%%
+\ExplSyntaxOn
+\NewDocumentCommand\RpgIfColoursEqual{m m +m +m}
+{
+	% Extract and convert Color 1 to RGB
+	\extractcolorspecs {#1} \l_tmpa_tl \l_tmpb_tl
+	\convertcolorspec \l_tmpa_tl \l_tmpb_tl { rgb } \l_tmpa_tl
+
+	% Extract and convert Color 2 to RGB
+	\extractcolorspecs {#2} \l_tmpc_tl \l_tmpd_tl
+	\convertcolorspec \l_tmpc_tl \l_tmpd_tl { rgb } \l_tmpb_tl
+
+	% Compare normalized RGB component strings
+	\str_if_eq:NNTF \l_tmpa_tl \l_tmpb_tl
+	{#3}
+	{#4}
+}
+\ExplSyntaxOff
