@@ -54,7 +54,7 @@
 \keys_set:nn{rpg/stat/mythic}{#1}
 
 \action{\__dnd_statMythicTraitName}\ \__dnd_statMythicTrait \par
-\tl_if_empty:eF{\__dnd_statMythicNarration}
+\tl_if_empty:oF{\__dnd_statMythicNarration}
 {
 	{\noindent\RpgFontStatBlockLegendary \rpgstringmythicNarrationLeadIn\par}
 

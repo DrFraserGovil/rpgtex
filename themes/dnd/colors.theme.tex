@@ -13,7 +13,7 @@
 \definecolor {ContourGray}	{HTML}	{CACCBE} % outline color in part & chapter font
 
 
-% Decoration colours
+% Decoration coloursdvance
 \definecolor {BrGreen}      {HTML} {E8E6DC} % Basic Rules
 \definecolor {BrTan}		{HTML} {F9EFD6} % lighter version of bgtan from the 2018 Basic Rules
 \definecolor {PhbLightGreen}{HTML} {E0E5C1} % PHB Part 1
@@ -69,6 +69,7 @@
 \NewDocumentCommand\RpgThemeSetColorCycle{m}
 {
 	\seq_set_from_clist:Nn \__rpg_ColorCycle{#1}
+	\RpgAdvanceColors{}
 }
 \NewDocumentCommand\RpgSetPHBColors{}
 {
@@ -90,4 +91,3 @@
 
 \ExplSyntaxOff
 \RpgSetPHBColors{}
-\RpgAdvanceColors{}

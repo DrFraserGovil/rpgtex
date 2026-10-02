@@ -93,16 +93,16 @@
 \cs_new_protected:Npn \__dnd_if_plus_dmg:
 {
 	\tl_if_empty:NF {\__dnd_attackPlusDmg}
-	{ ~ plus\ \__dnd_attackPlusDmg\ \__dnd_attackPlusType\ damage }
+	{ ~ plus\ \exp_args:Ne\RpgDice{\__dnd_attackPlusDmg}\ \__dnd_attackPlusType\ damage }
 }
 
 \cs_new_protected_nopar:Npn \__dnd_if_or_dmg:
 {
 	\tl_if_empty:NF {\__dnd_attackOrDmg}
 	{
-		, ~ or\ \__dnd_attackOrDmg\ \__dnd_attackOrType\ damage\ \__dnd_attackOrWhen
+		, ~ or\ \exp_args:Ne\RpgDice{\__dnd_attackOrDmg}\ \__dnd_attackOrType\ damage\ \__dnd_attackOrWhen
 
-		\tl_if_empty:NF {\__dnd_attackPlusDmg}
+		\tl_if_empty:NF {\__dnd_attackOrDmg}
 		{,}
 	}
 }

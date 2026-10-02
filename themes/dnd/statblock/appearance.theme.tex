@@ -72,13 +72,11 @@
 	\vspace{3pt}
 	\ignorespaces\noindent	{\RpgFontStatBlockTitle #1}
 
+	\tl_set:Nn\__dnd_statSubtitle{\__dnd_statSize\ \__dnd_statType}
 
-	\tl_if_empty:eTF{\__dnd_statAlignment}
+	\tl_if_empty:eF{\__dnd_statAlignment}
 	{
-		\tl_set:Nn\__dnd_statSubtitle{\__dnd_statType}
-	}
-	{
-		\tl_set:Nn{\__dnd_statSubtitle}{\__dnd_statAlignment\ \__dnd_statType}
+		\tl_put_right:Ne{\__dnd_statSubtitle}{,\ \__dnd_statAlignment}
 	}
 
 	\tl_if_empty:eF{\__dnd_statSubtitle}
@@ -109,13 +107,13 @@
 			\color{StatblockColor}
 			\noindent
 			\begin{tabularx}{\linewidth}{lXlX}
-				\textbf{AC}         & \__dnd_statAC
+				\textbf{AC}         & \RaggedRight\noindent \__dnd_statAC
 				                    &
-				\textbf{Speed}      & \__dnd_statSpeed
+				\textbf{Speed}      & \RaggedRight\noindent \__dnd_statSpeed
 				\\
-				\textbf{HP}         & \__dnd_statHP
+				\textbf{HP}         & \RaggedRight\noindent \exp_args:Ne\RpgDice{\__dnd_statHP}
 				                    &
-				\textbf{Initiative} & \__dnd_statInitiativeBonus
+				\textbf{Initiative} & \RaggedRight\noindent \__dnd_statInitiativeBonus
 			\end{tabularx}
 		}
 }
@@ -180,7 +178,7 @@
 		labelsep = \__rpg_SpaceDim,
 		nosep]
 
-	\__maybe_item:nn {Skills}					{\__dnd_statProcessedSkills}
+	\__maybe_item:ne {Skills}					{\__dnd_statProcessedSkills} %% use e variant to force expansion if empty
 	\__maybe_item:nn {Damage~Vulnerabilities}	{\__dnd_statDamageWeak}
 	\__maybe_item:nn {Damage~Resistances}		{\__dnd_statDamageResist}
 	\__maybe_item:nn {Damage~Immunities}		{\__dnd_statDamageImmune}

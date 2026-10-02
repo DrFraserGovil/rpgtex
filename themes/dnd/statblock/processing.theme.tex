@@ -67,7 +67,8 @@
 \RpgStatAddProperty	{float-type}			{ \__dnd_statFloatType}		{figure}
 
 %% Top block
-\RpgStatAddProperty	{nickname}				{ \__dnd_statName}		{}
+\RpgStatAddProperty	{nickname}[name]		{ \__dnd_statName}		{}
+\RpgStatAddProperty	{size}					{ \__dnd_statSize}		{Medium}
 \RpgStatAddProperty	{type}					{ \__dnd_statType}		{}
 \RpgStatAddProperty	{alignment}				{ \__dnd_statAlignment}	{Neutral}
 \RpgStatAddProperty	{armor-class}[ac,AC]	{ \__dnd_statAC}		{10}
@@ -86,7 +87,7 @@
 %% Bottom block
 \RpgStatAddProperty	{skills}				{\__dnd_statRawSkills}		{}
 \RpgStatAddProperty	{skills-expertise}		{\__dnd_statRawExpertise}	{}
-\RpgStatAddProperty {languages}				{\__dnd_statLanguages}		{}
+\RpgStatAddProperty {languages}[language]	{\__dnd_statLanguages}		{}
 \RpgStatAddProperty {senses}				{\__dnd_statSenses}			{}
 \RpgStatAddProperty {passive-perception}	{\__dnd_statPP}				{}
 \RpgStatAddProperty {proficiency-bonus}[proficiency,pb]{\__dnd_statPB}	{}
@@ -160,6 +161,7 @@
 	{
 		\tl_if_empty:oF {#2}{ \item [#1] #2 }
 	}
+	\cs_generate_variant:Nn \__maybe_item:nn{ne}
 
 	% Format signed integers for display
 	\cs_new_protected_nopar:Npn \__dnd_format_signed_integer:N #1
@@ -292,7 +294,7 @@
 				\tl_set:Ne{\__dnd_statXP}{\int_eval:n{100+50*((\__dnd_statCR)*(\__dnd_statCR)+(\__dnd_statCR)+2*(\__dnd_statCR)*\l_tmpa_int-7*\l_tmpa_int*\l_tmpa_int - 5 * \l_tmpa_int)}}
 			}
 			{
-				\tl_set:Ne{\__dnd_statXP}{\fp_eval:n{100*\__dnd_statCR}}
+				\tl_set:Ne{\__dnd_statXP}{\fp_eval:n{10*round(10*\__dnd_statCR)}}
 			}
 		}
 	}
