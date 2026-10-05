@@ -1,0 +1,81 @@
+\ExplSyntaxOn
+
+\newlength\macrowidth
+\newlength\macrosep
+\setlength\macrowidth{3.5cm}
+\setlength\macrosep{0.3cm}
+\newlength\reducer
+\setlength\reducer{0.65in}
+% \setlength\fboxsep{0cm}
+\NewDocumentCommand\MarginBlock{+m O{black} O{} +m O{white} +m}
+{
+	\par \vspace{0.5cm}
+
+	{
+		\hspace{-\dimexpr\reducer\relax} %
+		\begin{minipage}{0.922\paperwidth}
+			\colorbox{#5}{\makebox[0.9\paperwidth][l]{
+					\parbox[t]{\macrowidth}{
+						\mbox{} \raggedleft \color{#2} \maxsizebox{\macrowidth}{!}{\tt #1} }\hspace{\macrosep}
+					\parbox[t]{\dimexpr0.94\linewidth - \macrowidth-\macrosep\relax}{ #4
+					}
+				}
+			}
+		\end{minipage}
+	}
+
+	% \begin{minipage}[t]{\dimexpr \macrowidth + \macrosep + \linewidth+2\fboxsep\relax}
+	%
+	% }}
+	% \end{minipage}\par
+	\par
+	\tl_set:Ne\l_tmpa_tl{#3}
+	\tl_if_blank:oTF{\l_tmpa_tl}
+	{
+		\begin{adjustwidth}{2.2cm}{0pt}
+			#6
+		\end{adjustwidth}
+
+	}
+	{
+		\hspace{-\dimexpr\reducer\relax}
+		\begin{minipage}[t]{\macrowidth}
+			\parbox[t]{\macrowidth}{ \mbox{} \raggedleft \color{#2} \maxsizebox{\macrowidth}{!}{\tt (#3) eie} }
+		\end{minipage}%
+		\hspace{\macrosep}%
+		\begin{minipage}[t]{\dimexpr\linewidth-\macrowidth+0.5\reducer\relax}
+
+			#6
+		\end{minipage}
+	}
+
+}
+
+\setlength\marginparwidth{3.6cm}
+\setlength\marginparsep{0.3cm}
+
+
+
+\NewDocumentCommand\RpgVariable{+m O{} +m}
+{
+	\MarginBlock{\declareCmd{#1}}[Variable][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
+	{
+		\param{} ~\slshape (Variable)
+	}[VariableBackground]
+	{
+		#3
+	}
+}
+\NewDocumentCommand\RpgScript{+m +m +m}
+{
+	\MarginBlock{\declareEnv{#1}}[Script]
+	{
+		\tt #2
+	}[ScriptBackground]
+	{
+		#3
+	}
+}
+
+
+\ExplSyntaxOff

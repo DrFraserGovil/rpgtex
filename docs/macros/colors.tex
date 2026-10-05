@@ -1,0 +1,13 @@
+\colorlet{Variable}{RoyalPurple}
+\colorlet{VariableBackground}{Variable!14!white}
+
+\colorlet{Script}{black}
+\colorlet{ScriptBackground}{black!20!white}
+
+\newcommand{\fullpagerule}[1][black]{%
+	\par
+	\begin{tikzpicture}[remember picture, overlay]
+		\draw[line width=0.4pt,color=#1] (current page.west |- 0,0) -- (current page.east |- 0,0);
+	\end{tikzpicture}%
+	\par
+}

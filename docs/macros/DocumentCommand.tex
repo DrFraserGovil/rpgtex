@@ -1,0 +1,45 @@
+\ExplSyntaxOn
+
+\NewDocumentCommand{\RpgCommand}{s o m +m +m +m +m}{
+	\MarginBlock{\cmd{#3}}{
+		\lipsum[1]
+	}
+}
+
+
+% \IfBooleanTF{#1}
+% {
+% 	\label{#3}
+% }
+% {
+% 	\label{Macro:#3}
+% }
+%
+% \tl_if_novalue:nTF{#2}
+% {
+% 	\index{#3}
+% }
+% {
+% 	\cmdidx{#2}
+% }
+%
+
+%
+% 	#5
+%
+% 	\str_if_empty:nF{#6}
+% 	{
+% 		\RpgGetExample{#6}
+% 	}
+%
+% 	\str_if_empty:nF{#7}
+% 	{
+% 		% \subsection{Details}
+% 		{#7}
+% 	}
+%
+% \end{tcolorbox}
+% % \vspace{-0.5em}
+% }
+
+\ExplSyntaxOff

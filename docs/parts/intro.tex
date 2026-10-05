@@ -1,57 +1,61 @@
-\BeginMacroFormat{}
+% !TEX root = ../documentation.tex
+% \BeginMacroFormat{}
 \chapter{Installation \& Usage}
 
 	\section{Getting \rpgtex}
 
-		There are a number of different ways to acquire \rpgtex{}. Once you have installed it, it is vital to ensure that it is \href{\ref{S:Configuration}}{properly configured} (see below).
+		There are a number of different ways to acquire \rpgtex{}. Once you have installed it, it is vital to ensure that it is \hyperref[S:Configuration]{properly configured} (see below).
 
 
-		\subsection{texmf Installation}
+		\subsection{Direct Installation}
 
 			The simplest way to use \rpgtex{} is to install it on the \texttt{texmf} path, where the compiler can automatically find it:
 
+			%\begin{noindent}
 			\begin{BashBlock}
-mkdir -p "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex" %make sure the directory exists
+				mkdir -p "$(kpsewhich -var-value TEXMFHOME)/tex/latex" %make sure the directory exists
 git clone https://github.com/DrFraserGovil/rpgtex.git "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
 			\end{BashBlock}
-			
-			This will clone the repository into your\LaTeX{} path.
+			%\end{noindent}
+			This will clone the repository into your \LaTeX{} path.
 
 		\subsection{Indirect Installation}
 
 			If you want to tinker with \rpgtex{} -- such as by creating a new theme -- it is helpful to have it in a more accessible location. Clone the repository into a location of your choice:
 
 			\begin{BashBlock}
-git clone https://github.com/DrFraserGovil/rpgtex.git ~/your/rpgtex/directory
+				git clone https://github.com/DrFraserGovil/rpgtex.git /your/rpgtex/directory
 			\end{BashBlock}
 
 			You then have two options to make the package visible to the compiler:
 
 			\subsubsection{Use TEXINPUTS}
 
-			Setting the environment variable \texttt{TEXINPUTS} allows the compiler access:
+				Setting the environment variable \texttt{TEXINPUTS} allows the compiler access:
 				\begin{BashBlock}
-TEXINPUTS=~/your/rpgtex/directory/::
+					TEXINPUTS=~/your/rpgtex/directory/::
 				\end{BashBlock}
-				(Or similar commands, depending on your shell -- in \texttt{fish} you would call \texttt{set TEXINPUTS dir}).
+				(Or similar commands, depending on your shell).
 
 			\subsubsection{Use Symlinks}
 
-			You can symlink the install location to the texmf directory, allowing the compiler to act as if you had performed the texmf installation:
+				You can symlink the install location to the texmf directory, allowing the compiler to act as if you had performed the texmf installation:
 
-			\begin{BashBlock}
-mkdir -p "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex" 
+				%\begin{noindent}
+				\begin{BashBlock}
+					mkdir -p "$(kpsewhich -var-value TEXMFHOME)/tex/latex"
 ln -sf ~/your/rpgtex/directory "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
-			\end{BashBlock}
+				\end{BashBlock}
+				%\end{noindent}
 
-		\subsection{Overleaf (Not recommended!)}
+		\subsection{Overleaf (Not recommended!)} % HACK: We need to set up an overlead specific package
 
 			We do not recommend using Overleaf since the free-tier subscription has reduced compilation times drastically, making compiling documents using complex packages such as this one extremely difficult. Nevertheless:
 
 			\begin{enumerate}
 				\item  Download this GitHub repository as a ZIP archive using the Clone or download link above.
-    			\item On Overleaf, click the New Project button and select Upload Project. Upload the ZIP archive you downloaded from this repository.
-				\item Manually create the file \texttt{rpg-config.cfg} with the contents ``\cmd{edef}\cmd{RpgPackagePath}\param{../}''. This replaces the configuration step described below.
+				\item On Overleaf, click the New Project button and select Upload Project. Upload the ZIP archive you downloaded from this repository.
+				\item Manually create the file \texttt{rpg-config.cfg} with the contents \texttt{\textbackslash{edef}}\cmd{RpgPackagePath}\texttt{\{\}}. This replaces the configuration step described below.
 			\end{enumerate}
 
 
@@ -59,34 +63,37 @@ ln -sf ~/your/rpgtex/directory "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgt
 
 
 		Because \rpgtex{} comes packaged with some resources (namely some fonts) for which \TeX{} does not support relative-pathfinding, it is necessary to provide \rpgtex{} with a value for the \cmd{RpgPackagePath}.
-		
-		\RpgMacro{RpgPackagePath}{}{A variable holding the absolute path to the root directory of the rpgtex install location.}{}{
+
+
+		\RpgVariable{RpgPackagePath}{A variable holding the absolute path to the root directory of the rpgtex install location.
+
 			We provide a number of different ways to set this variable:
 			\begin{enumerate}
 				\item The provided \texttt{rpglatex} compiler automatically inserts a definition based on a \texttt{kpsewhich}, using the Command Line Interface \RpgPage[p]{S:CMD}.
 				\item If the variable does not exist, the \rpgtex{} engine itself tries the following
-				\begin{enumerate}
-					\item Searches for the file \texttt{core/rpg-config.cfg}, which (hopefully) contains a definition\footnote{In the form of \cmd{edef}\cmd{RpgPackagePath}\param{path/to/package}}, and \cmd{inserts} it.
-					\item If no file is found, \rpgtex{} used the \cmd{write18} utility to dispatch its own calls to \cmd{kpsewhich} and build a config file in the expected location. This requires the compiler be run with \texttt{--shell-escape} active
-					\item If this doesn't work, the compiler exits, and suggests that the user manually creates the config file:
-					\begin{Code}
-						cd <rpgtex root directory>
+				      \begin{enumerate}
+					      \item Searches for the file \texttt{core/rpg-config.cfg}, which (hopefully) contains a definition\footnote{In the form of \cmd*{edef}\cmd{RpgPackagePath}\param{path/to/package}}, and \cmd*{input}s it.
+					      \item If no file is found, \rpgtex{} used the \cmd{write18} utility to dispatch its own calls to \cmd{kpsewhich} and build a config file in the expected location. This requires the compiler be run with \texttt{--shell-escape} active
+					      \item If this doesn't work, the compiler exits, and suggests that the user manually creates the config file:
+					            \begin{Code}
+						            cd <rpgtex root directory>
 
-						cmd="\cmd{edef}\cmd{RpgPackagePath}\param{\$(pwd)}"
-						
-						echo \$cmd >> core/rpg-config.cfg
-					\end{Code}
-				\end{enumerate}
+						            cmd="\cmd{edef}\cmd{RpgPackagePath}\param{\$(pwd)}"
+
+						            echo \$cmd >> core/rpg-config.cfg
+					            \end{Code}
+				      \end{enumerate}
+				\item We provide a shell script which executes these commands for the user.
 			\end{enumerate}
 			The extra configuration steps need only be run once -- once the config file exists, the package will be able to configure itself.
-			}
+		}
 
 		\begin{RpgTip}{Why is configuration necessary?}
-			\TeX{} is generally set up so that when a file calls \texttt{include} or \texttt{input} it is possible to use filepaths relative to the package itself. \texttt{rpg.sty} can call \texttt{\cmd{input}{core/font.sty}} and it will know to first check for the file relative to rpg.sty; even if the package resides within the texmf path and the user has no idea where \texttt{rpgroot/rpg.sty}, or \texttt{rpgroot/core/font.sty}, are.
+			\TeX{} is generally set up so that when a file calls \texttt{include} or \texttt{input} it is possible to use filepaths relative to the package itself. \texttt{package.sty} can call \cmd*{input\{dir/subpackage.tex\}} and it will know to first check for the file relative to \texttt{package.sty}; even if the package resides within the texmf path and the user has no idea where \texttt{package.sty} is.
 
 			An annoying exception to this is fonts and typefaces. \texttt{xelatex} searches for fonts based on \textit{filepaths relative to the current working directory} -- or from those installed in as system fonts.
 
-			Since \texttt{rpgtex} includes several (license free) typefaces as part of the provided themes, this poses a problem. We must either require that:
+			Since \rpgtex{} includes several (license free) typefaces as part of the provided themes, this poses a problem. We must either require that:
 			\begin{enumerate}
 				\item \rpgtex{} documents can only be prepared in restricted locations relative to the install location of \rpgtex{}.
 				\item Users must identify and specify the \rpgtex{} root path when preparing a document
@@ -98,15 +105,15 @@ ln -sf ~/your/rpgtex/directory "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgt
 
 	\section{Package \& Class Usage}
 
-		 
+
 		\rpgtex{} can be used either as a standalone package, or as part of a number of classes
 
 		\subsection{Standalone Package}
 			The standalone package can be used directly by including the \rpgtex{} package:
 			\begin{lstlisting}
-				\documentclass{arbitrary-class}
-				\usepackage[options]{rpgtex}
-			\end{lstlisting}
+						\documentclass{arbitrary-class}
+						\usepackage[options]{rpgtex}
+					\end{lstlisting}
 
 			This will load only the core commands into the document, and (unless called explicitly) no themes will be imported. Using the package in this way does not activate any of the commands which change the overall geometry, background or headers of the document.
 
@@ -120,53 +127,49 @@ ln -sf ~/your/rpgtex/directory "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgt
 				\item \texttt{rpghandout} (\RpgPage{S:handoutClass}). Based on the article class, this is designed for shorter documents
 				\item \texttt{rpgcard} (\RpgPage{S:cardClass}). A small-document class designed for creating modular `handout' cards for items, spells or abilities.
 			\end{enumerate}
-	
 
-		
 
-		
+
+
+
 	\section{Compiling rpgtex Documents}\label{C:Compiler}
 
 
-		\rpgtex{} uses the \texttt{fontspec} package to allow custom fonts, and therefore requires compiling with \texttt{xelatex} or \texttt{luatex}:
+		\rpgtex{} uses the \texttt{fontspec} package to allow custom fonts, and therefore requires compiling with \texttt{xelatex} or \texttt{lualatex}:
 
 		\begin{lstlisting}
-			xelatex main.tex		#works
-			luatex main.tex			#works
-			pdflatex main.tex #fails
-		\end{lstlisting}
+						xelatex main.tex		#works
+						lualatex main.tex		#works
+						pdflatex main.tex #fails if fonts option passed
+					\end{lstlisting}
 		So long as \rpgtex{} is on the user's latex path, and the package properly configured \RpgPage[p]{S:Configuration} no further compilation steps are required. However, for ease of use, we provide the \texttt{rpglatex} compiler as part of the \rpgtex{} distribution.
 
 		\subsection{The \texttt{rpglatex} compiler}
 
-		\rpgtex{} is shipped with a special compiler, \texttt{rpglatex}. This is simply a python3 script which acts as a wrapper around either xelatex or luatex, but includes several quality-of-life changes to the interface to make it easier to use with \texttt{rpgtex}.
+			\rpgtex{} is shipped with a special compiler, \texttt{rpglatex}. This is simply a python3 script which acts as a wrapper around either xelatex or luatex, but includes several quality-of-life changes to the interface to make it easier to use with \texttt{rpgtex}.
 
 
-		\RpgMacro*{rpglatex}{\param{m}}{Compiles latex documents using either xelatex or luatex}
-		{
-			> rpglatex [options] <file>
-		}
-		{
-			\texttt{rpglatex} has the following features:
+			\RpgScript{rpglatex}{[options] <file>}{
 
-			\newcommand\feature[3]
-			{
-				\textbf{#1} & #2 & \texttt{#3} \\
+
+				\texttt{rpglatex} has the following features:
+
+				\newcommand\feature[3]
+				{
+					\textbf{#1} & #2 & \texttt{#3} \\
+				}
+				\begin{RpgTable}[width=\linewidth,breakable]{lXl}
+					Feature & Description & Options \\
+					\feature{Compiler Selection}{The \texttt{xelatex} compiler is selected by default, but the \texttt{-l, --luatex} flags set it to use luatex instead.}{-l, --luatex}
+					\feature{Build Directory}{Compilation files (.aux, .log etc.) are stored in a build directory. The default is \texttt{.build} in the calling location, but can be changed with the \texttt{-b} flag}{-b <build dir>}
+					\feature{Output Naming}{The name of the output file can be changed from the default (equal to the input tex name)}{-o <output name>}
+					\feature{Multi-pass Compiling}{By default, the compiler runs twice in a row to enable references and \texttt{tikz[remember]} commands to function. A full three-compilation suite (necessary for very complex or reference-heavy documents) can be activated with the \texttt{-f, --full} flag}{-f, --full}
+					\feature{Volume Control}{latex is notoriously noisy, producing copius output. By default, this is suppressed and only a summary is printed. The summary can be removed (rendering it completely silent) with the \texttt{-q} command, or the original output recovered in verbose mode; \texttt{-v}.
+
+						These outputs are always overriden if a compilation error occurs, in which case the full trace is output to the console.
+					}{-q, -v}
+					\feature{Auto-bibtex}{If the \texttt{-r} or \texttt{--ref} flag is set, \texttt{bibtex} is automatically called in between the multi-compilation steps}{-r, --ref}
+					\feature{Auto-visualisation}{If the \texttt{--show 1} option is set (which it is by default), the compiler will attempt to open the output file upon completion of the compilation; automatically opening or context-switching to the document. This can be turned off by calling \texttt{--show 0}}{--show}
+					\feature{Print Mode}{A special interface for \rpgtex{}, this uses the \cmd{RpgCMD} interface \RpgPage[p]{S:CMD} to inject code into the latex document, setting the \texttt{bg=print} mode and suppressing the background output.}{-p, --print}
+				\end{RpgTable}
 			}
-			\begin{RpgTable}[width=\linewidth]{lXl}
-				Feature & Description & Options \\
-				\feature{Compiler Selection}{The \texttt{xelatex} compiler is selected by default, but the \texttt{-l, --luatex} flags set it to use luatex instead.}{-l, --luatex}
-				\feature{Build Directory}{Compilation files (.aux, .log etc.) are stored in a build directory. The default is \texttt{.build} in the calling location, but can be changed with the \texttt{-b} flag}{-b <build dir>}
-				\feature{Output Naming}{The name of the output file can be changed from the default (equal to the input tex name)}{-o <output name>}
-				\feature{Multi-pass Compiling}{By default, the compiler runs twice in a row to enable references and \texttt{tikz[remember]} commands to function. A full three-compilation suite (necessary for very complex or reference-heavy documents) can be activated with the \texttt{-f, --full} flag}{-f, --full}
-				\feature{Volume Control}{latex is notoriously noisy, producing copius output. By default, this is suppressed and only a summary is printed. The summary can be removed (rendering it completely silent) with the \texttt{-q} command, or the original output recovered in verbose mode; \texttt{-v}.
-				
-				These outputs are always overriden if a compilation error occurs, in which case the full trace is output to the console.
-				}{-q, -v}
-				\feature{Auto-bibtex}{If the \texttt{-r} or \texttt{--ref} flag is set, \texttt{bibtex} is automatically called in between the multi-compilation steps}{-r, --ref}
-				\feature{Auto-visualisation}{If the \texttt{--show 1} option is set (which it is by default), the compiler will call \texttt{xdg-open <output-file>} upon completion of the compilation; automatically opening or context-switching to the document. This can be turned off by calling \texttt{--show 0}}{--show}
-				\feature{Print Mode}{A special interface for \rpgtex{}, this uses the \texttt{\RpgCMD} interface \RpgPage[p]{S:CMD} to inject code into the latex document, setting the \texttt{bg=print} mode and suppressing the background output.}{-p, --print}
-			\end{RpgTable}
-		}
-
-	

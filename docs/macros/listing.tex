@@ -1,0 +1,43 @@
+\ExplSyntaxOn
+
+
+\definecolor {backred}{HTML}{802020}
+\lstdefinestyle{example}
+{
+	language=TeX,
+	basicstyle=\ttfamily\small,
+	showstringspaces=false,
+	breaklines=true,
+
+	% --- Styles ---
+	texcsstyle=*\color{blue}\bfseries,
+	keywordstyle=\color{purple}\bfseries,
+	commentstyle=\color{green!60!black}\itshape,
+	stringstyle=\color{red},
+
+	% --- ExplSyntax Compliant Keyword Lists ---
+	% Spaces must be replaced with the tilde (~) character.
+	texcs={
+			documentclass, usepackage, input, section, subsection,
+			tcbset, newcommand, newenvironment,
+			ExplSyntaxOn, ExplSyntaxOff , newfontfamily,
+			document,
+			tikzpicture,
+			tcolorbox,
+			lstlisting,
+			newtcolorbox,
+			begin,end
+		},
+
+
+
+	framexleftmargin=0pt,
+
+	framexbottommargin=0pt,
+	breakindent=1em,
+	aboveskip=0pt,
+	belowskip=0pt,
+	framesep=0pt,
+	boxpos=t
+}
+\ExplSyntaxOff

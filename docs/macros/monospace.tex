@@ -1,0 +1,110 @@
+\ExplSyntaxOn
+
+\def\rpgtex{\texttt{RPGTeX}}
+
+%% Typesets the input as monospace latex commands, prepending a '\'
+%% Works on lists ( \cmd{a,b,c} -> \a, \b, \c)
+%% If unstarred, each cmd is added to the index. The optional o can be used to add a parent
+\NewDocumentCommand\cmd{s o m}
+{
+	\IfBooleanTF{#1}
+	{
+		\processControlSeq*[#2]{#3}{\texttt{\textbackslash ##1}}(,\ )
+	}
+	{
+		\processControlSeq[#2]{#3}{\texttt{\textbackslash ##1}}(,\ )
+	}
+}
+
+%% As with cmd, but autolabels each cmd
+\NewDocumentCommand\declareCmd{s o m}
+{
+	\IfBooleanTF{#1}
+	{
+		\processControlSeq*[#2]{#3}{\texttt{\textbackslash ##1 }\label{Cmd:##1}}(,\ )
+	}
+	{
+		\processControlSeq[#2]{#3}{\texttt{\textbackslash ##1 }\label{Cmd:##1}}(,\ )
+	}
+}
+%% Typesets the input as monospace latex environments
+%% If unstarred, each env is added to the index. The optional o can be used to add a parent
+\NewDocumentCommand\env{s o m}
+{
+	\IfBooleanTF{#1}
+	{
+		\processControlSeq*[#2]{#3}{ \texttt{##1}}
+	}
+	{
+		\processControlSeq[#2]{#3}{ \texttt{##1}}
+	}
+}
+
+%% As with env, but autolabels each env 
+\NewDocumentCommand\declareEnv{s o m}
+{
+	\IfBooleanTF{#1}
+	{
+		\processControlSeq*[#2]{#3}{\texttt{##1} \label{Env:##1}}
+	}
+	{
+		\processControlSeq[#2]{#3}{\texttt{##1} \label{Env:##1}}
+	}
+}
+
+%% Try to autoreference 
+\NewDocumentCommand{\cmdref}{o m}
+{
+	\cmd[#1]{#2}~\RpgPage[p]{Cmd:#2}
+}
+\NewDocumentCommand{\envref}{o m}
+{
+	\env[#1]{#2}~\RpgPage[p]{Env:#2}
+}
+
+
+\NewDocumentCommand{\param}{m}
+{
+	\{ #1 \}
+}
+
+
+%%% Helper functions
+%% some catcode hackery do auto replace underscores
+\tl_new:N \__doc_underscoreEscaped
+\tl_new:N \l__rpg_underscore_tl
+\tl_set:Nx \l__rpg_underscore_tl { \char_generate:nn { 95 } { 8 } }
+
+\cs_generate_variant:Nn \tl_replace_all:Nnn { NVn }
+
+\NewDocumentCommand\rpgEscapeUnderscores{m}
+{
+	\tl_set:Nn \__doc_underscoreEscaped { #1 }
+	\tl_replace_all:NVn \__doc_underscoreEscaped \l__rpg_underscore_tl { \_ }
+}
+
+\NewDocumentCommand\processControlSeq{s o  m m d()}
+{
+	\cs_set:Nn \__doc_tmp:n{#4}
+	\bool_set_true:N\__docs_isFirst
+	\foreach \m in {#3}
+		{
+			\exp_args:No \rpgEscapeUnderscores{\m}
+			\IfBooleanF{#1}
+			{
+				\IfNoValueTF{#2}
+				{
+					\index{\texttt{\__doc_underscoreEscaped}}
+				}
+				{
+					\index{\texttt{#2!\__doc_underscoreEscaped}}
+				}
+			}
+			\bool_if:NF{\__docs_isFirst}
+			{
+				#5
+			}
+			\bool_gset_false:N\__docs_isFirst
+			\exp_args:No \__doc_tmp:n{\tl_use:N \__doc_underscoreEscaped}
+		}
+}\ExplSyntaxOff
