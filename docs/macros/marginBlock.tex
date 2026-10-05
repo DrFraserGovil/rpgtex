@@ -9,30 +9,26 @@
 % \setlength\fboxsep{0cm}
 \NewDocumentCommand\MarginBlock{+m O{black} O{} +m O{white} +m}
 {
-	\par \vspace{0.5cm}
+	\par \vspace{0.3cm}
 
 	{
 		\hspace{-\dimexpr\reducer\relax} %
 		\begin{minipage}{0.922\paperwidth}
-			\colorbox{#5}{\makebox[0.9\paperwidth][l]{
+			\colorbox{#5}{\makebox[0.99\paperwidth][l]{
 					\parbox[t]{\macrowidth}{
 						\mbox{} \raggedleft \color{#2} \maxsizebox{\macrowidth}{!}{\tt #1} }\hspace{\macrosep}
-					\parbox[t]{\dimexpr0.94\linewidth - \macrowidth-\macrosep\relax}{ #4
+					\parbox[t]{\dimexpr0.94\linewidth - \macrowidth-\macrosep\relax}{ \textcolor{#2}{#4}
 					}
 				}
 			}
 		\end{minipage}
 	}
 
-	% \begin{minipage}[t]{\dimexpr \macrowidth + \macrosep + \linewidth+2\fboxsep\relax}
-	%
-	% }}
-	% \end{minipage}\par
 	\par
 	\tl_set:Ne\l_tmpa_tl{#3}
 	\tl_if_blank:oTF{\l_tmpa_tl}
 	{
-		\begin{adjustwidth}{2.2cm}{0pt}
+		\begin{adjustwidth}{2.3cm}{0pt}
 			#6
 		\end{adjustwidth}
 
@@ -40,7 +36,7 @@
 	{
 		\hspace{-\dimexpr\reducer\relax}
 		\begin{minipage}[t]{\macrowidth}
-			\parbox[t]{\macrowidth}{ \mbox{} \raggedleft \color{#2} \maxsizebox{\macrowidth}{!}{\tt (#3) eie} }
+			\parbox[t]{\macrowidth}{ \mbox{} \raggedleft \color{#2} \maxsizebox{\macrowidth}{!}{\tt #3 } }
 		\end{minipage}%
 		\hspace{\macrosep}%
 		\begin{minipage}[t]{\dimexpr\linewidth-\macrowidth+0.5\reducer\relax}
@@ -54,7 +50,26 @@
 \setlength\marginparwidth{3.6cm}
 \setlength\marginparsep{0.3cm}
 
-
+\NewDocumentCommand \RpgKeyval{m O{} m +m}
+{
+	\MarginBlock{\env{#1}}[KeyVal][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
+	{
+		#3
+	}[KeyValBackground]
+	{
+		#4
+	}
+}
+\NewDocumentCommand \RpgFlag{m O{} +m}
+{
+	\MarginBlock{\env{#1}}[Flag][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
+	{
+		<flag>
+	}[FlagBackground]
+	{
+		#3
+	}
+}
 
 \NewDocumentCommand\RpgVariable{+m O{} +m}
 {
