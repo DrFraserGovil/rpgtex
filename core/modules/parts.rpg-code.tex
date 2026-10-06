@@ -53,7 +53,7 @@
  
 \NewDocumentCommand\RpgPartTransparency{m}
 {
-	\tl_set:Nn{\__rpg_partTransparency}{\fp_eval:n #1}
+	\tl_set:Nn{\__rpg_partTransparency}{\fp_eval:n {#1}}
 }
 \RpgPartTransparency{0}
 
@@ -61,7 +61,7 @@
 %% Sets a default part image which is used whenever a part image is not supplied
 \NewDocumentCommand{\RpgDefaultPartImage}{ m }
 {
-	\tl_set:Nn{\rpg_AllPartImage}{#1}
+	\tl_set:Nn{\__rpg_AllPartImage}{#1}
 }
  
 \NewDocumentCommand\RpgThemePartPage{ +m }
