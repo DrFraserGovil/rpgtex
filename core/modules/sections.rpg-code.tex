@@ -12,7 +12,7 @@
 \def\RpgSubsubsectionName{~}
 
 \ExplSyntaxOn
-\msg_new:nnn{rpg}{bad-section}{#1~is~not~a~valid~name~for~\RpgGetName}
+\msg_new:nnn{rpg}{bad-section}{#1~is~not~a~valid~section-level~name}
 \NewDocumentCommand{\RpgGetName}{m}
 {
 	\str_case:enF{#1}
@@ -35,10 +35,14 @@
 	\addcontentsline{toc}{#1}{#2}
 	\str_case:enF{#1}
 	{
+		{part}{\def\RpgPartName{#2}}
 		{chapter}{\chaptermark{#2}}
 		{section}{\sectionmark{#2}}
 		{subsection}{\subsectionmark{#2}}
 		{subsubsection}{\subsubsectionmark{#2}}
+	}
+	{
+		\msg_error:nnn{rpg}{bad-section}{#1}
 	}
 }
 
@@ -53,7 +57,7 @@
 	\setcounter{secnumdepth}{0}
 	\def\chaptermark#1{\__rpg_chaptermark{#1}\def\RpgChapterName{#1}}
 	\def\sectionmark#1{\__rpg_sectionmark{#1}\def\RpgSectionName{#1}}
-	\def\subsectionmark#1{\__rpg_subsectionmark{#1}\def\RpgSubSectionName{#1}}
+	\def\subsectionmark#1{\__rpg_subsectionmark{#1}\def\RpgSubsectionName{#1}}
 	\def\subsubsectionmark#1{\__rpg_subsubsectionmark{#1}\def\RpgSubsubsectionName{#1}}
 }
 % \end{noindent}

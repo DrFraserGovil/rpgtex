@@ -19,6 +19,7 @@
 %%		#2:	An image path to use (overrides DefaultPartImage)
 %%		#3: The name of the part
 \RenewDocumentCommand{\part}{s O{} m}{
+	\def\RpgPartName{#3}
 	\bool_if:NTF{#1}
 	{
 		\__rpg_OriginalPart{#3}

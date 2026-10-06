@@ -65,7 +65,13 @@
 
 \NewDocumentCommand{\param}{m}
 {
-	\{ #1 \}
+	\tl_if_empty:eTF{#1}
+	{
+		\{\}
+	}
+	{
+		\{~ #1~ \}
+	}
 }
 
 

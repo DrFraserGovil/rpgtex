@@ -5,40 +5,41 @@
 
 
 	\section{Package Options}\label{S:PackageOptions}
-		Whether the package is invoked directly, or through a class users have the option to pass options to it which change the behavior of the resulting document:
+		Whether \rpgtex{} is loaded directly as a package or indirectly through one of its classes, options may be passed to it which change the behaviour of the resulting document:
 		\begin{Code}
-			\textbackslash{documentclass}[<options>]\param{rpgbook}
+			\textbackslash{}documentclass[<options>]\{rpgbook\}
 
-			\textbackslash{usepackage}[<options>]\param{rpgtex}
+			\textbackslash{}usepackage[<options>]\{rpgtex\}
 		\end{Code}
-		The options take one of two forms:
+		Each option takes one of two forms:
 
 		\begin{description}
-			\item[Key-value arguments:] The name must be passed and a value set using an equals sign:
+			\item[Key-value options:] The name of the option is followed by an equals sign and a value:
 			      \begin{Code}
 				      \textbackslash{}usepackage[columns = 2, bg = print]\{rpgtex\}
 			      \end{Code}
-			\item[Flags:] Just the name has to be provided:
+			\item[Flags:] Only the name of the option is provided. Its presence enables the associated behaviour:
 			      \begin{Code}
-				      \textbackslash{}usepackage[openany]\{rpgtex\}
+				      \textbackslash{}usepackage[openright]\{rpgtex\}
 			      \end{Code}
 		\end{description}
 
-		The available option for the package are:
+		The available options are:
 
 		\RpgFlag{background}{
 			If present, activates the `paper background' modules, including the background colour, paper images, geometry overloads and footer changes.
 
-			This flag is set by default when loading a class, but can be passed as a package option to enable the fonts.
+			This flag is set by default when loading a class, but must be passed explicitly to enable these modules when loading the package directly.
 		}
 		\RpgKeyval{bg}{= full / print / none}
 		{
-			Controls the behaviour of the background and footer decorations.
-			The value passed must be one of the three options (else an error is thrown). The most obvious effect of these three options is to change whether the `background paper' set by \cmdref{RpgThemeSetPaper}  and \cmdref{RpgThemeBackgroundColor} appears in the document, or the footer decorations set by \cmdref{RpgThemeFooterDecoration}.
+			Controls the behaviour of the background and footer decorations. The value must be one of the three listed above, else an error is thrown. The default value is \texttt{full}.
+
+			The most visible effect of this option is to control whether the `background paper' set by \cmdref{RpgThemeSetPaper} and \cmdref{RpgThemeBackgroundColor}, and the footer decorations set by \cmdref{RpgThemeFooterDecoration}, appear in the document:
 
 			\begin{center}
 				\begin{tabular}{rcc}
-					Command        & Paper  & Footer Decorations
+					Value          & Paper  & Footer Decorations
 					\\
 					\texttt{full}  & \cmark & \cmark
 					\\
@@ -48,124 +49,147 @@
 				\end{tabular}
 			\end{center}
 
-			This flag also changes the behavior of the rpgcard class \RpgPage[p]{S:cardClass}, and other environments may similarly change their colours or layouts in response to the values passed to this command.
+			This option also changes the behaviour of the rpgcard class \RpgPage[p]{S:cardClass}, and other environments may similarly alter their colours or layouts in response to its value.
 		}
-		\RpgKeyval{columns}{ = 1 / 2 }
+		\RpgKeyval{columns}{= 1 / 2}
 		{
-			Sets the paper to either \texttt{onecolumn} or \texttt{twocolumn} mode. More advanced column-settings would require the user manually using \texttt{multicols}.
+			Places the document into either \texttt{onecolumn} or \texttt{twocolumn} mode. The default value is \texttt{2}.
+
+			More advanced column layouts require the user to manually use the \texttt{multicols} environment.
 		}
 		\RpgFlag{font}{
 			If present, activates the font modules, applying the package fonts wherever possible.
 
-			This flag is set by default when loading a class, but can be passed as a package option to enable the fonts.
+			This flag is set by default when loading a class, but must be passed explicitly to enable these modules when loading the package directly.
 		}
 		\RpgFlag{justified}
 		{
-			If present, sets the text to justified throughout the document. Default behaviour is left-aligned `ragged right'.
+			If present, sets the text to be justified throughout the document. By default, text is left-aligned (`ragged right').
 		}
-		\RpgFlag{justified}
-		{
-			If present, sets the text to justified throughout the document. Default behaviour is left-aligned `ragged right'.
+		\RpgFlag{noemph}{
+			If present, the default behaviour of \cmd{emph} is left unchanged. By default, \cmd{emph} is redefined to be an alias of \cmdref{RpgKey}.
 		}
-		\RpgFlag{nomultitoc}{If present, disabled the multi-column table of contents option}
-
-		\RpgFlag{noemph}{Do not override the default behaviour of \cmd{emph}, default behaviour aliases it to \cmd{RpgKey} }
-		\RpgFlag{oneside}{Forces the document into oneside mode. Disables alternating footers but allows consistent asymmetric margins (such as in this document, where the left margin is larger to accommodate macro names)}{}{}
-
-		\RpgFlag{openright}{Places the document into right-opening mode (see book class documentation for more)}
+		\RpgFlag{nomultitoc}{
+			If present, disables the multi-column table of contents.
+		}
+		\RpgFlag{oneside}{
+			If present, places the document into one-sided mode. This disables alternating footers, but allows for consistent asymmetric margins (as in this document, where the left margin is enlarged to accommodate macro names).
+		}
+		\RpgFlag{openright}{
+			If present, places the document into right-opening mode, such that chapters always begin on a right-hand page. By default, chapters may begin on any page (see the documentation of the \texttt{book} class for more details).
+		}
 		\RpgFlag{sections}{
+			If present, activates the sections modules, including the part-page overloads and any theme behaviour which modifies the section commands.
 
-			If present, activates the sections modules, including the part-page overloads and any theme behaviour which modifies the behaviour of section commands.
-
-			This flag is set by default when loading a class, but can be passed as a package option to enable the fonts.
-
+			This flag is set by default when loading a class, but must be passed explicitly to enable these modules when loading the package directly.
 		}
-
-		\RpgKeyval{size}{ = <font-size> pt}
+		\RpgKeyval{size}{= <font-size>pt}
 		{
-			Sets the size equal to the value, if allowed by the parent class. The allowed values depend on the class being used (see the class section, beginning on \RpgPage{S:bookClass}).
+			Sets the base font size of the document, if permitted by the parent class. The default value is \texttt{10pt}.
+
+			The allowed values depend on the class being used (see the class section, beginning on \RpgPage{S:bookClass}).
 		}
+		\RpgKeyval{theme}{= <theme name>}
+		{
+			The initial value passed to \cmdref{RpgSetTheme} once package initialisation is complete.
 
-
-		\RpgKeyval{theme}{= <theme name>}{The initial value passed to \cmdref{RpgSetTheme} when package initialization is finished.
-
-			The default value is \texttt{default}, activating the Default Theme \RpgPage[p]{Theme:Default}.
+			The default value is \texttt{default}, which activates the Default Theme \RpgPage[p]{Theme:Default}.
 		}
+		\RpgKeyval{themepath}{= </path/to/themes/>}
+		{
+			Calls \cmdref{RpgSetThemePath} before the theme is loaded, allowing custom themes to be used.
 
-		\RpgKeyval{themepath}{= </path/to/theme/>}{
-			Calls \cmdref{RpgSetThemePath} before the theme is loaded, allowing for custom themes to be set.
-
-			Default value is \cmd{RpgPackagePath}\texttt{/themes}, with the assumption that the theme `name' is stored in \texttt{themes/name/name.cfg}.
+			The default value is \cmd{RpgPackagePath}\texttt{/themes}, with the assumption that a theme called \texttt{name} is stored in \texttt{themes/name/name.cfg}.
 		}
 		\RpgFlag{title}{
+			If present, activates the titling module and any theme presets which alter the behaviour of \cmd{maketitle}.
 
-			If present, activates the titling module and any theme-presets for altering the behaviour of \cmd{maketitle}.
-
-			This flag is set by default when loading a class, but can be passed as a package option to enable the fonts.
-
+			This flag is set by default when loading a class, but must be passed explicitly to enable this module when loading the package directly.
 		}
 	\section{Colo(u)rs}\label{S:Colors}
 
-		\rpgtex{} by default defines a number of colors\footnote{Yes, I hate myself, but we're going with the code-based spelling.} which are used for different elements:
-		% 	\begin{description}
-		% 		\item[themecolor] A `basic color' which is (by default) equal to the following three colors:
-		% 		      \begin{enumerate}
-		% 			      \item \textbf{sidebarcolor} The background color of the \envref{RpgSidebar} environment
-		% 			      \item \textbf{tablecolor} The background color of every other row in an \envref{RpgTable}
-		% 			      \item \textbf{tipcolor} The background color of the \envref{RpgTip} environment
-		% 		      \end{enumerate}
-		% 		\item[narrationcolor]  The background color of the \envref{RpgTip} environment
-		% 		\item[contourinnercolor]  The default color of the inner text within a \cmdref{RpgContour} command
-		% 		\item[contouroutercolor]  The default color of the external contour drawn around text within a \texttt{RpgContour} command.
-		% 		\item[filigreecolor]  The default color of the filigree used in a \envref{RpgFiligree} environment.
-		% 	\end{description}
-		%
-		% 	Calling \texttt{\bs{}RpgSetThemeColor} \RpgPage[p]{Macro:RpgSetThemeColor} updates the value of \texttt{themecolor}, as well as the three `co-varying' colors. Other colors are modified simply using the xcolors interface:
-		%
-		% 	\begin{Code}
-		% 		\cmd{colorlet}\{narrationcolor\}\{html\}\{FFFFF\}
-		% 	\end{Code}
+		\rpgtex{} defines a number of named colours\footnote{Although this document uses British spelling, the colour names follow the American spelling used throughout \LaTeX{} and \texttt{xcolor}, and must be written exactly as given (including capitalisation).} which are used by its various elements. The default values listed below may be overridden by the active theme.
+
+		\subsection*{Co-varying Colours}
+
+			The following colours are coupled together, and by default all take the same value:
+			\begin{description}
+				\item[\texttt{ThemeColor}] A general-purpose colour from which the other co-varying colours inherit. Default: \texttt{white!60!black}.
+				\item[\texttt{SidebarColor}] The background colour of the \envref{RpgSidebar} environment.
+				\item[\texttt{TableColor}] The background colour of alternate rows in an \envref{RpgTable}.
+				\item[\texttt{TipColor}] The background colour of the \envref{RpgTip} environment.
+			\end{description}
+
+			Calling \cmdref{RpgSetThemeColor} assigns a new value to \texttt{ThemeColor} and all three co-varying colours simultaneously:
+			\begin{Code}
+				\cmd{RpgSetThemeColor}\{blue!20!white\}
+			\end{Code}
+
+		\subsection*{Independent Colours}
+
+			The remaining colours are set individually:
+			\begin{description}
+				\item[\texttt{ContourInnerColor}] The default colour of the inner text produced by \cmdref{RpgContour}. Default: \texttt{black}.
+				\item[\texttt{ContourOuterColor}] The default colour of the outer contour drawn around text by \cmdref{RpgContour}. Default: \texttt{white!50!black}.
+				\item[\texttt{FiligreeBackColor}] The background colour of the \envref{RpgFiligree} environment. Default: \texttt{white}.
+				\item[\texttt{FiligreeColor}] The colour used to draw the filigree frame applied by the \texttt{rpgfiligree} style. Default: \texttt{black}.
+				\item[\texttt{NarrationColor}] The background colour of the \envref{RpgNarration} environment. Default: \texttt{F7F2E5} (HTML).
+				\item[\texttt{PaperColor}] The background colour of each page, applied only when the paper background is enabled (see the \texttt{bg} option, \RpgPage{S:PackageOptions}). Default: \texttt{white}.
+				\item[\texttt{SecretColor}] The default frame colour of the \envref{RpgSecret} environment. Default: \texttt{black!30!white}.
+			\end{description}
+
+			Any of these colours, including the co-varying colours, may be modified individually using the standard \texttt{xcolor} interface:
+			\begin{Code}
+				\cmd{definecolor}\{NarrationColor\}\{HTML\}\{FFFFFF\}
+
+				\cmd{colorlet}\{SidebarColor\}\{red!10!white\}
+			\end{Code}
+			Modifying a co-varying colour in this way changes only that colour, leaving the others unaffected.
 	\section{Section Names}\label{S:SectionNames}
 
-		Since many themes customise their appearance beyond the simple use of \texttt{mark}s (such as \texttt{chaptermark}), we have provided direct access to the current name of the chapter, section, subsection and subsection:
+		Many themes customise their appearance beyond the simple use of \texttt{mark}s (such as \cmd{chaptermark}). To support this, \rpgtex{} provides direct access to the names of the current chapter, section, subsection and subsubsection.
 
-		\begin{RpgSidebar}{Sections-Mode Only}
-			These commands rely on redefining common commands, and therefore are only loaded when using an rpgclass, or when the package was loaded with the 'sections' option.
+		\begin{RpgSidebar}{Sections Mode Only}
+			These names are recorded by redefining standard \LaTeX{} commands, and are therefore only available in \emph{sections mode}. Sections mode is enabled by default when using one of the \rpgtex{} classes, and may otherwise be enabled by passing the \texttt{sections} option to the package \RpgPage[p]{S:PackageOptions}.
+
+			When active, sections mode:
+			\begin{itemize}
+				\item Redefines \cmd{chaptermark}, \cmd{sectionmark}, \cmd{subsectionmark} and \cmd{subsubsectionmark} so that, in addition to their usual behaviour, they store the name they are given in the variables below.
+				\item Sets \texttt{secnumdepth} to \texttt{0}, so that sections and their subdivisions are unnumbered.
+				\item Replaces \cmd{part} with a version which draws a full-page part page using the active theme. The starred form, \cmd{part*}, falls back to the original \LaTeX{} command.
+			\end{itemize}
+			Themes may additionally alter the formatting of the sectioning commands when sections mode is active.
 		\end{RpgSidebar}
-		%
-		% 	% \RpgMacro{RpgChapterName}{}{The name given to the last \cmd{chapter} or \cmd{chapter*} command, or set by calling \cmd{chaptermark}}{}{}
-		% 	% \RpgMacro{RpgSectionName}{}{The name given to last \cmd{section} or \cmd{section*} command, or set by calling \cmd{sectionmark}}{}{}
-		% 	% \RpgMacro{RpgSubsectionName}{}{The name given to the last \cmd{subsection} or \cmd{chapter*} command, or set by calling \cmd{sectionmark}}{}{}
-		% 	% \RpgMacro{RpgSubsubsectionName}{}{The name given to the last \cmd{subsubsection} or \cmd{subsubsection*} command, or set by calling \cmd{subsection}}{}{}
-		%
-		% 	\RpgMacro{RpgGetName}{\param{m}}{Returns the name given to the last section matching the input command}
-		% 	{
-		% 		\cmd{RpgGetName}{chapter/section/subsection/subsubsection}
-		% 	}
-		% 	{
-		% 		If the input value is the name of a vaild section, returns the previous name given to that kind of section.
-		%
-		% 		These names can also be `spoofed' by manually calling a \cmd{mark} (such as \cmd{chaptermark} etc.), and we also provide the \cmdref{RpgFakeChapter} command.
-		% 	}
-		%
-		% 	\begin{ExampleBlock}{Section Names}
-		% 		We are in Chapter `\RpgGetName{chapter}', section `\RpgGetName{section}'.
-		%
-		% 		\subsubsection{An example subsubsection}
-		%
-		% 			Now I am in `\RpgGetName{subsubsection}'
-		%
-		% 		\chaptermark{Spoofed Chapter}
-		%
-		% 			I believe I am in a \RpgGetName{chapter}, though no chapter was actually called.
-		%
-		% 		\chaptermark{Options \& Variables} %%put it back to the real value!
-		%
-		% 	\end{ExampleBlock}
-		%
-		%
-		%
-		%
+
+
+		Each of the following variables is initially blank, and holds its value until the next command of the same level is called: beginning a new chapter does not, for example, reset \cmd{RpgSectionName}.
+
+		\RpgVariable{RpgPartName}{The name given to the last \cmd{part} command.}
+		\RpgVariable{RpgChapterName}{The name given to the last \cmd{chapter} command, or set by calling \cmd{chaptermark}}
+		\RpgVariable{RpgSectionName}{The name given to the last \cmd{section} command, or set by calling \cmd{sectionmark}. Starred sections (\cmd{section*}) do not update this value.}
+		\RpgVariable{RpgSubsectionName}{The name given to the last \cmd{subsection} command, or set by calling \cmd{subsectionmark}. Starred subsections (\cmd{subsection*}) do not update this value.}
+		\RpgVariable{RpgSubsubsectionName}{The name given to the last \cmd{subsubsection} command, or set by calling \cmd{subsubsectionmark}. Starred subsubsections (\cmd{subsubsection*}) do not update this value.}
+
+
+		\RpgFunction{RpgGetName}{\param{part / chapter / section / subsection / subsubsection}}
+		{
+			Returns the name stored for the given level (equivalent to the corresponding variable above). Any other input results in an error.
+
+			Since these names (other than that of the part) are taken from the \texttt{mark} commands, they may be set manually, without creating a new heading, by calling the relevant \texttt{mark} command directly.
+		}
+
+		\RpgFunction{RpgFake}{\param{level}\param{name}}
+		{
+			Mimics the creation of a new heading at the given \texttt{level} without printing a heading in the document. Specifically, it:
+			\begin{itemize}
+				\item Adds an entry called \texttt{name} to the table of contents at the given level, with a hyperlink anchor at the current position.
+				\item Updates the stored name for that level, as if a real heading had been created. For \texttt{chapter} to \texttt{subsubsection} this is done by calling the corresponding \texttt{mark} command, so any running headers are also updated.
+			\end{itemize}
+			The \texttt{level} must be one of \texttt{part}, \texttt{chapter}, \texttt{section}, \texttt{subsection} or \texttt{subsubsection}. Any other value results in an error.
+		}
+
+		\RpgGetExample{section-names}
+
 	\section{Command Line Interface}\label{S:CMD}
 
 		By default, \LaTeX{} does not have a `command line interface' which allows a user to modify the document from within the command line: changes to the document have to be placed inside the file, and then compiled. However, we found that -- particularly with the \textit{print} option (which suppresses background images on the paper, reducing ink requirements for printing), it was convenient to be able to compile the same document in either `normal' mode, or `print mode', without modifying the text.
