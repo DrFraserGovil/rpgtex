@@ -5,39 +5,51 @@
 
 	Many of these environments are built on the \texttt{tcolorbox} package. Unless stated otherwise, any option which is not recognised by an environment is passed on to \texttt{tcolorbox}, so all of its usual options (such as \texttt{colframe} or \texttt{breakable}) may also be used.
 
-	\section{Callouts}\label{S:Callouts}
+	\section{Callouts: RpgNarration, Sidebar \& Tip}\label{S:Callouts}
 
-		Callouts are boxed blocks of text which stand apart from the main text. There are three, intended for different purposes:
-		\begin{description}
-			\item[\texttt{RpgSidebar}] Important information, such as key rules or summaries, which readers \textit{should} pay attention to.
-			\item[\texttt{RpgTip}] Helpful additions, such as tips and trivia, which are not essential but are too large for a footnote.
-			\item[\texttt{RpgNarration}] Text to be read aloud, such as the description of a scene at the start of an adventure.
-		\end{description}
-		The distinction is one of intent, rather than mechanics: the theme determines how each one looks.
+		Callouts are boxed blocks of text which stand apart from the main text, the precise appearance determined by the theme. There are three types of callout, intended for different purposes:
+		\begin{RpgTable}[noheader,color-odd]{lX}
+			\texttt{RpgNarration} & Text to be read aloud, such as the description of a scene at the start of an adventure.
+			\\
+			\texttt{RpgSidebar} & Important information, such as key rules or summaries, which readers \textit{should} pay attention to.
+			\\
+			\texttt{RpgTip} & Helpful additions, such as tips and trivia, which are not essential but are too large for a footnote.
+		\end{RpgTable}
 
 		Each callout accepts the following options, in addition to the usual \texttt{tcolorbox} options:
-		\begin{description}
-			\item[\texttt{color}] The background colour of the box (and its title). Defaults to the corresponding colour \RpgPage[p]{S:Colors}.
-			\item[\texttt{filigree}] If present, decorates the box with the theme's filigree frame \RpgPage[p]{S:Filigree}.
-		\end{description}
+		\begin{RpgTable}{lX}
+			Option & Effect
+			\\
+			\texttt{color} & The background colour of the box (and its title). The default varies with the callout type. This is an alias (which overrides) the usual \texttt{tcb/colback} option.
+			\\
+			\texttt{filigree} & If present, decorates the box with the theme's filigree frame \RpgPage[p]{S:Filigree}.
+		\end{RpgTable}
 
-		\RpgEnvironment{RpgSidebar}{[<options>]\param{title}}
-		{
-			A box for important information, with a title. The title and body are typeset in the \cmd{RpgFontSidebarTitle} and \cmd{RpgFontSidebarBody} font elements, and the background is \texttt{SidebarColor}.
-		}
-		\RpgEnvironment{RpgTip}{[<options>]\param{title}}
-		{
-			A box for helpful additions, with a title. The title and body are typeset in the \cmd{RpgFontTipTitle} and \cmd{RpgFontTipBody} font elements, and the background is \texttt{TipColor}.
-		}
 		\RpgEnvironment{RpgNarration}{[<options>]}
 		{
 			A box for text to be read aloud. It has no title, and its text is typeset in the \cmd{RpgFontNarration} font element on a \texttt{NarrationColor} background.
 
-			\RpgGetExample{env-text-boxes}
+			\RpgGetExample{env-narration}
+		}
+		\RpgEnvironment{RpgSidebar}{[<options>]\param{title}}
+		{
+			A box for important information, with a title. The title and body are typeset in the \cmd{RpgFontSidebarTitle} and \cmd{RpgFontSidebarBody} font elements, and the background is \texttt{SidebarColor}.
+
+			\RpgGetExample{env-sidebar}
+		}
+		\RpgEnvironment{RpgTip}{[<options>]\param{title}}
+		{
+			A box for helpful additions, with a title. The title and body are typeset in the \cmd{RpgFontTipTitle} and \cmd{RpgFontTipBody} font elements, and the background is \texttt{TipColor}.
+
+			\RpgGetExample{env-tip}
 		}
 
-	\section{Tables}\label{S:Tables}
+	\section{RpgTable}\label{S:Tables}
 
+		\RpgFunction{RpgRowStyle}{\param{format}}
+		{
+			Applies \texttt{format} to every cell of the current row of an \texttt{RpgTable}. It must be placed at the start of the row. This is the mechanism used to style the header row, and may be used to highlight any other row in the same way.
+		}
 		\RpgEnvironment{RpgTable}{[<options>]\param{columns}}
 		{
 			Typesets a table in the style of the theme. By default this is a \texttt{tabularx} table which fills the width of the line, so the usual column types (\texttt{l}, \texttt{c}, \texttt{r}, \texttt{p\{<width>\}}, \ldots) may be used alongside the stretching \texttt{X} column. \rpgtex{} also provides a centred stretching column, \texttt{Y}.
@@ -48,25 +60,41 @@
 				\item Colours alternate rows in \texttt{TableColor} \RpgPage[p]{S:Colors}, beginning with the second row.
 			\end{itemize}
 			The following options are available:
-			\begin{description}
-				\item[\texttt{title}] A title, typeset above the table in the \cmd{RpgFontTableTitle} font element.
-				\item[\texttt{intro}] Introductory text, typeset between the title and the table.
-				\item[\texttt{color}] The colour used for the coloured rows. Default: \texttt{TableColor}.
-				\item[\texttt{color-odd}] If present, colours the odd rows (including the header) instead of the even rows.
-				\item[\texttt{color-both}] If present, colours every row.
-				\item[\texttt{noheader}] If present, the first row is typeset in the same style as the rest of the table.
-				\item[\texttt{width}] The width of the table. Default: \cmd{linewidth}.
-				\item[\texttt{breakable}] If present, uses \texttt{xltabular}, allowing the table to break across pages. This is only possible in one-column mode.
-				\item[\texttt{simple}] If present, uses a plain \texttt{tabular}, whose width is determined by its contents. The \texttt{width}, \texttt{breakable} and \texttt{noheader} options are then ignored, and the first row is not styled as a header.
-				\item[\texttt{filigree}] If present, wraps the table in an \envref{RpgFiligree}. The filigree's background opacity and horizontal padding may be set with \texttt{filigree-opacity} (default: \texttt{1}) and \texttt{filigree-hgap} (default: \texttt{1pt}).
-				\item[\texttt{vskip}, \texttt{headskip}, \texttt{introskip}] The vertical space around the table, below the title, and below the introduction respectively.
-			\end{description}
+			\begin{RpgTable}[breakable,width=0.8\paperwidth]{lXl}
+				Option & Effect & Default
+				\\
+				\texttt{breakable} & If present, uses \texttt{xltabular}, allowing the table to break across pages. This is only possible in one-column mode. & off
+				\\
+				\texttt{color} & The colour used for the coloured rows. & \texttt{TableColor} \RpgPage[p]{S:Colors}
+				\\
+				\texttt{color-both} & If present, colours every row. & off
+				\\
+				\texttt{color-odd} & If present, colours the odd rows (including the header) instead of the even rows. & off
+				\\
+				\texttt{filigree} & If present, wraps the table in an \envref{RpgFiligree}. & off
+				\\
+				\texttt{filigree-hgap} & The horizontal padding between the filigree and the table. & \texttt{1pt}
+				\\
+				\texttt{filigree-opacity} & The opacity of the filigree's background. & \texttt{1}
+				\\
+				\texttt{headskip} & The vertical space below the title. & \texttt{5pt plus 2pt minus 2pt}
+				\\
+				\texttt{intro} & Introductory text, typeset between the title and the table. & (empty)
+				\\
+				\texttt{introskip} & The vertical space below the introduction. & \texttt{5pt plus 2pt minus 2pt}
+				\\
+				\texttt{noheader} & If present, the first row is typeset in the same style as the rest of the table. & off
+				\\
+				\texttt{simple} & If present, uses a plain \texttt{tabular}, whose width is determined by its contents. The \texttt{width}, \texttt{breakable} and \texttt{noheader} options are then ignored, and the first row is not styled as a header. & off
+				\\
+				\texttt{title} & A title, typeset above the table in the \cmd{RpgFontTableTitle} font element. & (empty)
+				\\
+				\texttt{vskip} & The vertical space above and below the table. & \texttt{9pt plus 3pt minus 3pt}
+				\\
+				\texttt{width} & The width of the table. & \cmd{linewidth}
+			\end{RpgTable}
 
 			\RpgGetExample{env-table-standard}
-		}
-		\RpgFunction{rowstyle}{\param{format}}
-		{
-			Applies \texttt{format} to every cell of the current row of an \texttt{RpgTable}. It must be placed at the start of the row. This is the mechanism used to style the header row, and may be used to highlight any other row in the same way.
 		}
 
 	\section{Abstracts}\label{S:Abstracts}
@@ -102,17 +130,25 @@
 		\RpgEnvironment{RpgSecret}{[<options>]\{<public-text>\}}
 		{
 			Marks the body of the environment as secret. Its appearance depends on the \texttt{ShowSecrets} switch \RpgPage[p]{S:Switches}, which is off by default:
-			\begin{description}
-				\item[Off] Only the (optional) \texttt{public-text} is shown, as ordinary text, with nothing to suggest that anything has been withheld.
-				\item[On] The secret text is shown in a highlighted box, labelled as hidden. If \texttt{public-text} was given, it is shown in the lower part of the box, labelled as the publicly available version.
-			\end{description}
+			\begin{RpgTable}{lX}
+				Switch & Display
+				\\
+				Off & Only the (optional) \texttt{public-text} is shown, as ordinary text, with nothing to suggest that anything has been withheld.
+				\\
+				On & The secret text is shown in a highlighted box, labelled as hidden. If \texttt{public-text} was given, it is shown in the lower part of the box, labelled as the publicly available version.
+			\end{RpgTable}
 			Secrets are revealed for the remainder of the document with \cmd{RpgSwitch}\param{ShowSecrets}\param{on}. The following options are available:
-			\begin{description}
-				\item[\texttt{color}] The colour of the box's frame. Default: \texttt{SecretColor}.
-				\item[\texttt{label-secret}] The label above the secret text. Default: `Hidden text'.
-				\item[\texttt{label-public}] The label above the public text. Default: `Normal text'.
-				\item[\texttt{switch}] The switch which controls this secret. Default: \texttt{ShowSecrets}. Using a different switch allows separate groups of secrets to be revealed independently.
-			\end{description}
+			\begin{RpgTable}{lX}
+				Option & Effect
+				\\
+				\texttt{color} & The colour of the box's frame. Default: \texttt{SecretColor}.
+				\\
+				\texttt{label-public} & The label above the public text. Default: `Normal text'.
+				\\
+				\texttt{label-secret} & The label above the secret text. Default: `Hidden text'.
+				\\
+				\texttt{switch} & The switch which controls this secret. Default: \texttt{ShowSecrets}. Using a different switch allows separate groups of secrets to be revealed independently.
+			\end{RpgTable}
 			The labels are typeset in the \cmd{RpgFontSecretTitle} font element.
 		}
 
@@ -135,18 +171,6 @@
 
 		Adventures often describe a location as a numbered list of areas, which correspond to the labels on a map. The \texttt{RpgMap} environment produces such a list, numbering and nesting the areas automatically.
 
-		\RpgEnvironment{RpgMap}{[<options>]}
-		{
-			Begins a list of map areas, each of which is created with \cmd{area}. Each area is given a heading, whose size depends on how deeply the map is nested: \cmd{section*} at the top level, then \cmd{subsection*}, and so on, down to \cmd{subparagraph*}. These headings do not appear in the table of contents.
-
-			Areas are numbered according to their depth, cycling through numbers, capital letters and lower-case Roman numerals, so that the second area within the first area is \texttt{1B}, and its third sub-area is \texttt{1B-iii}. The following options are available:
-			\begin{description}
-				\item[\texttt{header-offset}] The number of levels by which to shrink the headings. Default: \texttt{0}.
-				\item[\texttt{title}] A title for the map, typeset as a heading one level larger than its areas. It is only used by the outermost map.
-				\item[\texttt{prefix}] Text placed before the number of a named area. Default: `Area~'.
-				\item[\texttt{empty-prefix}] Text placed before the number of an unnamed area. Default: `Area~'.
-			\end{description}
-		}
 		\RpgFunction{area}{[<label>]\{<name>\}}
 		{
 			Adds an area to the current map, much as \cmd{item} adds an item to a list. Its heading is `\texttt{<prefix><number>: <name>}', or `\texttt{<empty-prefix><number>}' if no \texttt{name} is given. Any text which follows forms the description of the area.
@@ -158,6 +182,23 @@
 			Adds an area to the current map, and begins a nested map within it, so that the body of the environment may contain sub-areas. It is equivalent to an \cmd{area} followed by an \texttt{RpgMap} environment, and raises an error if used outside of a map.
 
 			\RpgGetExample{env-map-nesting}
+		}
+		\RpgEnvironment{RpgMap}{[<options>]}
+		{
+			Begins a list of map areas, each of which is created with \cmd{area}. Each area is given a heading, whose size depends on how deeply the map is nested: \cmd{section*} at the top level, then \cmd{subsection*}, and so on, down to \cmd{subparagraph*}. These headings do not appear in the table of contents.
+
+			Areas are numbered according to their depth, cycling through numbers, capital letters and lower-case Roman numerals, so that the second area within the first area is \texttt{1B}, and its third sub-area is \texttt{1B-iii}. The following options are available:
+			\begin{RpgTable}{lX}
+				Option & Effect
+				\\
+				\texttt{empty-prefix} & Text placed before the number of an unnamed area. Default: `Area~'.
+				\\
+				\texttt{header-offset} & The number of levels by which to shrink the headings. Default: \texttt{0}.
+				\\
+				\texttt{prefix} & Text placed before the number of a named area. Default: `Area~'.
+				\\
+				\texttt{title} & A title for the map, typeset as a heading one level larger than its areas. It is only used by the outermost map.
+			\end{RpgTable}
 		}
 		\RpgFunction{RpgMapRef}[RpgMapRef*]{\param{label}}
 		{
@@ -172,23 +213,6 @@
 
 		Cards are rarely used directly: they are most often created by the rule environments \RpgPage[p]{S:RuleEnvs}, which can display the same content either as normal text or as a card.
 
-		\RpgEnvironment{RpgCard}{[<options>]}
-		{
-			Typesets its contents in one or more cards, placed side by side. The text is typeset in the \cmd{RpgFontCardBody} font element. The following options are available, with the defaults given in brackets:
-			\begin{description}
-				\item[\texttt{width}, \texttt{height}] The outer dimensions of each card (\texttt{6.75cm} by \texttt{9.7cm}).
-				\item[\texttt{hmargin}, \texttt{vmargin}] The space between the edge of the card and its text (\texttt{0.2cm}). Each must be less than half of the corresponding dimension.
-				\item[\texttt{cardsep}] The horizontal space between consecutive cards (\texttt{5pt}).
-				\item[\texttt{color}, \texttt{opacity}] The colour (\texttt{white}) and opacity (\texttt{1}) of the card's background.
-				\item[\texttt{vcentre}] If present, centres the text vertically within each card. (\texttt{vcenter} is also accepted.)
-				\item[\texttt{footnote}] The symbol used to mark the card's footnote (\texttt{*}).
-			\end{description}
-			Cards cannot be given a title, and cannot be nested within one another.
-
-			\RpgGetExample{env-card-dimensions}
-		}
-
-
 		\RpgFunction{cardbreak}{\param{}}
 		{
 			Within an \texttt{RpgCard}, ends the current card and continues the text on the next, in the same way as \cmd{pagebreak}. Outside of a card it has no effect, so it may safely be used in text which is only sometimes displayed as a card.
@@ -197,35 +221,53 @@
 		{
 			Within an \texttt{RpgCard}, \cmd{footnote} is redefined so that its text appears at the end of the card's contents, below a horizontal rule. \textbf{Only one footnote may appear in each card}: if more than one is used, only the last is shown. Card footnotes do not affect the document's footnote numbering.
 		}
-		\RpgFunction{RpgCardSet}{\param{options}}
+		\RpgEnvironment{RpgCard}{[<options>]}
 		{
-			Sets the default options of all subsequent cards. Options given to an individual \texttt{RpgCard} take priority over these defaults.
+			Typesets its contents in one or more cards, placed side by side. The text is typeset in the \cmd{RpgFontCardBody} font element. The following options are available, with the defaults given in brackets:
+			\begin{RpgTable}{lX}
+				Option & Effect
+				\\
+				\texttt{cardsep} & The horizontal space between consecutive cards (\texttt{5pt}).
+				\\
+				\texttt{color}, \texttt{opacity} & The colour (\texttt{white}) and opacity (\texttt{1}) of the card's background.
+				\\
+				\texttt{footnote} & The symbol used to mark the card's footnote (\texttt{*}).
+				\\
+				\texttt{hmargin}, \texttt{vmargin} & The space between the edge of the card and its text (\texttt{0.2cm}). Each must be less than half of the corresponding dimension.
+				\\
+				\texttt{vcentre} & If present, centres the text vertically within each card. (\texttt{vcenter} is also accepted.)
+				\\
+				\texttt{width}, \texttt{height} & The outer dimensions of each card (\texttt{6.75cm} by \texttt{9.7cm}).
+			\end{RpgTable}
+			Cards cannot be given a title, and cannot be nested within one another.
+
+			\RpgGetExample{env-card-dimensions}
 		}
 		\RpgFunction{RpgCardReset}{\param{}}
 		{
 			Restores the default options of all subsequent cards to their original values.
 		}
+		\RpgFunction{RpgCardSet}{\param{options}}
+		{
+			Sets the default options of all subsequent cards. Options given to an individual \texttt{RpgCard} take priority over these defaults.
+		}
 
 	\section{Rule Environments}\label{S:RuleEnvs}
 
 		The environments described so far are independent of any particular game system. Some elements, however, depend on the rules of the game being written for: a monster's statistics in one system look nothing like those in another. \rpgtex{} therefore provides four \emph{rule environments}, whose properties and appearance are defined by the theme:
-		\begin{description}
-			\item[\texttt{RpgItem}] Items and equipment.
-			\item[\texttt{RpgSpell}] Spells and similar abilities.
-			\item[\texttt{RpgFeat}] Feats, talents and other character features.
-			\item[\texttt{RpgStat}] Statistics blocks for creatures and characters.
-		\end{description}
+		\begin{RpgTable}{lX}
+			Environment & Purpose
+			\\
+			\texttt{RpgFeat} & Feats, talents and other character features.
+			\\
+			\texttt{RpgItem} & Items and equipment.
+			\\
+			\texttt{RpgSpell} & Spells and similar abilities.
+			\\
+			\texttt{RpgStat} & Statistics blocks for creatures and characters.
+		\end{RpgTable}
 		Each may be displayed either as normal text or as a card, controlled by a switch. Since the available properties depend on the theme, consult the documentation of the active theme for the details of each.
 
-		\RpgEnvironment{RpgItem}[RpgSpell, RpgFeat, RpgStat]{[<card-options>]\param{name}[<properties>]}
-		{
-			Typesets a rule element called \texttt{name}, with the given \texttt{properties} (a list of key-value pairs defined by the theme). Its display depends on the corresponding switch \RpgPage[p]{S:Switches}:
-			\begin{description}
-				\item[\texttt{UseItemCard}, \texttt{UseSpellCard}, \texttt{UseFeatCard}, \texttt{UseStatCard}] If on, the element is displayed as an \envref{RpgCard}, to which the \texttt{card-options} are passed. Otherwise (the default), it is displayed as normal text, and the \texttt{card-options} are ignored.
-			\end{description}
-
-			\RpgGetExample{env-rule}
-		}
 		\RpgVariable{RpgGetKey}{The value given to a property of the current rule environment, such as \cmd{RpgGetKey}\param{rarity}. It may only be used within a rule environment.
 
 			\RpgGetExample{env-getkey}
@@ -233,4 +275,22 @@
 		\RpgEnvironment{RpgIfEnv}{\param{switch}[<options-on>]\param{env-on}[<options-off>]\param{env-off}}
 		{
 			Begins the environment \texttt{env-on} (with \texttt{options-on}) if \texttt{switch} is on, and \texttt{env-off} (with \texttt{options-off}) otherwise. Any arguments which follow are passed to the chosen environment, so both environments must take the same arguments. This is the mechanism by which the rule environments switch between text and card modes, and it may be used to create similar switchable environments.
+		}
+		\RpgEnvironment{RpgItem}[RpgSpell, RpgFeat, RpgStat]{[<card-options>]\param{name}[<properties>]}
+		{
+			Typesets a rule element called \texttt{name}, with the given \texttt{properties} (a list of key-value pairs defined by the theme). Its display depends on the corresponding switch \RpgPage[p]{S:Switches}:
+			\begin{RpgTable}{lX}
+				Environment & Switch
+				\\
+				\texttt{RpgFeat} & \texttt{UseFeatCard}
+				\\
+				\texttt{RpgItem} & \texttt{UseItemCard}
+				\\
+				\texttt{RpgSpell} & \texttt{UseSpellCard}
+				\\
+				\texttt{RpgStat} & \texttt{UseStatCard}
+			\end{RpgTable}
+			If the switch is on, the element is displayed as an \envref{RpgCard}, to which the \texttt{card-options} are passed. Otherwise (the default), it is displayed as normal text, and the \texttt{card-options} are ignored.
+
+			\RpgGetExample{env-rule}
 		}

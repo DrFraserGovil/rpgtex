@@ -52,7 +52,7 @@
 
 \NewDocumentCommand \RpgKeyval{m O{} m +m}
 {
-	\MarginBlock{\env{#1}}[KeyVal][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
+	\MarginBlock{\textbackslash{}begin\{\env{#1}\}}[KeyVal][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
 	{
 		#3
 	}[KeyValBackground]

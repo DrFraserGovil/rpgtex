@@ -126,16 +126,20 @@
         body
     \end{RpgTable}
 
-% example = env-text-boxes
-% title = The Three Text Boxes
-     \begin{RpgNarration}[color=blue!30!white]
+% example = env-narration
+% highlight = RpgNarration
+    \begin{RpgNarration}[color=blue!30!white]
         This is text that you would read out loud to players, describing a scene. It will always be blue, even if the theme says otherwise -- because the optional argument takes priority.
     \end{RpgNarration}
 
+% example = env-sidebar
+% highlight = RpgSidebar
     \begin{RpgSidebar}{A Sidebar}
         This is an important block of text, that you should pay attention to.
     \end{RpgSidebar}
 
+% example = env-tip
+% highlight = RpgTip
     \begin{RpgTip}{A Tip}
         This is some helpful - but not vital - text.
     \end{RpgTip}

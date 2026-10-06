@@ -30,11 +30,11 @@
 \newcolumntype {Y} { > {\centering\arraybackslash } X } %% 
 
 %% Column types and overloads for UK TeX FAQ 282 auto-formatting
-\newcolumntype {`} { > {\global\let\currentrowstyle\relax } }
-\newcolumntype {^} { > {\currentrowstyle} }
-\newcommand{\rowstyle}[1]
+\newcolumntype {`} { > {\global\let\currentRpgRowStyle\relax } }
+\newcolumntype {^} { > {\currentRpgRowStyle} }
+\newcommand{\RpgRowStyle}[1]
 {
-	\gdef\currentrowstyle{#1}#1\ignorespaces
+	\gdef\currentRpgRowStyle{#1}#1\ignorespaces
 }
 % Matches {, }, >,  , and any other character
 \regex_const:Nn \c__preamble_regex {\|+|>\s*{.*}\s*\S|\S}
@@ -190,7 +190,7 @@
 				}
 				\tl_set:Nn \l_tmpa_tl {\seq_use:Nn \l_tmpb_seq {}}
 				\use:x { \exp_not:n {\begin}{#1}{\__rpg_tableWidth}{\l_tmpa_tl} }
-				\rowstyle{\RpgFontTableHeader}
+				\RpgRowStyle{\RpgFontTableHeader}
 		}
 		{
 			%% If we can't parse the table, then the formatting is not applied
