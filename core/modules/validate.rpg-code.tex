@@ -19,6 +19,7 @@
 		 
 		%%attempt to construct the rpgconfig file from within latex
 		%Relies on the fact that it is being called by rpg.sty, which is at the root of the project directory!
+		% BUG: the shell command runs in the directory of the document being compiled, not the rpgtex root, so core/rpg-config.cfg is written (and $(pwd) recorded) relative to the document. This only works when compiling from within the rpgtex root.
 		\immediate\write18{echo~"\\\\edef\\\\RpgPackagePath{"$(pwd)"}" > core/rpg-config.cfg}
 		 
 		%% Now check if that worked... 
@@ -44,6 +45,7 @@
 				3.~Manually~create~file~`[rpgtexroot]/core/rpg-config.cfg'~with~contents:\\
 				\unexpanded{\edef}\{\unexpanded{\RpgPackagePath}\}\{absolute / path~/to/rpgtex/root\}
 				\\\\
+				% BUG: in this message, the flag is --shell-escape (not --shell-execute); the script is now scripts/configure-rpgtex (not `configure'); and the manual definition should read \edef\RpgPackagePath{...} (no braces around \RpgPackagePath)
 				4.~Run~compiler~with~--shell-execute~enabled~(latex~auto-generates~configuration)
 				}{}
 			\msg_error:nnn { rpgtex } { missing-font-config } {  }

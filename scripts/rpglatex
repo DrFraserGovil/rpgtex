@@ -234,6 +234,7 @@ def finalize(args):
 	if args.show == 1:
 		# We prioritize viewer-specific commands for context switching (Okular, Evince)
 		# over generic commands (open, xdg-open)
+		# BUG: none of these viewers exist on Windows, so --show has no effect there. Add a Windows fallback, e.g. os.startfile(destination_pdf) when sys.platform == "win32".
 		viewer_commands = [
 			["xdg-open", destination_pdf],                   # Generic Linux fallback
 			["okular", destination_pdf],         # Linux/KDE (Okular: reloads and focuses)
