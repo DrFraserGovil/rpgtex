@@ -58,8 +58,8 @@
 
 
 %then override with command line if present
-\ifcsname{RpgCMD}\endcsname
-\keys_set:nV {rpg/options}{\RpgCMD}
+\ifcsname RpgCMD\endcsname
+	\keys_set:nV {rpg/options}{\RpgCMD}
 \fi
 
 

@@ -52,33 +52,36 @@ class Block:
         highlight = ""
         listing = "listing side text"
         begin = 0
+        # directives are only read from the header: stop at the first line of actual content
         for i,line in enumerate(self.Lines) :
             detect_name = name_pattern.match(line)
-            if detect_name:
-                title=detect_name.group(1)
-                begin = max(begin+1,i)
             detect_highlight = highlight_pattern.match(line)
-            if detect_highlight:
-                highlight = detect_highlight.group(1)
-                begin = max(begin+1,i)
             detect_options = options_pattern.match(line)
-            if detect_options:
-                listing = detect_options.group(1)
-                begin = max(begin+1,i)
+            if detect_name:
+                title=detect_name.group(1).strip()
+            elif detect_highlight:
+                highlight = detect_highlight.group(1).strip()
+            elif detect_options:
+                listing = detect_options.group(1).strip()
+            elif self.hasContent[i]:
+                break
+            else:
+                continue #blank lines in the header are skipped
+            begin = i+1
 
         self.Lines[-1] += "\n"
         self.Lines.insert(begin,f"\\begin{{ExampleBlock}}[{highlight}][{listing}]{{{title}}}\n")
         self.Lines.append("\\end{ExampleBlock}")
         self.beginIdx = [begin]
         self.endIdx = [len(self.Lines)-1]
-        self.hasContent = [1] + self.hasContent + [1]
+        self.hasContent = self.hasContent[:begin] + [True] + self.hasContent[begin:] + [True]
     def DetectWrapper(self):
         self.hasContent = [False]*len(self.Lines)
         self.beginIdx = []
         self.endIdx = []
         for i,line in enumerate(self.Lines):
             self.hasContent[i] = (len(line.strip()) > 0) #track non-empty lines
-            self.Lines[i] = self.Lines[i].replace("\t","    ") #convert tabs to spaces
+            self.Lines[i] = self.Lines[i].expandtabs(4) #convert tabs to spaces, respecting tab stops
             if begin_pattern.match(line):
                 self.beginIdx.append(i)
             if end_pattern.match(line):
@@ -110,7 +113,7 @@ class Block:
             
             firstNonEmpty = start_line +1
             
-            while firstNonEmpty < self.hasContent[firstNonEmpty]: #no need to end-check as the end line is (by definition) non-empty
+            while not self.hasContent[firstNonEmpty]: #no need to end-check as the end line is (by definition) non-empty
                 firstNonEmpty += 1
             #the wrapping lines are at zero indent
             if firstNonEmpty < end_line:
@@ -142,18 +145,30 @@ def processFiles():
                 if match:
                     if blockOpen:
                         blocks.append(block)
-                    block = Block(match.group(1),file)
+                    block = Block(match.group(1).strip(),file)
                     blockOpen= True
                 elif blockOpen:
                     block.AddLine(line)
         if blockOpen:
             blocks.append(block)
-    
+
+    # duplicate names would silently overwrite each other's compiled file
+    seen = {}
+    for block in blocks:
+        if block.Name in seen:
+            print(f"Warning: example '{block.Name}' is defined in both {seen[block.Name]} and {block.Parent}; only the latter will be used")
+        seen[block.Name] = block.Parent
+
     for block in blocks:
         print("Processing",block.Name)
         block.Process()
     writeTexOutput(blocks)
 def writeTexOutput(blocks):
+    #clear out old outputs, so examples removed from the source don't linger
+    os.makedirs(f"{example_root}/compiled",exist_ok=True)
+    for old in glob.glob(f"{example_root}/compiled/*.tex"):
+        os.remove(old)
+
     #write to file after processing
     for block in blocks:
         block.File = f"compiled/{block.Name}.tex"
@@ -176,9 +191,7 @@ def writeTexOutput(blocks):
         \\input{{examples/compiled/\\l_tmpa_tl.tex}}  
     }}
     {{
-        \\begin{{Code}}
-        #1   
-        \\end{{Code}}
+        \\msg_error:nnn{{rpg-docs}}{{bad-example}}{{#1}}
     }}
 }}\n\n%Create registry for examples:\n""")
 

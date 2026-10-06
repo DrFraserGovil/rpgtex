@@ -1,0 +1,24 @@
+\ExplSyntaxOn
+\NewDocumentEnvironment{fontlist}{+b}{
+	\vspace{1em}
+
+	% \hspace{-1.5cm}
+	% \let\__rpg_colsep:&
+	\noindent\begin{RpgTable}[breakable]{llX}
+		Font~Element & Components & Usage \\
+		#1
+	\end{RpgTable}}{}
+
+\NewDocumentCommand{\FontElement}{m +m +m}
+{
+\small\tt\cmd{#1}
+
+\tl_set:Nx \l_tmpa_tl { \str_range:nnn {#1} {8} {-1} }
+
+&
+\parbox[t]{4cm}{\tt {#2-family} \\ {#2-style} }
+&
+#3
+\\
+}
+\ExplSyntaxOff

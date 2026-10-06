@@ -1,0 +1,16 @@
+% title = Create Font
+% highlight = RpgThemeCreateFont
+\begin{ExampleBlock}[RpgThemeCreateFont][listing side text]{Create Font}
+\RpgThemeCreateFont{\MyFont}{myfont}
+\newfontfamily{\courier}{Courier}
+\RpgThemeFont{
+    myfont-family = \courier, 
+    myfont-style = \slshape
+}
+
+
+This is text
+
+{\MyFont This is text in my new font}
+
+\end{ExampleBlock}

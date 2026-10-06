@@ -10,29 +10,57 @@
     \cover{path/to/cover}       % optional
     \author{Dr. W. Riter}       % optional
 
-    \begin{document}
-        \maketitle
-        ...
+\begin{document}
+\maketitle
+...
 
 % example = cmd-emph
-    \emph{text}
+\emph{text}
 
-    \key{more-text}
+\key{more-text}
 
 
 % example = cmd-drop-cap
-    \RpgDropCap{T}{he example: this text runs over the first line, and then revert back to the normal font. It almost works! However, because it's wrapped in a text box, it goes slightly over the edges.}
+\RpgDropCap{T}{he example: this text runs over the first line, and then revert back to the normal font. It almost works! However, because it's wrapped in a text box, it goes slightly over the edges.}
 
 
 % example = section-names	
-	We are in Chapter `\RpgGetName{chapter}', section `\RpgGetName{section}'.
+We are in Chapter `\RpgGetName{chapter}', section `\RpgGetName{section}'.
 
-	\subsubsection{An example subsubsection}
+\subsubsection{An example subsubsection}
 
-		Now I am in `\RpgGetName{subsubsection}'.
+	Now I am in `\RpgGetName{subsubsection}'.
 
-	\chaptermark{Spoofed Chapter}
+\chaptermark{Spoofed Chapter}
 
-		I believe I am in `\RpgGetName{chapter}', though no chapter was actually called.
+	I believe I am in `\RpgGetName{chapter}', though no chapter was actually called.
 
-	\chaptermark{Options \& Variables} %% restore the real value
+\chaptermark{Options \& Variables} %% restore the real value
+
+% example = modify-font
+% title = Font Interface
+% highlight = RpgThemeFont
+	\subsection{The Original Font}
+		Here is some text
+
+		\newfontfamily{\courier}{Courier}
+		\RpgThemeFont{main-body-family=\courier,
+			subsection-style=\slshape\Huge}
+
+	\subsection{The New Font}
+		And after the change is introduced
+
+% example = create-font
+% title = Create Font
+% highlight = RpgThemeCreateFont
+	\RpgThemeCreateFont{\MyFont}{myfont}
+	\newfontfamily{\courier}{Courier}
+	\RpgThemeFont{
+		myfont-family = \courier, 
+		myfont-style = \slshape
+	}
+
+
+	This is text
+
+	{\MyFont This is text in my new font}

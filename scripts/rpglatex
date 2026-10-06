@@ -137,20 +137,18 @@ def locatePackageDirectory():
 
 def code_injection(args):
 	
-	if args.print:
-		val = "print"
-	else:
-		val = "full"
-	additional_code = f"\\def\\RpgCMD{{bg={val}}}"
+    additional_code = ""
+    if args.print:
+        additional_code = f"\\def\\RpgCMD{{bg=print}}"
 	#other code
 
-	packageDir =  locatePackageDirectory()
-	if packageDir is not None:
-		additional_code += packageDir
+    packageDir =  locatePackageDirectory()
+    if packageDir is not None:
+        additional_code += packageDir
 
-	#then insert the desired code
-	additional_code += f" \\input"
-	return additional_code
+    #then insert the desired code
+    additional_code += f" \\input"
+    return additional_code
 	
 
 def build_latex(args):
@@ -182,7 +180,7 @@ def build_latex(args):
 		f"-output-directory={build_dir_abs}",
 		f"-jobname={base_name}", 
 		"-halt-on-error",
-		"-max-print-line=10000"
+		"-max-print-line=10000",
 		"-file-line-error",
 		injected,
 		tex_filename 

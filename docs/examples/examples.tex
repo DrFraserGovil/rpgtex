@@ -11,9 +11,7 @@
         \input{examples/compiled/\l_tmpa_tl.tex}  
     }
     {
-        \begin{Code}
-        #1   
-        \end{Code}
+        \msg_error:nnn{rpg-docs}{bad-example}{#1}
     }
 }
 
@@ -23,6 +21,8 @@
 \seq_push:Nn\g__rpg_example_directory{cmd-emph}
 \seq_push:Nn\g__rpg_example_directory{cmd-drop-cap}
 \seq_push:Nn\g__rpg_example_directory{section-names}
+\seq_push:Nn\g__rpg_example_directory{modify-font}
+\seq_push:Nn\g__rpg_example_directory{create-font}
 \seq_push:Nn\g__rpg_example_directory{dnd-section-headers}
 \seq_push:Nn\g__rpg_example_directory{dnd-dice}
 \seq_push:Nn\g__rpg_example_directory{dnd-filigree}
