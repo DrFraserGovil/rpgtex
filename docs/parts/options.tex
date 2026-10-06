@@ -107,31 +107,31 @@
 	\section{Colo(u)rs}\label{S:Colors}
 
 		\rpgtex{} by default defines a number of colors\footnote{Yes, I hate myself, but we're going with the code-based spelling.} which are used for different elements:
-		\begin{description}
-			\item[themecolor] A `basic color' which is (by default) equal to the following three colors:
-			      \begin{enumerate}
-				      \item \textbf{sidebarcolor} The background color of the \envref{RpgSidebar} environment
-				      \item \textbf{tablecolor} The background color of every other row in an \envref{RpgTable}
-				      \item \textbf{tipcolor} The background color of the \envref{RpgTip} environment
-			      \end{enumerate}
-			\item[narrationcolor]  The background color of the \envref{RpgTip} environment
-			\item[contourinnercolor]  The default color of the inner text within a \cmdref{RpgContour} command
-			\item[contouroutercolor]  The default color of the external contour drawn around text within a \texttt{RpgContour} command.
-			\item[filigreecolor]  The default color of the filigree used in a \envref{RpgFiligree} environment.
-		\end{description}
+		% 	\begin{description}
+		% 		\item[themecolor] A `basic color' which is (by default) equal to the following three colors:
+		% 		      \begin{enumerate}
+		% 			      \item \textbf{sidebarcolor} The background color of the \envref{RpgSidebar} environment
+		% 			      \item \textbf{tablecolor} The background color of every other row in an \envref{RpgTable}
+		% 			      \item \textbf{tipcolor} The background color of the \envref{RpgTip} environment
+		% 		      \end{enumerate}
+		% 		\item[narrationcolor]  The background color of the \envref{RpgTip} environment
+		% 		\item[contourinnercolor]  The default color of the inner text within a \cmdref{RpgContour} command
+		% 		\item[contouroutercolor]  The default color of the external contour drawn around text within a \texttt{RpgContour} command.
+		% 		\item[filigreecolor]  The default color of the filigree used in a \envref{RpgFiligree} environment.
+		% 	\end{description}
 		%
 		% 	Calling \texttt{\bs{}RpgSetThemeColor} \RpgPage[p]{Macro:RpgSetThemeColor} updates the value of \texttt{themecolor}, as well as the three `co-varying' colors. Other colors are modified simply using the xcolors interface:
 		%
 		% 	\begin{Code}
 		% 		\cmd{colorlet}\{narrationcolor\}\{html\}\{FFFFF\}
 		% 	\end{Code}
-		% \section{Section Names}\label{S:SectionNames}
-		%
-		% 	Since many themes customise their appearance beyond the simple use of \texttt{mark}s (such as \texttt{chaptermark}), we have provided direct access to the current name of the chapter, section, subsection and subsection:
-		%
-		% 	\begin{RpgSidebar}{Layout Only}
-		% 		These commands rely on redefining common commands, and therefore are only loaded when in layout mode (i.e. by rpgbook).
-		% 	\end{RpgSidebar}
+	\section{Section Names}\label{S:SectionNames}
+
+		Since many themes customise their appearance beyond the simple use of \texttt{mark}s (such as \texttt{chaptermark}), we have provided direct access to the current name of the chapter, section, subsection and subsection:
+
+		\begin{RpgSidebar}{Sections-Mode Only}
+			These commands rely on redefining common commands, and therefore are only loaded when using an rpgclass, or when the package was loaded with the 'sections' option.
+		\end{RpgSidebar}
 		%
 		% 	% \RpgMacro{RpgChapterName}{}{The name given to the last \cmd{chapter} or \cmd{chapter*} command, or set by calling \cmd{chaptermark}}{}{}
 		% 	% \RpgMacro{RpgSectionName}{}{The name given to last \cmd{section} or \cmd{section*} command, or set by calling \cmd{sectionmark}}{}{}
@@ -166,9 +166,9 @@
 		%
 		%
 		%
-		% \section{Command Line Interface}\label{S:CMD}
-		%
-		% 	By default, \LaTeX{} does not have a `command line interface' which allows a user to modify the document from within the command line: changes to the document have to be placed inside the file, and then compiled. However, we found that -- particularly with the \textit{print} option (which suppresses background images on the paper, reducing ink requirements for printing), it was convenient to be able to compile the same document in either `normal' mode, or `print mode', without modifying the text.
+	\section{Command Line Interface}\label{S:CMD}
+
+		By default, \LaTeX{} does not have a `command line interface' which allows a user to modify the document from within the command line: changes to the document have to be placed inside the file, and then compiled. However, we found that -- particularly with the \textit{print} option (which suppresses background images on the paper, reducing ink requirements for printing), it was convenient to be able to compile the same document in either `normal' mode, or `print mode', without modifying the text.
 		%
 		% 	To this end, we have provided a method for pseudo-`command line variables' to be inserted into the RpgOptions module. To do this, we exploit the fact that \TeX{} can read documents from an input stream, not just files.
 		%
