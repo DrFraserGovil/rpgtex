@@ -16,6 +16,7 @@
 	\__RpgMakeKeys{#1}{#2}
 
 
+	% BUG: this redefinition replaces the one made by \__RpgBuildEnv, dropping its \RpgGetKey setup, so \RpgGetKey cannot be used inside a card format (it raises bad-getkey). No current theme does so, but it is inconsistent with the text format.
 	\RenewDocumentEnvironment{__#1#2Card}{O{} m O{} +b}
 	{
 		\keys_set:nn{rpg/rule/#1#2}{##3}

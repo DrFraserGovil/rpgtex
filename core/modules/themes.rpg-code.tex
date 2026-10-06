@@ -20,6 +20,7 @@
 			\input{#1}
 		}
 		{
+			% BUG: msg_new is called inside the error branch, so a second missing theme raises "message already defined" instead of this error. Move the msg_new outside the command.
 			\msg_new:nnn { rpg } { theme_missing } {Could~not~locate~theme~##1~directly,~and~is~not~on~theme~path(##2)}
 			\msg_error:nnxx { rpg } { theme_missing } { #1 } { \temp@themePath }
 		}

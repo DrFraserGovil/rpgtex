@@ -1,3 +1,4 @@
+% BUG: class not yet migrated to the revamped codebase: uses old names (\c__rpg_isclass_bool, \g__rpg_base_class_tl, \l__rpg_show_background_bool, \RpgSetTitleMode) instead of \__rpg_IsClass, \__rpg_BaseClass, \__rpg_ShowBackground, \RpgThemeTitleMode, and sets no \__rpg_ClassDefaults. Compare rpgbook.cls.
 %% THe RPG-card is used for short, tactile printouts in a playing-card format
 
 

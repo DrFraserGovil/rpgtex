@@ -4,7 +4,6 @@
 
 
 \chapter{Commands \& Macros}
-	\def\COSS{\hyperref[S:ThemeCommands]{\textcolor{blue!40!black}{{CoSS Function}}}}
 
 
 	\section{Document Structure}\label{S:DocStructure}
@@ -120,214 +119,127 @@
 				\RpgGetExample{fake-section}
 			}
 
+	\section{Text Styling}\label{S:TextStyling}
 
+		\rpgtex{} provides a small number of commands for applying decorative styles to text. The fonts and colours they use are set by the theme \RpgPage[p]{C:Fonts}.
 
+		\RpgFunction{RpgKey}[emph]{\param{text}}
+		{
+			Typesets \texttt{text} in the \cmd{RpgFontEmphasis} font element, giving a consistent appearance to keywords (such as conditions or game terms).
 
+			When the \texttt{font} option is active, and unless the \texttt{noemph} option is passed \RpgPage[p]{S:PackageOptions}, \cmd{emph} is redefined to be an alias of \cmd{RpgKey}. This replaces its usual `context-aware' behaviour (italics within upright text, and vice versa) with the keyword style.
 
-			% \section{Fonts \& Decorative Text}
-			% 	% In addition to the fundamental typeface alterations \rpgtex{} includes a number of commands to turn text into decorative elements.
-			% 	\RpgMacro{emph}{\param{m},\cmd{key},\param{m}}{Uses the \texttt{RpgFontEmphasis} font to emphasise text.\index{key}}
-			% 	{
-			% 		cmd-emph
-			% 	}
-			% 	{
-			% 		The \cmd{emph} command is usually a `context aware' emphasis command: equal to \cmd{textit} normally, \cmd{textbf} when the surrounding text is italics etc. However, for RPGs, it is convenient to be able to identify {keywords} in a consistent fashion. The \cmd{emph} command has therefore been redefined to use the \texttt{RpgFontEmphasis} font which can be configured to give a desired `keyword formatting'.
-			%
-			% 		The command \cmd{key} has also been provided, as a direct alias for \cmd{emph}.
-			% 	}
-			% 	\RpgMacro{RpgContour}{\param{\paramO{} m}}
-			% 	{
-			% 	Renders text with a \RpgContour[inner=red,outer=black]{contour effect}.
-			% 	}
-			% 	{
-			% 	\bs{}RpgContour[key/vals]\param{<text>}
-			% 	}
-			% 	{
-			% 	The optional argument accepts the following key/value pairs which alter the appearance of the contouring:
-			% 	\begin{RpgTable}{llX}
-			% 		Key & Argument Type & Effect
-			% 		\\
-			% 		inner & tikz color & Sets the color of the inner text
-			% 		\\
-			% 		outer & tikz color & Sets the color of the outer contour around the outside
-			% 		\\
-			% 		style & code & A style command (such as \cmd{bfseries}) which is applied to the text before contouring begins.
-			% 	\end{RpgTable}
-			% 	If the colors are not set, the default values are the \texttt{contourinnercolor} and \texttt{contouroutercolor} values defined by the theme \RpgPage[p]{S:Colors}.
-			%
-			% 	The contour does not automatically linebreak, but can be controlled manually with a \cmd{newline} command (not \cmd{\textbackslash} or \texttt{\textbackslash{}par})
-			%
-			% 	\begin{RpgTable}{lX}
-			% 		Example & Output \\
-			% 		\tabverbExample{\RpgContour[inner=red,outer=black]{example}}
-			% 		\tabverbExample{\RpgContour[style=\Huge\it]{example}}
-			% 		\tabverbExample{\RpgContour[]{multi\newline line\newline example}}
-			% 	\end{RpgTable}
-			% 	~\subsection{Quirks}
-			%
-			% 		Due to the tokenisation required for the line-splitting and space-preservation, the text inside the contour can exhibit some quirks if stylisation is applied within the \texttt{<text>} argument.
-			%
-			% 		Unbraced commands (such as \texttt{\it} or \texttt{\footnotesize}) will only apply to the first word in the text. Braced commands \textit{can} work, but will cause a compilation error if a \texttt{\newline} is included.
-			%
-			%
-			% 		\begin{RpgTable}{lX}
-			% 			\footnotesize\tabverbExample{\RpgContour[]{\Huge\it only first word changes}}
-			% 			\footnotesize\tabverbExample{\RpgContour[]{\textit{all words change}}}
-			% 			\footnotesize\texttt{\bs{}RpgContour[]{\bs{}textit\param{all word \bs{}newline change}}} & (fails to compile)
-			% 		\end{RpgTable}
-			% 		For robustness, we therefore recommend that all stylisation be applied through the \texttt{style} command, which is applied to each tokenised element, and therefore guaranteed to work as expected.
-			% 		}
-			% 		\RpgMacro{RpgDropCap}{\param{\paramO{} m m}}
-			% 		{
-			% 		Creates a decorative `drop cap' letter to begin a new chapter with, and modifies the following text.
-			% 		}
-			% 		{
-			% 		\bs{}RpgDropCap[<lettrine-args>]\param{<letter>}\param{<text>}
-			% 		}{
-			% 		This command uses \forcelink{https://texdoc.org/serve/lettrine/0}{the lettrine package} and the \forcelink{https://ctan.org/pkg/magaz?lang=en}{magaz} package to create an easy-to-use environment in which the first letter is enlarged (and stylised in the \texttt{RpgFontDropCap} font). The second argument formats \textit{up to the first line} of text in the \texttt{RpgFontDropCapInternal} font (usually a simple \texttt{scshape} command).
-			%
-			% 		This command can be a little fragile -- lettrine does not usually play well with the `FirstLine' command provided by magaz -- and we've used a few workarounds to allow both linebreaking, and the formatting of only the first line of text. There may need to be a small amount of manual calibration, but it is better than the default.
-			%
-			% 		}
-			% 		\RpgGetExample{cmd-drop-cap}
-			%
-			%
-			%
-			%
-			% \section{Theme Commands}
-			%
-			%
-			%
-			% 	\RpgMacro[RpgSet!Theme]{RpgSetTheme}{\param{{m}}}
-			% 	{
-			% 		Activates a chosen theme.
-			% 	}
-			% 	{\bs{}RpgSetTheme\param{<theme-name>}}
-			% 	{
-			% 		Searches for the file \texttt{<theme-path>/<theme-name>/<theme-name>.cfg}, and inputs it. If this is a properly configured theme file, then it activates the chosen theme given the current global parameters. If the file does not exist, throws an error.
-			%
-			% 		If   \texttt{\textbackslash{}l\_\_rpg\_layout\_bool} is True, the command automatically inserts \texttt{\bs{}clearpage}, as required to ensure the old headers are not overwritten by the new theme.
-			%
-			% 		\texttt{<theme-path>} is modified via \cmdref{RpgSetThemePath}.
-			% 	}
-			%
-			%
-			% 	\RpgMacro[RpgSet!Theme!Path]{RpgSetThemePath}{\param{{m}}}
-			% 	{
-			% 		Changes the value of the theme path searched for by \cmd{RpgSetTheme}
-			% 	}
-			% 	{
-			% 		\bs{}RpgSetThemePath\param{<path-name>}
-			% 	}
-			% 	{
-			% 		Updates an internal variable to be equal to the input value; does not check if the theme path is valid or not. Useful if you wish to create a new theme outside of the \texttt{rpgtex} file structure.
-			% 	}
-			%
-			% \section{Utility Commands}
-			% 	\RpgMacro{RpgDice}{\param{{m}}}
-			% 	{
-			% 		Evaluates expressions of the form $n\mathrm{d}x \pm m$, and outputs using a theme-dependent layout.
-			% 	}
-			% 	{
-			% 		\bs{}RpgDice\param{<dice-expression>}
-			% 	}{
-			% 		Uses regular expressions to extract and simplify the \texttt{dice-expression}, which must follow the following format:
-			% 		\begin{RpgSidebar}{Dice format}
-			% 			\begin{multicols}{2}
-			% 				\begin{enumerate}
-			% 					\item It must contain either `d' or `D' (the `dice symbol')
-			% 					\item The dice symbol must be immediately followed by a single number (the `dice size')
-			% 					\item The dice symbol may optionally be prefixed by a single number (the `dice count')
-			% 					\item The first (non-whitespace) character must be either the dice count (if present) or the dice symbol
-			% 					\item The dice size must be followed by either a `+', '-', or the end of the expression.
-			% 					\item After this, any number of standard numeric expressions may follow. This expression will be evaluated into a single `modifier'.
-			% 				\end{enumerate}
-			% 			\end{multicols}
-			% 		\end{RpgSidebar}
-			% 		The dice ignores any whitespace before the beginning of the expression, and arbitrary whitespace within the `modifier' part of the exprssion.
-			% 		\begin{RpgTable}{XX}
-			% 			Example & Output \\
-			% 			\tabverbExample{\RpgDice{  1d6-2}}
-			% 			\tabverbExample{\RpgDice{2D6 + 3*2^2}}
-			% 			\tabverbExample{\RpgDice{1d16}}
-			% 			\tabverbExample{\RpgDice{d8-3}}
-			% 			\texttt{\bs{}RpgDice\param{2*1d6}}, \texttt{\bs{}RpgDice\param{1 d6}}, \texttt{\bs{}RpgDice\param{3d 6 +3}} & (Fails to compile)
-			% 		\end{RpgTable}
-			%
-			% 		\cmd{RpgDice} is neat, but not necessarily impressive by itself. The true power of the expression is that it calls the control sequence set by \cmdref{RpgDiceFormat} to perform the output formatting (after performing the regular expression parsing), allowing designers to customise their dice formatting.
-			% 	}
-			%
-			% 	\RpgMacro{RpgFakeChapter}{\param{m}}{Mimics creating a new chapter with \cmd{chapter} (including adding in to the table of contents) without inserting a `chapter heading'}
-			% 	{
-			% 		\cmd{RpgFakeChapter}\param{fake-name}
-			% 	}
-			% 	{
-			% 		The value of \texttt{fake-name} is passed to the table of contents as a `true' chapter, and an update to \cmd{chaptermark} updates the Section Names \RpgPage[p]{S:SectionNames}, and thus the footer appearance.
-			% 	}
-			%
-			% 	\RpgMacro{RpgOrdinal}{\param{{o m}}}
-			% 	{
-			% 	Converts a numeric value to the corresponding ordinal.
-			% 	}
-			% 	{
-			% 	\bs{}RpgOrdinal[<command>]\param{<count>}
-			% 	}
-			% 	{
-			% 	The command outputs the \texttt{count} followed by the english abbreviations for the corresponding ordinal. The optional \texttt{command} argument is inserted between the numeral and the suffix, allowing for the customisation of appearances.
-			% 	\begin{RpgTable}{XX}
-			% 		Example & Output \\
-			% 		\tabverbExample{\RpgOrdinal{1}}
-			% 		\tabverbExample{\RpgOrdinal{2}}
-			% 		\tabverbExample{\RpgOrdinal[\textsuperscript]{13}}
-			% 		\tabverbExample{\RpgOrdinal[\textbf]{133}}
-			% 	\end{RpgTable}
-			% 	{\it Note that due to a lack of brace-capturing, it is not possible to chain multiple commands.}.
-			% 	}
-			% 	\RpgMacro{RpgPage}{\param{{O\param{t} m}}}
-			% 	{
-			% 	Outputs the current page reference for a label, with an option to enclose it in specific brackets or parentheses.
-			% 	}
-			% 	{
-			% 	\bs{}RpgPage[t/p/b/c]\param{<label-reference>}
-			% 	}
-			% 	{
-			% 	The optional arguments wrapping of the main reference. The options are:
-			% 	\begin{description}[itemsep=0pt]
-			% 		\item[t (default)] No wrapping
-			% 		\item[p] (parentheses)
-			% 		\item[b] [square brackets]
-			% 		\item[c] \{curly braces\}
-			% 	\end{description}
-			% 	An invalid input resolves to \texttt{?page~\bs{}pageref\param{<ref>}?}.\label{example:current page}
-			%
-			% 	\begin{RpgTable}{XX}
-			% 		Example & Output \\
-			% 		\tabverbExample{\RpgPage{example:current page}}
-			% 		\tabverbExample{\RpgPage[p]{example:current page}}
-			% 		\tabverbExample{\RpgPage[b]{example:current page}}
-			% 		\tabverbExample{\RpgPage[c]{example:current page}}
-			% 		\tabverbExample{\RpgPage[(error)]{example:current page}}
-			% 	\end{RpgTable}
-			% 	}
-			% 	\RpgMacro{RpgPlural}{\param{{s o m m}}}
-			% 	{
-			% 	Generates grammatically correct plural forms of a word based on a given count.
-			% 	}
-			% 	{
-			% 	\bs{}RpgPlural[<custom-plural>]\param{count}\param{<text>}
-			% 	}
-			% 	{
-			% 	The command outputs the count followed by the value of \texttt{<text>}. For a count of 1, the command then finishes. For any other count, it appends an ``s'', pluralizing the text. The starred version of the command suppresses the number output; so only the potentially-plural word is printed.
-			%
-			% 	The optional argument \texttt{[<custom-plural>]} overrides the default logic, allowing for irregular plurals.
-			% 	\begin{RpgTable}{XX}
-			% 		Example & Output \\
-			% 		\tabverbExample{\RpgPlural{1}{hat}}
-			% 		\tabverbExample{\RpgPlural{2}{hat}}
-			% 		\tabverbExample{\RpgPlural[octopodes]{1}{octopus}}
-			% 		\tabverbExample{\RpgPlural[octopodes]{359}{octopus}}
-			% 		\tabverbExample{\RpgPlural*[octopodes]{1}{octopus}}
-			% 		\tabverbExample{\RpgPlural*[octopodes]{359}{octopus}}
-			% 	\end{RpgTable}\normalfont
-			% 	}
-			% 	{}
+			\RpgGetExample{cmd-emph}
+		}
+		\RpgFunction{RpgContour}{[<options>]\param{text}}
+		{
+			Typesets \texttt{text} with a coloured outline (contour), using the \texttt{contour} package. The optional argument accepts the following keys:
+			\begin{description}
+				\item[\texttt{inner}] The colour of the text itself. Default: \texttt{ContourInnerColor} \RpgPage[p]{S:Colors}.
+				\item[\texttt{outer}] The colour of the outline. Default: \texttt{ContourOuterColor}.
+				\item[\texttt{style}] Formatting commands (such as \cmd{bfseries} or \cmd{Huge}) applied to the text.
+			\end{description}
+			The text is split into lines at each \texttt{\textbackslash\textbackslash}, and each word is contoured individually so that spacing is preserved. As a consequence, formatting commands placed within \texttt{text} may only affect the first word: all formatting should therefore be passed through the \texttt{style} key.
+
+			\RpgGetExample{cmd-contour}
+		}
+		\RpgFunction{RpgDropCap}{[<options>]\param{letter}\param{text}}
+		{
+			Begins a paragraph with a large decorative initial (a `drop cap'), using the \texttt{lettrine} package. The \texttt{letter} is typeset in the \cmd{RpgFontDropCap} font element, and \texttt{text} -- intended to be the remainder of the first line -- in the \cmd{RpgFontDropCapAfter} font element.
+
+			The drop cap spans a number of lines set by the theme (four, by default), and is separated from the following text by the length \cmd{RpgDropCapSeparation}, which may be changed with \cmd{setlength}. The optional argument accepts any \texttt{lettrine} options, which override these defaults.
+
+			\RpgGetExample{cmd-drop-cap}
+		}
+
+	\section{Utilities}\label{S:Utilities}
+
+		\RpgFunction{RpgDice}{\param{expression}}
+		{
+			Parses a dice expression of the form \texttt{<count>d<sides><modifier>} and typesets it in the format defined by the theme. The expression must satisfy the following rules:
+			\begin{itemize}
+				\item It contains a dice symbol (\texttt{d} or \texttt{D}), immediately followed by the number of sides.
+				\item The dice symbol may be preceded by the number of dice. If it is omitted, the theme determines how the expression is displayed.
+				\item Anything following the number of sides is treated as the modifier, which may be any numerical expression (such as \texttt{+3*2}). It is evaluated to a single number before being displayed.
+			\end{itemize}
+			Leading and trailing spaces are ignored. If the expression does not match this form, it is printed unchanged.
+
+			\RpgGetExample{cmd-dice}
+		}
+		\RpgFunction{RpgOrdinal}{[<format>]\param{number}}
+		{
+			Typesets an integer followed by its English ordinal suffix (\texttt{st}, \texttt{nd}, \texttt{rd} or \texttt{th}), correctly handling \texttt{11th}, \texttt{12th} and \texttt{13th}. The optional \texttt{format} is a command applied to the suffix only, such as \cmd{textbf}.
+		}
+		\RpgFunction{RpgSuperOrdinal}{\param{number}}
+		{
+			Equivalent to \cmd{RpgOrdinal}\texttt{[\textbackslash{}textsuperscript]}\param{number}, setting the suffix as a superscript.
+
+			\RpgGetExample{cmd-ordinal}
+		}
+		\RpgFunction{RpgPlural}{(*)[<plural>]\param{count}\param{word}}
+		{
+			Typesets \texttt{count} followed by \texttt{word}, adding an `s' to the word unless \texttt{count} is \texttt{1}. Irregular plurals may be given in the optional argument, which replaces the word whenever \texttt{count} is not \texttt{1}. The starred form omits the count, printing only the word.
+
+			\RpgGetExample{cmd-plural}
+		}
+		\RpgFunction{RpgPage}{[<style>]\param{label}}
+		{
+			Typesets `page' followed by the page number of \texttt{label}, optionally enclosed in brackets. The \texttt{style} may be one of \texttt{t} (no brackets; the default), \texttt{p} (parentheses), \texttt{b} (square brackets) or \texttt{c} (curly braces). Any other value encloses the reference in question marks, to make the error easy to spot.
+
+			\RpgGetExample{cmd-page}
+		}
+
+	\section{Full-Page Images}\label{S:Images}
+
+		\RpgFunction{RpgWholePageImage}{[<overlay>]\param{path/to/image}[<fade>]}
+		{
+			Places an image so that it fills the whole of a new page, clearing the page on either side. This is useful for maps, handouts and illustrations.
+
+			The optional \texttt{overlay} is drawn on top of the image, and may contain any number of \cmd{RpgPut} commands. The final optional argument (given in square brackets, after the path) fades the image towards white, as described for \cmd{RpgCoverTransparency} \RpgPage[p]{S:TitlePages}.
+		}
+		\RpgFunction{RpgPut}{[<width>][<format>](<anchor>)\param{x}\param{y}\param{content}}
+		{
+			Places \texttt{content} at a fixed position on the page, measured from the bottom-left corner. It may only be used within a page overlay, such as the first argument of \cmd{RpgWholePageImage}.
+
+			The content is set in a paragraph of the given \texttt{width} (default: \cmd{linewidth}), with \texttt{format} applied at the start (default: \cmd{centering}). The \texttt{anchor} determines which point of the content is placed at (\texttt{x}, \texttt{y}): \texttt{c} (centre; the default), \texttt{t}, \texttt{b}, \texttt{l}, \texttt{r}, or a combination such as \texttt{tl}.
+		}
+
+	\section{Switches}\label{S:Switches}
+
+		Switches are named true/false values which can be used to change the content of a document without editing its text. For example, \rpgtex{} uses switches to decide whether secrets are shown, and whether rule environments are displayed as cards. All switches are global: changing a switch affects the whole of the remaining document.
+
+		\RpgFunction{RpgNewSwitch}{\param{name}[<value>]}
+		{
+			Creates a new switch called \texttt{name}, with an initial \texttt{value} (default: \texttt{false}). An error is raised if the switch already exists.
+		}
+		\RpgFunction{RpgSwitch}{\param{name}\param{value}}
+		{
+			Sets an existing switch. The \texttt{value} may be \texttt{true}, \texttt{on} or \texttt{1} to turn it on, and \texttt{false}, \texttt{off} or \texttt{0} to turn it off (the words may also be capitalised). Any other value raises an error, as does a switch which does not exist.
+		}
+		\RpgFunction{RpgToggle}{\param{name}}
+		{
+			Turns an existing switch on if it is off, and off if it is on.
+		}
+		\RpgFunction{RpgIfSwitch}{\param{name}\param{if-on}\param{if-off}}
+		{
+			Typesets \texttt{if-on} if the switch is on, and \texttt{if-off} otherwise.
+
+			\RpgGetExample{cmd-switch}
+		}
+
+	\section{Themes \& Colours}\label{S:ThemeSelection}
+
+		\RpgFunction{RpgSetTheme}{\param{name}}
+		{
+			Loads the theme called \texttt{name}, replacing the appearance of any previously loaded theme. The theme is first searched for at \texttt{<themepath>/<name>/<name>.cfg}; if no such file exists, \texttt{name} is instead treated as a direct path to a theme file. An error is raised if neither file exists.
+
+			The initial theme is set by the \texttt{theme} option \RpgPage[p]{S:PackageOptions}. \cmd{RpgSetTheme} may be called at any point in the document, but since its effects are immediate, it is best called at the start of a new page.
+		}
+		\RpgFunction{RpgSetThemePath}{\param{path}}
+		{
+			Sets the directory searched by \cmd{RpgSetTheme}, allowing custom themes to be stored outside of the \rpgtex{} installation. The path is not checked until a theme is loaded. The initial value is set by the \texttt{themepath} option.
+		}
+		\RpgFunction{RpgSetThemeColor}{\param{colour}}
+		{
+			Sets \texttt{ThemeColor} and all of the co-varying colours to \texttt{colour} \RpgPage[p]{S:Colors}.
+		}

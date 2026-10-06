@@ -1,7 +1,11 @@
-%% options = listing only
+% options = listing only
 \begin{ExampleBlock}[][listing only]{}
 \begin{RpgMap}[<options>]
-    <contents>
+    \area[<label>]{<name>} <description>
+
+    \begin{RpgArea}[<label>]{<name>}
+        <nested areas>
+    \end{RpgArea}
 \end{RpgMap}
 
 

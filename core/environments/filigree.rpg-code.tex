@@ -9,6 +9,7 @@
 \NewDocumentCommand\RpgThemeSetFiligree{+m} { \cs_set:Nn\rpg_Filigree:{#1} }
 
 
+% BUG: this key is defined in the `callouts` family, but the callout environments read `rpg / callouts`, so filigree-size can never be set through an environment's options.
 \RpgThemeNewTLKey{callouts}{filigree-size}{\RpgFiligreeSize}{5pt}
 
 

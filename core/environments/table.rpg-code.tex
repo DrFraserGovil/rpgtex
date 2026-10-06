@@ -74,6 +74,7 @@
 	\bool_if:NT{\__rpg_tableFiligree}
 	{
 		\tl_set:Nn\__rpg_tableArgs{opacityback=\__rpg_tableFiligreeOpacity,left=\__rpg_tableFiligreeHGap, right=\__rpg_tableFiligreeHGap}
+		% BUG: RpgFiligree takes its options as an optional [..] argument, but they are passed in braces here, so the option string is typeset as text inside the box (and the options are ignored). Use \__rpg_ExpandBegin:nx{RpgFiligree}{\__rpg_tableArgs} or similar.
 		\begin{RpgFiligree}{\__rpg_tableArgs}\noindent
 	}
 

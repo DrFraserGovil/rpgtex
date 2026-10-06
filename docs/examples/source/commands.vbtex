@@ -15,9 +15,10 @@
 ...
 
 % example = cmd-emph
+% highlight = RpgKey
 \emph{text}
 
-\key{more-text}
+\RpgKey{more text}
 
 
 % example = cmd-drop-cap
@@ -69,3 +70,55 @@
 	This is text
 
 	{\MyFont This is text in my new font}
+
+% example = cmd-contour
+% highlight = RpgContour
+	\RpgContour[inner=red, outer=black]{Contoured text}
+
+	\RpgContour[style=\Large\bfseries]{Styled text \\ over two lines}
+
+% example = cmd-dice
+% highlight = RpgDice
+	\RpgDice{1d6-2}
+
+	\RpgDice{2D6 + 3*2^2}
+
+	\RpgDice{d8}
+
+	\RpgDice{not a dice roll}
+
+% example = cmd-ordinal
+% highlight = RpgOrdinal, RpgSuperOrdinal
+	\RpgOrdinal{1}, \RpgOrdinal{12}, \RpgOrdinal{23}
+
+	\RpgOrdinal[\textbf]{133}
+
+	\RpgSuperOrdinal{42}
+
+% example = cmd-plural
+% highlight = RpgPlural
+	\RpgPlural{1}{hat}, \RpgPlural{2}{hat}
+
+	\RpgPlural[octopodes]{1}{octopus}, \RpgPlural[octopodes]{3}{octopus}
+
+	\RpgPlural*{3}{hat}
+
+% example = cmd-page
+% highlight = RpgPage
+	\RpgPage{S:PackageOptions}
+
+	\RpgPage[p]{S:PackageOptions}
+
+	\RpgPage[b]{S:PackageOptions}
+
+	\RpgPage[c]{S:PackageOptions}
+
+% example = cmd-switch
+% highlight = RpgNewSwitch, RpgIfSwitch, RpgToggle
+	\RpgNewSwitch{HardMode}
+
+	The dragon has \RpgIfSwitch{HardMode}{500}{200} HP.
+
+	\RpgToggle{HardMode}
+
+	The dragon has \RpgIfSwitch{HardMode}{500}{200} HP.

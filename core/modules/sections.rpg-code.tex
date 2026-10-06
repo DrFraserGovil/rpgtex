@@ -32,6 +32,7 @@
 \NewDocumentCommand\RpgFake{m m}
 {
 	\phantomsection
+	% BUG: the contents entry is written before the level is validated, so an invalid level writes a bad toc entry before the error is raised. Move phantomsection/addcontentsline into the valid cases.
 	\addcontentsline{toc}{#1}{#2}
 	\str_case:enF{#1}
 	{

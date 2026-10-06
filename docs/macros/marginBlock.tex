@@ -101,6 +101,16 @@
 		#4
 	}
 }
+\NewDocumentCommand\RpgEnvironment{+m O{} +m  +m}
+{
+	\MarginBlock{\declareEnv{#1}}[Environment][\tl_if_blank:nF{#2}{\declareEnv{#2}}]
+	{
+		\tt #3
+	}[EnvironmentBackground]
+	{
+		#4
+	}
+}
 
 
 \ExplSyntaxOff

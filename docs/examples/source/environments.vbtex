@@ -28,49 +28,34 @@
         \lipsum[2]
     \end{RpgCard}
 
-%% example = env-map-basic
-%% options = listing only
+% example = env-map-basic
+% options = listing only
     \begin{RpgMap}[<options>]
-        <contents>
+        \area[<label>]{<name>} <description>
+
+        \begin{RpgArea}[<label>]{<name>}
+            <nested areas>
+        \end{RpgArea}
     \end{RpgMap}
 
-%% example =env-map-area
-%% options = listing only
-    \area[area-name][manual-label] <body-text>
-    % or
-    \begin{area}[area-name][manual-label]
-        <body-text>
-    \end{area}
+% example = env-map-nesting
+% title = Nested Map Areas
+% highlight = RpgMap, RpgArea, area
+    \begin{RpgMap}[header-offset=2]
+        \begin{RpgArea}[map:hall]{Great Hall}
+            A long and draughty hall.
 
-%% example = env-map-nesting
-% title=Automated Map Nesting
-    \begin{RpgMap}
-    \begin{area}[Test Zone]
-        A description
-            \begin{area}[Sub Zone]
-                A sub-description
-                \area[Arbitrary nested zone]
-                    (we can keep nesting)
-            \end{area}
-        \end{area}
-        \area[][nameless-ref] A nameless zone
+            \area[map:dais]{The Dais} A raised stone platform.
+
+            \area An unremarkable alcove.
+        \end{RpgArea}
+
+        \area[map:cellar]{Cellar} Damp and dark.
     \end{RpgMap}
 
-%% example = env-map-refs
-%% title = Visible RpgMap labelling
-%% highlight = RpgMapShowRefs
-    \RpgMapShowRefs{}
-    \begin{RpgMap}
-        \begin{area}[Test Zone]
-        A description
-            \begin{area}[Sub Zone]
-                A sub-description
-                \area[Arbitrary nested zone]
-                    (we can keep nesting)
-            \end{area}
-        \end{area}
-        \area[][nameless-ref] A nameless zone
-    \end{RpgMap}
+% example = env-map-refs
+% highlight = RpgMapRef
+    \RpgMapRef{map:dais} is area \RpgMapRef*{map:dais}, on \RpgPage{map:dais}.
 
 %% example = env-secret-basic
 %%options = listing only
@@ -175,17 +160,26 @@
 
 
     %% As option
-    \begin{RpgSidebar}[rpgfiligree, filigree-size=8pt]{Fancy Sidebar}
+    \begin{RpgSidebar}[filigree]{Fancy Sidebar}
         A very fancy sidebar
     \end{RpgSidebar}
 
 
 % example = env-getkey
-%options = listing only
-%highlight = getkey
-    \begin{Rpg[X]}{Test Object}[key1 = value1, key2 = value2]
-        The value of key1 is \getkey{key1}
-    \end{Rpg[X]}
+% options = listing only
+% highlight = RpgGetKey
+    \begin{RpgItem}{<name>}[<key> = <value>]
+        The value of the key is \RpgGetKey{<key>}.
+    \end{RpgItem}
+
+% example = env-rule
+% options = listing only
+% highlight = RpgItem, RpgSwitch
+    \RpgSwitch{UseItemCard}{false} % text mode (the default)
+
+    \begin{RpgItem}[<card-options>]{<name>}[<properties>]
+        <description>
+    \end{RpgItem}
 
 %% example = env-full-featureforge
 %highlight = TestObject, RpgMakeFeature, TestObjectAddProperty
