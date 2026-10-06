@@ -35,8 +35,8 @@
 	}
 	{
 		\hspace{-\dimexpr\reducer\relax}
-		\begin{minipage}[t]{\macrowidth}
-			\parbox[t]{\macrowidth}{ \mbox{} \raggedleft \color{#2} \maxsizebox{\macrowidth}{!}{\tt #3 } }
+		\hspace{\fboxsep}\begin{minipage}[t]{\macrowidth}
+			\mbox{} \raggedleft \color{#2} \maxsizebox{\macrowidth}{!}{\tt #3 }
 		\end{minipage}%
 		\hspace{\macrosep}%
 		\begin{minipage}[t]{\dimexpr\linewidth-\macrowidth+0.5\reducer\relax}
@@ -75,7 +75,7 @@
 {
 	\MarginBlock{\declareCmd{#1}}[Variable][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
 	{
-		\param{} ~\slshape (Variable)
+		\slshape (Variable)
 	}[VariableBackground]
 	{
 		#3

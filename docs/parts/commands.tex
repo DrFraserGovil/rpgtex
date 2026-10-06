@@ -5,6 +5,22 @@
 
 \chapter{Commands \& Macros}
 
+	\section{Themes \& Colours}\label{S:ThemeSelection}
+
+		\RpgFunction{RpgSetTheme}{\param{name}}
+		{
+			Loads the theme called \texttt{name}, replacing the appearance of any previously loaded theme. The theme is first searched for at \texttt{<themepath>/<name>/<name>.cfg}; if no such file exists, \texttt{name} is instead treated as a direct path to a theme file. An error is raised if neither file exists.
+
+			The initial theme is set by the \texttt{theme} option \RpgPage[p]{S:PackageOptions}. \cmd{RpgSetTheme} may be called at any point in the document, but since its effects are immediate, it is best called at the start of a new page.
+		}
+		\RpgFunction{RpgSetThemeColor}{\param{colour}}
+		{
+			Sets \texttt{ThemeColor} and all of the co-varying colours to \texttt{colour} \RpgPage[p]{S:Colors}.
+		}
+		\RpgFunction{RpgSetThemePath}{\param{path}}
+		{
+			Sets the directory searched by \cmd{RpgSetTheme}, allowing custom themes to be stored outside of the \rpgtex{} installation. The path is not checked until a theme is loaded. The initial value is set by the \texttt{themepath} option \RpgPage[p]{S:ThemePath}.
+		}
 
 	\section{Document Structure}\label{S:DocStructure}
 
@@ -29,19 +45,11 @@
 
 			The title page draws on the usual \cmd{title} and \cmd{author} commands, along with the following additions.
 
-			\RpgFunction{subtitle}{\param{text}}
-			{
-				Sets the subtitle of the document. As with \cmd{title} and \cmd{author}, this has no visible effect by itself: the subtitle is displayed by \cmd{maketitle} if the theme includes it. The default value is empty.
-			}
 			\RpgFunction{cover}{\param{path/to/image}}
 			{
 				Sets an image to be used as the full-page background of the cover page created by \cmd{maketitle} in \texttt{cover} mode (see below). The theme's title design is drawn over the top of the image.
 
 				The default value is empty, in which case the title design is drawn on a plain page.
-			}
-			\RpgFunction{RpgCoverTransparency}{\param{value}}
-			{
-				Fades the \cmd{cover} image towards white, which can help to keep the title legible over a busy image. The \texttt{value} is the opacity of a white layer placed over the image, between \texttt{0} (the image is unaltered) and \texttt{1} (the image is completely hidden). The default value is \texttt{0}.
 			}
 			\RpgFunction{maketitle}[RpgMakeTitle]{\param{}}
 			{
@@ -54,11 +62,19 @@
 
 				\cmd{RpgMakeTitle} is equivalent to \cmd{maketitle}, but remains available even if the \texttt{title} option is not active, or if another package redefines \cmd{maketitle}.
 
-				\RpgGetExample{cmd-maketitle}
 			}
-			\RpgVariable{RpgGetTitle}[RpgGetTitle*]{The title set by \cmd{title}, formatted with the \cmd{RpgFontTitle} font element \RpgPage[p]{C:Fonts}. The starred form gives the title as plain text, without applying the font.}
-			\RpgVariable{RpgGetSubtitle}[RpgGetSubtitle*]{The subtitle set by \cmd{subtitle}, formatted with the \cmd{RpgFontSubTitle} font element. The starred form gives the subtitle as plain text.}
+			\RpgFunction{RpgCoverTransparency}{\param{value}}
+			{
+				Fades the \cmd{cover} image towards white, which can help to keep the title legible over a busy image. The \texttt{value} is the opacity of a white layer placed over the image, between \texttt{0} (the image is unaltered) and \texttt{1} (the image is completely hidden). The default value is \texttt{0}.
+			}
 			\RpgVariable{RpgGetAuthor}[RpgGetAuthor*]{The author set by \cmd{author}, formatted with the \cmd{RpgFontSubTitle} font element. The starred form gives the author as plain text.}
+			\RpgVariable{RpgGetSubtitle}[RpgGetSubtitle*]{The subtitle set by \cmd{subtitle}, formatted with the \cmd{RpgFontSubTitle} font element. The starred form gives the subtitle as plain text.}
+			\RpgVariable{RpgGetTitle}[RpgGetTitle*]{The title set by \cmd{title}, formatted with the \cmd{RpgFontTitle} font element \RpgPage[p]{C:Fonts}. The starred form gives the title as plain text, without applying the font.}
+
+			\RpgFunction{subtitle}{\param{text}}
+			{
+				Sets the subtitle of the document. As with \cmd{title} and \cmd{author}, this has no visible effect by itself: the subtitle is displayed by \cmd{maketitle} if the theme includes it. The default value is empty.
+			}
 
 		\subsection{Part Pages}
 
@@ -88,8 +104,8 @@
 
 			Each of the following variables is initially blank, and holds its value until the next command of the same level is called: beginning a new chapter does not, for example, reset \cmd{RpgSectionName}.
 
-			\RpgVariable{RpgPartName}{The name given to the last \cmd{part} or \cmd{part*} command.}
 			\RpgVariable{RpgChapterName}{The name given to the last \cmd{chapter} command, or set by calling \cmd{chaptermark}. Starred chapters (\cmd{chapter*}) do not update this value.}
+			\RpgVariable{RpgPartName}{The name given to the last \cmd{part} or \cmd{part*} command.}
 			\RpgVariable{RpgSectionName}{The name given to the last \cmd{section} command, or set by calling \cmd{sectionmark}. Starred sections (\cmd{section*}) do not update this value.}
 			\RpgVariable{RpgSubsectionName}{The name given to the last \cmd{subsection} command, or set by calling \cmd{subsectionmark}. Starred subsections (\cmd{subsection*}) do not update this value.}
 			\RpgVariable{RpgSubsubsectionName}{The name given to the last \cmd{subsubsection} command, or set by calling \cmd{subsubsectionmark}. Starred subsubsections (\cmd{subsubsection*}) do not update this value.}
@@ -119,18 +135,13 @@
 				\RpgGetExample{fake-section}
 			}
 
-	\section{Text Styling}\label{S:TextStyling}
+	\section{Text Utilities}\label{S:TextStyling}\label{S:Utilities}
 
-		\rpgtex{} provides a small number of commands for applying decorative styles to text. The fonts and colours they use are set by the theme \RpgPage[p]{C:Fonts}.
 
-		\RpgFunction{RpgKey}[emph]{\param{text}}
-		{
-			Typesets \texttt{text} in the \cmd{RpgFontEmphasis} font element, giving a consistent appearance to keywords (such as conditions or game terms).
+		\rpgtex{} provides a number of commands for applying decorative styles to text and transforming it in ways useful for writing in an RPG context.
 
-			When the \texttt{font} option is active, and unless the \texttt{noemph} option is passed \RpgPage[p]{S:PackageOptions}, \cmd{emph} is redefined to be an alias of \cmd{RpgKey}. This replaces its usual `context-aware' behaviour (italics within upright text, and vice versa) with the keyword style.
+		Any fonts or styles they apply are those assigned by the theme \RpgPage[p]{C:Fonts}.
 
-			\RpgGetExample{cmd-emph}
-		}
 		\RpgFunction{RpgContour}{[<options>]\param{text}}
 		{
 			Typesets \texttt{text} with a coloured outline (contour), using the \texttt{contour} package. The optional argument accepts the following keys:
@@ -139,21 +150,10 @@
 				\item[\texttt{outer}] The colour of the outline. Default: \texttt{ContourOuterColor}.
 				\item[\texttt{style}] Formatting commands (such as \cmd{bfseries} or \cmd{Huge}) applied to the text.
 			\end{description}
-			The text is split into lines at each \texttt{\textbackslash\textbackslash}, and each word is contoured individually so that spacing is preserved. As a consequence, formatting commands placed within \texttt{text} may only affect the first word: all formatting should therefore be passed through the \texttt{style} key.
+			Contours cannot automatically linebreak, instead the text is split into lines at each \texttt{\textbackslash\textbackslash}, and each word is contoured individually so that spacing is preserved. As a consequence, formatting commands placed within \texttt{text} may only affect the first word: all formatting should therefore be passed through the \texttt{style} key.
 
 			\RpgGetExample{cmd-contour}
 		}
-		\RpgFunction{RpgDropCap}{[<options>]\param{letter}\param{text}}
-		{
-			Begins a paragraph with a large decorative initial (a `drop cap'), using the \texttt{lettrine} package. The \texttt{letter} is typeset in the \cmd{RpgFontDropCap} font element, and \texttt{text} -- intended to be the remainder of the first line -- in the \cmd{RpgFontDropCapAfter} font element.
-
-			The drop cap spans a number of lines set by the theme (four, by default), and is separated from the following text by the length \cmd{RpgDropCapSeparation}, which may be changed with \cmd{setlength}. The optional argument accepts any \texttt{lettrine} options, which override these defaults.
-
-			\RpgGetExample{cmd-drop-cap}
-		}
-
-	\section{Utilities}\label{S:Utilities}
-
 		\RpgFunction{RpgDice}{\param{expression}}
 		{
 			Parses a dice expression of the form \texttt{<count>d<sides><modifier>} and typesets it in the format defined by the theme. The expression must satisfy the following rules:
@@ -166,21 +166,29 @@
 
 			\RpgGetExample{cmd-dice}
 		}
+		\RpgFunction{RpgDropCap}{[<options>]\param{letter}\param{text}}
+		{
+			Begins a paragraph with a large decorative initial (a `drop cap'), using the \texttt{lettrine} package. The \texttt{letter} is typeset in the \cmd{RpgFontDropCap} font element, and \texttt{text} -- intended to be the remainder of the first line -- in the \cmd{RpgFontDropCapAfter} font element.
+
+			The drop cap spans a number of lines set by the theme (four, by default), and is separated from the following text by the length \cmd{RpgDropCapSeparation}, which may be changed with \cmd{setlength}. The optional argument accepts any \texttt{lettrine} options, which override these defaults.
+
+
+			\RpgGetExample{cmd-drop-cap}
+		}
+		\RpgFunction{RpgKey}[emph]{\param{text}}
+		{
+			Typesets \texttt{text} in the \cmd{RpgFontEmphasis} font element, giving a consistent appearance to keywords (such as conditions or game terms).
+
+			When the \texttt{font} option is active, and unless the \texttt{noemph} option is passed \RpgPage[p]{S:PackageOptions}, \cmd{emph} is redefined to be an alias of \cmd{RpgKey}. This replaces its usual `context-aware' behaviour (italics within upright text, and vice versa) with the keyword style.
+
+			\RpgGetExample{cmd-emph}
+		}
+
 		\RpgFunction{RpgOrdinal}{[<format>]\param{number}}
 		{
 			Typesets an integer followed by its English ordinal suffix (\texttt{st}, \texttt{nd}, \texttt{rd} or \texttt{th}), correctly handling \texttt{11th}, \texttt{12th} and \texttt{13th}. The optional \texttt{format} is a command applied to the suffix only, such as \cmd{textbf}.
-		}
-		\RpgFunction{RpgSuperOrdinal}{\param{number}}
-		{
-			Equivalent to \cmd{RpgOrdinal}\texttt{[\textbackslash{}textsuperscript]}\param{number}, setting the suffix as a superscript.
 
 			\RpgGetExample{cmd-ordinal}
-		}
-		\RpgFunction{RpgPlural}{(*)[<plural>]\param{count}\param{word}}
-		{
-			Typesets \texttt{count} followed by \texttt{word}, adding an `s' to the word unless \texttt{count} is \texttt{1}. Irregular plurals may be given in the optional argument, which replaces the word whenever \texttt{count} is not \texttt{1}. The starred form omits the count, printing only the word.
-
-			\RpgGetExample{cmd-plural}
 		}
 		\RpgFunction{RpgPage}{[<style>]\param{label}}
 		{
@@ -188,58 +196,72 @@
 
 			\RpgGetExample{cmd-page}
 		}
+		\RpgFunction{RpgPlural}{(*)[<plural>]\param{count}\param{word}}
+		{
+			Typesets \texttt{count} followed by \texttt{word}, adding an `s' to the word unless \texttt{count} is \texttt{1}. Irregular plurals may be given in the optional argument, which replaces the word whenever \texttt{count} is not \texttt{1}. The starred form omits the count, printing only the word.
+
+			\RpgGetExample{cmd-plural}
+		}
+		\RpgFunction{RpgSuperOrdinal}{\param{number}}
+		{
+			Equivalent to \cmd{RpgOrdinal}\texttt{[\textbackslash{}textsuperscript]}\param{number} \RpgPage[p]{Cmd:RpgOrdinal}, automatically applying a superscript style command.
+
+			\RpgGetExample{cmd-super-ordinal}
+		}
 
 	\section{Full-Page Images}\label{S:Images}
 
+		We use the \texttt{eso-pic}\index{eso-pic} library for formatting whole-page images and placing content at specific positions on the page.
+		\RpgFunction{RpgPut}{[<width>][<format>](<anchor>)\param{x}\param{y}\param{content}}
+		{
+			Places \texttt{content} at a fixed position on the page, measured from the bottom-left corner. It may only be used within a page overlay, such as the first argument of \cmd{RpgWholePageImage}.
+
+			The content is set in a paragraph of the given \texttt{width} (default: \cmd{linewidth}), with \texttt{format} applied at the start (default: \cmd{centering}).
+
+			The \texttt{anchor} determines which point of the content is placed at (\texttt{x}, \texttt{y}): \texttt{c} (centre; the default), \texttt{t}, \texttt{b}, \texttt{l}, \texttt{r}, or a combination such as \texttt{tl}.
+		}
 		\RpgFunction{RpgWholePageImage}{[<overlay>]\param{path/to/image}[<fade>]}
 		{
 			Places an image so that it fills the whole of a new page, clearing the page on either side. This is useful for maps, handouts and illustrations.
 
 			The optional \texttt{overlay} is drawn on top of the image, and may contain any number of \cmd{RpgPut} commands. The final optional argument (given in square brackets, after the path) fades the image towards white, as described for \cmd{RpgCoverTransparency} \RpgPage[p]{S:TitlePages}.
 		}
-		\RpgFunction{RpgPut}{[<width>][<format>](<anchor>)\param{x}\param{y}\param{content}}
-		{
-			Places \texttt{content} at a fixed position on the page, measured from the bottom-left corner. It may only be used within a page overlay, such as the first argument of \cmd{RpgWholePageImage}.
-
-			The content is set in a paragraph of the given \texttt{width} (default: \cmd{linewidth}), with \texttt{format} applied at the start (default: \cmd{centering}). The \texttt{anchor} determines which point of the content is placed at (\texttt{x}, \texttt{y}): \texttt{c} (centre; the default), \texttt{t}, \texttt{b}, \texttt{l}, \texttt{r}, or a combination such as \texttt{tl}.
-		}
 
 	\section{Switches}\label{S:Switches}
 
 		Switches are named true/false values which can be used to change the content of a document without editing its text. For example, \rpgtex{} uses switches to decide whether secrets are shown, and whether rule environments are displayed as cards. All switches are global: changing a switch affects the whole of the remaining document.
 
+		Switches are designed to act as boolean counterparts to traditional \TeX{} counters, and so have a similar interface.
+
+		The primary use-case for switches in \rpgtex{} is for the `Cardable Environments' % BUG: NEED to ref here when we know where it points
+		, allowing the same document to typeset as both inline text, and as a 'playing card module' depending on the value of the associated switch.
+
+		\RpgFunction{RpgIfSwitch}{\param{name}\param{if-on}\param{if-off}}
+		{
+			Typesets \texttt{if-on} if the switch is on, and \texttt{if-off} otherwise.
+
+		}
 		\RpgFunction{RpgNewSwitch}{\param{name}[<value>]}
 		{
 			Creates a new switch called \texttt{name}, with an initial \texttt{value} (default: \texttt{false}). An error is raised if the switch already exists.
 		}
 		\RpgFunction{RpgSwitch}{\param{name}\param{value}}
 		{
-			Sets an existing switch. The \texttt{value} may be \texttt{true}, \texttt{on} or \texttt{1} to turn it on, and \texttt{false}, \texttt{off} or \texttt{0} to turn it off (the words may also be capitalised). Any other value raises an error, as does a switch which does not exist.
+			Sets an existing switch to the chosen value. Accepted input strings are:
+			\begin{RpgTable}{lX}
+				Boolean State & Input Strings
+				\\
+				True & on, On, true, True, 1
+				\\
+				False & off, Off, false, False, 0
+			\end{RpgTable}
+
+			Any other value raises an error, as does a switch which does not exist.
 		}
 		\RpgFunction{RpgToggle}{\param{name}}
 		{
 			Turns an existing switch on if it is off, and off if it is on.
-		}
-		\RpgFunction{RpgIfSwitch}{\param{name}\param{if-on}\param{if-off}}
-		{
-			Typesets \texttt{if-on} if the switch is on, and \texttt{if-off} otherwise.
 
 			\RpgGetExample{cmd-switch}
 		}
 
-	\section{Themes \& Colours}\label{S:ThemeSelection}
-
-		\RpgFunction{RpgSetTheme}{\param{name}}
-		{
-			Loads the theme called \texttt{name}, replacing the appearance of any previously loaded theme. The theme is first searched for at \texttt{<themepath>/<name>/<name>.cfg}; if no such file exists, \texttt{name} is instead treated as a direct path to a theme file. An error is raised if neither file exists.
-
-			The initial theme is set by the \texttt{theme} option \RpgPage[p]{S:PackageOptions}. \cmd{RpgSetTheme} may be called at any point in the document, but since its effects are immediate, it is best called at the start of a new page.
-		}
-		\RpgFunction{RpgSetThemePath}{\param{path}}
-		{
-			Sets the directory searched by \cmd{RpgSetTheme}, allowing custom themes to be stored outside of the \rpgtex{} installation. The path is not checked until a theme is loaded. The initial value is set by the \texttt{themepath} option.
-		}
-		\RpgFunction{RpgSetThemeColor}{\param{colour}}
-		{
-			Sets \texttt{ThemeColor} and all of the co-varying colours to \texttt{colour} \RpgPage[p]{S:Colors}.
-		}

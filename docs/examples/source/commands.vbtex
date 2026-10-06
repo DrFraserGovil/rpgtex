@@ -93,6 +93,8 @@
 
 	\RpgOrdinal[\textbf]{133}
 
+% example = cmd-super-ordinal
+% highlight = RpgOrdinal, RpgSuperOrdinal
 	\RpgSuperOrdinal{42}
 
 % example = cmd-plural
