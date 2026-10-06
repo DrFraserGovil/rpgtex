@@ -1,7 +1,7 @@
 % !TEX root = ../documentation.tex
-\chapter{Options \& Variables}
+\chapter{Options \& Configuration}
 
-	\rpgtex{} defines many dozens to hundreds of variables, most with the (expl3) syntax \cmd*{__rpg\_[x]}. Most of these are used in the internal functioning of the macros, however a number of them are useful for a user to understand.
+	This chapter describes the ways in which the behaviour of \rpgtex{} may be configured without writing any new code: the options which may be passed to the package or class, the named colours used by its elements, and the command line interface for changing these options at compile time.
 
 
 	\section{Package Options}\label{S:PackageOptions}
@@ -16,18 +16,18 @@
 		\begin{description}
 			\item[Key-value options:] The name of the option is followed by an equals sign and a value:
 			      \begin{Code}
-				      \textbackslash{}usepackage[columns = 2, bg = print]\{rpgtex\}
+				      \textbackslash{}usepackage[bg = print, theme = dnd]\{rpgtex\}
 			      \end{Code}
 			\item[Flags:] Only the name of the option is provided. Its presence enables the associated behaviour:
 			      \begin{Code}
-				      \textbackslash{}usepackage[openright]\{rpgtex\}
+				      \textbackslash{}usepackage[justified]\{rpgtex\}
 			      \end{Code}
 		\end{description}
 
 		The available options are:
 
 		\RpgFlag{background}{
-			If present, activates the `paper background' modules, including the background colour, paper images, geometry overloads and footer changes.
+			If present, activates the `paper background' modules, which control the paper colour and background images, the footer decorations, and the spacing around floats.
 
 			This flag is set by default when loading a class, but must be passed explicitly to enable these modules when loading the package directly.
 		}
@@ -35,7 +35,7 @@
 		{
 			Controls the behaviour of the background and footer decorations. The value must be one of the three listed above, else an error is thrown. The default value is \texttt{full}.
 
-			The most visible effect of this option is to control whether the `background paper' set by \cmdref{RpgThemeSetPaper} and \cmdref{RpgThemeBackgroundColor}, and the footer decorations set by \cmdref{RpgThemeFooterDecoration}, appear in the document:
+			The most visible effect of this option is to control whether the `background paper' set by \cmdref{RpgThemePaperImage} and \cmdref{RpgThemePaperColor}, and the footer decorations set by \cmdref{RpgThemeFooterDecoration}, appear in the document:
 
 			\begin{center}
 				\begin{tabular}{rcc}
@@ -56,6 +56,8 @@
 			Places the document into either \texttt{onecolumn} or \texttt{twocolumn} mode. The default value is \texttt{2}.
 
 			More advanced column layouts require the user to manually use the \texttt{multicols} environment.
+
+			This option only has an effect when using one of the \rpgtex{} classes.
 		}
 		\RpgFlag{font}{
 			If present, activates the font modules, applying the package fonts wherever possible.
@@ -74,9 +76,13 @@
 		}
 		\RpgFlag{oneside}{
 			If present, places the document into one-sided mode. This disables alternating footers, but allows for consistent asymmetric margins (as in this document, where the left margin is enlarged to accommodate macro names).
+
+			This option only has an effect when using one of the \rpgtex{} classes.
 		}
 		\RpgFlag{openright}{
 			If present, places the document into right-opening mode, such that chapters always begin on a right-hand page. By default, chapters may begin on any page (see the documentation of the \texttt{book} class for more details).
+
+			This option only has an effect when using one of the \rpgtex{} classes.
 		}
 		\RpgFlag{sections}{
 			If present, activates the sections modules, including the part-page overloads and any theme behaviour which modifies the section commands.
@@ -86,6 +92,8 @@
 		\RpgKeyval{size}{= <font-size>pt}
 		{
 			Sets the base font size of the document, if permitted by the parent class. The default value is \texttt{10pt}.
+
+			This option only has an effect when using one of the \rpgtex{} classes.
 
 			The allowed values depend on the class being used (see the class section, beginning on \RpgPage{S:bookClass}).
 		}
@@ -99,7 +107,7 @@
 		{
 			Calls \cmdref{RpgSetThemePath} before the theme is loaded, allowing custom themes to be used.
 
-			The default value is \cmd{RpgPackagePath}\texttt{/themes}, with the assumption that a theme called \texttt{name} is stored in \texttt{themes/name/name.cfg}.
+			The default value is \texttt{themes}, which \TeX{} locates within the \rpgtex{} installation. A theme called \texttt{name} is then expected to be stored in \texttt{<themepath>/name/name.cfg}.
 		}
 		\RpgFlag{title}{
 			If present, activates the titling module and any theme presets which alter the behaviour of \cmd{maketitle}.
@@ -145,50 +153,6 @@
 				\cmd{colorlet}\{SidebarColor\}\{red!10!white\}
 			\end{Code}
 			Modifying a co-varying colour in this way changes only that colour, leaving the others unaffected.
-	\section{Section Names}\label{S:SectionNames}
-
-		Many themes customise their appearance beyond the simple use of \texttt{mark}s (such as \cmd{chaptermark}). To support this, \rpgtex{} provides direct access to the names of the current chapter, section, subsection and subsubsection.
-
-		\begin{RpgSidebar}{Sections Mode Only}
-			These names are recorded by redefining standard \LaTeX{} commands, and are therefore only available in \emph{sections mode}. Sections mode is enabled by default when using one of the \rpgtex{} classes, and may otherwise be enabled by passing the \texttt{sections} option to the package \RpgPage[p]{S:PackageOptions}.
-
-			When active, sections mode:
-			\begin{itemize}
-				\item Redefines \cmd{chaptermark}, \cmd{sectionmark}, \cmd{subsectionmark} and \cmd{subsubsectionmark} so that, in addition to their usual behaviour, they store the name they are given in the variables below.
-				\item Sets \texttt{secnumdepth} to \texttt{0}, so that sections and their subdivisions are unnumbered.
-				\item Replaces \cmd{part} with a version which draws a full-page part page using the active theme. The starred form, \cmd{part*}, falls back to the original \LaTeX{} command.
-			\end{itemize}
-			Themes may additionally alter the formatting of the sectioning commands when sections mode is active.
-		\end{RpgSidebar}
-
-
-		Each of the following variables is initially blank, and holds its value until the next command of the same level is called: beginning a new chapter does not, for example, reset \cmd{RpgSectionName}.
-
-		\RpgVariable{RpgPartName}{The name given to the last \cmd{part} command.}
-		\RpgVariable{RpgChapterName}{The name given to the last \cmd{chapter} command, or set by calling \cmd{chaptermark}}
-		\RpgVariable{RpgSectionName}{The name given to the last \cmd{section} command, or set by calling \cmd{sectionmark}. Starred sections (\cmd{section*}) do not update this value.}
-		\RpgVariable{RpgSubsectionName}{The name given to the last \cmd{subsection} command, or set by calling \cmd{subsectionmark}. Starred subsections (\cmd{subsection*}) do not update this value.}
-		\RpgVariable{RpgSubsubsectionName}{The name given to the last \cmd{subsubsection} command, or set by calling \cmd{subsubsectionmark}. Starred subsubsections (\cmd{subsubsection*}) do not update this value.}
-
-
-		\RpgFunction{RpgGetName}{\param{part / chapter / section / subsection / subsubsection}}
-		{
-			Returns the name stored for the given level (equivalent to the corresponding variable above). Any other input results in an error.
-
-			Since these names (other than that of the part) are taken from the \texttt{mark} commands, they may be set manually, without creating a new heading, by calling the relevant \texttt{mark} command directly.
-		}
-
-		\RpgFunction{RpgFake}{\param{level}\param{name}}
-		{
-			Mimics the creation of a new heading at the given \texttt{level} without printing a heading in the document. Specifically, it:
-			\begin{itemize}
-				\item Adds an entry called \texttt{name} to the table of contents at the given level, with a hyperlink anchor at the current position.
-				\item Updates the stored name for that level, as if a real heading had been created. For \texttt{chapter} to \texttt{subsubsection} this is done by calling the corresponding \texttt{mark} command, so any running headers are also updated.
-			\end{itemize}
-			The \texttt{level} must be one of \texttt{part}, \texttt{chapter}, \texttt{section}, \texttt{subsection} or \texttt{subsubsection}. Any other value results in an error.
-		}
-
-		\RpgGetExample{section-names}
 
 	\section{Command Line Interface}\label{S:CMD}
 
@@ -219,8 +183,3 @@
 		\begin{Code}
 			rpglatex document.tex -p
 		\end{Code}
-
-
-
-
-
