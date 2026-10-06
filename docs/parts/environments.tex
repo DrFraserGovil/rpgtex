@@ -28,12 +28,12 @@
 		\end{RpgTable}
 
 		Each callout accepts the following options, in addition to the usual \texttt{tcolorbox} options:
-		\begin{RpgTable}{lX}
-			Option & Effect
+		\begin{RpgTable}{lXl}
+			Option & Effect & Default
 			\\
-			\texttt{color} & The background colour of the box (and its title). The default varies with the callout type. This is an alias (which overrides) the usual \texttt{tcb/colback} option.
+			\texttt{color} & The background colour of the box and its title, setting both \texttt{colback} and \texttt{colbacktitle}. An explicit \texttt{colback} or \texttt{colbacktitle} option takes priority over this value. & \texttt{NarrationColor}, \texttt{SidebarColor} or \texttt{TipColor} \RpgPage[p]{S:Colors}
 			\\
-			\texttt{filigree} & If present, decorates the box with the theme's filigree frame \RpgPage[p]{S:Filigree}.
+			\texttt{filigree} & If present, decorates the box with the theme's filigree frame \RpgPage[p]{S:Filigree}. & off
 		\end{RpgTable}
 
 		\RpgEnvironment{RpgNarration}{[<options>]}
@@ -55,7 +55,7 @@
 			\RpgGetExample{env-tip}
 		}
 
-	\section{RpgTable}\label{S:Tables}
+	\section{RpgTables}\label{S:Tables}
 
 		\RpgFunction{RpgRowStyle}{\param{format}}
 		{
@@ -108,7 +108,7 @@
 			\RpgGetExample{env-table-standard}
 		}
 
-	\section{Abstracts}\label{S:Abstracts}
+	\section{RpgAbstracts}\label{S:Abstracts}
 
 		\RpgEnvironment{RpgAbstract}[abstract]{[<title>][<width>][<gap>]}
 		{
@@ -121,7 +121,7 @@
 			Identical to \texttt{RpgAbstract}, but with the default title `Summary'.
 		}
 
-	\section{Filigree}\label{S:Filigree}
+	\section{RpgFiligree}\label{S:Filigree}
 
 		Filigree is a decorative frame, drawn around the outside of a box in place of its usual border. Its design is provided by the theme, and it is drawn in \texttt{FiligreeColor} \RpgPage[p]{S:Colors}.
 
@@ -134,7 +134,7 @@
 			\RpgGetExample{env-filigree-example}
 		}
 
-	\section{Secrets}\label{S:Secret}
+	\section{RpgSecrets}\label{S:Secret}
 
 		Game Masters often need notes which their players should not see. The \texttt{RpgSecret} environment allows the same document to serve both purposes, by marking text as secret and choosing whether to reveal it.
 
@@ -149,16 +149,16 @@
 				On & The secret text is shown in a highlighted box, labelled as hidden. If \texttt{public-text} was given, it is shown in the lower part of the box, labelled as the publicly available version.
 			\end{RpgTable}
 			Secrets are revealed for the remainder of the document with \cmd{RpgSwitch}\param{ShowSecrets}\param{on}. The following options are available:
-			\begin{RpgTable}{lX}
-				Option & Effect
+			\begin{RpgTable}{lXl}
+				Option & Effect & Default
 				\\
-				\texttt{color} & The colour of the box's frame. Default: \texttt{SecretColor}.
+				\texttt{color} & The colour of the box's frame. & \texttt{SecretColor}
 				\\
-				\texttt{label-public} & The label above the public text. Default: `Normal text'.
+				\texttt{label-public} & The label above the public text. & `Normal text'
 				\\
-				\texttt{label-secret} & The label above the secret text. Default: `Hidden text'.
+				\texttt{label-secret} & The label above the secret text. & `Hidden text'
 				\\
-				\texttt{switch} & The switch which controls this secret. Default: \texttt{ShowSecrets}. Using a different switch allows separate groups of secrets to be revealed independently.
+				\texttt{switch} & The switch which controls this secret. Using a different switch allows separate groups of secrets to be revealed independently. & \texttt{ShowSecrets}
 			\end{RpgTable}
 			The labels are typeset in the \FontRef{SecretTitle} font element.
 		}
@@ -167,7 +167,7 @@
 		\RpgGetExample{env-secret-hide}
 		\RpgGetExample{env-secret-show}
 
-	\section{Maps}\label{S:Map}
+	\section{RpgMaps}\label{S:Map}
 
 		Adventures often describe a location as a numbered list of areas, which correspond to the labels on a map. The \texttt{RpgMap} environment produces such a list, numbering and nesting the areas automatically.
 
@@ -176,16 +176,16 @@
 			Begins a list of map areas, each of which is created with \cmd{area}. Each area is given a heading, whose size depends on how deeply the map is nested: \cmd{section*} at the top level, then \cmd{subsection*}, and so on, down to \cmd{subparagraph*}. These headings do not appear in the table of contents.
 
 			Areas are numbered according to their depth, cycling through numbers, capital letters and lower-case Roman numerals, so that the second area within the first area is \texttt{1B}, and its third sub-area is \texttt{1B-iii}. The following options are available:
-			\begin{RpgTable}{lX}
-				Option & Effect
+			\begin{RpgTable}{lXl}
+				Option & Effect & Default
 				\\
-				\texttt{empty-prefix} & Text placed before the number of an unnamed area. Default: `Area~'.
+				\texttt{empty-prefix} & Text placed before the number of an unnamed area. & `Area~'
 				\\
-				\texttt{header-offset} & The number of levels by which to shrink the headings. Default: \texttt{0}.
+				\texttt{header-offset} & The number of levels by which to shrink the headings. & \texttt{0}
 				\\
-				\texttt{prefix} & Text placed before the number of a named area. Default: `Area~'.
+				\texttt{prefix} & Text placed before the number of a named area. & `Area~'
 				\\
-				\texttt{title} & A title for the map, typeset as a heading one level larger than its areas. It is only used by the outermost map.
+				\texttt{title} & A title for the map, typeset as a heading one level larger than its areas. It is only used by the outermost map. & (empty)
 			\end{RpgTable}
 		}
 		\RpgFunction{RpgMapRef}[RpgMapRef*]{\param{label}}
@@ -198,13 +198,13 @@
 
 
 		\subsection{Inside a Map}
-			Inside a map environment, the following commmands and environments are valid.
+			Inside a map environment, the following commands and environments are valid.
 
 			\RpgFunction{area}{[<label>]\{<name>\}}
 			{
 				Adds an area to the current map, much as \cmd{item} adds an item to a list. Its heading is `\texttt{<prefix><number>: <name>}', or `\texttt{<empty-prefix><number>}' if no \texttt{name} is given. Any text which follows forms the description of the area.
 
-				If a \texttt{label} is given, the area may be referred to with \cmd{RpgMapRef} or \cmd{RpgPage}. \cmd{area} is only defined within a map.
+				If a \texttt{label} is given, the area may be referred to with \cmd{RpgMapRef} or \cmd{RpgPage}.
 			}
 			\RpgEnvironment{RpgArea}{[<label>]\{<name>\}}
 			{
@@ -212,7 +212,7 @@
 
 				\RpgGetExample{env-map-nesting}
 			}
-	\section{Cards}\label{S:Card}
+	\section{RpgCards}\label{S:Card}
 
 		Cards are small, playing-card sized boxes, useful for handouts such as items, spells or abilities. If the content of a card is too long to fit, it is automatically continued onto further cards.
 
@@ -231,21 +231,29 @@
 		}
 		\RpgEnvironment{RpgCard}{[<options>]}
 		{
-			Typesets its contents in one or more cards, placed side by side. The text is typeset in the \FontRef{CardBody} font element. The following options are available, with the defaults given in brackets:
-			\begin{RpgTable}{lX}
-				Option & Effect
+			Typesets its contents in one or more cards, placed side by side. The text is typeset in the \FontRef{CardBody} font element. The following options are available:
+			\begin{RpgTable}{lXl}
+				Option & Effect & Default
 				\\
-				\texttt{cardsep} & The horizontal space between consecutive cards (\texttt{5pt}).
+				\texttt{cardsep} & The horizontal space between consecutive cards. & \texttt{5pt}
 				\\
-				\texttt{color}, \texttt{opacity} & The colour (\texttt{white}) and opacity (\texttt{1}) of the card's background.
+				\texttt{color} & The colour of the card's background. & \texttt{white}
 				\\
-				\texttt{footnote} & The symbol used to mark the card's footnote (\texttt{*}).
+				\texttt{footnote} & The symbol used to mark the card's footnote. & \texttt{*}
 				\\
-				\texttt{hmargin}, \texttt{vmargin} & The space between the edge of the card and its text (\texttt{0.2cm}). Each must be less than half of the corresponding dimension.
+				\texttt{height} & The outer height of each card. & \texttt{9.7cm}
 				\\
-				\texttt{vcentre} & If present, centres the text vertically within each card. (\texttt{vcenter} is also accepted.)
+				\texttt{hmargin} & The horizontal space between the edge of the card and its text. It must be less than half of the \texttt{width}. & \texttt{0.2cm}
 				\\
-				\texttt{width}, \texttt{height} & The outer dimensions of each card (\texttt{6.75cm} by \texttt{9.7cm}).
+				\texttt{opacity} & The opacity of the card's background. & \texttt{1}
+				\\
+				\texttt{vcenter} & An alias of \texttt{vcentre}. & off
+				\\
+				\texttt{vcentre} & If present, centres the text vertically within each card. & off
+				\\
+				\texttt{vmargin} & The vertical space between the edge of the card and its text. It must be less than half of the \texttt{height}. & \texttt{0.2cm}
+				\\
+				\texttt{width} & The outer width of each card. & \texttt{6.75cm}
 			\end{RpgTable}
 			Cards cannot be given a title, and cannot be nested within one another.
 
@@ -302,6 +310,3 @@
 			If the switch is on, the element is displayed as an \envref{RpgCard}, to which the \texttt{card-options} are passed. Otherwise (the default), it is displayed as normal text, and the \texttt{card-options} are ignored.
 
 		}
-
-
-

@@ -114,45 +114,63 @@
 
 			This flag is set by default when loading a class, but must be passed explicitly to enable this module when loading the package directly.
 		}
-	\section{Colo(u)rs}\label{S:Colors}
+	\section{Colors}\label{S:Colors}
 
-		\rpgtex{} defines a number of named colours\footnote{Although this document uses British spelling, the colour names follow the American spelling used throughout \LaTeX{} and \texttt{xcolor}, and must be written exactly as given (including capitalisation).} which are used by its various elements. The default values listed below may be overridden by the active theme.
+		\rpgtex{} defines a number of named colors which are used by its various elements. The default values listed below may be overridden by the active theme.
 
-		\subsection*{Co-varying Colours}
+		\begin{RpgSidebar}{A Note on Spelling}
+			Although this document otherwise uses British spelling, this section follows the American spelling of `color' used throughout \LaTeX{} and \texttt{xcolor}. The color names below must be written exactly as given, including their spelling and capitalization.
 
-			The following colours are coupled together, and by default all take the same value:
-			\begin{description}
-				\item[\texttt{ThemeColor}] A general-purpose colour from which the other co-varying colours inherit. Default: \texttt{white!60!black}.
-				\item[\texttt{SidebarColor}] The background colour of the \envref{RpgSidebar} environment.
-				\item[\texttt{TableColor}] The background colour of alternate rows in an \envref{RpgTable}.
-				\item[\texttt{TipColor}] The background colour of the \envref{RpgTip} environment.
-			\end{description}
+			An exception is in Gray/Grey, as I personally cannot remember which is the `right' way to spell it, so I have aliased most colours to use both spellings.
+		\end{RpgSidebar}
 
-			Calling \cmdref{RpgSetThemeColor} assigns a new value to \texttt{ThemeColor} and all three co-varying colours simultaneously:
+		\subsection*{Co-varying Colors}
+
+			The following colors are coupled together, and by default all take the same value:
+			\begin{RpgTable}{lXl}
+				Color & Usage & Default
+				\\
+				\texttt{SidebarColor} & The background color of the \envref{RpgSidebar} environment. & \texttt{ThemeColor}
+				\\
+				\texttt{TableColor} & The background color of alternate rows in an \envref{RpgTable}. & \texttt{ThemeColor}
+				\\
+				\texttt{ThemeColor} & A general-purpose color from which the other co-varying colors inherit. & \texttt{white!60!black}
+				\\
+				\texttt{TipColor} & The background color of the \envref{RpgTip} environment. & \texttt{ThemeColor}
+			\end{RpgTable}
+
+			Calling \cmdref{RpgSetThemeColor} assigns a new value to \texttt{ThemeColor} and all three co-varying colors simultaneously:
 			\begin{Code}
 				\cmd{RpgSetThemeColor}\{blue!20!white\}
 			\end{Code}
+		\subsection*{Independent Colors}
 
-		\subsection*{Independent Colours}
+			The remaining colors are set individually:
+			\begin{RpgTable}{lXl}
+				Color & Usage & Default
+				\\
+				\texttt{ContourInnerColor} & The default color of the inner text produced by \cmdref{RpgContour}. & \texttt{black}
+				\\
+				\texttt{ContourOuterColor} & The default color of the outer contour drawn around text by \cmdref{RpgContour}. & \texttt{white!50!black}
+				\\
+				\texttt{FiligreeBackColor} & The background color of the \envref{RpgFiligree} environment. & \texttt{white}
+				\\
+				\texttt{FiligreeColor} & The color used to draw the filigree frame applied by the \texttt{rpgfiligree} style. & \texttt{black}
+				\\
+				\texttt{NarrationColor} & The background color of the \envref{RpgNarration} environment. & \texttt{F7F2E5} (HTML)
+				\\
+				\texttt{PaperColor} & The background color of each page, applied only when the paper background is enabled (see the \texttt{bg} option, \RpgPage{S:PackageOptions}). & \texttt{white}
+				\\
+				\texttt{SecretColor} & The default frame color of the \envref{RpgSecret} environment. & \texttt{black!30!white}
+			\end{RpgTable}
 
-			The remaining colours are set individually:
-			\begin{description}
-				\item[\texttt{ContourInnerColor}] The default colour of the inner text produced by \cmdref{RpgContour}. Default: \texttt{black}.
-				\item[\texttt{ContourOuterColor}] The default colour of the outer contour drawn around text by \cmdref{RpgContour}. Default: \texttt{white!50!black}.
-				\item[\texttt{FiligreeBackColor}] The background colour of the \envref{RpgFiligree} environment. Default: \texttt{white}.
-				\item[\texttt{FiligreeColor}] The colour used to draw the filigree frame applied by the \texttt{rpgfiligree} style. Default: \texttt{black}.
-				\item[\texttt{NarrationColor}] The background colour of the \envref{RpgNarration} environment. Default: \texttt{F7F2E5} (HTML).
-				\item[\texttt{PaperColor}] The background colour of each page, applied only when the paper background is enabled (see the \texttt{bg} option, \RpgPage{S:PackageOptions}). Default: \texttt{white}.
-				\item[\texttt{SecretColor}] The default frame colour of the \envref{RpgSecret} environment. Default: \texttt{black!30!white}.
-			\end{description}
-
-			Any of these colours, including the co-varying colours, may be modified individually using the standard \texttt{xcolor} interface:
+			Any of these colors, including the co-varying colors, may be modified individually using the standard \texttt{xcolor} interface:
 			\begin{Code}
 				\cmd{definecolor}\{NarrationColor\}\{HTML\}\{FFFFFF\}
 
 				\cmd{colorlet}\{SidebarColor\}\{red!10!white\}
 			\end{Code}
-			Modifying a co-varying colour in this way changes only that colour, leaving the others unaffected.
+			Modifying a co-varying color in this way changes only that color, leaving the others unaffected.
 
 	\section{Command Line Interface}\label{S:CMD}
 
