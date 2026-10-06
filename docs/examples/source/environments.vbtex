@@ -20,11 +20,11 @@
        
     \end{tikzpicture}
 
-    \vspace{0.5cm}
-
-    %shrink so it fits in display area
+% example = env-card-overflow
+%title = RpgCard example
+% highlight = RpgCard, footnote
     \begin{RpgCard}[vmargin=0.1cm, hmargin=0.1cm, height=5.2cm, width=3.6cm]
-            \raggedright\footnotesize And if we add lots of text\footnote{And maybe a footnote too?}
+		\raggedright\footnotesize  This is an example card with lots of text\footnote{And maybe a footnote too?}.
         \lipsum[2]
     \end{RpgCard}
 
@@ -176,14 +176,6 @@
         The value of the key is \RpgGetKey{<key>}.
     \end{RpgItem}
 
-% example = env-rule
-% options = listing only
-% highlight = RpgItem, RpgSwitch
-    \RpgSwitch{UseItemCard}{false} % text mode (the default)
-
-    \begin{RpgItem}[<card-options>]{<name>}[<properties>]
-        <description>
-    \end{RpgItem}
 
 %% example = env-full-featureforge
 %highlight = TestObject, RpgMakeFeature, TestObjectAddProperty

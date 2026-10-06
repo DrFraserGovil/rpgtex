@@ -67,9 +67,9 @@
 			{
 				Fades the \cmd{cover} image towards white, which can help to keep the title legible over a busy image. The \texttt{value} is the opacity of a white layer placed over the image, between \texttt{0} (the image is unaltered) and \texttt{1} (the image is completely hidden). The default value is \texttt{0}.
 			}
-			\RpgVariable{RpgGetAuthor}[RpgGetAuthor*]{The author set by \cmd{author}, formatted with the \cmd{RpgFontSubTitle} font element. The starred form gives the author as plain text.}
-			\RpgVariable{RpgGetSubtitle}[RpgGetSubtitle*]{The subtitle set by \cmd{subtitle}, formatted with the \cmd{RpgFontSubTitle} font element. The starred form gives the subtitle as plain text.}
-			\RpgVariable{RpgGetTitle}[RpgGetTitle*]{The title set by \cmd{title}, formatted with the \cmd{RpgFontTitle} font element \RpgPage[p]{C:Fonts}. The starred form gives the title as plain text, without applying the font.}
+			\RpgVariable{RpgGetAuthor}[RpgGetAuthor*]{The author set by \cmd{author}, formatted with the \FontRef{SubTitle} font element. The starred form gives the author as plain text.}
+			\RpgVariable{RpgGetSubtitle}[RpgGetSubtitle*]{The subtitle set by \cmd{subtitle}, formatted with the \FontRef{SubTitle} font element. The starred form gives the subtitle as plain text.}
+			\RpgVariable{RpgGetTitle}[RpgGetTitle*]{The title set by \cmd{title}, formatted with the \FontRef{Title} font element \RpgPage[p]{C:Fonts}. The starred form gives the title as plain text, without applying the font.}
 
 			\RpgFunction{subtitle}{\param{text}}
 			{
@@ -168,7 +168,7 @@
 		}
 		\RpgFunction{RpgDropCap}{[<options>]\param{letter}\param{text}}
 		{
-			Begins a paragraph with a large decorative initial (a `drop cap'), using the \texttt{lettrine} package. The \texttt{letter} is typeset in the \cmd{RpgFontDropCap} font element, and \texttt{text} -- intended to be the remainder of the first line -- in the \cmd{RpgFontDropCapAfter} font element.
+			Begins a paragraph with a large decorative initial (a `drop cap'), using the \texttt{lettrine} package. The \texttt{letter} is typeset in the \FontRef{DropCap} font element, and \texttt{text} -- intended to be the remainder of the first line -- in the \FontRef{DropCapAfter} font element.
 
 			The drop cap spans a number of lines set by the theme (four, by default), and is separated from the following text by the length \cmd{RpgDropCapSeparation}, which may be changed with \cmd{setlength}. The optional argument accepts any \texttt{lettrine} options, which override these defaults.
 
@@ -177,7 +177,7 @@
 		}
 		\RpgFunction{RpgKey}[emph]{\param{text}}
 		{
-			Typesets \texttt{text} in the \cmd{RpgFontEmphasis} font element, giving a consistent appearance to keywords (such as conditions or game terms).
+			Typesets \texttt{text} in the \FontRef{Emphasis} font element, giving a consistent appearance to keywords (such as conditions or game terms).
 
 			When the \texttt{font} option is active, and unless the \texttt{noemph} option is passed \RpgPage[p]{S:PackageOptions}, \cmd{emph} is redefined to be an alias of \cmd{RpgKey}. This replaces its usual `context-aware' behaviour (italics within upright text, and vice versa) with the keyword style.
 

@@ -52,7 +52,7 @@
 
 \NewDocumentCommand \RpgKeyval{m O{} m +m}
 {
-	\MarginBlock{\textbackslash{}begin\{\env{#1}\}}[KeyVal][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
+	\MarginBlock{\env{#1}}[KeyVal][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
 	{
 		#3
 	}[KeyValBackground]
@@ -103,7 +103,11 @@
 }
 \NewDocumentCommand\RpgEnvironment{+m O{} +m  +m}
 {
-	\MarginBlock{\declareEnv{#1}}[Environment][\tl_if_blank:nF{#2}{\declareEnv{#2}}]
+	\MarginBlock{\tt
+		{\color{Environment!40!white}\textbackslash{}begin\{~}
+		\declareEnv{#1}
+		{\color{Environment!40!white}\ \}}
+	}[Environment][\tl_if_blank:nF{#2}{\declareEnv{#2}}]
 	{
 		\tt #3
 	}[EnvironmentBackground]

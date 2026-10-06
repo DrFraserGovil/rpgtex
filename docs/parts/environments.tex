@@ -1,4 +1,15 @@
 % !TEX root = ../documentation.tex
+\def\fmt{\color{gray!60}\small}
+\def\lorumIpsumOne{{\fmt{}Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit,
+			vestibulum ut, placerat ac, adipiscing vitae, felis. Curabitur dictum gravida mauris. }}
+\def\lorumIpsumTwo{{\fmt{}Nam arcu libero, nonummy eget,
+			consectetuer id, vulputate a, magna. Donec vehicula augue eu neque.
+			Pellentesque habitant morbi tristique senectus et netus et malesuada
+			fames ac turpis egestas. }}
+\def\lorumIpsumThree{{\fmt{}Mauris ut leo. Cras viverra metus rhoncus
+			sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu
+			tellus sit amet tortor gravida placerat. Integer sapien est, iaculis in,
+			pretium quis, viverra ac, nunc. }}
 \chapter{Environments}
 
 	\rpgtex{} provides a number of environments for the elements which appear throughout RPG books: boxed text, tables, map keys, secrets and playing cards. Their appearance (fonts, colours and decoration) is set by the active theme, but may be adjusted through their options.
@@ -27,19 +38,19 @@
 
 		\RpgEnvironment{RpgNarration}{[<options>]}
 		{
-			A box for text to be read aloud. It has no title, and its text is typeset in the \cmd{RpgFontNarration} font element on a \texttt{NarrationColor} background.
+			A box for text to be read aloud. It has no title, and its text is typeset in the \FontRef{Narration} font element on a \texttt{NarrationColor} background.
 
 			\RpgGetExample{env-narration}
 		}
 		\RpgEnvironment{RpgSidebar}{[<options>]\param{title}}
 		{
-			A box for important information, with a title. The title and body are typeset in the \cmd{RpgFontSidebarTitle} and \cmd{RpgFontSidebarBody} font elements, and the background is \texttt{SidebarColor}.
+			A box for important information, with a title. The title and body are typeset in the \FontRef{SidebarTitle} and \FontRef{SidebarBody} font elements, and the background is \texttt{SidebarColor}.
 
 			\RpgGetExample{env-sidebar}
 		}
 		\RpgEnvironment{RpgTip}{[<options>]\param{title}}
 		{
-			A box for helpful additions, with a title. The title and body are typeset in the \cmd{RpgFontTipTitle} and \cmd{RpgFontTipBody} font elements, and the background is \texttt{TipColor}.
+			A box for helpful additions, with a title. The title and body are typeset in the \FontRef{TipTitle} and \FontRef{TipBody} font elements, and the background is \texttt{TipColor}.
 
 			\RpgGetExample{env-tip}
 		}
@@ -56,7 +67,7 @@
 
 			By default, the table:
 			\begin{itemize}
-				\item Typesets its first row as a header, in the \cmd{RpgFontTableHeader} font element, and the remaining rows in \cmd{RpgFontTableBody}.
+				\item Typesets its first row as a header, in the \FontRef{TableHeader} font element, and the remaining rows in \FontRef{TableBody}.
 				\item Colours alternate rows in \texttt{TableColor} \RpgPage[p]{S:Colors}, beginning with the second row.
 			\end{itemize}
 			The following options are available:
@@ -87,7 +98,7 @@
 				\\
 				\texttt{simple} & If present, uses a plain \texttt{tabular}, whose width is determined by its contents. The \texttt{width}, \texttt{breakable} and \texttt{noheader} options are then ignored, and the first row is not styled as a header. & off
 				\\
-				\texttt{title} & A title, typeset above the table in the \cmd{RpgFontTableTitle} font element. & (empty)
+				\texttt{title} & A title, typeset above the table in the \FontRef{TableTitle} font element. & (empty)
 				\\
 				\texttt{vskip} & The vertical space above and below the table. & \texttt{9pt plus 3pt minus 3pt}
 				\\
@@ -101,7 +112,7 @@
 
 		\RpgEnvironment{RpgAbstract}[abstract]{[<title>][<width>][<gap>]}
 		{
-			Typesets a short, centred summary block, such as the introduction to an adventure. The \texttt{title} (default: `Abstract') is typeset in the \cmd{RpgFontAbstractTitle} font element, and the body in \cmd{RpgFontAbstractBody}. The block has the given \texttt{width} (default: \texttt{0.7\textbackslash{}linewidth}), with a vertical \texttt{gap} above and below it (default: \texttt{15pt}).
+			Typesets a short, centred summary block, such as the introduction to an adventure. The \texttt{title} (default: `Abstract') is typeset in the \FontRef{AbstractTitle} font element, and the body in \FontRef{AbstractBody}. The block has the given \texttt{width} (default: \texttt{0.7\textbackslash{}linewidth}), with a vertical \texttt{gap} above and below it (default: \texttt{15pt}).
 
 			In two-column mode, the block spans both columns. The standard \texttt{abstract} environment is redefined to be identical to \texttt{RpgAbstract}.
 		}
@@ -149,20 +160,9 @@
 				\\
 				\texttt{switch} & The switch which controls this secret. Default: \texttt{ShowSecrets}. Using a different switch allows separate groups of secrets to be revealed independently.
 			\end{RpgTable}
-			The labels are typeset in the \cmd{RpgFontSecretTitle} font element.
+			The labels are typeset in the \FontRef{SecretTitle} font element.
 		}
 
-		\def\fmt{\color{gray!60}\small}
-		\def\lorumIpsumOne{{\fmt{}Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Ut purus elit,
-					vestibulum ut, placerat ac, adipiscing vitae, felis. Curabitur dictum gravida mauris. }}
-		\def\lorumIpsumTwo{{\fmt{}Nam arcu libero, nonummy eget,
-					consectetuer id, vulputate a, magna. Donec vehicula augue eu neque.
-					Pellentesque habitant morbi tristique senectus et netus et malesuada
-					fames ac turpis egestas. }}
-		\def\lorumIpsumThree{{\fmt{}Mauris ut leo. Cras viverra metus rhoncus
-					sem. Nulla et lectus vestibulum urna fringilla ultrices. Phasellus eu
-					tellus sit amet tortor gravida placerat. Integer sapien est, iaculis in,
-					pretium quis, viverra ac, nunc. }}
 
 		\RpgGetExample{env-secret-hide}
 		\RpgGetExample{env-secret-show}
@@ -171,18 +171,6 @@
 
 		Adventures often describe a location as a numbered list of areas, which correspond to the labels on a map. The \texttt{RpgMap} environment produces such a list, numbering and nesting the areas automatically.
 
-		\RpgFunction{area}{[<label>]\{<name>\}}
-		{
-			Adds an area to the current map, much as \cmd{item} adds an item to a list. Its heading is `\texttt{<prefix><number>: <name>}', or `\texttt{<empty-prefix><number>}' if no \texttt{name} is given. Any text which follows forms the description of the area.
-
-			If a \texttt{label} is given, the area may be referred to with \cmd{RpgMapRef} or \cmd{RpgPage}. \cmd{area} is only defined within a map.
-		}
-		\RpgEnvironment{RpgArea}{[<label>]\{<name>\}}
-		{
-			Adds an area to the current map, and begins a nested map within it, so that the body of the environment may contain sub-areas. It is equivalent to an \cmd{area} followed by an \texttt{RpgMap} environment, and raises an error if used outside of a map.
-
-			\RpgGetExample{env-map-nesting}
-		}
 		\RpgEnvironment{RpgMap}{[<options>]}
 		{
 			Begins a list of map areas, each of which is created with \cmd{area}. Each area is given a heading, whose size depends on how deeply the map is nested: \cmd{section*} at the top level, then \cmd{subsection*}, and so on, down to \cmd{subparagraph*}. These headings do not appear in the table of contents.
@@ -202,16 +190,36 @@
 		}
 		\RpgFunction{RpgMapRef}[RpgMapRef*]{\param{label}}
 		{
-			Typesets the name of the labelled area. The starred form typesets its number instead. Both are hyperlinks to the area.
-
+			Typesets the name of the labelled area. The starred form typesets its number instead.
+			This is a wrapper around \cmd{ref} and \cmd{nameref}.
 			\RpgGetExample{env-map-refs}
 		}
 
+
+
+		\subsection{Inside a Map}
+			Inside a map environment, the following commmands and environments are valid.
+
+			\RpgFunction{area}{[<label>]\{<name>\}}
+			{
+				Adds an area to the current map, much as \cmd{item} adds an item to a list. Its heading is `\texttt{<prefix><number>: <name>}', or `\texttt{<empty-prefix><number>}' if no \texttt{name} is given. Any text which follows forms the description of the area.
+
+				If a \texttt{label} is given, the area may be referred to with \cmd{RpgMapRef} or \cmd{RpgPage}. \cmd{area} is only defined within a map.
+			}
+			\RpgEnvironment{RpgArea}{[<label>]\{<name>\}}
+			{
+				Adds an area to the current map, and begins a nested map within it, so that the body of the environment may contain sub-areas. It is equivalent to an \cmd{area} followed by an \texttt{RpgMap} environment, and raises an error if used outside of a map.
+
+				\RpgGetExample{env-map-nesting}
+			}
 	\section{Cards}\label{S:Card}
 
 		Cards are small, playing-card sized boxes, useful for handouts such as items, spells or abilities. If the content of a card is too long to fit, it is automatically continued onto further cards.
 
 		Cards are rarely used directly: they are most often created by the rule environments \RpgPage[p]{S:RuleEnvs}, which can display the same content either as normal text or as a card.
+
+		%% this is large and non-page breaking, so put it outside the macro defs
+		\RpgGetExample{env-card-overflow}
 
 		\RpgFunction{cardbreak}{\param{}}
 		{
@@ -223,7 +231,7 @@
 		}
 		\RpgEnvironment{RpgCard}{[<options>]}
 		{
-			Typesets its contents in one or more cards, placed side by side. The text is typeset in the \cmd{RpgFontCardBody} font element. The following options are available, with the defaults given in brackets:
+			Typesets its contents in one or more cards, placed side by side. The text is typeset in the \FontRef{CardBody} font element. The following options are available, with the defaults given in brackets:
 			\begin{RpgTable}{lX}
 				Option & Effect
 				\\
@@ -268,6 +276,7 @@
 		\end{RpgTable}
 		Each may be displayed either as normal text or as a card, controlled by a switch. Since the available properties depend on the theme, consult the documentation of the active theme for the details of each.
 
+
 		\RpgVariable{RpgGetKey}{The value given to a property of the current rule environment, such as \cmd{RpgGetKey}\param{rarity}. It may only be used within a rule environment.
 
 			\RpgGetExample{env-getkey}
@@ -276,21 +285,23 @@
 		{
 			Begins the environment \texttt{env-on} (with \texttt{options-on}) if \texttt{switch} is on, and \texttt{env-off} (with \texttt{options-off}) otherwise. Any arguments which follow are passed to the chosen environment, so both environments must take the same arguments. This is the mechanism by which the rule environments switch between text and card modes, and it may be used to create similar switchable environments.
 		}
-		\RpgEnvironment{RpgItem}[RpgSpell, RpgFeat, RpgStat]{[<card-options>]\param{name}[<properties>]}
+		\RpgEnvironment{Rpg[X]}{[<card-options>]\param{name}[<properties>]}
 		{
-			Typesets a rule element called \texttt{name}, with the given \texttt{properties} (a list of key-value pairs defined by the theme). Its display depends on the corresponding switch \RpgPage[p]{S:Switches}:
+			Typesets the rule element 'X' called \texttt{name}, with the given \texttt{properties} (a list of key-value pairs defined by the theme). Its display depends on the corresponding switch \RpgPage[p]{S:Switches}:
 			\begin{RpgTable}{lX}
-				Environment & Switch
+				Environment (X) & Switch
 				\\
-				\texttt{RpgFeat} & \texttt{UseFeatCard}
+				\env{RpgFeat} & \texttt{UseFeatCard}
 				\\
-				\texttt{RpgItem} & \texttt{UseItemCard}
+				\env{RpgItem} & \texttt{UseItemCard}
 				\\
-				\texttt{RpgSpell} & \texttt{UseSpellCard}
+				\env{RpgSpell} & \texttt{UseSpellCard}
 				\\
-				\texttt{RpgStat} & \texttt{UseStatCard}
+				\env{RpgStat} & \texttt{UseStatCard}
 			\end{RpgTable}
 			If the switch is on, the element is displayed as an \envref{RpgCard}, to which the \texttt{card-options} are passed. Otherwise (the default), it is displayed as normal text, and the \texttt{card-options} are ignored.
 
-			\RpgGetExample{env-rule}
 		}
+
+
+

@@ -2,10 +2,10 @@
 \chapter{Fonts} \label{C:Fonts}
 
 
-	\rpgtex{} allows a high degree of customisation of the fonts and typefaces used throughout a document. Rather than setting fonts directly, each part of the document (headings, table text, footers and so on) draws its font from a named \emph{font element}, such as \cmd{RpgFontSection}. The theme defines the appearance of each element using \cmd{RpgThemeFont}, and assigns each element to the relevant part of the document. Changing the appearance of an element therefore changes it consistently wherever that element is used.
+	\rpgtex{} allows a high degree of customisation of the fonts and typefaces used throughout a document. Rather than setting fonts directly, each part of the document (headings, table text, footers and so on) draws its font from a named \emph{font element}, such as \FontRef{Section}. The theme defines the appearance of each element using \cmd{RpgThemeFont}, and assigns each element to the relevant part of the document. Changing the appearance of an element therefore changes it consistently wherever that element is used.
 
 	\begin{RpgSidebar}{Why didn't my font change?}
-		\cmd{RpgThemeFont} does not change any fonts directly: it updates the stored definition of a \emph{font element}, which a theme designer must then assign to the relevant part of the document. For example, the \cmd{RpgFontSection} element does not `hook in' to the \cmd{section} command by itself; it changes the section font only because most themes call \texttt{\textbackslash{}titleformat\{\textbackslash{}section\}\{\textbackslash{}RpgFontSection\}...}. If the \texttt{titleformat} were later changed (for whatever reason), the section font would no longer update.
+		\cmd{RpgThemeFont} does not change any fonts directly: it updates the stored definition of a \emph{font element}, which a theme designer must then assign to the relevant part of the document. For example, the \FontRef{Section} element does not `hook in' to the \cmd{section} command by itself; it changes the section font only because most themes call \texttt{\textbackslash{}titleformat\{\textbackslash{}section\}\{\textbackslash{}RpgFontSection\}...}. If the \texttt{titleformat} were later changed (for whatever reason), the section font would no longer update.
 
 		If an element does not change font after its definition is updated, first check that the font element is actually being invoked -- and if not, invoke it manually. Once the command is in place, the font will change as expected.
 
@@ -14,6 +14,7 @@
 
 
 	\section{Font Commands}
+
 
 		\RpgFunction{RpgThemeFont}{\param{key-value-list}}
 		{
@@ -53,44 +54,44 @@
 		\end{RpgSidebar}
 
 
-		\index{Fonts|see {RpgFont[X]}}\index{RpgFont[X]}
+
 		\begin{fontlist}
-			\FontElement{RpgFontBody}{main-body}{The main body text of the document. \cmd{RpgThemeFont} sets \cmd{normalfont} equal to this element.
+			\FontElement{Body}{main-body}{The main body text of the document. \cmd{RpgThemeFont} sets \cmd{normalfont} equal to this element.
 
 				Changing the font size here (e.g.\ with \cmd{large}) can give counterintuitive results, since it affects \textit{only} the body text and does not scale the other elements accordingly. The font size of the whole document should instead be set using the \texttt{size} option \RpgPage[p]{S:PackageOptions}.
 			}
-			\FontElement{RpgFontEmphasis}{emph}{The font used by \cmd{RpgKey}, and therefore by \cmd{emph} unless the \texttt{noemph} option is passed.}
-			\FontElement{RpgFontTitle}{title}{The font used for the document title, as returned by \cmd{RpgGetTitle} and displayed by \cmd{maketitle}.}
-			\FontElement{RpgFontSubTitle}{subtitle}{The font used for the subtitle and author, as returned by \cmd{RpgGetSubtitle} and \cmd{RpgGetAuthor} and displayed by \cmd{maketitle}.}
-			\FontElement{RpgFontPart}{part}{The font used for the part name on the part page created by \cmd{part}.}
-			\FontElement{RpgFontChapter}{chapter}{The font used for \cmd{chapter} headings.}
-			\FontElement{RpgFontSection}{section}{The font used for \cmd{section} headings.}
-			\FontElement{RpgFontSubsection}{subsection}{The font used for \cmd{subsection} headings.}
-			\FontElement{RpgFontSubsubsection}{subsubsection}{The font used for \cmd{subsubsection} headings.}
-			\FontElement{RpgFontParagraph}{paragraph}{The font used for \cmd{paragraph} headings.}
-			\FontElement{RpgFontSubparagraph}{subparagraph}{The font used for \cmd{subparagraph} headings.}
-			\FontElement{RpgFontTableTitle}{table-title}{The title of an \envref{RpgTable}, if one is set using the \texttt{title} option.}
-			\FontElement{RpgFontTableHeader}{table-header}{The first (header) row of an \envref{RpgTable}.}
-			\FontElement{RpgFontTableBody}{table-body}{The rows of an \envref{RpgTable} after the header row.}
-			\FontElement{RpgFontTipTitle}{tip-title}{The title of an \envref{RpgTip} environment.}
-			\FontElement{RpgFontTipBody}{tip-body}{The body of an \envref{RpgTip} environment.}
-			\FontElement{RpgFontSidebarTitle}{sidebar-title}{The title of an \envref{RpgSidebar} environment.}
-			\FontElement{RpgFontSidebarBody}{sidebar-body}{The body of an \envref{RpgSidebar} environment.}
-			\FontElement{RpgFontNarration}{narration}{All text within an \envref{RpgNarration} environment (which has no title).}
-			\FontElement{RpgFontAbstractTitle}{abstract-title}{The title of an \envref{RpgAbstract} environment.}
-			\FontElement{RpgFontAbstractBody}{abstract-body}{The body of an \envref{RpgAbstract} environment.}
-			\FontElement{RpgFontSecretTitle}{secret-title}{The labels which distinguish the hidden and public text of an \envref{RpgSecret} environment when secrets are shown.}
-			\FontElement{RpgFontCardTitle}{card-title}{The title of a card, as used by the card-switching environments of the provided themes (such as \texttt{RpgItem}).}
-			\FontElement{RpgFontCardHeader}{card-header}{Subheadings and descriptive headers within a card (such as the type and rarity of an \texttt{RpgItem}).}
-			\FontElement{RpgFontCardBody}{card-body}{The body text of an \envref{RpgCard}.}
-			\FontElement{RpgFontTocPart}{toc-part}{Part entries in the table of contents.}
-			\FontElement{RpgFontTocChapter}{toc-chapter}{Chapter entries in the table of contents.}
-			\FontElement{RpgFontTocSection}{toc-section}{Section entries in the table of contents.}
-			\FontElement{RpgFontStatBlockTitle}{stat-block-title}{The title of a statblock environment (in the dnd theme, \texttt{RpgStat}).}
-			\FontElement{RpgFontStatBlockBody}{stat-block-body}{The body text of a statblock environment.}
-			\FontElement{RpgFontStatBlockSection}{stat-block-section}{Section headings within a statblock environment.}
-			\FontElement{RpgFontFooter}{footer}{The footer text.}
-			\FontElement{RpgFontPageNumber}{page-number}{The page number within the footer.}
-			\FontElement{RpgFontDropCap}{drop-cap}{The large initial letter created by \cmd{RpgDropCap}.}
-			\FontElement{RpgFontDropCapAfter}{drop-cap-after}{The text which follows the initial letter of an \cmd{RpgDropCap}, on the first line.}
+			\FontElement{Emphasis}{emph}{The font used by \cmd{RpgKey}, and therefore by \cmd{emph} unless the \texttt{noemph} option is passed.}
+			\FontElement{Title}{title}{The font used for the document title, as returned by \cmd{RpgGetTitle} and displayed by \cmd{maketitle}.}
+			\FontElement{SubTitle}{subtitle}{The font used for the subtitle and author, as returned by \cmd{RpgGetSubtitle} and \cmd{RpgGetAuthor} and displayed by \cmd{maketitle}.}
+			\FontElement{Part}{part}{The font used for the part name on the part page created by \cmd{part}.}
+			\FontElement{Chapter}{chapter}{The font used for \cmd{chapter} headings.}
+			\FontElement{Section}{section}{The font used for \cmd{section} headings.}
+			\FontElement{Subsection}{subsection}{The font used for \cmd{subsection} headings.}
+			\FontElement{Subsubsection}{subsubsection}{The font used for \cmd{subsubsection} headings.}
+			\FontElement{Paragraph}{paragraph}{The font used for \cmd{paragraph} headings.}
+			\FontElement{Subparagraph}{subparagraph}{The font used for \cmd{subparagraph} headings.}
+			\FontElement{TableTitle}{table-title}{The title of an \envref{RpgTable}, if one is set using the \texttt{title} option.}
+			\FontElement{TableHeader}{table-header}{The first (header) row of an \envref{RpgTable}.}
+			\FontElement{TableBody}{table-body}{The rows of an \envref{RpgTable} after the header row.}
+			\FontElement{TipTitle}{tip-title}{The title of an \envref{RpgTip} environment.}
+			\FontElement{TipBody}{tip-body}{The body of an \envref{RpgTip} environment.}
+			\FontElement{SidebarTitle}{sidebar-title}{The title of an \envref{RpgSidebar} environment.}
+			\FontElement{SidebarBody}{sidebar-body}{The body of an \envref{RpgSidebar} environment.}
+			\FontElement{Narration}{narration}{All text within an \envref{RpgNarration} environment (which has no title).}
+			\FontElement{AbstractTitle}{abstract-title}{The title of an \envref{RpgAbstract} environment.}
+			\FontElement{AbstractBody}{abstract-body}{The body of an \envref{RpgAbstract} environment.}
+			\FontElement{SecretTitle}{secret-title}{The labels which distinguish the hidden and public text of an \envref{RpgSecret} environment when secrets are shown.}
+			\FontElement{CardTitle}{card-title}{The title of a card, as used by the card-switching environments of the provided themes (such as \texttt{RpgItem}).}
+			\FontElement{CardHeader}{card-header}{Subheadings and descriptive headers within a card (such as the type and rarity of an \texttt{RpgItem}).}
+			\FontElement{CardBody}{card-body}{The body text of an \envref{RpgCard}.}
+			\FontElement{TocPart}{toc-part}{Part entries in the table of contents.}
+			\FontElement{TocChapter}{toc-chapter}{Chapter entries in the table of contents.}
+			\FontElement{TocSection}{toc-section}{Section entries in the table of contents.}
+			\FontElement{StatBlockTitle}{stat-block-title}{The title of a statblock environment (in the dnd theme, \texttt{RpgStat}).}
+			\FontElement{StatBlockBody}{stat-block-body}{The body text of a statblock environment.}
+			\FontElement{StatBlockSection}{stat-block-section}{Section headings within a statblock environment.}
+			\FontElement{Footer}{footer}{The footer text.}
+			\FontElement{PageNumber}{page-number}{The page number within the footer.}
+			\FontElement{DropCap}{drop-cap}{The large initial letter created by \cmd{RpgDropCap}.}
+			\FontElement{DropCapAfter}{drop-cap-after}{The text which follows the initial letter of an \cmd{RpgDropCap}, on the first line.}
 		\end{fontlist}

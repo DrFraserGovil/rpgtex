@@ -9,16 +9,19 @@
 		#1
 	\end{RpgTable}}{}
 
-\NewDocumentCommand{\FontElement}{m +m +m}
+\NewDocumentCommand{\FontElement}{O{RpgFont} m +m +m}
 {
-\small\tt\cmd{#1}
-
-\tl_set:Nx \l_tmpa_tl { \str_range:nnn {#1} {8} {-1} }
+\small\tt \declareCmd{#1#2}
 
 &
-\parbox[t]{4cm}{\tt {#2-family} \\ {#2-style} }
+\parbox[t]{4cm}{\tt {#3-family} \\ {#3-style} }
 &
-#3
+#4
 \\
+}
+
+\NewDocumentCommand\FontRef{m}
+{
+	\cmdref{RpgFont#1}
 }
 \ExplSyntaxOff
