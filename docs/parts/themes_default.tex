@@ -4,17 +4,17 @@
 
 	As the name suggests, the \texttt{default} theme is the theme which is loaded if no arguments are passed to \texttt{theme} when loading the \rpgtex{} package. As such, it is largely a re-statement of the default \LaTeX{} values. This is important, as most other themes begin by first re-inserting the default theme; thereby resetting everything into a `known state'. This means that they only need to define formatting which differs from the default.
 
-	The majority of this document has been typeset in a rpgbook class \RpgPage[p]{S:bookClass} using the default theme.
+	The majority of this document has been typeset in the rpgbook class \RpgPage[p]{S:bookClass} using the default theme.
 
 	\section{Appearance}
 		\subsection{Fonts}
-			If the fonts module is loaded, the default format defines only a single font: the Latin Modern Roman font, the standard \LaTeX{} font. For consistency with the rest of the library (which uses fontspec-defined fonts), we have used an OTF version of LMR which is available on all systems with a valid TeXLive package.
+			If the \texttt{font} option is active, the default theme defines a single font family, \cmd{lrfont}: Latin Modern Roman, the standard \LaTeX{} font. For consistency with the rest of the library (which uses fontspec-defined fonts), we have used an OTF version of Latin Modern Roman, which is available on all systems with a TeX Live installation. It is used for the body text and the headings. The titles and headers of tables, the titles of tips and sidebars, and the section headings of statblocks instead use the standard sans-serif family, Latin Modern Sans.
 
 			\RpgFunction{lrfont}{\param{}}{
 				Applies the Latin Modern Roman font-family (extended with a small-caps font; Latin Modern Roman Caps) defined by the default theme
 			}
 
-			The values assigned to the font elements areas follows (note that \cmd{normalfont} is aliased to the value of RpgFontBody).
+			The values assigned to the font elements are as follows (note that \cmd{normalfont} is aliased to the value of \FontRef{Body}).
 
 			\InsertFontTable{}
 
@@ -25,7 +25,7 @@
 			\DefaultSwatches{}
 
 		\subsection{Backgrounds \& Footers}
-			The default theme defines no background or headers (and clears any existing ones). The footer consists of the chapter name and a page number, using the appropriate fonts (\cmd{RpgFontFooter} and \cmd{RpgFontPageNumber}).
+			The default theme defines no background or headers (and clears any existing ones). The footer consists of the chapter name and a page number, using the appropriate fonts (\FontRef{Footer} and \FontRef{PageNumber}).
 
 
 		\subsection{Text Boxes}
@@ -47,10 +47,11 @@
 				\end{RpgNarration}
 				\vfil
 				\begin{RpgFiligree}
-					The filigree uses an arbitrary pattern:
-
+					The filigree decorates each corner with curved strokes.
 				\end{RpgFiligree}
 			\end{multicols}
+
+			The filigree frame \RpgPage[p]{S:Filigree} draws four nested, curved strokes across each corner of the box, in \texttt{FiligreeColor}. The strokes reach from 0.2 to 1.4 times \cmdref{RpgFiligreeSize} along each edge, so the design grows and shrinks with that size.
 
 
 
@@ -78,10 +79,18 @@
 
 		\subsection{Section Headers}
 
-			Only parts and chapters\footnote{If in an rpgbook / other class which support chapters and parts} are numbered; all other section/subsections (etc.) are unnumbered. Otherwise there are no changes made to the titles aside from minor spacing changes, and the assignment of the relevant fonts.
+			Only parts and chapters\footnote{In rpgbook, or another class which supports chapters and parts.} are numbered; all other section/subsections (etc.) are unnumbered. Each level uses its own font element, with some changes to the spacing, and two changes to the standard layout:
+			\begin{itemize}
+				\item A chapter heading is a single line, `Chapter 3: Title', rather than the number and title on separate lines. In the appendices, `Chapter' is replaced by `Appendix'.
+				\item Paragraph and subparagraph headings are run into the start of their text, and followed by a full stop. Subparagraph headings are also indented.
+			\end{itemize}
 
 
 			\RpgGetExample{theme-section-headers}
+
+		\subsection{Table of Contents}
+
+			The table of contents lists only parts, chapters and sections. Each part is listed as `Part I: Title', with a rule beneath it, and each chapter as `3: Title'. Sections are indented beneath their chapter, with a dotted line leading to their page number. Parts and chapters are not given page numbers, except in the appendices, where each chapter is listed as `Appendix A: Title', with its page number. The contents of this manual are typeset in the default theme.
 
 		\subsection{RpgDice}\index{RpgDice}
 
