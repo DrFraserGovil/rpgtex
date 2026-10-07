@@ -110,7 +110,9 @@
 \subtitle{}
 \cover{}
 \newcommand\tocchapapp{}
+\newcommand\tocchappage{}
 \g@addto@macro\appendix{%
 	\addtocontents{toc}{\protect\renewcommand{\protect\@chapapp}{Appendix}}%
 	\addtocontents{toc}{\protect\renewcommand{\protect\tocchapapp}{Appendix}}%
+	\addtocontents{toc}{\protect\renewcommand{\protect\tocchappage}{\protect\titlerule*{.}\protect\contentspage}}%
 }

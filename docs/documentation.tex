@@ -60,7 +60,8 @@
 		\appendix
 		\input{parts/appendix_compiler.tex}
 		\input{parts/appendix_dependencies.tex}
-		\RpgFake{chapter}{Index}
+		\refstepcounter{chapter}
+		\setindexprenote{\RpgFake{chapter}{Appendix \thechapter: Index}}
 		{\footnotesize\tt
 			\idxlayout{columns=3}
 			\printindex
