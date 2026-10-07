@@ -1,4 +1,4 @@
-%% THe RPG-book class is used for writing long-form documents
+%% The RPG-book class is used for writing long-form documents
 %%It activates the rpg geometry, and overloads title pages and part pages to the theme-determined options
 
 \RequirePackage {expl3}
