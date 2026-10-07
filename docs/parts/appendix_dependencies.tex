@@ -16,6 +16,8 @@
 					\item \texttt{cuted} (\texttt{sttools})
 					\item \texttt{enumitem}
 					\item \texttt{eso-pic}
+					\item \texttt{extarticle}* (\texttt{extsizes})
+					\item \texttt{extbook}* (\texttt{extsizes})
 					\item \texttt{fancyhdr}
 					\item \texttt{float}
 					\item \texttt{fontenc}* (\texttt{latex})
@@ -52,13 +54,14 @@
 
 	The packages marked with an asterisk are loaded as follows:
 	\begin{itemize}
+		\item \texttt{extarticle} and \texttt{extbook}: as the base classes of \texttt{rpghandout} and \texttt{rpgbook} respectively.
 		\item \texttt{fontenc} and \texttt{fontspec}: when the \texttt{font} option is active \RpgPage[p]{S:PackageOptions}.
 		\item \texttt{geometry}: by the \rpgtex{} classes.
 		\item \texttt{luacolor}: when compiling with \texttt{lualatex}.
 		\item \texttt{multitoc}: by the \rpgtex{} classes, unless the \texttt{nomultitoc} option is used.
 		\item \texttt{standalone}: by the \texttt{rpgcard} and \texttt{rpgdeck} classes.
 	\end{itemize}
-	In addition, the classes are built on the standard \texttt{book} and \texttt{article} classes, which are part of every \LaTeX{} installation, as is \texttt{expl3}.
+	The \texttt{rpgcard} and \texttt{rpgdeck} classes are built on the standard \texttt{article} class, which is part of every \LaTeX{} installation, as is \texttt{expl3}.
 
 	\section{Fonts}
 
