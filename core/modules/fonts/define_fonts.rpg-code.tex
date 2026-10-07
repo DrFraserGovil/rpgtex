@@ -21,8 +21,8 @@
 		#2-style .initial:n = {},
 	}
 
-	%%Create the font-access command from the provided name
-	\NewDocumentCommand{#1}{}{
+	%%Create the font-access command from the provided name (redefining it if the theme is loaded again)
+	\DeclareDocumentCommand{#1}{}{
 		\use:c {__rpg_font_#2_family} \use:c{__rpg_font_#2_style}
 	}
 	%%% We don't disable this command with RpgIfFont (that would be a lot of checks -- we just leave them blank)

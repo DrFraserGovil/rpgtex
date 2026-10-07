@@ -1,4 +1,3 @@
-% BUG: this file uses \@title, \@subtitle and \@author, but never sets @ as a letter. When the theme is loaded in the document body, @ is not a letter, so these are read as \@ followed by text, and the title page prints the wrong content (silently). Add \makeatletter at the top (and \makeatother at the end), or use \use:c{@title} etc.
 \ExplSyntaxOff
 
 \DeclareDocumentCommand\RpgThemeSetPHBParts{}
@@ -56,7 +55,7 @@
 {
 	\def\w{0.3\paperwidth}
 	\def\h{0.005\paperwidth}
-	\RpgPut[0.9\paperwidth](t){0.5 \paperwidth}{\paperheight-3cm}{ \RpgContour[inner=white,outer=black,style=\RpgFontTitle]{\@title}
+	\RpgPut[0.9\paperwidth](t){0.5 \paperwidth}{\paperheight-3cm}{ \RpgContour[inner=white,outer=black,style=\RpgFontTitle]{\RpgGetTitle*}
 		% %%fancy red diamond
 		\begin{center}
 			\begin{tikzpicture}
@@ -67,12 +66,12 @@
 
 	\RpgPut[\paperwidth](b){0.5\paperwidth}{1cm}{
 		\begin{center}
-			\RpgContour[inner=white,outer=black,style={\RpgFontSubTitle}]{\@subtitle}
+			\RpgContour[inner=white,outer=black,style={\RpgFontSubTitle}]{\RpgGetSubtitle*}
 		\end{center}
 
 		\vspace{1cm}
 
-		{\RpgContour[inner=white,outer=black,style={\RpgFontSubTitle\huge}]{\@author}}
+		{\RpgContour[inner=white,outer=black,style={\RpgFontSubTitle\huge}]{\RpgGetAuthor*}}
 	}
 }
 

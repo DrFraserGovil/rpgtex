@@ -25,7 +25,7 @@
 
 }
 
-\NewDocumentCommand{\RpgStatSaveEffect}{m O{}}
+\DeclareDocumentCommand{\RpgStatSaveEffect}{m O{}}
 {
 	\keys_set:nn { rpg/stat/save}{#2}
 	\tl_set:Ne \__dnd_statSaveNiceName{\prop_item:Ne{\__dnd_StatNames}{\__dnd_statSaveMod}}
@@ -42,7 +42,7 @@
 }
 
 
-\cs_new_protected:Npn \__dnd_statSaveMakeText:
+\cs_set_protected:Npn \__dnd_statSaveMakeText:
 {
 	\__dnd_statSaveText
 	\__dnd_append_if_missing:nn{\__dnd_statSaveSize}{ft}
@@ -57,7 +57,7 @@
 
 }
 
-\cs_new_protected:Npn \__dnd_statShapeText:
+\cs_set_protected:Npn \__dnd_statShapeText:
 {
 	\tl_if_empty:eF{\__dnd_statSaveOrigin}
 	{

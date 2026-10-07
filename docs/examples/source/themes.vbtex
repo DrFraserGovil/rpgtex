@@ -1,0 +1,23 @@
+% Examples shared between the theme chapters: each chapter activates its theme, so the same example shows each theme's formatting
+
+% example = theme-dice
+% title = Dice
+% highlight = RpgDice
+	\RpgDice{3d8 -5 +2}
+
+	\RpgDice{d8 + 0}
+
+% example = theme-section-headers
+% title = Section Headers
+	\section*{Example} %starred so not added to toc; otherwise the same
+		\subsection{Another Example}
+			\subsubsection{More Examples!}
+
+% example = theme-title-header
+% title = A Compact Title
+% highlight = RpgThemeTitleMode, RpgMakeTitle, title, subtitle, author
+	\RpgThemeTitleMode{header}
+	\title{The Sunken Temple}
+	\subtitle{An adventure for four players}
+	\author{A. Writer}
+	\RpgMakeTitle

@@ -35,7 +35,7 @@
 \ExplSyntaxOn
 
 %% Appearance modification
-\cs_new_protected_nopar:Npn \__dnd_appearancePreprocessing:
+\cs_set_protected_nopar:Npn \__dnd_appearancePreprocessing:
 {
 	\bool_if:NF{\__rpg_ShowBackground}
 	{
@@ -67,7 +67,7 @@
 %%Core stat environments
 
 % Title and Italicized text appearing immediately afterwards
-\NewDocumentCommand {\RpgStatTitle} {m}
+\DeclareDocumentCommand {\RpgStatTitle} {m}
 {
 	\vspace{3pt}
 	\ignorespaces\noindent	{\RpgFontStatBlockTitle #1}
@@ -88,7 +88,7 @@
 }
 
 %%Formats Speed, hp, ability scores etc
-\NewDocumentCommand {\RpgHeaderBlock} {m}
+\DeclareDocumentCommand {\RpgHeaderBlock} {m}
 {
 	\RpgStatTitle{#1}
 	\RpgStatLine
@@ -101,7 +101,7 @@
 }
 
 %% BASIC BLOCK -- HP / AC / etc.
-\cs_new_protected_nopar:Npn \__dnd_stat_basics:
+\cs_set_protected_nopar:Npn \__dnd_stat_basics:
 {
 	{
 			\color{StatblockColor}
@@ -119,17 +119,17 @@
 }
 %% ABILITY SCORE BLOCK
 %%Formatters for ability table
-\cs_new:Npn \__dnd_format_mod_labels:n #1
+\cs_set:Npn \__dnd_format_mod_labels:n #1
 {
 	\rotatebox[origin=c]{90}{\RpgFontStatBlockTitle\scriptsize \hspace{0.1cm} #1 \hspace{0.1cm}}
 }
-\cs_new:Npn \__dnd_format_stat_titles:nn #1#2
+\cs_set:Npn \__dnd_format_stat_titles:nn #1#2
 {
 & \RpgFontStatBlockTitle \normalsize  {#1} ~{ (#2)}
 }
 
 
-\cs_new_protected_nopar:Npn \__dnd_stat_ability_scores:
+\cs_set_protected_nopar:Npn \__dnd_stat_ability_scores:
 {
 	%%define colours and spacings
 	\color {StatblockColor}
@@ -168,7 +168,7 @@
 	\par \vspace{0.1cm}
 }
 %% DETAILS BLOCK -- languages/skilsl etc
-\cs_new_protected_nopar:Npn \__dnd_stat_details:
+\cs_set_protected_nopar:Npn \__dnd_stat_details:
 {
 	%% Each item is wrapped in command that ensures it only appears 
 	%% if the value is non-empty
@@ -190,7 +190,7 @@
 }
 
 % Fancy DnD 5e stat block rule
-\NewDocumentCommand {\RpgStatLine} {}
+\DeclareDocumentCommand {\RpgStatLine} {}
 {
 	\par \vspace{-2pt} \noindent
 	\begin {tikzpicture}

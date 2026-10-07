@@ -29,7 +29,7 @@
 %% Melee/Ranged (distance-in-ft): +x to hit. On hit [damage-calculation] damage, [optional plus] [optional or]. 
 
 %\begin{noindent}
-\NewDocumentCommand {\RpgStatAttack} {m O{}}
+\DeclareDocumentCommand {\RpgStatAttack} {m O{}}
 {
 	\group_begin:
 	\keys_set:nn { rpg / stat / attack } {#2}
@@ -60,13 +60,13 @@
 }
 % \end{noindent}
 
-\cs_new_protected_nopar:Npn \__dnd_make_modifier:nnn#1#2#3
+\cs_set_protected_nopar:Npn \__dnd_make_modifier:nnn#1#2#3
 {
 	\tl_set:Ne#1{\__dnd_format_signed_integer:N{\int_eval:n{\__dnd_statPB+#3+\use:c{__dnd_#2 Mod}}}}
 }
 
 %%% Construct the `on hit' text
-\cs_new_protected:Npn \__dnd_on_hit_text:
+\cs_set_protected:Npn \__dnd_on_hit_text:
 {
 	\tl_clear:N\l_tmpa_tl
 	\str_if_empty:NF {\__dnd_attackDmg}
@@ -90,13 +90,13 @@
 }
 %%Formatters
 
-\cs_new_protected:Npn \__dnd_if_plus_dmg:
+\cs_set_protected:Npn \__dnd_if_plus_dmg:
 {
 	\tl_if_empty:NF {\__dnd_attackPlusDmg}
 	{ ~ plus\ \exp_args:Ne\RpgDice{\__dnd_attackPlusDmg}\ \__dnd_attackPlusType\ damage }
 }
 
-\cs_new_protected_nopar:Npn \__dnd_if_or_dmg:
+\cs_set_protected_nopar:Npn \__dnd_if_or_dmg:
 {
 	\tl_if_empty:NF {\__dnd_attackOrDmg}
 	{

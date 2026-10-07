@@ -122,6 +122,7 @@ def locatePackageDirectory():
 		if result.returncode == 0 and full_path:
 
 			# 3. Extract the directory path
+			# BUG: the leading space makes the injected code start with a space when -p is not used; xelatex then quotes the argument and reads `" "' as a file name ("I can't find file"). Strip it, e.g. return additional_code.strip() in code_injection.
 			return f" \\def\\RpgPackagePath{{{os.path.dirname(full_path)}}}"
 		else:
 			print(f"   Error: Package '{package_name}' not found by kpsewhich")

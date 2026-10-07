@@ -1,14 +1,3 @@
-% example = dnd-section-headers
-	\section*{Example} %starred so not added to toc; otherwise the same
-    \subsection{Another Example}
-    \subsubsection{More Examples!}
-
-% example = dnd-dice
-% highlight = RpgDice
-	\RpgDice{3d8 -5 +2}
-
-	\RpgDice{d8 + 0}
-
 % example = dnd-filigree
 % highlight = RpgFiligree, filigree
 	\begin{RpgFiligree}

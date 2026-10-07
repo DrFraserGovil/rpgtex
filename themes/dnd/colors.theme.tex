@@ -57,7 +57,7 @@
 }
 
 \ExplSyntaxOn
-\NewDocumentCommand\RpgAdvanceColors{}
+\DeclareDocumentCommand\RpgAdvanceColors{}
 {
 	\__rpg_checkColorList:
 
@@ -66,28 +66,28 @@
 	\seq_gput_right:NV \__rpg_ColorCycle \l__tmpa_tl
 }
 
-\NewDocumentCommand\RpgThemeSetColorCycle{m}
+\DeclareDocumentCommand\RpgThemeSetColorCycle{m}
 {
 	\seq_set_from_clist:Nn \__rpg_ColorCycle{#1}
 	\RpgAdvanceColors{}
 }
-\NewDocumentCommand\RpgSetPHBColors{}
+\DeclareDocumentCommand\RpgSetPHBColors{}
 {
 	\RpgThemeSetColorCycle{PhbLightGreen, PhbLightCyan, PhbMauve, PhbTan,DmgLavender,DmgCoral,DmgSlateGray,DmgPatina}
 }
-\NewDocumentCommand\RpgSetDMGColors{}
+\DeclareDocumentCommand\RpgSetDMGColors{}
 {
 	\RpgThemeSetColorCycle{DmgLavender,DmgCoral,DmgSlateGray,DmgPatina,PhbLightGreen, PhbLightCyan, PhbMauve, PhbTan}
 }
-\cs_new_protected:Npn\__rpg_checkColorList:
+\cs_set_protected:Npn\__rpg_checkColorList:
 {
 	\seq_if_empty:NT \__rpg_ColorCycle
 	{
 		\msg_error:nnn{rpg}{empty-colors}{}
 	}
 }
-\seq_new:N \__rpg_ColorCycle
-\msg_new:nnn {rpg}{empty-colors}{No~colors~in~color~cycle.~Call~RpgThemeSetColorCycle}
+\seq_clear_new:N \__rpg_ColorCycle
+\msg_set:nnn {rpg}{empty-colors}{No~colors~in~color~cycle.~Call~RpgThemeSetColorCycle}
 
 \ExplSyntaxOff
 \RpgSetPHBColors{}

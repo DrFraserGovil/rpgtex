@@ -4,8 +4,6 @@
 
 %% The function used to switch themes. Immediately loads in the new overloads, overloading any previous definitions
 %% I
-% BUG:  themes cannot be loaded twice in one document.
-% Theme files define commands with \NewDocumentCommand/\newcommand/\cs_new/\msg_new (e.g. \ConditionalRagged in default/callouts.theme.tex, most of dnd/colors, spell and statblock/*), so any mid-document switch that reloads a theme (including the \RpgSetTheme{default} inside dnd.cfg and scifi.cfg) raises "already defined" errors. Planned fix: switch theme definitions to \DeclareDocumentCommand/\cs_set (so later themes can override them; \Provide... only where the first definition should win), and guard variables and messages with \..._if_exist or \msg_set.
 \NewDocumentCommand\RpgSetTheme { m }
 {
 

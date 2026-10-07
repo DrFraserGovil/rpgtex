@@ -6,51 +6,61 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
  
 	%%we do some looping over the 6 stats; so define them in a list here
-	\seq_const_from_clist:Nn \__dnd_Stats {str,dex,con,int,wis,cha}
-
-	\prop_const_from_keyval:Nn\__dnd_Skills
+	%% constants can only be created once, so are skipped if the theme is loaded again
+	\seq_if_exist:NF \__dnd_Stats
 	{
-		{athletics}={\__dnd_strMod},
-		{acrobatics}={\__dnd_dexMod},
-		{sleight~of~hand}={\__dnd_dexMod},
-		{stealth}={\__dnd_dexMod},
-		{arcana}={\__dnd_intMod},
-		{history}={\__dnd_intMod},
-		{investigation}={\__dnd_intMod},
-		{nature}={\__dnd_intMod},
-		{religion}={\__dnd_intMod},
-		{animal~handling}={\__dnd_wisMod},
-		{insight}={\__dnd_wisMod},
-		{medicine}={\__dnd_wisMod},
-		{perception}={\__dnd_wisMod},
-		{survival}={\__dnd_wisMod},
-		{deception}={\__dnd_chaMod},
-		{intimidation}={\__dnd_chaMod},
-		{performance}={\__dnd_chaMod},
-		{persuasion}={\__dnd_chaMod},
+		\seq_const_from_clist:Nn \__dnd_Stats {str,dex,con,int,wis,cha}
 	}
 
-	\prop_const_from_keyval:Nn\__dnd_StatNames
+	\prop_if_exist:NF \__dnd_Skills
 	{
-		str={Strength},
-		dex={Dexterity},
-		con={Constitution},
-		int={Intelligence},
-		wis={Wisdom},
-		cha={Charisma},
+		\prop_const_from_keyval:Nn\__dnd_Skills
+		{
+			{athletics}={\__dnd_strMod},
+			{acrobatics}={\__dnd_dexMod},
+			{sleight~of~hand}={\__dnd_dexMod},
+			{stealth}={\__dnd_dexMod},
+			{arcana}={\__dnd_intMod},
+			{history}={\__dnd_intMod},
+			{investigation}={\__dnd_intMod},
+			{nature}={\__dnd_intMod},
+			{religion}={\__dnd_intMod},
+			{animal~handling}={\__dnd_wisMod},
+			{insight}={\__dnd_wisMod},
+			{medicine}={\__dnd_wisMod},
+			{perception}={\__dnd_wisMod},
+			{survival}={\__dnd_wisMod},
+			{deception}={\__dnd_chaMod},
+			{intimidation}={\__dnd_chaMod},
+			{performance}={\__dnd_chaMod},
+			{persuasion}={\__dnd_chaMod},
+		}
+	}
+
+	\prop_if_exist:NF \__dnd_StatNames
+	{
+		\prop_const_from_keyval:Nn\__dnd_StatNames
+		{
+			str={Strength},
+			dex={Dexterity},
+			con={Constitution},
+			int={Intelligence},
+			wis={Wisdom},
+			cha={Charisma},
+		}
 	}
 
 	%now programatically generate some variables...
 	\seq_map_inline:Nn{\__dnd_Stats}{
-		\int_new:c{__dnd_#1Mod} %%defines \__[stat]Mod for each stat
-		\tl_new:c{__#1Save} %%defines \__[stat]Save for each stat 
+		\int_zero_new:c{__dnd_#1Mod} %%defines \__[stat]Mod for each stat
+		\tl_clear_new:c{__#1Save} %%defines \__[stat]Save for each stat 
 	}
 
 	% Some helper variables....
-	\msg_new:nnn{rpg}{bad-ability}{Cannot~parse~#1~as~a~valid~ability~score}
-	\bool_new:N \__dnd_searchPerception
-	\seq_new:N \__dnd_seqHolder
-	\tl_new:N \__dnd_boxOptions
+	\msg_set:nnn{rpg}{bad-ability}{Cannot~parse~#1~as~a~valid~ability~score}
+	\bool_if_exist:NF \__dnd_searchPerception { \bool_new:N \__dnd_searchPerception }
+	\seq_clear_new:N \__dnd_seqHolder
+	\tl_clear_new:N \__dnd_boxOptions
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Environment Options
@@ -99,13 +109,13 @@
 \RpgStatAddProperty {condition-immunities}	{\__dnd_statConditionImmune}{}
 
 
-\tl_new:N \__dnd_statProcessedSkills %%storage for skills (& expertise) after processing
+\tl_clear_new:N \__dnd_statProcessedSkills %%storage for skills (& expertise) after processing
  
 %%%%%%%%%%%%%%%%%%%%%%%
 %% Preprocessing
 %%%%%%%%%%%%%%%%%%%%%%%
 % computes ability scores, save mods, skil bonuses etc. 
-\cs_new_protected_nopar:Npn \__dnd_statPreprocessing:
+\cs_set_protected_nopar:Npn \__dnd_statPreprocessing:
 {
 	% see if cr/prof provided, otherwise generate them
 	\__dnd_ProficiencyAndCR:
@@ -126,7 +136,7 @@
 
 % Defines a bunch of commands; or redefines existing ones; within the statblock scope
 % Use 'Provide' so no conflicts with pre-existing definitions
-\cs_new_protected_nopar:Npn\__dnd_remap_functions:
+\cs_set_protected_nopar:Npn\__dnd_remap_functions:
 {
 %alias a command that definitely exists
 \RenewDocumentCommand{		\section}{m}		{\RpgStatSection{##1}}
@@ -157,14 +167,14 @@
 
 
 	% A toggle-item for descriptions; if the body is empty, the item is not added 
-	\cs_new_protected_nopar:Npn \__maybe_item:nn #1#2
+	\cs_set_protected_nopar:Npn \__maybe_item:nn #1#2
 	{
 		\tl_if_empty:oF {#2}{ \item [#1] #2 }
 	}
 	\cs_generate_variant:Nn \__maybe_item:nn{ne}
 
 	% Format signed integers for display
-	\cs_new_protected_nopar:Npn \__dnd_format_signed_integer:N #1
+	\cs_set_protected_nopar:Npn \__dnd_format_signed_integer:N #1
 	{
 		\int_compare:nNnTF {#1} < {0}
 			{ - }
@@ -174,7 +184,7 @@
 
 	% If string 2 is not present in token list #1; append it
 	% Useful for ensuring, i.e. distances always end in 'ft'.
-	\cs_new_protected:Npn \__dnd_append_if_missing:nn#1#2
+	\cs_set_protected:Npn \__dnd_append_if_missing:nn#1#2
 	{
 		\regex_match:nVF{#2}{#1}
 		{
@@ -183,7 +193,7 @@
 	}
 
 	%% If no nickname set, use the 'main name'
-	\cs_new_protected_nopar:Npn\__dnd_checkNickname:n#1
+	\cs_set_protected_nopar:Npn\__dnd_checkNickname:n#1
 	{
 		\tl_if_empty:eT{\__dnd_statName}
 		{
@@ -192,7 +202,7 @@
 	}
 
 	%% If no senses provided, just uses passive, otherwise put other senses first
-	\cs_new_protected_nopar:Npn \__dnd_construct_perception:
+	\cs_set_protected_nopar:Npn \__dnd_construct_perception:
 	{
 		\tl_if_blank:eF{\__dnd_statSenses}
 		{
@@ -202,7 +212,7 @@
 	}
 
 	%% Checks if a manual initiative value was passed
-	\cs_new_protected_nopar:Npn \__dnd_checkInitiative:
+	\cs_set_protected_nopar:Npn \__dnd_checkInitiative:
 	{
 		\tl_if_blank:eT{\__dnd_statInitiativeBonus}
 		{
@@ -217,7 +227,7 @@
 
 	% given (str/dex/etc), retrieves the assigned score, and then saves
 	% the modifier (floor(x-10)/2) to the associated modifier variable
-	\cs_new_protected_nopar:Npn \__dnd_storeAbilityModifier:n#1
+	\cs_set_protected_nopar:Npn \__dnd_storeAbilityModifier:n#1
 	{
 		%have to do a bit roundabout way to get the expansion to work
 		\tl_set_eq:Nc\l_tmpa_tl{__dnd_#1Score}
@@ -234,7 +244,7 @@
 	%% Checks the save bool, and either constructs the modifier into a formatted tl
 	%% or (if bool=false), empties the token list. This means only proficient saves
 	%% appear in the table
-	\cs_new_protected_nopar:Npn \__dnd_storeSaveModifier:n#1
+	\cs_set_protected_nopar:Npn \__dnd_storeSaveModifier:n#1
 	{
 		\bool_if:cT{__dnd_Is#1SaveProficient}
 		{
@@ -247,7 +257,7 @@
 
 
 	%% Checks if a passive perception was passed
-	\cs_new_protected_nopar:Npn \__dnd_checkPP:
+	\cs_set_protected_nopar:Npn \__dnd_checkPP:
 	{
 		\tl_if_blank:eTF{\__dnd_statPP}
 		{
@@ -260,7 +270,7 @@
 	}
 
 	%% Checks if a manual proficiency bonus /challenge rating was passed
-	\cs_new_protected_nopar:Npn \__dnd_ProficiencyAndCR:
+	\cs_set_protected_nopar:Npn \__dnd_ProficiencyAndCR:
 	{
 		\tl_if_blank:eTF{\__dnd_statPB}
 		{
@@ -300,7 +310,7 @@
 	}
 
 	%%Executes the code in the True block if any of the save bools are true
-	\cs_new_protected_nopar:Npn \__dnd_if_any_saves:T#1
+	\cs_set_protected_nopar:Npn \__dnd_if_any_saves:T#1
 	{
 		\bool_set_false:N\l_tmpa_bool
 
@@ -323,7 +333,7 @@
 	%%%%%%%%%%%%%%%%%%%%%%%
 
 	%% check if each skill is in the list, and if so, compute the modifier
-	\cs_new_protected:Npn \__dnd_statComputeBonuses:nn#1#2
+	\cs_set_protected:Npn \__dnd_statComputeBonuses:nn#1#2
 	{
 		\tl_set:Nn \l_tmpa_tl {\prop_item:Ne\__dnd_Skills{\str_lowercase:f{#1}}}
 
@@ -350,7 +360,7 @@
 
 	%% Iterates through the skills comma-list, and tries to compute the modifier
 	%% If a 'bad skill' is passed (or a manual override), it just inserts the plain text
-	\cs_new_protected:Npn \__dnd_statProcessSkills:
+	\cs_set_protected:Npn \__dnd_statProcessSkills:
 	{
 		\seq_clear:N \l__seq_holder
 

@@ -3,7 +3,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 \ExplSyntaxOn
-\NewDocumentCommand{\RpgStatLegacyMode}{}
+\DeclareDocumentCommand{\RpgStatLegacyMode}{}
 {
 \cs_set:Nn{\__dnd_stat_basics:}{\LEGACY__dnd_stat_basics:}
 \cs_set:Nn{\__dnd_stat_ability_scores:}{\LEGACY__dnd_stat_ability_scores:}
@@ -39,7 +39,7 @@ fontlower        = \RpgFontStatBlockBody,
 
 
 % %% BASIC BLOCK -- HP / AC / etc.
-\cs_new_protected_nopar:Npn \LEGACY__dnd_stat_basics:
+\cs_set_protected_nopar:Npn \LEGACY__dnd_stat_basics:
 {
 	{
 			\color{StatblockColor}
@@ -58,7 +58,7 @@ fontlower        = \RpgFontStatBlockBody,
 %% ABILITY SCORE BLOCK
 
 
-\cs_new_protected_nopar:Npn \LEGACY__dnd_stat_ability_scores:
+\cs_set_protected_nopar:Npn \LEGACY__dnd_stat_ability_scores:
 {
 	%%define colours and spacings
 	\color {StatblockColor}
@@ -83,7 +83,7 @@ fontlower        = \RpgFontStatBlockBody,
 	\par \vspace{0.1cm}
 }
 % %% DETAILS BLOCK -- languages/skilsl etc
-\cs_new_protected:Npn \LEGACY__dnd_format_saves:n#1
+\cs_set_protected:Npn \LEGACY__dnd_format_saves:n#1
 {
 	\seq_clear:N\l_tmpa_seq
 	\seq_map_inline:Nn{\__dnd_Stats}
@@ -97,7 +97,7 @@ fontlower        = \RpgFontStatBlockBody,
 	\tl_set:Ne{#1}{\seq_use:Nn{\l_tmpa_seq}{,~}}
 }
 
-\cs_new_protected_nopar:Npn \LEGACY__dnd_stat_details:
+\cs_set_protected_nopar:Npn \LEGACY__dnd_stat_details:
 {
 	\tl_clear:N\l_tmpa_saves
 	\LEGACY__dnd_format_saves:n{\l_tmpa_saves}

@@ -1,4 +1,3 @@
-% BUG: this file uses \@title, \@subtitle and \@author, but never sets @ as a letter. When the theme is loaded in the document body, @ is not a letter, so these are read as \@ followed by text, and the title page prints the wrong content (silently). Add \makeatletter at the top (and \makeatother at the end), or use \use:c{@title} etc.
 \ExplSyntaxOff %%turn off to simplify formatting
 
 
@@ -24,19 +23,19 @@
 	\RpgPut[0.8\paperwidth]{0.5\paperwidth}{0.5\paperheight}{
 
 		\RpgFontTitle\color{black}
-		\@title
+		\RpgGetTitle*
 
 		\vspace{1em}
 
-		\RpgFontSubTitle {\color{black} \@subtitle}
+		\RpgFontSubTitle {\color{black} \RpgGetSubtitle*}
 
 		\vspace{1em}
 
-		\RpgFontSubTitle {\color{black} \@author}
+		\RpgFontSubTitle {\color{black} \RpgGetAuthor*}
 
 		\vspace{1em}
 
-		\@date
+		\csname @date\endcsname
 	}
 
 }
@@ -46,12 +45,12 @@
 	\def\contents{
 		\begin{center}
 			\RpgFontTitle
-			\@title\par
+			\RpgGetTitle*\par
 
 			\RpgFontSubTitle
-			\@subtitle\par
+			\RpgGetSubtitle*\par
 
-			\@author
+			\RpgGetAuthor*
 		\end{center}
 		% \vspace{8pt}
 	}

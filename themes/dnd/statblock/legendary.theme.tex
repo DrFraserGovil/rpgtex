@@ -9,7 +9,7 @@
 }
 
 
-\NewDocumentCommand{\RpgStatLegendarySection}{O{}}
+\DeclareDocumentCommand{\RpgStatLegendarySection}{O{}}
 {
 	\keys_set:nn{rpg/stat/legendary}{#1}
 
@@ -22,11 +22,11 @@
 	}
 }
 
-\NewDocumentCommand\RpgStatLegendaryDefiance{}
+\DeclareDocumentCommand\RpgStatLegendaryDefiance{}
 {
 \action{Legendary~Defiance}~{\rpgstringlegendaryDefiance}
 }
-\NewDocumentCommand\RpgStatLegendaryResistance{m}
+\DeclareDocumentCommand\RpgStatLegendaryResistance{m}
 {
 	\action{Legendary~Resistance (#1/day)}\ \rpgstringlegendaryResistance
 }
@@ -48,7 +48,7 @@
 
 
 
-\NewDocumentCommand{\RpgStatMythicSection}{+O{}}{
+\DeclareDocumentCommand{\RpgStatMythicSection}{+O{}}{
 \RpgStatSection{Mythic~Monster}
 
 \keys_set:nn{rpg/stat/mythic}{#1}

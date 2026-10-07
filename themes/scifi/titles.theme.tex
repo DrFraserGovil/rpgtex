@@ -1,4 +1,3 @@
-% BUG: this file uses \@title, \@subtitle and \@author, but never sets @ as a letter. When the theme is loaded in the document body, @ is not a letter, so these are read as \@ followed by text, and the title page prints the wrong content (silently). Add \makeatletter at the top (and \makeatother at the end), or use \use:c{@title} etc.
 
 \ExplSyntaxOff
 
@@ -35,7 +34,9 @@
 \RpgThemeTitleCover
 {
 	\RpgPut[0.9\paperwidth]{0.5\paperwidth}{\paperheight-3cm}{
-		\RpgContour[outer=TitleBlue,inner=white,style= \RpgFontTitle]{\@title}
+		\maxsizebox{0.8\paperwidth}{!}{
+			\RpgContour[outer=TitleBlue,inner=white,style= \RpgFontTitle]{\RpgGetTitle*}
+		}
 	}
 
 	\RpgPut[0.9\paperwidth](b){0.5\paperwidth}{1cm}{
@@ -45,14 +46,14 @@
 
 
 			\RpgIfColoursEqual{SubtitleInner}{SubtitleOuter}{
-				\RpgFontSubTitle \color{SubtitleInner} \@subtitle \par
+				\RpgFontSubTitle \color{SubtitleInner} \RpgGetSubtitle* \par
 				\vspace{1cm}
-				\@author
+				\RpgGetAuthor*
 			}{
-				{\RpgContour[inner=SubtitleInner,outer=SubtitleOuter,style=\RpgFontSubTitle]{\@subtitle}}
+				{\RpgContour[inner=SubtitleInner,outer=SubtitleOuter,style=\RpgFontSubTitle]{\RpgGetSubtitle*}}
 
 				\vspace{1cm}
-				{\RpgContour[inner=SubtitleInner,outer=SubtitleOuter,style=\RpgFontSubTitle]{\@author}}
+				{\RpgContour[inner=SubtitleInner,outer=SubtitleOuter,style=\RpgFontSubTitle]{\RpgGetAuthor*}}
 			}
 		\end{center}
 
@@ -64,7 +65,7 @@
 %% Color helpers
 %%%%%%%
 \ExplSyntaxOn
-\NewDocumentCommand\RpgIfColoursEqual{m m +m +m}
+\DeclareDocumentCommand\RpgIfColoursEqual{m m +m +m}
 {
 	% Extract and convert Color 1 to RGB
 	\extractcolorspecs {#1} \l_tmpa_tl \l_tmpb_tl

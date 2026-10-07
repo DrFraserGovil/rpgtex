@@ -4,7 +4,7 @@
 % Stat block made to look like stat blocks in the PHB.
 % Some some modifications made to include 2024 updates
 
-\newcommand\statInclude[1]{\input{\RpgPackagePath/themes/dnd/statblock/#1}}
+\DeclareDocumentCommand\statInclude{m}{\input{\RpgPackagePath/themes/dnd/statblock/#1}}
 
 \statInclude{processing.theme.tex}
 \statInclude{appearance.theme.tex}
@@ -60,7 +60,7 @@
 
 
 
-\NewDocumentEnvironment{RpgStat*}{O{} m O{} +b}
+\DeclareDocumentEnvironment{RpgStat*}{O{} m O{} +b}
 {
 	\bool_set_true:N \__dnd_statIsBig
 	\begin{RpgStat}[#1]{#2}[float-type=figure*,#3,twocolumn]
@@ -75,7 +75,7 @@
 %%%%%%%%%%%%%%%%%%%
 
 % \begin{noindent}
-\cs_new_protected_nopar:Npn \__stat_begin:
+\cs_set_protected_nopar:Npn \__stat_begin:
 {
 
 	\tl_if_blank:eTF{\__dnd_statFloat}
@@ -100,7 +100,7 @@
 		\bool_if:NT\__dnd_statTwocol{ \begin{multicols}{2} }
 }
 
-\cs_new_protected_nopar:Npn\__stat_end:
+\cs_set_protected_nopar:Npn\__stat_end:
 {
 		\bool_if:NT\__dnd_statTwocol { \end{multicols} } 
 	\end{RpgStatBox}

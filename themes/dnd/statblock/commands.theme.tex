@@ -7,7 +7,7 @@
 
 % Creates a section within environment
 % aliased by 'section' within the environment
-\NewDocumentCommand {\RpgStatSection} {m}
+\DeclareDocumentCommand {\RpgStatSection} {m}
 {
 	{
 			\par\addvspace{6pt plus 2pt minus 2pt}
@@ -22,13 +22,13 @@
 % Inline header for stat actions - similar to a paragraph
 % aliased in the environment by \action
 % optional arg is used by legendary actions
-\NewDocumentCommand {\RpgStatAction} {O{} m}
+\DeclareDocumentCommand {\RpgStatAction} {O{} m}
 {
 	\par \smallskip \noindent { \RpgFontParagraph {#2\tl_if_blank:eF{#1}{~({#1~actions})}.} }
 }
 
 % As with action, but allows for an italicised trigger
-\NewDocumentCommand\RpgStatReaction{m m}
+\DeclareDocumentCommand\RpgStatReaction{m m}
 {
 	\RpgStatAction{#1}
 	\tl_if_blank:eF{#2}{~\textit{#2:}}
@@ -38,16 +38,16 @@
 % Interface for internal values
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\NewDocumentCommand\RpgStatSetName{m}
+\DeclareDocumentCommand\RpgStatSetName{m}
 {
 	\tl_set:Nn \__dnd_statName {#1}
 }
 
-\NewDocumentCommand\RpgStatName{}
+\DeclareDocumentCommand\RpgStatName{}
 {
 	\__dnd_statName{}
 }
-\NewDocumentCommand{\RpgStatMod}{m}{
+\DeclareDocumentCommand{\RpgStatMod}{m}{
 	\__dnd_format_signed_integer:N{\str_case:nn{#1}
 		{
 			{proficiency}{\__dnd_statPB}

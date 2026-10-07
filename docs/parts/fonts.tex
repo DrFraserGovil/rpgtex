@@ -26,7 +26,7 @@
 		}
 		\RpgFunction{RpgThemeCreateFont}{\param{\cmd*{ElementName}}\param{key-base}}
 		{
-			Creates a new font element, \cmd*{ElementName}, along with the keys \texttt{<key-base>-family} and \texttt{<key-base>-style}. A new element is initially blank (it applies no formatting) until it is assigned a value using \cmd{RpgThemeFont}. Thereafter, it may be used and modified in exactly the same way as the built-in font elements.
+			Creates a new font element, \cmd*{ElementName}, along with the keys \texttt{<key-base>-family} and \texttt{<key-base>-style}. A new element is initially blank (it applies no formatting) until it is assigned a value using \cmd{RpgThemeFont}. Thereafter, it may be used and modified in exactly the same way as the built-in font elements. Creating an element which already exists (for example, when a theme is loaded again) redefines it, and resets it to blank.
 
 			\RpgGetExample{create-font}
 		}

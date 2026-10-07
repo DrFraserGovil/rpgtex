@@ -14,7 +14,7 @@
 	\RpgThemeBoolKey*{no-intro}{\__dnd_statSpellUseHeader}
 }
 
-\NewDocumentEnvironment{RpgStatSpells}{ O{} +b}{
+\DeclareDocumentEnvironment{RpgStatSpells}{ O{} +b}{
 	\group_begin:
 	\keys_set:nn{rpg/stat/spell}{#1}
 
@@ -52,7 +52,7 @@
 	\group_end:
 }
 
-\NewDocumentCommand{\RpgStatSpellSlots}{o o m}
+\DeclareDocumentCommand{\RpgStatSpellSlots}{o o m}
 {
 	\item[
 	            \IfNoValueTF{#1}{Cantrips}{\RpgOrdinal{#1}\ level
@@ -64,7 +64,7 @@
 	\RpgEmphSpellString{#3}
 }
 
-\NewDocumentCommand{\RpgStatSpellList}{ o m}
+\DeclareDocumentCommand{\RpgStatSpellList}{ o m}
 {
 	\item[
 	            \IfValueTF{#1}{
@@ -82,7 +82,7 @@
 }
 
 %general wrapper for printing all spells in a list, with nice parsing of commans and whitespace
-\NewDocumentCommand {\RpgEmphSpellString} {m}
+\DeclareDocumentCommand {\RpgEmphSpellString} {m}
 {
 	\group_begin:
 	\seq_set_from_clist:Nn \l_tmpa_seq {#1}

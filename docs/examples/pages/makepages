@@ -1,0 +1,14 @@
+#!/bin/bash
+## Compiles themepages.tex once for each theme in the themes directory, as page-<theme>.pdf,
+## so that each theme's cover and part pages can be shown in the documentation
+set -e
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+cd "$SCRIPT_DIR"
+mkdir -p .build
+for dir in ../../../themes/*/; do
+	theme=$(basename "$dir")
+	xelatex -interaction=nonstopmode -halt-on-error -output-directory=.build \
+		-jobname="page-$theme" "\def\RpgCMD{theme=$theme}\input{themepages}" > /dev/null
+	cp ".build/page-$theme.pdf" "page-$theme.pdf"
+done

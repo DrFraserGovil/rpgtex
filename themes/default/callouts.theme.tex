@@ -1,7 +1,7 @@
 % \begin{noindent}
 
 \ExplSyntaxOn
-\NewDocumentCommand\ConditionalRagged{}
+\DeclareDocumentCommand\ConditionalRagged{}
 {
 	\bool_if:NF \__rpg_IsJustified {\RaggedRight}
 }
