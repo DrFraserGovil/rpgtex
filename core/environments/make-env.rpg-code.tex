@@ -16,8 +16,6 @@
 	\__RpgMakeKeys{#1}{#2}
 
 
-	% BUG: this redefinition replaces the one made by \__RpgBuildEnv, dropping its \RpgGetKey setup, so \RpgGetKey cannot be used inside a card format (it raises bad-getkey). No current theme does so, but it is inconsistent with the text format.
-	% BUG: I think this is fixed
 	\RenewDocumentEnvironment{__#1#2Card}{O{} m O{} +b}
 	{
 		\RenewExpandableDocumentCommand\RpgGetKey{m}{  { \prop_item:cn{__rpg_#1#2_properties}{####1}}}

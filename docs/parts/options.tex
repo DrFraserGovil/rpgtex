@@ -59,7 +59,7 @@
 
 			This option only has an effect when using one of the \rpgtex{} classes.
 		}
-		\RpgFlag{font}{
+		\RpgFlag{font}{ \label{flag:font}
 			If present, activates the font modules, applying the package fonts wherever possible.
 
 			This flag is set by default when loading a class, but must be passed explicitly to enable these modules when loading the package directly.
@@ -214,7 +214,7 @@
 			xelatex "\textbackslash{}def\textbackslash{}RpgCMD\{bg=print, columns=1\} \textbackslash{}input\{document.tex\}"
 		\end{Code}
 
-		The \texttt{rpglatex} compiler \RpgPage[p]{C:Compiler} performs this insertion automatically: the \texttt{-p} (\texttt{-{}-print}) flag sets \texttt{bg=print}, allowing the user to switch between the standard and print versions of a document with a single flag:
+		The \texttt{rpglatex} compiler \RpgPage[p]{S:rpglatex} performs this insertion automatically: the \texttt{-p} (\texttt{-{}-print}) flag sets \texttt{bg=print}, allowing the user to switch between the standard and print versions of a document with a single flag:
 		\begin{Code}
 			rpglatex document.tex -p
 		\end{Code}

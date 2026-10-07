@@ -102,11 +102,8 @@
 \cs_new:Npn \__rpg_ComputeNormalOrdinal:n #1
 {
 	% Get the last digit (modulo 10)
-	% BUG: \int_set:Nn is not expandable, but \RpgOrdinal is declared with NewExpandableDocumentCommand; it fails in expansion-only contexts (e.g. PDF bookmarks). Use \int_case:nnF { \int_mod:nn {#1} {10} } directly.
-	\int_set:Nn \l_tmpa_int { \int_mod:nn { #1 } { 10 } }
 
-	% Check for 1, 2, or 3
-	\int_case:nnF { \l_tmpa_int }
+	\int_case:nnF{\int_mod:nn{#1}{10}}
 	{
 		{1} {st}
 			{2} {nd}

@@ -37,18 +37,18 @@
 	\mainmatter{}
 	\input{parts/intro.tex}
 
-	\part{rpgtex For Users}
+	\part{\rpgtex{} For Users}
+		\input{parts/classes.tex}
 		\input{parts/options.tex}
 		\input{parts/commands.tex}
 		\input{parts/environments.tex}
 		% \part{Classes \& Themes}
-		% 	\input{parts/classes.tex}
 		% 	\input{parts/themes_default.tex}
 		% 	\input{parts/themes_dnd.tex}
 		% 	\input{parts/themes_scifi.tex}
 		%
 		% 	\RpgSetTheme{default}
-	\part{rpgtex For Designers}
+	\part{\rpgtex{} For Designers}
 		\input{parts/designer_theme.tex}
 		\input{parts/fonts.tex}
 		\input{parts/designer_page.tex}
@@ -56,6 +56,11 @@
 		\input{parts/designer_rules.tex}
 		% 	\input{parts/featureforge.tex}
 		%
+	\part{Appendices}
+		\appendix
+		\input{parts/appendix_compiler.tex}
+		\input{parts/appendix_dependencies.tex}
+		\RpgFake{chapter}{Index}
 		{\footnotesize\tt
 			\idxlayout{columns=3}
 			\printindex

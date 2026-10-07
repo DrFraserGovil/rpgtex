@@ -46,11 +46,11 @@
 			{header} {\bool_set_true:N \__rpg_UseSimpleTitle}
 	}
 	{
-		% BUG: msg_new is called inside the error branch, so a second invalid mode raises "message already defined" instead of this error. Move the msg_new outside the command.
-		\msg_new:nnn{rpg}{bad-cover-set}{Title~mode~input~must~be~(header/cover),~not~'#1'}
 		\msg_error:nnn{rpg}{bad-cover-set}{#1}
 	}
 }
+
+\msg_new:nnn{rpg}{bad-cover-set}{Title~mode~input~must~be~(header/cover),~not~'#1'}
 
 %% A new maketitle overload
 \let\__rpg_OriginalMakeTitle\maketitle

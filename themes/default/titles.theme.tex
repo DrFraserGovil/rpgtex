@@ -57,8 +57,7 @@
 
 
 	%%perform a neat trick to get the title into the centre of a twocolumn doc
-	% BUG: \l__rpg_cols_tl is the pre-revamp name; the column setting is now \__rpg_PageColumns (values onecolumn/twocolumn), so header-mode \maketitle will fail (an undefined-variable error, or no title if neither case matches).
-	\str_case:Nn \l__rpg_cols_tl
+	\str_case:Nn \__rpg_PageColumns
 	{
 		{onecolumn}{\contents}
 			{twocolumn}{\twocolumn[\contents]}
