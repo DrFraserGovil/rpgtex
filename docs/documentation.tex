@@ -14,6 +14,7 @@
 \cover{../example/img/typewriter}
 \RpgCoverTransparency{0.6}
 
+\RpgDefaultPartImage{../example/img/typewriter.jpg}
 \newlength\macromargin
 \setlength\macromargin{4cm}
 \begin{document}
@@ -37,7 +38,8 @@
 	\mainmatter{}
 	\input{parts/intro.tex}
 
-	\part{\rpgtex{} For Users}
+	\RpgPartTransparency{0.4}
+	\part[img/the_writing_desk_2015.19.1530.jpg]{\rpgtex{} For Users}
 		\input{parts/classes.tex}
 		\input{parts/options.tex}
 		\input{parts/commands.tex}
@@ -48,7 +50,7 @@
 		% 	\input{parts/themes_scifi.tex}
 		%
 		% 	\RpgSetTheme{default}
-	\part{\rpgtex{} For Designers}
+	\part[img/desk_1943.8.5338]{\rpgtex{} For Designers}
 		\input{parts/designer_theme.tex}
 		\input{parts/fonts.tex}
 		\input{parts/designer_page.tex}
@@ -60,6 +62,7 @@
 		\appendix
 		\input{parts/appendix_compiler.tex}
 		\input{parts/appendix_dependencies.tex}
+		\input{parts/appendix_attribution.tex}
 		\refstepcounter{chapter}
 		\setindexprenote{\RpgFake{chapter}{Appendix \thechapter: Index}}
 		{\footnotesize\tt
