@@ -49,6 +49,7 @@
 }
 
 %% Sets the footer decoration as a shipoutimage overlaid on top of the current paper
+% BUG: this comment is the wrong way round: the code mirrors the image for the UNSTARRED form, and draws it as-is for the starred form (the scifi theme relies on this). Fix the comment, or swap the branches and the theme calls.
 %% Arguments: #1 (starred) mirror-flips the footer decoration (Used for alternating pages)
 %%				#2 The height of th be decoration (use ! to use aspectratio height)
 %%				#3 The path to image to include as the footer
