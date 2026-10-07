@@ -1,0 +1,25 @@
+% title = RpgThemeMapFormat: Roman Numerals
+% highlight = RpgThemeMapFormat, RpgMap, RpgArea, area
+\begin{ExampleBlock}[RpgThemeMapFormat, RpgMap, RpgArea, area][listing side text]{RpgThemeMapFormat: Roman Numerals}
+\ExplSyntaxOn
+\RpgThemeMapFormat{ % #1: depth, #2: position at that depth
+    \int_compare:nNnTF {#1} = {1}
+    { \int_to_Roman:n {#2} }        %% outermost: I, II, III, ...
+    { . \int_to_arabic:n {#2} } %% deeper: .1, .2, .3, ...
+}
+\ExplSyntaxOff
+
+\begin{RpgMap}[header-offset=2]
+    \area{Gatehouse} The only way in.
+
+    \begin{RpgArea}{Keep}
+        \area{Armoury} Racks of old spears.
+
+        \begin{RpgArea}{Cellars}
+            \area{Wine Store} Mostly empty.
+        \end{RpgArea}
+    \end{RpgArea}
+\end{RpgMap}
+
+
+\end{ExampleBlock}

@@ -1,3 +1,17 @@
+% example = des-callout-style
+% title = Restyling a Callout
+% highlight = tcbset, RpgTip
+	\tcbset{
+		rpgtip/.append style={
+			sharp corners,
+			borderline west={3pt}{0pt}{black},
+		}
+	}
+
+	\begin{RpgTip}{A Restyled Tip}
+		This tip has square corners, and a rule down its left-hand side.
+	\end{RpgTip}
+
 % example = des-dice-format
 % title = RpgDice Formatting: The D\&D Format
 % highlight = RpgThemeDiceFormat, RpgDice
@@ -15,6 +29,32 @@
 	\ExplSyntaxOff
 
 	After: \RpgDice{2d8 + 3}, \RpgDice{d8}
+
+% example = des-drop-cap-height
+% title = Changing the Drop Cap Height
+% highlight = RpgThemeDropCapHeight, RpgDropCap
+	\RpgThemeDropCapHeight{2}
+
+	\RpgDropCap{T}{he road} winds down from the pass into a valley of grey stone, where the river has long since run dry and the old watchtowers stand empty.
+
+% example = des-filigree
+% title = A Custom Filigree
+% highlight = RpgThemeSetFiligree, RpgFiligree, RpgFiligreeSize
+	\RpgThemeSetFiligree{
+		%% a bracket at each corner, scaled by \RpgFiligreeSize
+		\foreach \corner/\dx/\dy in
+			{north west/1/-1, north east/-1/-1, south west/1/1, south east/-1/1}
+		{
+			\draw[thick]
+				($(frame.\corner)+(0,{2*\dy*\RpgFiligreeSize})$)
+				-- (frame.\corner)
+				-- ($(frame.\corner)+({2*\dx*\RpgFiligreeSize},0)$);
+		}
+	}
+
+	\begin{RpgFiligree}
+		The frame is drawn over the box, so it can extend beyond its edges.
+	\end{RpgFiligree}
 
 % example = des-footer
 % options = listing only
@@ -42,6 +82,29 @@
 
 	\keys_set:nn {rpg/my-env} {title=Hello, hidden, size=large}
 
+% example = des-map-format
+% title = RpgThemeMapFormat: Roman Numerals
+% highlight = RpgThemeMapFormat, RpgMap, RpgArea, area
+	\ExplSyntaxOn
+	\RpgThemeMapFormat{ % #1: depth, #2: position at that depth
+		\int_compare:nNnTF {#1} = {1}
+		{ \int_to_Roman:n {#2} }		%% outermost: I, II, III, ...
+		{ . \int_to_arabic:n {#2} }	%% deeper: .1, .2, .3, ...
+	}
+	\ExplSyntaxOff
+
+	\begin{RpgMap}[header-offset=2]
+		\area{Gatehouse} The only way in.
+
+		\begin{RpgArea}{Keep}
+			\area{Armoury} Racks of old spears.
+
+			\begin{RpgArea}{Cellars}
+				\area{Wine Store} Mostly empty.
+			\end{RpgArea}
+		\end{RpgArea}
+	\end{RpgMap}
+
 % example = des-rule-env
 % title = Creating a Rule Environment
 % highlight = RpgThemeNewCardableRuleEnv, RpgPotionAddProperty, RpgThemePotionFormat, RpgThemePotionCardFormat, RpgPotion, RpgSwitch
@@ -65,3 +128,15 @@
 	\begin{RpgPotion}[width=4.5cm, height=3cm]{Healing Draught}[colour=red]
 		Restores \RpgDice{2d4+2} hit points.
 	\end{RpgPotion}
+
+% example = des-secrets
+% title = Inline Secrets
+% highlight = RpgThemeSetSecretHidden, RpgThemeSetSecretVisible, RpgSecret, RpgSwitch
+	\RpgThemeSetSecretHidden{#1}
+	\RpgThemeSetSecretVisible{#1 \textcolor{SecretColor!60!black}{[#2]}}
+
+	\RpgSwitch{ShowSecrets}{false}
+	Players: the door \begin{RpgSecret}{is locked}is trapped\end{RpgSecret}.
+
+	\RpgSwitch{ShowSecrets}{true}
+	GM: the door \begin{RpgSecret}{is locked}is trapped\end{RpgSecret}.
