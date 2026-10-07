@@ -1,3 +1,4 @@
+% BUG: this file uses \@title, \@subtitle and \@author, but never sets @ as a letter. When the theme is loaded in the document body, @ is not a letter, so these are read as \@ followed by text, and the title page prints the wrong content (silently). Add \makeatletter at the top (and \makeatother at the end), or use \use:c{@title} etc.
 
 \ExplSyntaxOff
 

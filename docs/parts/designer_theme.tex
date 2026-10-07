@@ -1,8 +1,12 @@
 % !TEX root = ../documentation.tex
 \chapter{Building a Theme}\label{S:ThemeCommands}
 
-	This part of the manual documents the commands used to build themes. Authors of \rpgtex{} documents will rarely need them; they are intended for designers creating or modifying a theme, and for users who wish to adjust an existing theme in detail. By convention, all of these commands begin with \texttt{RpgTheme}.
 
+	This part of the manual documents the commands used to build themes, they are intended for designers creating or modifying a theme, and for users who wish to adjust an existing theme in detail. By convention, all of these commands begin with \texttt{\textbackslash{}RpgTheme...}.
+
+	\begin{center}
+		\large \bfseries Authors of \rpgtex{} documents probably do not need any of the commands in this section, and it can safely be ignored.
+	\end{center}
 	This chapter describes how a theme is organised. The chapters which follow describe how a theme defines its fonts \RpgPage[p]{C:Fonts}, the design of its pages \RpgPage[p]{C:PageDesign}, the appearance of individual elements \RpgPage[p]{S:ElementStyles}, and its rule environments \RpgPage[p]{C:ThemeRuleEnvs}.
 
 	\begin{RpgSidebar}{Code Setters}
@@ -17,35 +21,97 @@
 
 	\section{Theme Files}\label{S:ThemeStructure}
 
-		A theme called \texttt{name} is a directory, \texttt{<themepath>/name}, containing the file \texttt{name.cfg}. Calling \cmdref{RpgSetTheme}\param{name} inputs this file, which in turn usually inputs a number of \texttt{.theme.tex} files, each customising one part of the document (colours, fonts, headers, titles and so on). For example, the default theme's configuration file begins:
+		When \cmd{RpgSetTheme}\param{<name>} is called, \RpgPage[p]{Cmd:RpgSetTheme} the module attempts to input a file of the form:
 		\begin{Code}
-			\cmd*{def}\cmd*{base}\{themes/default\}
+			<theme path> / <name> / <name>.cfg
+		\end{Code}
+		Where <theme path> is the value set by the theme path option \RpgPage[p]{S:ThemePath} or by \cmdref{RpgSetThemePath}. The theme ``\texttt{name}" is therefore defined by a directory, \texttt{<themepath>/name}, containing the file \texttt{name.cfg}. This file (the `theme configuration file') may then execute any \LaTeX{} code.
 
-			\cmd*{input}\{\cmd*{base}/colors.theme.tex\}
+		If the theme config file separates out the concerns across multiple files, it is important to \cmd*{input} them using the full \cmdref{RpgPackagePath} to prevent name collisions. For example, the default theme's configuration file begins:
+		\begin{Code}
+			\cmd*{input}\{\cmd*{RpgPackagePath}/themes/default/colors.theme.tex\}
 
-			\cmd*{input}\{\cmd*{base}/callouts.theme.tex\}
+			\cmd*{input}\{\cmd*{RpgPackagePath}/themes/default/utility.theme.tex\}
 
 			\ldots
 		\end{Code}
 		Since a theme may be loaded in the middle of a document, its commands should only change appearance, and each theme should set every value it relies upon, rather than assuming the defaults of the theme before it.
 
+		\textsc{The small caps}
+
+		\textit{Italics font}
+		\subsection{Theme Code}\label{S:ThemeCode}
+
+			Since themes are inserted entirely through \cmd*{input} commands, and may be introduced midway through a document, there are some restrictions and limitations on what should go inside a theme file or its subsidiary files:
+
+			\begin{enumerate}
+				\item \textbf{Packages.} Any package loading content (\cmd*{usepackage}, \cmd*{tcbuselibrary}) should be wrapped in a \cmdref{RpgIfPreamble} block, and appropriate guards put in place in case the packages cannot be loaded (because the theme was first activated in the document body).
+				\item \textbf{Other preamble-only commands.} Commands such as \cmd*{geometry} may also only be used in the preamble. Where a body equivalent exists, \cmdref{RpgIfPreambleTF} can choose between the two (for example, \cmd*{geometry} in the preamble and \cmd*{newgeometry} in the body).
+				\item \textbf{Repeated loading.} A theme may be loaded more than once in the same document, either because the author switches back to it, or because another theme builds upon it: the \texttt{dnd} and \texttt{scifi} themes both begin by calling \cmd{RpgSetTheme}\{default\}, and so the default theme is reloaded whenever either is activated. Every definition must therefore succeed when it is made a second time:
+				      \begin{itemize}
+					      \item Use \cmd*{DeclareDocumentCommand} (or \cmd*{cs_set:Npn}) rather than \cmd*{NewDocumentCommand} (or \cmd*{cs_new:Npn}), so that the definition is replaced rather than raising an error. This also allows a later theme to override a command defined by an earlier one.
+					      \item Create variables only if they do not already exist (for example, with \cmd*{tl_if_exist:NF}), and use \cmd*{msg_set:nnn} rather than \cmd*{msg_new:nnn}.
+				      \end{itemize}
+				\item \textbf{Category codes.} A theme file is read with the category codes in force where \cmd{RpgSetTheme} is called. When it is called in the document body, \LaTeX{}3 syntax is off and \texttt{@} is not a letter. Each file should therefore begin with \cmd*{ExplSyntaxOn} if it uses \LaTeX{}3 syntax, and with \cmd*{makeatletter} if it uses internal commands such as \cmd*{@title}, rather than relying on the settings left by the file before it.
+				\item \textbf{Timing.} A theme only affects material created after it is loaded. In particular, it cannot change the options passed to the underlying class (such as the font size or the number of columns), and it does not restyle a table of contents which has already been typeset.
+			\end{enumerate}
+
+		\subsection{Theme Resources}\label{S:ThemeResources}
+
+			It is possible to ship non-\TeX{} resources, such as fonts and images, with a theme. By convention, these are kept in subdirectories of the theme's directory, such as \texttt{fonts/} and \texttt{img/}.
+
+			\TeX{}, \texttt{graphicx} and \texttt{fontspec} search for these files relative to the document being compiled, not to the theme, and so each resource must be referred to by its full path. For a theme distributed with \rpgtex{}, this is built from \cmdref{RpgPackagePath}. For example, the \texttt{dnd} theme sets its paper texture with:
+			\begin{Code}
+				\cmd*{RpgThemePaperImage}\{\cmd*{RpgPackagePath}/themes/dnd/img/paper\}
+			\end{Code}
+			and loads its fonts by giving \texttt{fontspec} the location of the font files:
+			\begin{Code}
+				\cmd*{RpgIfFont}\{
+
+				\quad\cmd*{providefontfamily}\{\cmd*{kepler}\}\{KpSans\}[
+
+				\quad\quad Path = \cmd*{RpgPackagePath}/themes/dnd/fonts/,
+
+				\quad\quad UprightFont = *-Regular,
+
+				\quad\quad \ldots
+
+				\quad]
+
+				\}
+			\end{Code}
+			Fonts should be loaded within \cmdref{RpgIfFont}, so that they are only loaded when the \texttt{font} option is active. A theme stored outside the \rpgtex{} installation cannot use \cmd{RpgPackagePath}, and must give the full location of its resources in some other way.
+
+			Any resource shipped with a theme is distributed along with it, and so must be licensed for redistribution.
+
 	\section{Conditional Code}\label{S:ThemeConditional}
 
-		Many parts of a theme are only meaningful when the corresponding package option is active. The following commands allow a theme to include code conditionally:
+		Many parts of a theme are only meaningful when the corresponding package option is active, and some commands may only be used in the preamble, although a theme may be loaded in the document body. The following commands allow a theme to include code conditionally:
 
-		\RpgFunction{RpgIfFont}{\param{code}}
+		\RpgFunction{RpgIfFontTF}[RpgIfFont]{\param{true code}\param{false code}}
 		{
-			Runs \texttt{code} only if the \texttt{font} option is active \RpgPage[p]{S:PackageOptions}.
+			Runs \texttt{true code} if the \texttt{font} option is active \RpgPage[p]{S:PackageOptions}, and \texttt{false code} otherwise. The alias \cmd{RpgIfFont}\param{code} takes a single argument, and is equivalent to \cmd{RpgIfFontTF}\param{code}\{\}.
 		}
-		\RpgFunction{RpgIfPaper}{\param{code}}
+		\RpgFunction{RpgIfPaperTF}[RpgIfPaper]{\param{true code}\param{false code}}
 		{
-			Runs \texttt{code} only if the \texttt{background} option is active.
+			Runs \texttt{true code} if the \texttt{background} option is active, and \texttt{false code} otherwise. The alias \cmd{RpgIfPaper}\param{code} takes a single argument, and is equivalent to \cmd{RpgIfPaperTF}\param{code}\{\}.
 		}
-		\RpgFunction{RpgIfSections}{\param{code}}
+		\RpgFunction{RpgIfPreambleTF}[RpgIfPreamble]{\param{true code}\param{false code}}
 		{
-			Runs \texttt{code} only if the \texttt{sections} option is active.
+			Runs \texttt{true code} if it is reached before \texttt{\textbackslash begin\{document\}}, and \texttt{false code} otherwise. The alias \cmd{RpgIfPreamble}\param{code} takes a single argument, and is equivalent to \cmd{RpgIfPreambleTF}\param{code}\{\}.
+
+			This allows a body alternative to be given for preamble-only commands, for example:
+			\begin{Code}
+				\cmd*{RpgIfPreambleTF}\{\cmd*{geometry}\{...\}\}\{\cmd*{newgeometry}\{...\}\}
+			\end{Code}
+			The restrictions on what a theme may contain are described on \RpgPage{S:ThemeCode}.
 		}
-		\RpgFunction{RpgIfTitle}{\param{code}}
+		\RpgFunction{RpgIfSectionsTF}[RpgIfSections]{\param{true code}\param{false code}}
 		{
-			Runs \texttt{code} only if the \texttt{title} option is active.
+			Runs \texttt{true code} if the \texttt{sections} option is active, and \texttt{false code} otherwise. The alias \cmd{RpgIfSections}\param{code} takes a single argument, and is equivalent to \cmd{RpgIfSectionsTF}\param{code}\{\}.
 		}
+		\RpgFunction{RpgIfTitleTF}[RpgIfTitle]{\param{true code}\param{false code}}
+		{
+			Runs \texttt{true code} if the \texttt{title} option is active, and \texttt{false code} otherwise. The alias \cmd{RpgIfTitle}\param{code} takes a single argument, and is equivalent to \cmd{RpgIfTitleTF}\param{code}\{\}.
+		}
+

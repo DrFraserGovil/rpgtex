@@ -34,14 +34,15 @@
 	]
 
 
-	\providefontfamily{\bookman}{Bookman~Old~Style~Std}
+	\providefontfamily{\gyreBonum}{texgyrebonum}
 	[
-		Path= \RpgPackagePath/themes/dnd/fonts/,
-		UprightFont = *~Regular,
-		BoldFont= *~Bold,
-		ItalicFont=*~Italic,
-		BoldItalicFont=*~Bold~It,
-		SmallCapsFont=EBGaramondSC08-Regular.otf
+		Extension      = .otf,
+		UprightFont    = *-regular,
+		BoldFont       = *-bold,
+		ItalicFont     = *-italic,
+		BoldItalicFont = *-bolditalic,
+		SmallCapsFont  = EBGaramond-Regular.otf,
+		SmallCapsFeatures = {Letters =SmallCaps},
 	]
 }
 
@@ -58,7 +59,7 @@
 \RpgThemeCreateFont{\RpgFontPartSubtitle}{part-subtitle}
 
 \RpgThemeFont{
-	main-body-family			={\bookman},
+	main-body-family			={\gyreBonum},
 	%Sections
 	title-family=		{\normalfont},
 	title-style			= {\bfseries\fontsize{30}{50}\selectfont\color{TitleRed}},
@@ -99,7 +100,7 @@
 	%stat block
 	stat-block-title-family={\scshape},
 	stat-block-title-style= {\bfseries \LARGE \color{StatblockColor}},
-	stat-block-body-family={\bookman},
+	stat-block-body-family={\gyreBonum},
 	stat-block-body-style={\small\color{black}},
 	stat-block-section-family={\kepler},
 	stat-block-section-style={\color{StatblockColor} \scshape \large},

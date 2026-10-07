@@ -74,6 +74,7 @@
 % % % conflicts (e.g., package options).
 % % % Low-level modules first.
 
+\input {core/modules/	conditionals	.rpg-code.tex}
 \input {core/modules/	themes			.rpg-code.tex}
 \input {core/modules/	colors			.rpg-code.tex}
 \input {core/modules/	dice			.rpg-code.tex}

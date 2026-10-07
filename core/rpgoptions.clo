@@ -23,7 +23,7 @@
 	\RpgThemeBoolKey*	{nomultitoc}{\__rpg_HasMulticolToc}
 
 	\RpgThemeTLKey		{size}		{\__rpg_FontSize}	{10pt}
-	\RpgThemeTLKey		{themepath}	{\__rpg_ThemePath}	{themes}
+	\RpgThemeTLKey		{themepath}	{\__rpg_ThemePath}	{\RpgPackagePath/themes}
 	\RpgThemeTLKey		{theme}		{\__rpg_Theme}		{default}
 
 	\RpgThemeTLMapKey	{columns}	{\__rpg_PageColumns}	{1,2}	{onecolumn,twocolumn} {2}
@@ -84,32 +84,4 @@
 	}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Define Guards 
-% Deactivates some portions if arg not present
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\NewDocumentCommand\RpgIfFont{+m}{
-	\bool_if:NT{\__rpg_UseFontOption}
-	{
-		#1
-	}
-}
-\NewDocumentCommand\RpgIfTitle{+m}{
-	\bool_if:NT{\__rpg_UseTitlesOption}
-	{
-		#1
-	}
-}
-\NewDocumentCommand\RpgIfPaper{+m}{
-	\bool_if:NT{\__rpg_UsePaperOption}
-	{
-		#1
-	}
-}
-\NewDocumentCommand\RpgIfSections{+m}{
-	\bool_if:NT{\__rpg_UseSectionsOption}
-	{
-		#1
-	}
-}

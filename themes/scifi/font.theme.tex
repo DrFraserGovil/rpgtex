@@ -19,7 +19,11 @@
 		Path=\RpgPackagePath/themes/scifi/fonts/,
 		UprightFont = *-Regular,
 		BoldFont= *-Bold,
-		ItalicFont=EurostileBQ-Italic,
+		AutoFakeSlant=0.2,
+		%% Jura's own small caps only cover some letters, so borrow Fira Sans' (weights chosen to match Jura's)
+		SmallCapsFont = FiraSans-Light.otf,
+		SmallCapsFeatures = {Letters=SmallCaps},
+		BoldFeatures = {SmallCapsFont = FiraSans-Medium.otf, SmallCapsFeatures = {Letters=SmallCaps}},
 	]
 }
 
