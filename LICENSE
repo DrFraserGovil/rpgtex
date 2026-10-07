@@ -40,18 +40,6 @@ kept in the file named alongside it.
 
 Fonts
 
-  themes/dnd/fonts/KpSans-*, KpRoman-*
-      Kp-Fonts, Christophe Caignaert and Daniel Flipo
-      SIL Open Font License 1.1 -- see KpFonts-LICENSE.txt
-
-  themes/dnd/fonts/GilliusADFNo2-*
-      Gillius ADF No2, Arkandis Digital Foundry
-      GNU GPL v2 or later, with font exception -- see Gillius-LICENSE.txt
-
-  themes/dnd/fonts/EBGaramondSC08-Regular.otf
-      EB Garamond, Georg Duffner
-      SIL Open Font License 1.1 -- see EBGaramond-LICENSE.txt
-
   themes/scifi/fonts/Orbitron-*
       Orbitron, Matt McInerney / The Orbitron Project Authors
       SIL Open Font License 1.1 -- see Orbitron-LICENSE.txt

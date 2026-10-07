@@ -61,13 +61,13 @@
 			\begin{Code}
 				\cmd*{RpgThemePaperImage}\{\cmd*{RpgPackagePath}/themes/dnd/img/paper\}
 			\end{Code}
-			and loads its fonts by giving \texttt{fontspec} the location of the font files:
+			Fonts are loaded by giving \texttt{fontspec} the location of the font files. For example, the \texttt{scifi} theme loads its body font with:
 			\begin{Code}
 				\cmd*{RpgIfFont}\{
 
-				\quad\cmd*{providefontfamily}\{\cmd*{kepler}\}\{KpSans\}[
+				\quad\cmd*{providefontfamily}\{\cmd*{jura}\}\{Jura\}[
 
-				\quad\quad Path = \cmd*{RpgPackagePath}/themes/dnd/fonts/,
+				\quad\quad Path = \cmd*{RpgPackagePath}/themes/scifi/fonts/,
 
 				\quad\quad UprightFont = *-Regular,
 
@@ -77,7 +77,7 @@
 
 				\}
 			\end{Code}
-			Fonts should be loaded within \cmdref{RpgIfFont}, so that they are only loaded when the \texttt{font} option is active. A theme stored outside the \rpgtex{} installation cannot use \cmd{RpgPackagePath}, and must give the full location of its resources in some other way.
+			Fonts should be loaded within \cmdref{RpgIfFont}, so that they are only loaded when the \texttt{font} option is active. Fonts which are part of the \TeX{} distribution need no \texttt{Path}, and need not be shipped with the theme: they are found by name, as with \texttt{Extension = .otf} in the \texttt{dnd} theme. Note that \texttt{Path} applies to every face of a font family, including any separate small capitals font, so a bundled font and a \TeX{} distribution font cannot be combined in the same family. A theme stored outside the \rpgtex{} installation cannot use \cmd{RpgPackagePath}, and must give the full location of its resources in some other way.
 
 			Any resource shipped with a theme is distributed along with it, and so must be licensed for redistribution.
 
