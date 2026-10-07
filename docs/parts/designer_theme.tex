@@ -112,3 +112,74 @@
 			Runs \texttt{true code} if the \texttt{title} option is active, and \texttt{false code} otherwise. The alias \cmd{RpgIfTitle}\param{code} takes a single argument, and is equivalent to \cmd{RpgIfTitleTF}\param{code}\{\}.
 		}
 
+	\section{Key-Value Options}\label{S:ThemeKeys}
+
+		Themes often need to give their own commands and environments key-value options. The l3keys library provides a convenient interface, but can be extremely verbose, and relies on excessive boilerplate to declare a new variable. \rpgtex{} provides commands which define such options in a single line each, creating the variable in which the value is stored if it does not already exist. Each key belongs to a \texttt{family}, such as \texttt{rpg/table}.
+
+		\subsection{Defining Keys}
+
+			Keys may be defined one at a time, giving the \texttt{family} each time \RpgPage[p]{S:ThemeKeysSingle}, or several at once within a single \texttt{family} \RpgPage[p]{S:ThemeKeysGroup}. The two sets of commands define exactly the same kinds of key.
+			\subsubsection{Defining Individual Keys}\label{S:ThemeKeysSingle}
+
+				Each of the following commands defines a single key in the given \texttt{family}:
+
+				\RpgFunction{RpgThemeNewBoolKey}{(*)\param{family}\param{key}\param{variable}}
+				{
+					Defines a flag, which takes no value. The unstarred form sets the boolean \texttt{variable} to false, and makes it true when the flag is present. The starred form does the opposite: the variable starts true, and the flag makes it false.
+				}
+				\RpgFunction{RpgThemeNewCodeMapKey}{\param{family}\param{key}\param{choices}\param{code}\param{default}}
+				{
+					Defines a key whose value must be one of the comma-separated \texttt{choices}. Rather than storing the value, it runs the corresponding entry of the comma-separated \texttt{code} list. Any entry of \texttt{code} which itself contains a comma must be enclosed in braces.
+				}
+				\RpgFunction{RpgThemeNewTLChoiceKey}{\param{family}\param{key}\param{variable}\param{choices}\param{default}}
+				{
+					Defines a key whose value must be one of the comma-separated \texttt{choices}, and stores it in \texttt{variable}.
+				}
+				\RpgFunction{RpgThemeNewTLKey}{\param{family}\param{key}\param{variable}\param{default}}
+				{
+					Defines a key which takes any value, and stores it in \texttt{variable}. A value must be given whenever the key is used.
+				}
+				\RpgFunction{RpgThemeNewTLMapKey}{\param{family}\param{key}\param{variable}\param{choices}\param{values}\param{default}}
+				{
+					Defines a key whose value must be one of the comma-separated \texttt{choices}, and stores the corresponding entry of the comma-separated \texttt{values} in \texttt{variable}. For example, the \texttt{columns} option maps the choices \texttt{1,2} to the values \texttt{onecolumn,twocolumn}.
+				}
+
+			\subsubsection{Defining Groups of Keys}\label{S:ThemeKeysGroup}
+
+				When several keys belong to the same \texttt{family}, they may be defined together, without repeating the family each time:
+
+				\RpgFunction{RpgThemeKeys}{\param{family}\param{definitions}}
+				{
+					Defines several keys in the same \texttt{family} at once. The \texttt{definitions} are made with the commands below.
+
+					\RpgGetExample{des-keys}
+				}
+
+				The following commands may only be used within the \texttt{definitions} of \cmd{RpgThemeKeys}, and define a key in its \texttt{family}:
+
+				\RpgFunction{RpgThemeBoolKey}{(*)\param{key}\param{variable}}
+				{
+					Defines a flag, which takes no value. The unstarred form sets the boolean \texttt{variable} to false, and makes it true when the flag is present. The starred form does the opposite: the variable starts true, and the flag makes it false. The \texttt{family} is the one given to \cmd{RpgThemeKeys}.
+				}
+				\RpgFunction{RpgThemeCodeMapKey}{\param{key}\param{choices}\param{code}\param{default}}
+				{
+					Defines a key whose value must be one of the comma-separated \texttt{choices}. Rather than storing the value, it runs the corresponding entry of the comma-separated \texttt{code} list. Any entry of \texttt{code} which itself contains a comma must be enclosed in braces. The \texttt{family} is the one given to \cmd{RpgThemeKeys}.
+				}
+				\RpgFunction{RpgThemeTLChoiceKey}{\param{key}\param{variable}\param{choices}\param{default}}
+				{
+					Defines a key whose value must be one of the comma-separated \texttt{choices}, and stores it in \texttt{variable}. The \texttt{family} is the one given to \cmd{RpgThemeKeys}.
+				}
+				\RpgFunction{RpgThemeTLKey}{\param{key}\param{variable}\param{default}}
+				{
+					Defines a key which takes any value, and stores it in \texttt{variable}. A value must be given whenever the key is used. The \texttt{family} is the one given to \cmd{RpgThemeKeys}.
+				}
+				\RpgFunction{RpgThemeTLMapKey}{\param{key}\param{variable}\param{choices}\param{values}\param{default}}
+				{
+					Defines a key whose value must be one of the comma-separated \texttt{choices}, and stores the corresponding entry of the comma-separated \texttt{values} in \texttt{variable}. For example, the \texttt{columns} option maps the choices \texttt{1,2} to the values \texttt{onecolumn,twocolumn}. The \texttt{family} is the one given to \cmd{RpgThemeKeys}.
+				}
+
+		\subsection{Setting Keys}
+
+			Once a key has been defined, its value is set using either the l3keys function \cmd*{keys_set:nn}\param{family}\param{key-value-list} (which requires \cmd*{ExplSyntaxOn}), or the \LaTeX{} kernel command \cmd*{SetKeys}[<family>]\param{key-value-list}, which may be used anywhere. The \texttt{family} is optional for \cmd*{SetKeys}, but should always be given: if it is omitted, the family of the package currently being loaded is used instead.
+
+			The new values are local to the group in which they are set (except where the code run by a \cmd{RpgThemeNewCodeMapKey} key makes a global change), so they revert at the end of the group. Every environment is a group, and a group may also be created with braces, \cmd*{begingroup} and \cmd*{endgroup}, or \cmd*{group_begin:} and \cmd*{group_end:}.
