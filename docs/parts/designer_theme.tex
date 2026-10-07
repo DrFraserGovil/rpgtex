@@ -2,10 +2,10 @@
 \chapter{Building a Theme}\label{S:ThemeCommands}
 
 
-	This part of the manual documents the commands used to build themes, they are intended for designers creating or modifying a theme, and for users who wish to adjust an existing theme in detail. By convention, all of these commands begin with \texttt{\textbackslash{}RpgTheme...}.
+	This part of the manual documents the commands used to build themes. They are intended for designers creating or modifying a theme, and for users who wish to adjust an existing theme in detail. By convention, all of these commands begin with \texttt{\textbackslash{}RpgTheme...}.
 
 	\begin{center}
-		\large \bfseries Authors of \rpgtex{} documents probably do not need any of the commands in this section, and it can safely be ignored.
+		\large \bfseries Authors of \rpgtex{} documents probably do not need any of the commands in this part, and it can safely be ignored.
 	\end{center}
 	This chapter describes how a theme is organised. The chapters which follow describe how a theme defines its fonts \RpgPage[p]{C:Fonts}, the design of its pages \RpgPage[p]{C:PageDesign}, the appearance of individual elements \RpgPage[p]{S:ElementStyles}, and its rule environments \RpgPage[p]{C:ThemeRuleEnvs}.
 
@@ -21,13 +21,13 @@
 
 	\section{Theme Files}\label{S:ThemeStructure}
 
-		When \cmd{RpgSetTheme}\param{<name>} is called, \RpgPage[p]{Cmd:RpgSetTheme} the module attempts to input a file of the form:
+		When \cmd{RpgSetTheme}\param{<name>} is called, \RpgPage[p]{Cmd:RpgSetTheme} \rpgtex{} attempts to input a file of the form:
 		\begin{Code}
 			<theme path> / <name> / <name>.cfg
 		\end{Code}
-		Where <theme path> is the value set by the theme path option \RpgPage[p]{S:ThemePath} or by \cmdref{RpgSetThemePath}. The theme ``\texttt{name}" is therefore defined by a directory, \texttt{<themepath>/name}, containing the file \texttt{name.cfg}. This file (the `theme configuration file') may then execute any \LaTeX{} code.
+		Where \texttt{<theme path>} is the value set by the theme path option \RpgPage[p]{S:ThemePath} or by \cmdref{RpgSetThemePath}. The theme ``\texttt{name}'' is therefore defined by a directory, \texttt{<theme path>/name}, containing the file \texttt{name.cfg}. This file (the `theme configuration file') may then execute any \LaTeX{} code.
 
-		If the theme config file separates out the concerns across multiple files, it is important to \cmd*{input} them using the full \cmdref{RpgPackagePath} to prevent name collisions. For example, the default theme's configuration file begins:
+		If the theme config file separates out the concerns across multiple files, it is important to \cmd*{input} them using the full file path to prevent name collisions. For example, the default theme's configuration file begins:
 		\begin{Code}
 			\cmd*{input}\{\cmd*{RpgPackagePath}/themes/default/colors.theme.tex\}
 
@@ -35,7 +35,6 @@
 
 			\ldots
 		\end{Code}
-		Since a theme may be loaded in the middle of a document, its commands should only change appearance, and each theme should set every value it relies upon, rather than assuming the defaults of the theme before it.
 
 		\subsection{Theme Code}\label{S:ThemeCode}
 
@@ -57,10 +56,13 @@
 
 			It is possible to ship non-\TeX{} resources, such as fonts and images, with a theme. By convention, these are kept in subdirectories of the theme's directory, such as \texttt{fonts/} and \texttt{img/}.
 
-			\TeX{}, \texttt{graphicx} and \texttt{fontspec} search for these files relative to the document being compiled, not to the theme, and so each resource must be referred to by its full path. For a theme distributed with \rpgtex{}, this is built from \cmdref{RpgPackagePath}. For example, the \texttt{dnd} theme sets its paper texture with:
+			\TeX{}, \texttt{graphicx} and \texttt{fontspec} search for these files relative to the document being compiled, not to the theme, and so each resource must be referred to by its full path. For example, the \texttt{dnd} theme sets its paper texture with:
 			\begin{Code}
 				\cmd*{RpgThemePaperImage}\{\cmd*{RpgPackagePath}/themes/dnd/img/paper\}
 			\end{Code}
+
+			Note that this uses \cmd{RpgPackagePath} because the theme is bundled with a package; for a general theme which is stored elsewhere, the designer must give the full path.
+
 			Fonts are loaded by giving \texttt{fontspec} the location of the font files. For example, the \texttt{scifi} theme loads its body font with:
 			\begin{Code}
 				\cmd*{RpgIfFont}\{
@@ -77,9 +79,7 @@
 
 				\}
 			\end{Code}
-			Fonts should be loaded within \cmdref{RpgIfFont}, so that they are only loaded when the \texttt{font} option is active. Fonts which are part of the \TeX{} distribution need no \texttt{Path}, and need not be shipped with the theme: they are found by name, as with \texttt{Extension = .otf} in the \texttt{dnd} theme. Note that \texttt{Path} applies to every face of a font family, including any separate small capitals font, so a bundled font and a \TeX{} distribution font cannot be combined in the same family. A theme stored outside the \rpgtex{} installation cannot use \cmd{RpgPackagePath}, and must give the full location of its resources in some other way.
-
-			Any resource shipped with a theme is distributed along with it, and so must be licensed for redistribution.
+			\cmdref{RpgThemeFont} may be used unguarded, since it does not load any fonts itself, but the font declarations should be placed within \cmdref{RpgIfFont}, so that fonts are only loaded when the \texttt{font} option is active.
 
 	\section{Conditional Code}\label{S:ThemeConditional}
 
