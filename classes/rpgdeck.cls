@@ -10,7 +10,7 @@
 
 %% Decks are always laid out in a single column (the cards themselves are placed side by side)
 \tl_new:N \__rpg_ClassDefaults
-\tl_set:Nn \__rpg_ClassDefaults {font,background,sections,columns=1}
+\tl_set:Nn \__rpg_ClassDefaults {title,font,background,sections,columns=1}
 
 \input {core/rpgoptions.clo}
 \LoadClass[a4paper] { \__rpg_BaseClass }
@@ -23,16 +23,7 @@
 \RequirePackage[subpreambles=true]{standalone}
 
 %% Display every cardable rule environment as a card (by convention, their switches are named Use[X]Card)
-%% The names are collected first, since \RpgSwitch modifies the list being mapped over
-\seq_clear:N \l_tmpa_seq
-\prop_map_inline:Nn \__rpg_SwitchList
-{
-	\str_if_in:nnT {#1} {Card}
-	{
-		\seq_put_right:Nn \l_tmpa_seq {#1}
-	}
-}
-\seq_map_inline:Nn \l_tmpa_seq
+\seq_map_inline:Nn \__rpg_CardSwitches
 {
 	\RpgSwitch{#1}{on}
 }

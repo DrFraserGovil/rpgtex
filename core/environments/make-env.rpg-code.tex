@@ -16,6 +16,7 @@
 	\__RpgBuildEnv{__}{#1}{#2}{#1#2}
 	\__RpgBuildEnv{__}{#1}{#2Card}{#1#2}
 	\__RpgMakeKeys{#1}{#2}
+	\seq_put_right:Nn \__rpg_CardSwitches {#3}
 
 
 	\RenewDocumentEnvironment{__#1#2Card}{O{} m O{} +b}
@@ -48,6 +49,9 @@
 %%%%%%%%%%%%%%
 %% Helpers
 %%%%%%%%%%%%%%
+
+
+\seq_new:N \__rpg_CardSwitches
 
 \msg_new:nnn{rpg}{bad-getkey}{Cannot~get~key~(#1)~when~not~in~environment}
 \NewDocumentCommand\__RpgBuildEnv{m m m m}

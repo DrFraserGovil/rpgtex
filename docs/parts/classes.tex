@@ -1,265 +1,154 @@
-\chapter{Package \& Class Usage}
-	\rpgtex{} can be used either as a standalone package, or through one of its classes.
+\chapter{Package \& Class Usage}\label{C:Classes}
 
-	\begin{RpgTable}{lX}
-		Class & Purpose
-		\\
-		\texttt{rpgbook} \RpgPage[p]{S:bookClass} & Larger RPG documents, such as rulebooks and adventures. Based on the standard \texttt{book} class.
-		\\
-		\texttt{rpgcard} \RpgPage[p]{S:cardClass} & Individual cards, such as items, spells or abilities, for digital use.
-		\\
-		\texttt{rpgdeck} \RpgPage[p]{S:deckClass} & Collections of cards, arranged for printing.
-		\\
-		\texttt{rpghandout} \RpgPage[p]{S:handoutClass} & Shorter documents, such as player handouts. Based on the standard \texttt{article} class.
-	\end{RpgTable}
+	\rpgtex{} may be loaded through one of its four classes, which set up the whole document, or as a package within a document of any other class. Most documents should use a class. The simplest complete \rpgtex{} document is:
+	\begin{Code}
+		\cmd*{documentclass}\{rpgbook\}
 
-	Loading a one of these classes automatically activates the \texttt{font}, \texttt{sections}, \texttt{title} and \texttt{background} options \RpgPage[p]{S:PackageOptions}
-	\section{Standalone Package}
+		\cmd*{begin}\{document\}
+
+		~~\cmd*{chapter}\{The Adventure Begins\}
+
+		~~Your text here.
+
+		\cmd*{end}\{document\}
+	\end{Code}
+	Options are given in the usual way, such as \cmd*{documentclass}[theme=dnd, columns=1]\{rpgbook\} \RpgPage[p]{S:PackageOptions}.
+
+	\section{Choosing a Class}\label{S:ChooseClass}
+
+		Each class is suited to a different kind of document:
+		\begin{RpgTable}{lX}
+			Class & Purpose
+			\\
+			\texttt{rpgbook} \RpgPage[p]{S:bookClass} & Long documents, such as rulebooks and adventures, which are divided into parts and chapters.
+			\\
+			\texttt{rpgcard} \RpgPage[p]{S:cardClass} & One or a few cards, such as an item or spell, cropped to size for viewing on screen.
+			\\
+			\texttt{rpgdeck} \RpgPage[p]{S:deckClass} & Many cards, arranged on pages for printing.
+			\\
+			\texttt{rpghandout} \RpgPage[p]{S:handoutClass} & Shorter documents, such as player handouts, which are divided into sections.
+		\end{RpgTable}
+
+		\subsection{What the Classes Provide}\label{S:ClassCommon}
+
+			Compared with loading the package, every class:
+			\begin{itemize}
+				\item Activates the \texttt{font}, \texttt{background} and \texttt{sections} modules \RpgPage[p]{S:PackageOptions}. Every class except \texttt{rpgcard} also activates the \texttt{title} module.
+				\item Sets the page size (A4, except in the screen mode of \texttt{rpgcard}) and margins, and passes the \texttt{size}, \texttt{columns}, \texttt{openright} and \texttt{oneside} options to the underlying class.
+				\item Applies \rpgtex{}'s overall text layout: hyphenation is restricted, text is left-aligned unless the \texttt{justified} option is given, lists are spaced more compactly, and the table of contents is set in two columns unless the \texttt{nomultitoc} option is given.
+			\end{itemize}
+
+		\subsection{Font Sizes}\label{S:ClassSizes}
+
+			The \texttt{size} option sets the base font size, which must be one of the sizes accepted by the underlying class:
+			\begin{RpgTable}{lX}
+				Classes & Sizes
+				\\
+				\texttt{rpgbook}, \texttt{rpghandout} & \texttt{8pt}, \texttt{9pt}, \texttt{10pt}, \texttt{11pt}, \texttt{12pt}, \texttt{14pt}, \texttt{17pt} and \texttt{20pt}
+				\\
+				\texttt{rpgcard}, \texttt{rpgdeck} & \texttt{10pt}, \texttt{11pt} and \texttt{12pt}
+			\end{RpgTable}
+
+	\section{Standalone Package}\label{S:StandalonePackage}
 
 		The package may be loaded into a document of any class:
 		\begin{Code}
-			\textbackslash{}documentclass\{<any-class>\}
+			\cmd*{documentclass}\{<any-class>\}
 
-			\textbackslash{}usepackage[<options>]\{rpgtex\}
+			\cmd*{usepackage}[<options>]\{rpgtex\}
 		\end{Code}
-
-		This loads the core commands and environments, and the theme (the \texttt{default} theme, unless the \texttt{theme} option is used). However, the modules which change the fonts, page backgrounds, section headings and title page are inactive unless they are enabled with the \texttt{font}, \texttt{background}, \texttt{sections} and \texttt{title} options \RpgPage[p]{S:PackageOptions}. This allows \rpgtex{} to be added to an existing document without changing its overall appearance.
+		This loads the core commands and environments, and the theme (the \texttt{default} theme, unless the \texttt{theme} option is used). However, the modules which change the fonts, page backgrounds, section headings and title page are inactive unless they are enabled with the \texttt{font}, \texttt{background}, \texttt{sections} and \texttt{title} options, and none of the layout changes listed above \RpgPage[p]{S:ClassCommon} are made. This allows \rpgtex{} to be added to an existing document without changing its overall appearance.
 
 	\section{rpgbook}\label{S:bookClass}
 
-		The rpgbook class is designed for writing long form documents such as rulebooks and sourcebooks for RPGs - cases where you need to be able to organise things into parts and chapters!
+		The \texttt{rpgbook} class is designed for long documents, such as rulebooks, sourcebooks and adventures, which need to be organised into parts and chapters. It is the class used to typeset this manual.
 
-		\subsection{Inherited Class}
+		It is based on the \texttt{extbook} class from the \forcelink{https://ctan.org/pkg/extsizes}{extsizes} package, which behaves almost identically to the standard \texttt{book} class, but accepts a wider range of font sizes \RpgPage[p]{S:ClassSizes}. All of the usual \texttt{book} commands are therefore available, including \cmd*{part}, \cmd*{chapter}, \cmd*{frontmatter}, \cmd*{mainmatter}, \cmd*{backmatter} and \cmd*{appendix}.
 
-			The rpgbook class inherits from \forcelink{https://ctan.org/pkg/extsizes}{the extbook class}. This is an extension to the basic \texttt{book} class to allow more fontsizes to be accepted. Otherwise it behaves near-identically to the standard book class.
+		By default, \cmd{maketitle} produces a full cover page \RpgPage[p]{Cmd:RpgThemeTitleMode}. The \texttt{openright} option starts each chapter on a right-hand page, and the \texttt{oneside} option lays the document out for single-sided printing.
 
-			% \begin{RpgTip}{A known quirk}
-			% 	The only notable deviation between \texttt{book} and \texttt{extbook} that I have found is that even with \texttt{openany} mode active, \texttt{extbook} will still add a blank page after every \cmd{part} call. This problem has been reported by \forcelink{https://latex.org/forum/viewtopic.php?t=24722}{others for a decade}, but has not been fixed. 
-
-			% 	However, since rpgbook will almost always will be using custom part pages (via \cmdref{RpgSetPartPage}) this is of minimal concern.
-			% \end{RpgTip}
-
-			The full list of sizes which extbook can accept (and thus allowed inputs for the \texttt{size} option \RpgPage[p]{size}) is ``eight, nine, ten, eleven, twelve, fourteen, seventeen and twenty points''.
-
-			\subsubsection{Special Commands}
-
-				rpgbook inherits the following notable commands from the book class, which are not available in other classes:
-				%
-				% \RpgMacro{frontmatter}{\param{}}{Activates `preliminary formatting' for the introductory sections}{}{
-				% 	The initial formatting mimics formatting found in forewords and other miscellaneous text before the `main body' begins:
-				% 	\begin{enumerate}
-				% 		\item Chapters are un-numbered (as if called with \cmd{chapter*}), despite being entered into the table of contents.
-				% 		\item Page numbers are changed to lowercase roman (i, ii, etc.)
-				% 	\end{enumerate}
-				% }
-				% \RpgMacro{mainmatter}{\param{}}{Disables the special formatting.}{}{The `main matter' is the bulk of the text, and the expected formatting the user requests.
-				%
-				% 	When mainmatter is called, the page number is reset back to 1 -- this may cause the PDF page counter to differ from those which appear in the footer. The values reported by \cmd{pageref} and \cmd{RpgPage} refer to the `footer page numbers', not the PDF page numebrs.
-				% }
-				%
-				% \RpgMacro{backmatter}{\param{}}{Activates `appendix formatting'}{}
-				% {
-				% 	Appendix formatting does not change the page numbering, but disables the chapter numbering as in the \texttt{frontmatter}
-				% }
-		\subsection{Geometry}
-
-			The default geometry for an rpgbook is:
-			\begin{RpgTable}{ll}
-				Element & Size
-				\\
-				Left and right margin & 0.65in
-				\\
-				Top margin & 0.4in
-				\\
-				Bottom margin (from main text to page bottom) & 0.75in
-				\\
-				Bottom margin (from main text to top of footer area) & 0.3in
-				\\
-				Gap between columns in twocolumn mode & 0.25in
-			\end{RpgTable}
-
-		\subsection{Options \& Interactions}
-
-			The rpgbook interacts with all of the options detailed on \RpgPage{S:PackageOptions}. Note that there is no `forwarding' to the underlying class and that there is a slightly different syntax for, i.e., setting the global font size.
-
-			\begin{itemize}
-				\item RPG books use a cover-title by default (\cmdref{RpgSetTitleMode} is set to \texttt{cover})
-				\item The extbook provides the \texttt{part} and \texttt{chapter}
-				\item The \texttt{layout} mode is activated
-				      \begin{enumerate}
-					      \item Unless print mode is active, the page background will use the image set by \cmdref{RpgSetPaper}
-					      \item Calling \cmd{RpgSetTheme} clears the page (so that the old theme may complete)
-				      \end{enumerate}
-				\item A table of contents is available and formatted using the ToC-fonts
-			\end{itemize}
+		The page geometry is:
+		\begin{RpgTable}{ll}
+			Element & Size
+			\\
+			Left and right margins & 0.65in
+			\\
+			Top margin & 0.4in
+			\\
+			Bottom margin (from the text to the bottom of the page) & 0.75in
+			\\
+			Footer separation (from the text to the footer) & 0.3in
+			\\
+			Gap between columns & 0.25in
+		\end{RpgTable}
 
 	\section{rpghandout}\label{S:handoutClass}
 
-		The rpghandout class is designed for smaller documents where the full structure of a book is unnecessary, such as printouts for players, or individual adventure modules.
+		The \texttt{rpghandout} class is designed for shorter documents, where the structure of a book is unnecessary: printouts for players, or short adventure modules.
 
+		It is based on the \texttt{extarticle} class from the \forcelink{https://ctan.org/pkg/extsizes}{extsizes} package, which behaves almost identically to the standard \texttt{article} class, but accepts a wider range of font sizes \RpgPage[p]{S:ClassSizes}. The highest sectioning level is therefore \cmd*{section}.
 
-		\subsection{Inherited Class}
+		By default, \cmd{maketitle} produces a compact title at the top of the first page, rather than a cover page \RpgPage[p]{Cmd:RpgThemeTitleMode}. It is often followed by a short summary, using the \texttt{abstract} environment \RpgPage[p]{S:Abstracts}.
 
-			The rpghandout class inherits from \forcelink{https://ctan.org/pkg/extsizes}{the extarticle class}. This is an extension to the basic \texttt{article} class to allow more fontsizes to be accepted. Otherwise it behaves near-identically to the standard article class.
+		The page geometry is the same as that of \texttt{rpgbook} \RpgPage[p]{S:bookClass}.
 
-			The full list of sizes which extarticle can accept (and thus allowed inputs for the \texttt{size} option \RpgPage[p]{size}) is ``eight, nine, ten, eleven, twelve, fourteen, seventeen and twenty points''.
-
-			\subsubsection{Special Commands}
-
-				% \RpgMacro*{abstract}{\param{O\param{Abstract}},summary}{Defines a block of text which (if in twocolumn mode) spans both columns, serving as a summary of the document.}
-				% {
-				% 	\cmd{begin\param{abstract}}[<abstract-name>] ~~~\% (or \cmd{begin\param{summary}})
-				%
-				% 	~~<abstract-contents>
-				%
-				% 	\cmd{end\param{abstract}}
-				% }
-				% {
-				% 	We have redefined the abstract environment slightly so that it renders almost identically in both twocolumn and onecolumn mode:
-				%
-				% 	The optional argument determines the `header' text which is printed above the abstract text. This is centered and uses the \cmd{RpgFontAbstractTitle} font, whilst the body text uses \cmd{RpgFontAbstractBody}. The text is placed into a parbox which is 70\% the line width.
-				%
-				% 	The \texttt{summary} variant is identical, but uses the default header value of `Summary', which might be more familiar to non-technical writers.\index{summary}
-				% }
-		\subsection{Geometry}
-
-			The default geometry for an rpghandout is:
-			\begin{RpgTable}{ll}
-				Element & Size
-				\\
-				Left and right margin & 0.65in
-				\\
-				Top margin & 0.4in
-				\\
-				Bottom margin (from main text to page bottom) & 0.75in
-				\\
-				Bottom margin (from main text to top of footer area) & 0.3in
-				\\
-				Gap between columns in twocolumn mode & 0.25in
-			\end{RpgTable}
-		\subsection{Options \& Interactions}
-
-			The rpghandout interacts with all of the options detailed on \RpgPage{S:PackageOptions}. Note that there is no `forwarding' to the underlying class and that there is a slightly different syntax for, i.e., setting the global font size.
-
-			\begin{itemize}
-				\item RPG books use a header-title by default (\cmdref{RpgSetTitleMode} is set to \texttt{header})
-				\item The \texttt{layout} mode is activated
-				      \begin{enumerate}
-					      \item Unless print mode is active, the page background will use the image set by \cmdref{RpgSetPaper}
-					      \item Calling \cmd{RpgSetTheme} clears the page (so that the old theme may complete)
-				      \end{enumerate}
-				\item A table of contents is available and formatted using the ToC-fonts
-			\end{itemize}
-			\newpage
 	\section{rpgcard}\label{S:cardClass}
-		The rpgcard class is designed for typesetting individual (or very few) \envref{RpgCard} objects, primarily for digital and screen viewing. Printing of RpgCards is better done via a deck \RpgPage[p]{S:deckClass}.
 
+		The \texttt{rpgcard} class is designed for typesetting one or a few cards \RpgPage[p]{Env:RpgCard}, primarily for viewing on screen, or for collecting into a deck later \RpgPage[p]{S:deckClass}. The rule environments are displayed as cards: the class turns on the switch of every cardable rule environment \RpgPage[p]{C:ThemeRuleEnvs} which exists when the class is loaded. This includes the standard environments, such as \texttt{RpgItem} and \texttt{RpgSpell}, and any created by the theme given in the class options, but not those created later (in the preamble, or by a theme loaded within the document), whose switches must be turned on with \cmdref{RpgSwitch}. Other switches, such as \texttt{ShowSecrets}, are unaffected.
 
-		\subsection{Inherited Class}
+		The class has two modes, chosen by the \texttt{bg} option \RpgPage[p]{S:PackageOptions}:
+		\begin{description}
+			\item[Screen mode] (\texttt{bg=full}, the default): the class is based on the \texttt{standalone} class, and each page is cropped to fit its contents exactly, giving a file which contains just the card.
+			\item[Print mode] (\texttt{bg=print} or \texttt{bg=none}): the class is based on the \texttt{article} class, and the cards are placed on A4 pages, with a margin of 5pt on each side. For printing large numbers of cards, \texttt{rpgdeck} is more suitable.
+		\end{description}
 
-			The rpgcard class changes which class it inherits from depending on the \textit{background} option which is passed, which is used as a proxy for `print mode'.
+		Cards cannot have a title page or a table of contents, and \cmd{maketitle} raises an error. The \texttt{columns} option is ignored, since cards are always laid out in a single column.
 
-			\paragraph{Normal Mode}
-			By default, the rpgcard class inherits from the \texttt{standalone} class. The final output pdf is cropped to the smallest rectangle which contains the output. This makes it ideal for screen-viewing a single card.
+		In screen mode, the whole document is typeset as a single line, so everything should be placed within a card or rule environment: loose text and headings outside of a card cause errors. Several cards are placed side by side.
 
-			\paragraph{Print Mode}
-			If the option \texttt{bg=print} or \texttt{bg=none} has been passed, the class instead inherits from \texttt{article}. This prevents the cropping, and makes it simple to print the card out as a `normal' size. However, we recommend using the \texttt{RpgDeck} class for assembling and printing large numbers of cards.
-
-
-		\subsection{Special Commands}
-
-			The rpgcard class does not define any special commands.
-		\subsection{Geometry}
-
-			An rpgcard has `no geometry' in the normal sense; as a standalone environment it resizes to fit the contents. The document expands horizontally if a \cmdref{cardbreak} occurs, or if more than one card is added into the document. There is no way to add a linebreak -- this is usually an indication that you want an rpgdeck.
-
-			When in print mode, the margins are a uniform 5pt to prevent printing errors.
-
-		\subsection{Options \& Interactions}
-
-			The rpgcard has the following special interactions with the options detailed on \RpgPage{S:PackageOptions}:
-			\begin{RpgTable}{lXX}
-				Option & Normal Behaviour & rpgcard Behaviour
-				\\
-				bg & Determines if the `background paper' and footer decorations are rendered. & Background paper and footers are disabled. Command instead toggles the Inherited class/page geometry of the class (see above).
-				\\
-				columns & Sets the number of columns & Ignored
-			\end{RpgTable}
-
-
-		\subsection{Interactions}
-
-			\begin{itemize}
-				\item rpgcards cannot set titles or use tables of contents
-				\item rpgcards are generally unsuited for any environment which spans an entire page width, unless wrapped inside another environment. \envref{RpgTable} will fail if used `exposed' in an rpgcard document; but works within an RpgCard.
-				\item All switches (\cmdref{RpgSwitch}) are set to true, setting everything into card-mode.
-			\end{itemize}
-
-			\newpage
 	\section{rpgdeck}\label{S:deckClass}
-		The \texttt{rpgdeck} class is designed to allow a writer to aggregate a large number of \envref{RpgCard} objects into a single document. In particular, it is designed to allow easy consolidation of cards which have been individually typeset using a \texttt{rpgcard} \RpgPage[p]{S:cardClass} document.
 
-		The rpgdeck class is largely identical to the \texttt{rpghandout} class, with the following exceptions:
+		The \texttt{rpgdeck} class is designed to collect a large number of cards \RpgPage[p]{Env:RpgCard} into a single document for printing, including cards which were written as separate \texttt{rpgcard} documents.
 
-		\begin{enumerate}
-			\item The default geometry is a simple 5pt margin on all sides.
-			\item The ability to activate \texttt{twocolumn} mode is deactivated
-			\item The \texttt{clear} pagestyle is set globally; no footer decorations are rendered (only the \cmdref{RpgSetPaper}).
-			\item All switches (\cmdref{RpgSwitch}) are set to true, setting everything into card-mode.
-		\end{enumerate}
+		It is based on the standard \texttt{article} class, on A4 pages with a margin of 5pt on each side, and the cards are placed side by side, filling each page in turn. As in \texttt{rpgcard}, the rule environments are displayed as cards: the class turns on the switch of every cardable rule environment which exists when the class is loaded, including the standard ones and any created by the theme given in the class options. Environments created later (in the preamble, or by a theme loaded within the document) must have their switches turned on with \cmdref{RpgSwitch}. The \texttt{columns} option is ignored, and no page numbers or footers are shown. Unlike \texttt{rpgcard}, a deck may have a title: \cmd{maketitle} produces a compact title at the top of the first page \RpgPage[p]{Cmd:RpgThemeTitleMode}.
 
+		With the default \texttt{bg=full}, the theme's paper background is drawn behind the cards across the whole page. When printing, \texttt{bg=print} avoids this.
 
-		\subsection{Including \texttt{rpgcard}s}
+		\subsection{Including rpgcard Documents}
 
+			The \texttt{rpgdeck} class loads the \forcelink{https://ctan.org/pkg/standalone}{\texttt{standalone} package} with the \texttt{subpreambles=true} option. This allows a complete \texttt{rpgcard} document, with its own \cmd*{documentclass} and \texttt{document} environment, to be included in a deck with \cmd*{input}. For example, given the card:
+			\begin{Code}
+				\% spell1.tex
 
-			The \texttt{rpgdeck} activates the \forcelink{https://ctan.org/pkg/standalone?lang=en}{standalone \textit{package}}, with the \texttt{subpreambles=true} option passed.
+				\cmd*{documentclass}[theme=dnd]\{rpgcard\}
 
-			This allows a writer to \cmd{input} a standalone document, even if it has its own \cmd{documentclass} and \cmd{begin\param{document}}, which would normally prohibit such an inclusion.
+				\cmd*{begin}\{document\}
 
-			\subsubsection{Example Deck-Building}
+				~~\cmd*{begin}\{RpgSpell\}\{Fireball\}
 
-				Consider the following rpgcard document:
-				\begin{Code}
-					\% spell1.tex
+				~~~~\ldots
 
-					\cmd{documentclass}[theme=dnd]\param{rpgcard}
+				~~\cmd*{end}\{RpgSpell\}
 
-					\cmd{def}{\cmd{spellname}}\param{<text>}
+				\cmd*{end}\{document\}
+			\end{Code}
+			which may be compiled on its own (and, for example, sent to a player), several such cards may be collected into a deck:
+			\begin{Code}
+				\% deck.tex
 
-					\cmd{begin}\param{document}
+				\cmd*{documentclass}[theme=dnd, bg=print]\{rpgdeck\}
 
-					~~\cmd{begin}\param{RpgSpell}\param{\cmd{spellname}}
+				\cmd*{begin}\{document\}
 
-					~~~~~(\ldots)
+				~~\cmd*{input}\{spell1\}
 
-					~~\cmd{end}\param{RpgSpell}
+				~~\cmd*{input}\{spell2\}
 
-					\cmd{end}\param{document}
-				\end{Code}
-				This generates a single playing-card size description of the spell, and can be compiled on its own and (for example) sent to a player digitally. We can assume that we have multiple such documents, \texttt{spell2.tex} and so on.
+				~~\ldots
 
-				If we wished to include this card in a larger document:
+				\cmd*{end}\{document\}
+			\end{Code}
 
-				\begin{Code}
-					\% deck1.tex
+			The preambles of the included cards are collected and added to the preamble of the deck, so any definitions they make are shared between all of the cards. Two cards which define the same command therefore conflict, and every card uses the last definition. To avoid this, definitions which differ between cards should be made within their \texttt{document} environments.
 
-					\cmd{documentclass}[theme=dnd]\param{rpgdeck}
-
-					\cmd{input}\param{spell1}
-
-					\cmd{input}\param{spell2}
-
-					\cmd{input}\param{spell3}
-
-					(\ldots)
-
-					\cmd{end}\param{document}
-				\end{Code}
-
-			\subsubsection{Quirks}
-
-				In the example above we defined the name of the environment through the macro \cmd{spellname}, which was defined in the preamble. This works fine, because the package invokes \cmd{RequirePackage[subpreambles=true]\param{standalone}}; the `subpreambles' are parsed and included, even though they were invoked outside the preamble of the deck-document.
-
-				\textbf{However}, the package does this by collecting all the subpreambles first (excluding the documentclass declaration), then adding them to the main preamble, and then including the body text. This means that repeated definitions will override each other; if we had used \cmd{spellname} for \texttt{spell2} and \texttt{spell3}, then \textit{all} of the objects in the final deck would act as if they had spell3's name. This can be avoided by moving the \cmd{def} inside the \cmd{begin\param{document}}.
-
-				Note too that since the theme (\texttt{dnd}) of the card was defined in the documentclass, this is excluded when it is aggregated; only the `deck' package options are executed. It is therefore possible to aggregate objects into a deck which uses a different theme than the original items; the items will be rendered using the parent theme. If this is a concern, a manual call to \cmdref{RpgSetTheme} can be used.
+			The \cmd*{documentclass} line of an included card is ignored, along with its options. The cards are therefore typeset with the deck's theme and options, which may differ from the ones used when the card was compiled on its own; \cmdref{RpgSetTheme} may be used within the deck to change the theme.

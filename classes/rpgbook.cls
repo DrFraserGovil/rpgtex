@@ -13,7 +13,7 @@
 \tl_set:Nn \__rpg_ClassDefaults {font,background,sections,title}
 
 \input {core/rpgoptions.clo}
-\LoadClass{ \__rpg_BaseClass }
+\LoadClass[a4paper]{ \__rpg_BaseClass }
 
 
 
