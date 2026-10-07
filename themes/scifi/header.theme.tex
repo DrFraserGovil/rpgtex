@@ -1,13 +1,6 @@
 
 \ExplSyntaxOn
 
-%% Set the textured paper (off by default)
-\NewDocumentCommand\RpgSetScifiPaper{}
-{
-	\RpgThemePaperImage{\RpgPackagePath/themes/scifi/img/paper}
-}
-
-
 %% only load this if the paper option was set, since we're altering primitives here
 \RpgIfPaper{
 

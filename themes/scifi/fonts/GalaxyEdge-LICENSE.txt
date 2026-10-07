@@ -1,0 +1,17 @@
+GalaxyEdge.ttf
+==============
+
+Font:      Edge of the Galaxy
+Designer:  SonicFontsHD (FontStruct)
+Source:    https://fontstruct.com/fontstructions/show/1755458/edge-of-the-galaxy
+Licence:   Creative Commons CC0 1.0 Universal (Public Domain Dedication)
+           https://creativecommons.org/publicdomain/zero/1.0/
+
+The font has been dedicated to the public domain by its designer, and may be
+used, modified and redistributed for any purpose, including commercially,
+without permission or attribution. This file is provided as a record of the
+font's origin.
+
+The file has been renamed from its original download name, which contained
+spaces that interfered with fontspec's font search. The font itself is
+unmodified.

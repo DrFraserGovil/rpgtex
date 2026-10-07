@@ -3,7 +3,7 @@ THIS WORK
 
 Copyright (c) 2025 Jack Fraser-Govil
 
-This software is a derivative work based on the original software by Evan Bergeron (2017). The original work's MIT license is detailed below and applies to this entire repository.
+This software is a derivative work based on the original software by Evan Bergeron (2017). The original work's MIT license is detailed below and applies to this repository, except for the third-party fonts and images listed under THIRD-PARTY MATERIAL, which remain under their own licenses.
 
 ORIGINAL WORK
 --------------------
@@ -29,3 +29,60 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+THIRD-PARTY MATERIAL
+--------------------
+
+The following files are not covered by the MIT license above. Each is
+distributed under its own license, the full text or details of which are
+kept in the file named alongside it.
+
+Fonts
+
+  themes/dnd/fonts/KpSans-*, KpRoman-*
+      Kp-Fonts, Christophe Caignaert and Daniel Flipo
+      SIL Open Font License 1.1 -- see KpFonts-LICENSE.txt
+
+  themes/dnd/fonts/GilliusADFNo2-*
+      Gillius ADF No2, Arkandis Digital Foundry
+      GNU GPL v2 or later, with font exception -- see Gillius-LICENSE.txt
+
+  themes/dnd/fonts/EBGaramondSC08-Regular.otf
+      EB Garamond, Georg Duffner
+      SIL Open Font License 1.1 -- see EBGaramond-LICENSE.txt
+
+  themes/scifi/fonts/Orbitron-*
+      Orbitron, Matt McInerney / The Orbitron Project Authors
+      SIL Open Font License 1.1 -- see Orbitron-LICENSE.txt
+
+  themes/scifi/fonts/Jura-*
+      Jura, The Jura Project Authors
+      SIL Open Font License 1.1 -- see Jura-LICENSE.txt
+
+  themes/scifi/fonts/FiraSans-*
+      Fira Sans, The Mozilla Foundation and Telefonica S.A.
+      SIL Open Font License 1.1 -- see FiraSans-LICENSE.txt
+
+  themes/scifi/fonts/GalaxyEdge.ttf
+      Edge of the Galaxy, SonicFontsHD
+      CC0 1.0 (public domain) -- see GalaxyEdge-LICENSE.txt
+
+Images
+
+  themes/dnd/img/paper.jpg, footerscroll.*
+  example/img/paper.jpg, paper-low-res.jpg
+      Included in good faith from the original work (Evan Bergeron's D&D 5e
+      LaTeX Template, https://github.com/rpgtex/DND-5e-LaTeX-Template), which
+      credits the background to Lost and Taken (https://lostandtaken.com/).
+      See themes/dnd/img/ATTRIBUTION.txt.
+
+  example/img/typewriter.jpg, engine_part.jpg, fantasy_title.jpg
+      Pixabay Content License -- see example/img/ATTRIBUTION.txt
+
+  example/img/joyeuse.jpg
+      Public domain -- see example/img/ATTRIBUTION.txt
+
+  docs/img/the_writing_desk_2015.19.1530.jpg, desk_1943.8.5338.jpg
+      National Gallery of Art, Washington, Open Access (CC0) -- credited in
+      the "Image Credits" appendix of the documentation
