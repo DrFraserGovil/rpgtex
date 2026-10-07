@@ -61,10 +61,10 @@
 		\AddToShipoutPictureFG*{
 			\IfBooleanTF{#1}
 			{
-				\put(\LenToUnit{.5\paperwidth},0){\makebox[0pt][c]{\includegraphics[width=\paperwidth,height=#2]{#3}}}
+				\put(\LenToUnit{.5\paperwidth},0) {\makebox[0pt][c]{\reflectbox{\includegraphics[width=\paperwidth,height=#2]{#3}}}}
 			}
 			{
-				\put(\LenToUnit{.5\paperwidth},0) {\makebox[0pt][c]{\reflectbox{\includegraphics[width=\paperwidth,height=#2]{#3}}}}
+				\put(\LenToUnit{.5\paperwidth},0){\makebox[0pt][c]{\includegraphics[width=\paperwidth,height=#2]{#3}}}
 			}
 			#4
 

@@ -1,0 +1,25 @@
+% title = Creating a Rule Environment
+% highlight = RpgThemeNewCardableRuleEnv, RpgPotionAddProperty, RpgThemePotionFormat, RpgThemePotionCardFormat, RpgPotion, RpgSwitch
+\begin{ExampleBlock}[RpgThemeNewCardableRuleEnv, RpgPotionAddProperty, RpgThemePotionFormat, RpgThemePotionCardFormat, RpgPotion, RpgSwitch][listing side text]{Creating a Rule Environment}
+\RpgThemeNewCardableRuleEnv{Potion}{UsePotionCard}
+\RpgPotionAddProperty{colour}{\PotionColour}{clear}
+
+\RpgThemePotionFormat{
+    \paragraph{#1} (\PotionColour) #2
+}
+\RpgThemePotionCardFormat{
+    {\RpgFontCardTitle #1}\par
+    \textit{A \PotionColour{} liquid}\par
+    #2
+}
+
+\begin{RpgPotion}{Healing Draught}[colour=red]
+    Restores \RpgDice{2d4+2} hit points.
+\end{RpgPotion}
+
+\RpgSwitch{UsePotionCard}{on}
+\begin{RpgPotion}[width=4.5cm, height=3cm]{Healing Draught}[colour=red]
+    Restores \RpgDice{2d4+2} hit points.
+\end{RpgPotion}
+
+\end{ExampleBlock}

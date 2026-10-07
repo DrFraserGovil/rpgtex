@@ -1,0 +1,55 @@
+% !TEX root = ../documentation.tex
+\chapter{Building a Theme}\label{S:ThemeCommands}
+
+	This part of the manual documents the commands used to build themes. Authors of \rpgtex{} documents will rarely need them; they are intended for designers creating or modifying a theme, and for users who wish to adjust an existing theme in detail. By convention, all of these commands begin with \texttt{RpgTheme}.
+
+	This chapter describes how a theme is organised. The chapters which follow describe how a theme defines its fonts \RpgPage[p]{C:Fonts}, the design of its pages \RpgPage[p]{C:PageDesign}, the appearance of individual elements \RpgPage[p]{S:ElementStyles}, and its rule environments \RpgPage[p]{C:ThemeRuleEnvs}.
+
+	\begin{RpgSidebar}{Code Setters}
+		Many of the commands in this part of the manual do not perform any action themselves. Instead, they \emph{store} a piece of code, which \rpgtex{} runs later, when the corresponding element is created. For example, \cmd{RpgThemePartPage} stores the code used to draw a part page, which is run each time \cmd{part} is called.
+
+		The stored code is often given arguments at the time it is run, such as the name of the part. These are accessed as \texttt{\#1}, \texttt{\#2} and so on within the stored code, even though the setter itself is called with only a single argument:
+		\begin{Code}
+			\cmd{RpgThemePartPage}\{The part is called \#1\}
+		\end{Code}
+		The entry for each setter lists the arguments which are available.
+	\end{RpgSidebar}
+
+	\section{Theme Files}\label{S:ThemeStructure}
+
+		A theme called \texttt{name} is a directory, \texttt{<themepath>/name}, containing the file \texttt{name.cfg}. Calling \cmdref{RpgSetTheme}\param{name} inputs this file, which in turn usually inputs a number of \texttt{.theme.tex} files, each customising one part of the document (colours, fonts, headers, titles and so on). For example, the default theme's configuration file begins:
+		\begin{Code}
+			\cmd*{def}\cmd*{base}\{themes/default\}
+
+			\cmd*{input}\{\cmd*{base}/colors.theme.tex\}
+
+			\cmd*{input}\{\cmd*{base}/callouts.theme.tex\}
+
+			\ldots
+		\end{Code}
+		Since a theme may be loaded in the middle of a document, its commands should only change appearance, and each theme should set every value it relies upon, rather than assuming the defaults of the theme before it.
+
+	\section{Conditional Code}\label{S:ThemeConditional}
+
+		Many parts of a theme are only meaningful when the corresponding package option is active. The following commands allow a theme to include code conditionally:
+
+		\RpgFunction{RpgIfFont}{\param{code}}
+		{
+			Runs \texttt{code} only if the \texttt{font} option is active \RpgPage[p]{S:PackageOptions}.
+		}
+		\RpgFunction{RpgIfPaper}{\param{code}}
+		{
+			Runs \texttt{code} only if the \texttt{background} option is active.
+		}
+		\RpgFunction{RpgIfSections}{\param{code}}
+		{
+			Runs \texttt{code} only if the \texttt{sections} option is active.
+		}
+		\RpgFunction{RpgIfTitle}{\param{code}}
+		{
+			Runs \texttt{code} only if the \texttt{title} option is active.
+		}
+		\RpgFunction{RpgThemeLayoutOnly}{\param{code}}
+		{
+			Runs \texttt{code} only if \rpgtex{} was loaded through one of its classes, rather than directly as a package. This is used for changes to the overall layout of the document (such as hyphenation and list spacing), which should not be imposed on a document of another class.
+		}

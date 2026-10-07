@@ -1,0 +1,62 @@
+% !TEX root = ../documentation.tex
+\chapter{Page Design}\label{C:PageDesign}
+
+	This chapter describes the commands which define the overall design of a theme's pages: their backgrounds and footers, and the title and part pages.
+
+	\section{Backgrounds \& Footers}\label{S:PageAppearance}
+
+		These commands control the page background and footer. Their effects depend on the \texttt{bg} option \RpgPage[p]{S:PackageOptions}: the paper colour and image are only shown when it is \texttt{full}, and the footer decorations unless it is \texttt{none}. The paper and footer commands have no effect unless the \texttt{background} option is active.
+
+		The footer commands draw on the page using the \texttt{eso-pic} package. Positions are measured from the bottom-left corner of the page, and further content may be placed with \cmdref{RpgPut}.
+
+		\RpgFunction{RpgThemeFooterDecoration}{(*)\param{height}\param{path/to/image}\param{overlay}}
+		{
+			Draws an image across the full width of the bottom of the current page, with the given \texttt{height}, and then draws the \texttt{overlay} (such as \cmd{RpgPut} or \cmd{RpgThemePageNumberAt} commands) on top of it.
+
+			The decoration is only drawn on the page on which the command is called, and so it is normally placed within the definition of a page footer. The unstarred form mirrors the image horizontally, and the starred form draws it as it is, allowing a single image to be used on both left- and right-hand pages:
+
+			\RpgGetExample{des-footer}
+		}
+		\RpgFunction{RpgThemePageNumberAt}{\param{x}\param{y}}
+		{
+			Typesets the page number, in the \FontRef{PageNumber} font element, centred at the position (\texttt{x}, \texttt{y}). It may only be used within a page overlay, such as the final argument of \cmd{RpgThemeFooterDecoration}.
+		}
+		\RpgFunction{RpgThemePaperColor}{\param{colour}}
+		{
+			Sets the background colour of every page, and updates \texttt{PaperColor} to match \RpgPage[p]{S:Colors}.
+		}
+		\RpgFunction{RpgThemePaperImage}{\param{path/to/image}}
+		{
+			Sets an image, stretched to fill the page, as the background of every subsequent page. This is typically a paper texture. An empty path removes any existing background image.
+		}
+
+	\section{Title \& Part Pages}\label{S:ThemeTitles}
+
+		These commands define the appearance of the pages created by \cmdref{maketitle} and \cmdref{part}. The cover and part page designs are drawn on the page with \texttt{eso-pic}, usually with \cmdref{RpgPut}, while the header title is typeset as ordinary text. Within them, the title information is available through \cmd{RpgGetTitle}, \cmd{RpgGetSubtitle} and \cmd{RpgGetAuthor} \RpgPage[p]{S:TitlePages}.
+
+		\RpgFunction{RpgThemeOnPartChange}{\param{code}}
+		{
+			Stores \texttt{code} to be run after every \cmd{part} (in either form). For example, the \texttt{dnd} theme uses this to cycle its colour scheme with each new part.
+		}
+		\RpgFunction{RpgThemePartPage}{\param{code}}
+		{
+			Stores the design of the part page created by \cmd{part}, which is drawn on top of the part's background image (if any). The available arguments are:
+			\begin{RpgTable}{lX}
+				Argument & Value
+				\\
+				\texttt{\#1} & The name of the part.
+			\end{RpgTable}
+			The part number is available through \cmd{thepart}. By default, the part number and name are centred on the page in the \FontRef{Part} font element.
+		}
+		\RpgFunction{RpgThemeTitleCover}{\param{code}}
+		{
+			Stores the design of the cover page created by \cmd{maketitle} in \texttt{cover} mode. It is drawn on top of the \cmd{cover} image, if one has been set, or on an otherwise blank page.
+		}
+		\RpgFunction{RpgThemeTitleHeader}{\param{code}}
+		{
+			Stores the code which typesets the title when \cmd{maketitle} is called in \texttt{header} mode. Unlike the cover, this is ordinary text, placed at the point where \cmd{maketitle} is called.
+		}
+		\RpgFunction{RpgThemeTitleMode}{\param{cover / header}}
+		{
+			Selects which of the two designs \cmd{maketitle} produces. Any other value raises an error. The \texttt{rpgbook} class selects \texttt{cover}; otherwise, the default is \texttt{header}.
+		}

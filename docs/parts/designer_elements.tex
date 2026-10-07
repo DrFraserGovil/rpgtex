@@ -1,0 +1,65 @@
+% !TEX root = ../documentation.tex
+\chapter{Styling Elements}\label{S:ElementStyles}
+
+	The appearance of most environments is controlled through \texttt{tcolorbox} styles, which a theme may redefine with \cmd{tcbset}:
+	\begin{Code}
+		\cmd*{tcbset}\{rpgsidebar/.style=\{colframe=black, \ldots\}\}
+	\end{Code}
+	The available styles are \texttt{rpgnarration}, \texttt{rpgsidebar} and \texttt{rpgtip} (the callouts), \texttt{rpgsecret} (the box used by \envref{RpgSecret}) and \texttt{rpgcard} (the cards). The following commands control the elements which are not built from a \texttt{tcolorbox} style.
+
+	\RpgFunction{RpgThemeDiceFormat}{\param{code}}
+	{
+		Stores the code which typesets a dice expression, after it has been parsed by \cmdref{RpgDice}. The available arguments are:
+		\begin{RpgTable}{lX}
+			Argument & Value
+			\\
+			\texttt{\#1} & The number of dice (empty if none was given).
+			\\
+			\texttt{\#2} & The number of sides.
+			\\
+			\texttt{\#3} & The evaluated modifier, including its sign (for example, \texttt{+6} or \texttt{-2}).
+		\end{RpgTable}
+		By default, the expression is typeset as \texttt{\#1d\#2\#3}.
+
+		The arguments are passed as variables which contain these values, rather than as the values themselves. They typeset correctly as they are, but must be expanded before being tested or compared: for example, with \cmd{tl_if_blank:eTF} rather than \cmd{tl_if_blank:nTF}.
+
+		\RpgGetExample{des-dice-format}
+	}
+	\RpgFunction{RpgThemeDropCapHeight}{\param{lines}}
+	{
+		Sets the number of lines spanned by the initial letter of \cmdref{RpgDropCap}. The default is \texttt{4}.
+	}
+	\RpgFunction{RpgThemeMapFormat}{\param{code}}
+	{
+		Stores the code which formats the number of an area within an \envref{RpgMap}. The available arguments are:
+		\begin{RpgTable}{lX}
+			Argument & Value
+			\\
+			\texttt{\#1} & The depth of the area (\texttt{1} for the outermost map).
+			\\
+			\texttt{\#2} & The position of the area at that depth (\texttt{1} for the first area).
+		\end{RpgTable}
+		The full number of an area is formed by joining the formatted numbers at each depth. By default, the depths cycle through numbers, capital letters, and lower-case Roman numerals preceded by a hyphen, giving numbers such as \texttt{1B-iii}.
+	}
+	\RpgFunction{RpgThemeSetFiligree}{\param{code}}
+	{
+		Stores the \texttt{tikz} code which draws the filigree frame \RpgPage[p]{S:Filigree}. It is drawn over the box, with \texttt{FiligreeColor} as the line colour, and may refer to the box's corners through the \texttt{frame} node (such as \texttt{frame.north west}). The size of the design should be scaled by \cmdref{RpgFiligreeSize}.
+	}
+	\RpgFunction{RpgThemeSetSecretHidden}{\param{code}}
+	{
+		Stores the code which typesets an \texttt{RpgSecret} while secrets are hidden. The available arguments are:
+		\begin{RpgTable}{lX}
+			Argument & Value
+			\\
+			\texttt{\#1} & The public text (possibly empty).
+			\\
+			\texttt{\#2} & The secret text.
+			\\
+			\texttt{\#3} & Any options given to the environment which are not recognised by it, intended to be passed to a \texttt{tcolorbox}.
+		\end{RpgTable}
+		By default, only the public text (\texttt{\#1}) is typeset.
+	}
+	\RpgFunction{RpgThemeSetSecretVisible}{\param{code}}
+	{
+		Stores the code which typesets an \texttt{RpgSecret} while secrets are shown. The available arguments are the same as for \cmd{RpgThemeSetSecretHidden}. By default, the secret text is typeset in a \texttt{tcolorbox} with the \texttt{rpgsecret} style, with the public text (if any) in its lower part.
+	}

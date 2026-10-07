@@ -1,0 +1,67 @@
+% example = des-dice-format
+% title = RpgDice Formatting: The D\&D Format
+% highlight = RpgThemeDiceFormat, RpgDice
+	Before: \RpgDice{2d8 + 3}, \RpgDice{d8}
+
+	\ExplSyntaxOn
+	\RpgThemeDiceFormat{ % #1: Dice Number, #2: Dice Sides, #3: Modifier
+		%% d8 -> 1d8
+		%% the arguments are variables, so must be expanded before testing
+		\tl_set:Ne \l_tmpa_tl { \tl_if_blank:eTF {#1} {1} {#1} }
+		%% compute the average roll, and print it first
+		\fp_eval:n { floor ( \l_tmpa_tl * ( #2 + 1 ) / 2 ) + ( #3 ) }
+		~( \l_tmpa_tl d#2 \fp_compare:nNnF { #3 } = { 0 } { #3 } )
+	}
+	\ExplSyntaxOff
+
+	After: \RpgDice{2d8 + 3}, \RpgDice{d8}
+
+% example = des-footer
+% options = listing only
+% highlight = RpgThemeFooterDecoration, RpgPut
+	\fancyfoot[LE]{%
+		\RpgThemeFooterDecoration*{1.5cm}{path/to/scroll}{
+			\RpgPut{0.43in}{0.15in}{\RpgFontPageNumber \thepage}
+		}
+	}
+	\fancyfoot[RO]{%
+		\RpgThemeFooterDecoration{1.5cm}{path/to/scroll}{
+			\RpgPut{\paperwidth-0.43in}{0.15in}{\RpgFontPageNumber \thepage}
+		}
+	}
+
+% example = des-keys
+% options = listing only
+% highlight = RpgThemeKeys, RpgThemeTLKey, RpgThemeBoolKey, RpgThemeTLChoiceKey
+	\RpgThemeKeys{rpg/my-env}
+	{
+		\RpgThemeTLKey {title} {\l_myenv_title_tl} {Untitled}
+		\RpgThemeBoolKey {hidden} {\l_myenv_hidden_bool}
+		\RpgThemeTLChoiceKey {size} {\l_myenv_size_tl} {small,large} {small}
+	}
+
+	\keys_set:nn {rpg/my-env} {title=Hello, hidden, size=large}
+
+% example = des-rule-env
+% title = Creating a Rule Environment
+% highlight = RpgThemeNewCardableRuleEnv, RpgPotionAddProperty, RpgThemePotionFormat, RpgThemePotionCardFormat, RpgPotion, RpgSwitch
+	\RpgThemeNewCardableRuleEnv{Potion}{UsePotionCard}
+	\RpgPotionAddProperty{colour}{\PotionColour}{clear}
+
+	\RpgThemePotionFormat{
+		\paragraph{#1} (\PotionColour) #2
+	}
+	\RpgThemePotionCardFormat{
+		{\RpgFontCardTitle #1}\par
+		\textit{A \PotionColour{} liquid}\par
+		#2
+	}
+
+	\begin{RpgPotion}{Healing Draught}[colour=red]
+		Restores \RpgDice{2d4+2} hit points.
+	\end{RpgPotion}
+
+	\RpgSwitch{UsePotionCard}{on}
+	\begin{RpgPotion}[width=4.5cm, height=3cm]{Healing Draught}[colour=red]
+		Restores \RpgDice{2d4+2} hit points.
+	\end{RpgPotion}
