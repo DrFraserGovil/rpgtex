@@ -44,16 +44,9 @@
 }
 
 
-\NewDocumentCommand \RpgThemeLayoutOnly { +m }
+%% force layout changes -- but only when loaded through a class
+\bool_if:NT \__rpg_IsClass
 {
-	\bool_if:NT \__rpg_IsClass
-	{
-		#1
-	}
-}
-
-%% force layout changes -- but only if layout option triggered by class
-\RpgThemeLayoutOnly{
 	% \def\raggedright\RaggedRight
 
 	\bool_if:NT \__rpg_HasMulticolToc
@@ -112,10 +105,3 @@
 % \RequirePackage {core/environments/map}   % section styling and special section headers
 % \RequirePackage {core/environments/secret}
 % \RequirePackage {core/environments/table}      % tables
-% %
-%  % %% packages which do nothing but alter geometry/page settings, and so are ignored if the header layout setting is not active
-% \RpgLayoutOnly{
-% 	\RequirePackage {core/titles}
-% 	\RequirePackage {core/headerdecorations}     % fancy headers and footers
-% 	\RequirePackage {core/sections}   % section styling and special section headers
-% }
