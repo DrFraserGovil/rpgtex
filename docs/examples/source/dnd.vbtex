@@ -1,0 +1,200 @@
+% Examples for the dnd theme chapter (themes_dnd.tex), which activates the dnd theme
+
+% example = dnd-feat-card
+% title = RpgFeat: Card Mode
+% highlight = RpgFeat, RpgSwitch
+	\RpgSwitch{UseFeatCard}{on}
+	\begin{RpgFeat}[width=5.5cm, height=7.5cm, color=DmgCoral]{Grappler}[prerequisite={Strength 13 or higher}]
+		You've developed the skills necessary to hold your own in close-quarters grappling. You have advantage on attack rolls against a creature you are grappling.
+	\end{RpgFeat}
+	\RpgSwitch{UseFeatCard}{off}
+
+% example = dnd-feat-text
+% title = RpgFeat: Text Mode
+% highlight = RpgFeat
+	\begin{RpgFeat}{Grappler}[requires={Strength 13 or higher}]
+		You've developed the skills necessary to hold your own in close-quarters grappling. You gain the following benefits:
+		\begin{itemize}
+			\item You have advantage on attack rolls against a creature you are grappling.
+			\item You can use your action to try to pin a creature grappled by you.
+		\end{itemize}
+	\end{RpgFeat}
+
+% example = dnd-filigree
+% highlight = RpgFiligree, filigree
+	\begin{RpgFiligree}
+        Some decorative text
+    \end{RpgFiligree}
+
+    \vspace{1cm}
+
+    \begin{RpgTable}[filigree]{lX}
+        Header 1 & Header 2
+        \\
+        Body 1 & Body 2
+        \\
+        Body 3 & Body 4
+    \end{RpgTable}
+
+% example = dnd-item-card
+% title = RpgItem: Card Mode
+% highlight = RpgItem, RpgSwitch
+	\RpgSwitch{UseItemCard}{on}
+	\begin{RpgItem}[width=5.5cm, height=8cm]{Joyeuse}[
+		rarity = Rare,
+		type = weapon (sword),
+		requires-attunement = {by a paladin},
+		image = {../example/img/joyeuse},
+	]
+		The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+	\end{RpgItem}
+	\RpgSwitch{UseItemCard}{off}
+
+% example = dnd-item-text
+% title = RpgItem: Text Mode
+% highlight = RpgItem
+	\begin{RpgItem}{Joyeuse}[
+		rarity = Rare,
+		type = weapon (sword),
+		requires-attunement, %% a flag, with no value
+	]
+		The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
+	\end{RpgItem}
+
+% example = dnd-spell-card
+% title = RpgSpell: Card Mode
+% highlight = RpgSpell, RpgSpellUpcast, RpgSwitch
+	\RpgSwitch{UseSpellCard}{on}
+	\begin{RpgSpell}[width=6cm, height=9cm]{Cone of Cold}[
+		school = Evocation,
+		level = 5,
+		range = self,
+		area = 60ft cone,
+		components = VSM\footnote{A small crystal or glass cone},
+		source = Free Basic Rules (2014),
+	]
+		A blast of cold air erupts from your hands. Each creature in the cone must make a Constitution saving throw, taking \RpgDice{8d8} cold damage on a failed save, or half as much on a successful one.
+
+		\RpgSpellUpcast{1d8}
+	\end{RpgSpell}
+	\RpgSwitch{UseSpellCard}{off}
+
+% example = dnd-spell-text
+% title = RpgSpell: Text Mode
+% highlight = RpgSpell, RpgCantripScaling
+	\begin{RpgSpell}{Fire Bolt}[
+		school = Evocation,
+		level = 0,
+		range = 120ft,
+		components = VS,
+		source = Free Basic Rules (2014),
+	]
+		You hurl a mote of fire at a creature or object within range. On a hit, the target takes \RpgDice{1d10} fire damage.
+
+		\RpgCantripScaling{1d10}{2d10}{3d10}{4d10}
+	\end{RpgSpell}
+
+% example = dnd-spell-upcast
+% title = Upcasting with Optional Arguments
+% highlight = RpgSpell, RpgSpellUpcast
+	\begin{RpgSpell}{Slow Time}[level = 3, school = Transmutation, duration = 1 minute]
+		Time slows around a creature of your choice.
+
+		\RpgSpellUpcast[The duration increases by]{1 minute}[2]
+	\end{RpgSpell}
+
+% example = dnd-stat-actions
+% title = Sections, Traits \& Reactions
+% highlight = RpgStat, section, trait, action, reaction
+	\begin{RpgStat}{Guard}[ac=16 (chain shirt), hp=\RpgDice{3d8+3}, str=13, con=12]
+		\section{Traits}
+			\trait{Watchful} The guard can't be surprised while conscious.
+		\section{Actions}
+			\action{Halberd Sweep} The guard attacks each creature within 10ft.
+		\section{Reactions}
+			\reaction{Parry}{When hit by a melee attack} The guard adds 2 to its AC.
+	\end{RpgStat}
+
+% example = dnd-stat-attacks
+% title = Attacks
+% highlight = RpgStat, melee, ranged, attack
+	\begin{RpgStat}{Bandit Captain}[str=15, dex=16, cr=2]
+		\section{Actions}
+			\melee{Scimitar}[modifier=dex, dmg=1d6+3, dmg-type=slashing]
+			\ranged{Dagger}[modifier=dex, range=20/60, dmg=1d4+3, dmg-type=piercing]
+			\attack{Spear}[distance=both, reach=5, range=20/60, dmg=1d6+2, dmg-type=piercing,
+				or-dmg=1d8+2, or-type=piercing, or-when={when used with two hands}]
+			\melee{Flame Blade}[type=spell, modifier=cha, dmg=3d6, dmg-type=fire]
+	\end{RpgStat}
+
+% example = dnd-stat-full
+% title = A Complete Statblock
+% highlight = RpgStat
+	\begin{RpgStat}{Gorgenhar, the Devourer}[
+		nickname = Gorgenhar,
+		size = Large, type = Fiend, alignment = Chaotic Evil,
+		ac = 17 (natural armor), hp = \RpgDice{10d10+30}, speed = 40ft,
+		str = 20, dex = 14, con = 16, int = 11, wis = 13, cha = 18,
+		str-save, con-save,
+		skills = {perception, athletics}, skills-expertise = {stealth},
+		senses = darkvision 60ft, languages = Abyssal,
+		damage-resistances = fire, condition-immunities = poisoned,
+		cr = 7,
+	]
+		\section{Traits}
+			\trait{Fiery Aura} At the start of each of its turns, each creature within 5ft of \name{} takes \RpgDice{1d6} fire damage.
+		\section{Actions}
+			\melee{Claw}[dmg=2d6+5, dmg-type=slashing, plus-dmg=1d6, plus-type=fire]
+	\end{RpgStat}
+
+% example = dnd-stat-legacy
+% title = The 2014 Appearance
+% highlight = RpgStatLegacyMode
+	{
+		\RpgStatLegacyMode{}
+		\begin{RpgStat}{Commoner}[type=Humanoid, languages=Common]
+			\section{Actions}
+				\melee{Club}[dmg=1d4, dmg-type=bludgeoning]
+		\end{RpgStat}
+	}
+	% outside the braces, the 2024 appearance returns
+
+% example = dnd-stat-legendary
+% title = Legendary \& Mythic Actions
+% highlight = RpgStat, RpgStatLegendarySection, RpgStatLegendaryResistance, RpgStatMythicSection, action
+	\begin{RpgStat}{Ancient Wyrm}[size=Gargantuan, type=Dragon, cr=20]
+		\section{Traits}
+			\RpgStatLegendaryResistance{3}
+		\RpgStatLegendarySection[uses=3, defiance]
+			\action{Tail Swipe} The wyrm makes a tail attack.
+			\action[2]{Wing Attack} The wyrm beats its wings.
+		\RpgStatMythicSection[narration={The wyrm's scales blaze with light, and it rises again!}]
+			\action{Radiant Breath} The wyrm exhales radiant fire.
+	\end{RpgStat}
+
+% example = dnd-stat-saves
+% title = Saving Throws
+% highlight = RpgStat, save
+	\begin{RpgStat}{Basilisk}[con=15, cr=3]
+		\section{Actions}
+			\save{Petrifying Gaze}[modifier=con, dc=12,
+				failure={The target begins to turn to stone.}, success={The target is unaffected.}]
+			\save{Venom Spray}[modifier=dex, dc=12, shape=cone, size=15,
+				failure={\RpgDice{3d6} poison damage}, success={Half damage}]
+	\end{RpgStat}
+
+% example = dnd-stat-spells
+% title = Spellcasting
+% highlight = RpgStat, RpgStatSpells, atWill, perDay, level
+	\begin{RpgStat}{Mage}[int=17, cr=6]
+		\section{Actions}
+			\begin{RpgStatSpells}[modifier=int]
+				\atWill{mage hand, light}
+				\perDay{2}{fly, counterspell}
+				\level{fire bolt, shocking grasp}
+				\level[1][4]{magic missile, shield}
+			\end{RpgStatSpells}
+			\begin{RpgStatSpells}[modifier=cha, title=Innate Spellcasting, innate]
+				\perDay{1}{misty step}
+			\end{RpgStatSpells}
+	\end{RpgStat}

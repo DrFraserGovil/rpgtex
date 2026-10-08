@@ -72,27 +72,31 @@
 
 \setcounter{tocdepth}{1}
 %
-\titlecontents{part}
-[0pt] % left
-{ \addvspace{.06in} \RpgFontTocPart } % above-code
-{Part\ \thecontentslabel :~ } % numbered-entry-format
-{} % numberless-entry-format
-{} % filler-page-format
-[ \addvspace{-.03in} \titleline{ \color{black} \titlerule[1pt] } \addvspace{.05in } ] % below-code
+%% Contents formatting is only set in the preamble: after \begin{document}, titletoc writes \titlecontents into the .toc file,
+%% where it would refer to this theme's colours and fonts before the theme has been loaded on the next run
+\RpgIfPreamble{
+	\titlecontents{part}
+	[0pt] % left
+	{ \addvspace{.06in} \RpgFontTocPart } % above-code
+	{Part\ \thecontentslabel :~ } % numbered-entry-format
+	{} % numberless-entry-format
+	{} % filler-page-format
+	[ \addvspace{-.03in} \titleline{ \color{black} \titlerule[1pt] } \addvspace{.05in } ] % below-code
 
-\titlecontents{chapter}
-[0pt] % left
-{ \addvspace{.1in} \RpgFontTocChapter } % above-code
-{ \tocchapapp\ \thecontentslabel :~ } % numbered-entry-format
-{} % numberless-entry-format
-{ \tocchappage} % filler-page-format
+	\titlecontents{chapter}
+	[0pt] % left
+	{ \addvspace{.1in} \RpgFontTocChapter } % above-code
+	{ \tocchapapp\ \thecontentslabel :~ } % numbered-entry-format
+	{} % numberless-entry-format
+	{ \tocchappage} % filler-page-format
 
-\titlecontents{section}
-[3em] % left
-{\RpgFontTocSection} % above-code
-{\thecontentslabel :~ } % numbered-entry-format
-{} % numberless-entry-format
-{\titlerule*{.}\contentspage} % filler-page-format
+	\titlecontents{section}
+	[3em] % left
+	{\RpgFontTocSection} % above-code
+	{\thecontentslabel :~ } % numbered-entry-format
+	{} % numberless-entry-format
+	{\titlerule*{.}\contentspage} % filler-page-format
+}
 
 \RpgIfPaper{
 	% Set spacing around floats

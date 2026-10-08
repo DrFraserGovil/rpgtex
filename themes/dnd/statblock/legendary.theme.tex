@@ -28,6 +28,7 @@
 }
 \DeclareDocumentCommand\RpgStatLegendaryResistance{m}
 {
+	% BUG: the space before the bracket is lost under expl3 syntax, giving 'Legendary Resistance(3/day)'. Use ~ before the bracket.
 	\action{Legendary~Resistance (#1/day)}\ \rpgstringlegendaryResistance
 }
 

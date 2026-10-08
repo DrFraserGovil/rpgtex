@@ -110,6 +110,7 @@ fontlower        = \RpgFontStatBlockBody,
 		nosep]
 
 	\__maybe_item:nn {Saving~Throws}			{\l_tmpa_saves}
+	% BUG: the variable is passed unexpanded (:nn), so the emptiness test never sees an empty value and an empty 'Skills' line is always shown. The 2024 appearance uses :ne here.
 	\__maybe_item:nn {Skills}					{\__dnd_statProcessedSkills}
 	\__maybe_item:nn {Damage~Vulnerabilities}	{\__dnd_statDamageWeak}
 	\__maybe_item:nn {Damage~Resistances}		{\__dnd_statDamageResist}

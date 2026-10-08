@@ -147,6 +147,7 @@
 	\ProvideDocumentCommand		{\trait}	{O{} m}		{\RpgStatAction[##1]{##2}}
 	\ProvideDocumentCommand		{\reaction}{m m}		{\RpgStatReaction{##1}{##2}}
 	\ProvideDocumentCommand		{\name}{}			{\RpgStatName{}}
+% BUG: \RpgStatGet does not exist, so \stat raises 'Undefined control sequence'. It should presumably call \RpgStatMod.
 	\ProvideDocumentCommand		{\stat}{m}			{\RpgStatGet{##1}}
 	\ProvideDocumentCommand		{\save}{m O{}}		{\RpgStatSaveEffect{##1}[##2]}
 	%attacks
@@ -154,6 +155,7 @@
 	\ProvideDocumentCommand		{\melee}{m O{}}		{\RpgStatAttack{##1}[##2,distance=melee]}
 	\ProvideDocumentCommand		{\ranged}{m O{}}	{\RpgStatAttack{##1}[##2,distance=ranged]}
 	%spellss
+% BUG: RpgStatSpellcasting does not exist (the environment is RpgStatSpells), so \begin{spells} raises an error.
 	\ProvideDocumentEnvironment	{spells}{O{}}		{\begin{RpgStatSpellcasting}[##1]}{\end{RpgStatSpellcasting}}
 	% \ProvideDocumentCommand		{\slot}{o o m}		{\RpgStatSpellSlots[##1][##2]{##3}}
 	% \ProvideDocumentCommand		{\innate}{O{} m}	{\RpgStatSpellList[##1]{##2}}
@@ -206,6 +208,7 @@
 	{
 		\tl_if_blank:eF{\__dnd_statSenses}
 		{
+			% BUG: \__dnd_statSenses_tl is the pre-revamp name; the property is stored in \__dnd_statSenses, so the senses are never shown (only ', passive Perception N').
 			\__dnd_statSenses_tl,~
 		}
 		passive~Perception~ \__dnd_statPP

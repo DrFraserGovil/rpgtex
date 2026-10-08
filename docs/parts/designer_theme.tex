@@ -49,7 +49,7 @@
 					      \item Create variables only if they do not already exist (for example, with \cmd*{tl_if_exist:NF}), and use \cmd*{msg_set:nnn} rather than \cmd*{msg_new:nnn}.
 				      \end{itemize}
 				\item \textbf{Category codes.} A theme file is read with the category codes in force where \cmd{RpgSetTheme} is called. When it is called in the document body, \LaTeX{}3 syntax is off and \texttt{@} is not a letter. Each file should therefore begin with \cmd*{ExplSyntaxOn} if it uses \LaTeX{}3 syntax, and with \cmd*{makeatletter} if it uses internal commands such as \cmd*{@title}, rather than relying on the settings left by the file before it.
-				\item \textbf{Timing.} A theme only affects material created after it is loaded. In particular, it cannot change the options passed to the underlying class (such as the font size or the number of columns), and it does not restyle a table of contents which has already been typeset.
+				\item \textbf{Timing.} A theme only affects material created after it is loaded. In particular, it cannot change the options passed to the underlying class (such as the font size or the number of columns), and it does not restyle a table of contents which has already been typeset. Changes to the formatting of the contents (with \cmd*{titlecontents}) should be wrapped in \cmdref{RpgIfPreamble}: in the document body, the \texttt{titletoc} package writes them into the \texttt{.toc} file, where they are read on the next compilation before the theme has been loaded, and so may refer to colors or fonts which do not yet exist.
 			\end{enumerate}
 
 		\subsection{Theme Resources}\label{S:ThemeResources}

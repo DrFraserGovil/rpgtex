@@ -1,22 +1,14 @@
-%highlight = RpgStatLegacyMode
-\begin{ExampleBlock}[RpgStatLegacyMode][listing side text]{}
-%new style active before these braces
+% title = The 2014 Appearance
+% highlight = RpgStatLegacyMode
+\begin{ExampleBlock}[RpgStatLegacyMode][listing side text]{The 2014 Appearance}
 {
     \RpgStatLegacyMode{}
-    \begin{RpgStat}{Commoner}[
-        type={Medium or Small Humanoid; typically neutral},
-        languages=Common
-    ]
-        \section{Traits}
-            \action{Mob Mentality} If a Commoner is subjected to a mind-altering effect (such as the frightened condition, or a charm spell), all Commoners within 10ft are also subjected to this effect.
+    \begin{RpgStat}{Commoner}[type=Humanoid, languages=Common]
         \section{Actions}
-            \melee{Club}
+            \melee{Club}[dmg=1d4, dmg-type=bludgeoning]
     \end{RpgStat}
-
-    % legacy style persists within these braces
 }
-
-%outside the changes revert to the new style
+% outside the braces, the 2024 appearance returns
 
 
 \end{ExampleBlock}

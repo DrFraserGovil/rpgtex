@@ -46,7 +46,7 @@
 {
 	%%Add entries into the registry
 	%%extracts the current values assigned to the variables
-	\prop_put:Nen{\table_names}{#2}{\verb|#1| & \texttt{\tl_to_str:c{__rpg_font_#2_family}}& \texttt{\tl_to_str:c{__rpg_font_#2_style}} & #1 Lorum~ipsum}
+	\prop_put:Nen{\table_names}{#2}{\verb|#1| & \texttt{\tl_to_str:c{__rpg_font_#2_family}}& \parbox[t]{3cm}{\texttt{\tl_to_str:c{__rpg_font_#2_style}}} & #1 Lorum~ipsum}
 
 }
 \NewDocumentCommand{\InsertFontTable}{m}{

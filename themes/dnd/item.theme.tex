@@ -21,6 +21,7 @@
 		\tl_concat:NNN{\RpgItemRarity}{\RpgItemRarity}{~}
 	}
 
+	% BUG: this overwrites any description given by the user, so the description property is silently dropped in text mode (the card format shows it in preference to the rarity and type). Only build the line from rarity and type when no description was given, as the card format does.
 	\tl_concat:NNN\RpgItemDescription{\RpgItemRarity}{\RpgItemType}
 
 	\str_compare:eNeF{\RpgAttunement}{=}{none}

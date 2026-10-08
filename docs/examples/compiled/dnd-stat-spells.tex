@@ -1,0 +1,17 @@
+% title = Spellcasting
+% highlight = RpgStat, RpgStatSpells, atWill, perDay, level
+\begin{ExampleBlock}[RpgStat, RpgStatSpells, atWill, perDay, level][listing side text]{Spellcasting}
+\begin{RpgStat}{Mage}[int=17, cr=6]
+    \section{Actions}
+        \begin{RpgStatSpells}[modifier=int]
+            \atWill{mage hand, light}
+            \perDay{2}{fly, counterspell}
+            \level{fire bolt, shocking grasp}
+            \level[1][4]{magic missile, shield}
+        \end{RpgStatSpells}
+        \begin{RpgStatSpells}[modifier=cha, title=Innate Spellcasting, innate]
+            \perDay{1}{misty step}
+        \end{RpgStatSpells}
+\end{RpgStat}
+
+\end{ExampleBlock}
