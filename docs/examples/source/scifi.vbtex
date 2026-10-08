@@ -1,0 +1,39 @@
+% Examples for the scifi theme chapter
+
+% example = scifi-item-text
+% title = RpgItem: Text Mode
+% highlight = RpgItem
+	\begin{RpgItem}{Mag-Anchor}[
+		description={Hull-Grip Boarding Clamp},
+		image={img/Phaser_model.jpg}
+	]
+		A magnetic clamp, standard issue for boarding crews. While it is fixed to a metal surface, you cannot be pushed, pulled or thrown, even in zero gravity. Detaching it takes an action.
+	\end{RpgItem}
+
+% example = scifi-item-card
+% title = RpgItem: Card Mode
+% highlight = RpgItem, RpgSwitch
+	\RpgSwitch{UseItemCard}{on}
+	\begin{RpgItem}[width=5cm, height=7cm]{Mag-Anchor}[
+		description={Hull-Grip Boarding Clamp},
+		image={img/Phaser_model.jpg}
+	]
+		A magnetic clamp, standard issue for boarding crews. While it is fixed to a metal surface, you cannot be pushed, pulled or thrown, even in zero gravity. Detaching it takes an action.
+	\end{RpgItem}
+	\RpgSwitch{UseItemCard}{off}
+
+% example = scifi-feat-text
+% title = RpgFeat: Text Mode
+% highlight = RpgFeat
+	\begin{RpgFeat}{Void Dancer}[requires={EVA certification}]
+		Years of spacewalks have taught you to move without gravity. You suffer no penalties for fighting in zero gravity, and once per scene you may push off any surface to move \RpgDice{2d6} metres as a free action.
+	\end{RpgFeat}
+
+% example = scifi-feat-card
+% title = RpgFeat: Card Mode
+% highlight = RpgFeat, RpgSwitch
+	\RpgSwitch{UseFeatCard}{on}
+	\begin{RpgFeat}[width=5cm, height=6cm]{Void Dancer}[requires={EVA certification}]
+		Years of spacewalks have taught you to move without gravity. You suffer no penalties for fighting in zero gravity, and once per scene you may push off any surface to move \RpgDice{2d6} metres as a free action.
+	\end{RpgFeat}
+	\RpgSwitch{UseFeatCard}{off}
