@@ -54,7 +54,7 @@
 				\statRow{nickname, name}{A shorter name for the creature, such as `Gorgenhar' for `Gorgenhar, the Devourer'.}{\textit{(the title)}}[Use \cmd{RpgStatName} (or \cmd*{name}) in the abilities to refer to the creature by this name.]
 				\statRow{size}{The size of the creature, shown beneath its name.}{\texttt{Medium}}
 				\statRow{speed}{The speed of the creature, used as it is written.}{\texttt{30ft}}[Include the units and any other movement, such as \texttt{30ft, fly 60ft}.]
-				\statRow{type}{The type of the creature, shown after its size.}{\textit{(none)}}
+				\statRow{type}{The type of the creature, shown after its size.}{\texttt{Creature}}
 			\end{RpgTable}
 
 		\subsubsection{Abilities \& Saves}
@@ -122,6 +122,23 @@
 				      \end{enumerate}
 				\item The passive Perception is $10$ plus the Wisdom (Perception) bonus, taking into account the assigned proficiency.
 			\end{itemize}
+		\subsubsection{Names \& Values}
+
+			The following commands give the values of the current statblock, for use within its abilities:
+
+			\RpgFunction{RpgStatMod}[stat]{\param{ability}}
+			{
+				The modifier of the given \texttt{ability} (\texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis} or \texttt{cha}), or the proficiency bonus (\texttt{proficiency}), with its sign, such as $+3$.
+			}
+			\RpgVariable{RpgStatName}[name]
+			{
+				The name of the creature, as used in its abilities: its \texttt{nickname}, if one was given, and otherwise its title.
+			}
+			\RpgFunction{RpgStatSetName}{\param{name}}
+			{
+				Changes the name given by \cmd{RpgStatName}.
+			}
+
 	\subsection{Abilities}\label{S:DndStatAbilities}
 
 		The abilities of the creature are written in the body of the environment, using the commands below.
@@ -131,6 +148,8 @@
 		\end{RpgSidebar}
 
 		\subsubsection{Sections \& Actions}
+
+
 
 			\RpgFunction{RpgStatAction}[action]{[<cost>]\param{name}}
 			{
@@ -145,51 +164,39 @@
 				Begins a section of the statblock, such as `Traits' or `Actions', with its \texttt{title} in \FontRef{StatBlockSection} above a rule.
 			}
 
+			In addition to the standard sectioning command, we provide special commands which initiate a Legendary Actions or Mythic Monster section, including the introductory preamble text. These are found on \RpgPage[t]{S:Legendary}.
+
 			\RpgGetExample{dnd-stat-actions}
 
 		\subsubsection{Attacks}
 
 			\RpgFunction{RpgStatAttack}[attack]{\param{name}[<options>]}
 			{
-				Typesets an attack called \texttt{name} in the standard form, `\textit{Melee (5ft):} +5 to hit. \textit{On Hit:} \ldots'. The bonus to hit is the proficiency bonus, plus the modifier of the attack's ability, plus any extra \texttt{bonus}. The \texttt{options} are:
-				\begin{RpgTable}{lXl}
+				Typesets an attack called \texttt{name} in the standard form, `\textit{Melee (5ft):} +5 to hit. \textit{On Hit:} \ldots'. The \texttt{options} are:
+				\begin{RpgTable}[breakable]{lXl}
 					Option & Effect & Default
-					\\
-					\texttt{bonus} & An extra bonus to hit. & \texttt{0}
-					\\
-					\texttt{distance} & \texttt{melee}, \texttt{ranged} or \texttt{both}. & \texttt{melee}
-					\\
-					\texttt{dmg} & The damage of the attack, as dice. & \texttt{1d4}
-					\\
-					\texttt{dmg-type} & The type of the damage. & \texttt{bludgeoning}
-					\\
-					\texttt{extra} & Any further effect of a hit, added after the damage. & \textit{(none)}
-					\\
-					\texttt{modifier} & The ability used by the attack: \texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis} or \texttt{cha} (or capitals, i.e. \texttt{STR}). & \texttt{str}
-					\\
-					\texttt{or-dmg} & Alternative damage, such as for a weapon used with two hands. & \textit{(none)}
-					\\
-					\texttt{or-type} & The type of the alternative damage. & \textit{(none)}
-					\\
-					\texttt{or-when} & When the alternative damage applies. & \textit{(none)}
-					\\
-					\texttt{plus-dmg} & Additional damage, added to the main damage. & \textit{(none)}
-					\\
-					\texttt{plus-type} & The type of the additional damage. & \texttt{slashing}
-					\\
-					\texttt{range} & The range of a ranged attack, in feet. & \texttt{20/60}
-					\\
-					\texttt{reach} & The reach of a melee attack, in feet. & \texttt{5}
-					\\
-					\texttt{type} & \texttt{weapon} or \texttt{spell}. & \texttt{weapon}
+					\statRow{bonus}{An extra bonus to hit.}{\texttt{0}}
+					\statRow{distance}{\texttt{melee}, \texttt{ranged} or \texttt{both}.}{\texttt{melee}}[\cmd{melee} and \cmd{ranged} set this for you.]
+					\statRow{dmg}{The damage of the attack, as dice, such as \texttt{1d6+3}.}{\texttt{1d4}}[
+						Unlike to-hit, the modifier is not added here, but may be included in the calculation using \cmd{RpgStatMod}, which allows numerical expressions.
+					]
+					\statRow{dmg-type}{The type of the damage.}{\texttt{bludgeoning}}
+					\statRow{extra}{Any further effect of a hit, added after the damage.}{\textit{(none)}}[Do not end it with a full stop, which is added for you.]
+					\statRow{modifier}{The ability used by the attack: \texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis} or \texttt{cha}, or the same in capitals.}{\texttt{str}}
+					\statRow{or-dmg}{Alternative damage, such as for a weapon used with two hands.}{\textit{(none)}}
+					\statRow{or-type}{The type of the alternative damage.}{\textit{(none)}}
+					\statRow{or-when}{When the alternative damage applies, such as \texttt{when used with two hands}.}{\textit{(none)}}
+					\statRow{plus-dmg}{Additional damage, added to the main damage.}{\textit{(none)}}
+					\statRow{plus-type}{The type of the additional damage.}{\texttt{slashing}}
+					\statRow{range}{The range of a ranged attack, in feet.}{\texttt{20/60}}[Used when \texttt{distance} is \texttt{ranged} or \texttt{both}. The units are added if missing.]
+					\statRow{reach}{The reach of a melee attack, in feet.}{\texttt{5}}[Used when \texttt{distance} is \texttt{melee} or \texttt{both}. The units are added if missing.]
+					\statRow{type}{\texttt{weapon} or \texttt{spell}.}{\texttt{weapon}}[A spell attack is shown as `Melee Spell' or `Ranged Spell'.]
 				\end{RpgTable}
-				The short names \cmd{melee} and \cmd{ranged} are the same as \cmd*{attack}, with \texttt{distance} set to \texttt{melee} or \texttt{ranged}.
 
 				The displayed to-hit modifier is computed automatically from:
 				\begin{equation*}
 					\text{to-hit} = \text{modifier} + \text{PB} + \text{bonus}
 				\end{equation*}
-				Damage does not automatically include bonuses from (for example) strength, but it possible to include them by using the \cmd{RpgStatMod}, and even use these in numerical expressions.
 			}
 			\RpgFunction{melee}{\param{name}[<options>]}
 			{
@@ -205,29 +212,21 @@
 
 		\subsubsection{Saving Throws}
 
+			A `saving throw' in the context of the main body of an \env{RpgStat} is \textit{an action which forces creatures to perform a saving throw}, such as a dragon's breath weapon.
 			\RpgFunction{RpgStatSaveEffect}[save]{\param{name}[<options>]}
 			{
 				Typesets an effect called \texttt{name} which forces a saving throw, such as a breath weapon, followed by its effects on a failed and a successful save. The \texttt{options} are:
 				\begin{RpgTable}{lXl}
 					Option & Effect & Default
-					\\
-					\texttt{dc} & The difficulty class of the save. & \texttt{10}
-					\\
-					\texttt{failure} & The effect on a failed save. Also \texttt{fail}. & \textit{(none)}
-					\\
-					\texttt{modifier} & The ability used for the save. & \texttt{dex}
-					\\
-					\texttt{origin} & Where the area is centred, for an area effect. & \textit{(none)}
-					\\
-					\texttt{shape} & \texttt{single} (one target), \texttt{cone}, \texttt{sphere}, \texttt{line} or \texttt{cube}. & \texttt{single}
-					\\
-					\texttt{size} & The range, or the size of the area, in feet. & \texttt{60}
-					\\
-					\texttt{success} & The effect on a successful save, which is left out if empty. Also \texttt{succeed}. & \textit{(none)}
-					\\
-					\texttt{target} & \texttt{creature} or \texttt{enemy}. & \texttt{creature}
-					\\
-					\texttt{text} & Text placed before the description of the save. & \textit{(none)}
+					\statRow{dc}{The difficulty class of the save.}{\texttt{10}}
+					\statRow{failure, fail}{The effect on a failed save.}{\textit{(none)}}
+					\statRow{modifier}{The ability used for the save: \texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis} or \texttt{cha}, or the same in capitals.}{\texttt{dex}}
+					\statRow{origin}{Where an area effect is centred.}{\textit{(none)}}[Shown as `Choose a point \ldots' before the area.]
+					\statRow{shape}{\texttt{single}, \texttt{cone}, \texttt{sphere}, \texttt{line} or \texttt{cube}.}{\texttt{single}}[\texttt{single} affects one target within the \texttt{size}; the others affect every target in an area of that shape and \texttt{size}.]
+					\statRow{size}{The range, or the size of the area, in feet.}{\texttt{60}}[The units are added if missing.]
+					\statRow{success, succeed}{The effect on a successful save.}{\textit{(none)}}[Left out if it is empty.]
+					\statRow{target}{\texttt{creature} or \texttt{enemy}.}{\texttt{creature}}
+					\statRow{text}{Text placed before the description of the save.}{\textit{(none)}}
 				\end{RpgTable}
 			}
 
@@ -240,45 +239,65 @@
 				Lists the spells the creature can cast, after a sentence giving its bonus to hit and its spell save DC (the proficiency bonus, plus the modifier of its spellcasting ability, plus any extra \texttt{bonus}; and 8 more than this, respectively). The \texttt{options} are:
 				\begin{RpgTable}{lXl}
 					Option & Effect & Default
-					\\
-					\texttt{bonus} & An extra bonus to hit, and to the save DC. & \texttt{0}
-					\\
-					\texttt{innate} & A flag, which says the spells are cast `without requiring components'. & \textit{(off)}
-					\\
-					\texttt{modifier} & The spellcasting ability. & \texttt{int}
-					\\
-					\texttt{no-intro} & A flag, which leaves out the introductory sentence. & \textit{(off)}
-					\\
-					\texttt{title} & The name of the trait. & \texttt{Spellcasting}
+					\statRow{bonus}{An extra bonus to hit, and to the save DC.}{\texttt{0}}
+					\statRow{innate}{A flag, which says the spells are cast `without requiring components'.}{\textit{(off)}}
+					\statRow{modifier}{The spellcasting ability: \texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis} or \texttt{cha}, or the same in capitals.}{\texttt{int}}
+					\statRow{no-intro}{A flag, which leaves out the introductory sentence.}{\textit{(off)}}
+					\statRow{title}{The name of the trait.}{\texttt{Spellcasting}}
 				\end{RpgTable}
-				Within the environment, each line of spells is given with one of the following short names. The spells are given as a comma-separated list, and are set in italics:
-				\begin{description}
-					\item[\cmd*{atWill}\param{spells}] Spells which can be cast at will.
-					\item[\cmd*{perDay}\param{uses}\param{spells}] Spells which can be cast \texttt{uses} times per day (each).
-					\item[\cmd*{level}{[<level>][<slots>]}\param{spells}] Spells cast using spell slots: cantrips if no \texttt{level} is given, and otherwise spells of the given \texttt{level}, with the given number of \texttt{slots}.
-				\end{description}
-				These are short names for \cmd*{RpgStatSpellList}{[<uses>]}\param{spells} and \cmd*{RpgStatSpellSlots}{[<level>][<slots>]}\param{spells}.
+			}
+
+			Each line of spells is typeset with one of the following commands, where the spells are given as a comma-separated list, and are set in italics.
+
+			The following commands function anywhere (even outside an \env{RpgStat}), so long as it is inside a list environment, such as \texttt{itemize}.
+			\RpgFunction{RpgStatSpellList}{[<uses>]\param{spells}}
+			{
+				Used for the modern `innate' style of spellcasting which does not track spell slots. The spells are typeset as either:
+				\begin{enumerate}
+					\item `At will' (if no <uses> argument given)
+					\item `<x>/day' (if only one spell given)
+					\item `<x>/day each' (if more than one spell given)
+				\end{enumerate}
+			}
+			\RpgFunction{RpgStatSpellSlots}{[<level>][<slots>]\param{spells}}
+			{
+				Used for the traditional slot-based spellcasting. The spells are typeset as either:
+				\begin{enumerate}
+					\item `Cantrip' (if no <level> argument given)
+
+					\item `\cmd{RpgOrdinal}\param{ <level> } level Spell (at will)' if a <level> is given, but no <slots>
+					\item `\cmd{RpgOrdinal}\param{ <level> } level Spell (<slots> slots)' if both a <level> and <slots> are given.
+				\end{enumerate}
+			}
+
+			Within \env{RpgStatSpells}, the following short names are also available. Like the other short names \RpgPage[p]{S:DndStatAbilities}, each is only created if no command of that name already exists, and they cannot be used outside the environment:
+
+			\RpgFunction{atWill}{\param{spells}}
+			{
+				Lists spells which can be cast at will. It is the same as \cmd{RpgStatSpellList}\param{spells}.
+			}
+			\RpgFunction{level}{[<level>][<slots>]\param{spells}}
+			{
+				Lists spells which are cast using spell slots. It is the same as \cmd{RpgStatSpellSlots}[<level>][<slots>]\param{spells}.
+			}
+			\RpgFunction{perDay}{\param{uses}\param{spells}}
+			{
+				Lists spells which can be cast \texttt{uses} times per day. It is the same as \cmd{RpgStatSpellList}[<uses>]\param{spells}, except that the number of \texttt{uses} is required.
 			}
 
 			\RpgGetExample{dnd-stat-spells}
 
-		\subsubsection{Legendary \& Mythic Actions}
+		\subsubsection{Legendary \& Mythic Actions}\label{S:Legendary}
 
-			\RpgFunction{RpgStatLegendaryDefiance}{\param{}}
-			{
-				Adds the standard `Legendary Defiance' action. It is usually added with the \texttt{defiance} option of \cmd{RpgStatLegendarySection}.
-			}
-			\RpgFunction{RpgStatLegendaryResistance}{\param{uses}}
-			{
-				Adds the standard `Legendary Resistance' trait, which may be used \texttt{uses} times per day.
-			}
+
+			The following commands are used to initiate the Legendary or Mythic actions section of a statblock -- in addition to the usual \cmd*{section} command, these insert the explanatory preambles.
 			\RpgFunction{RpgStatLegendarySection}{[<options>]}
 			{
 				Begins the `Legendary Actions' section, with the standard explanation of legendary actions. The actions follow, each begun with \cmd*{action} (with its cost in legendary actions, if more than one). The \texttt{options} are:
 				\begin{RpgTable}{lXl}
 					Option & Effect & Default
 					\\
-					\texttt{defiance} & A flag, which adds the `Legendary Defiance' action. & \textit{(off)}
+					\texttt{defiance} & A flag, which adds the homebrew `Legendary Defiance' action. & \textit{(off)}
 					\\
 					\texttt{uses} & The number of legendary actions the creature may take. & \texttt{3}
 				\end{RpgTable}
@@ -300,24 +319,24 @@
 				By default, the mythic trait restores the creature to full hit points, and removes any negative effects, when it is reduced to 0 hit points.
 			}
 
+			\RpgFunction{RpgStatLegendaryDefiance}{\param{}}
+			{
+				\begin{RpgSidebar}{Legendary Defiance is Homebrew}
+					Legendary Defiance is \textit{not} part of the official D\&D rules: it is a homebrew action, written for \rpgtex{} as an improved version of Legendary Resistance.
+
+					As a legendary action, the creature repeats a saving throw which it failed in the past hour, against an effect which is still ongoing. Any penalties from that effect are ignored for the new save, and the effect ends on a success.
+
+					It is never added to a statblock unless it is asked for, with \cmd{RpgStatLegendaryDefiance} or the \texttt{defiance} option of \cmd{RpgStatLegendarySection}. Check that it suits your table before using it.
+				\end{RpgSidebar}
+				Adds the homebrew `Legendary Defiance' action (see the sidebar above). It is usually added with the \texttt{defiance} option of \cmd{RpgStatLegendarySection}.
+			}
+			\RpgFunction{RpgStatLegendaryResistance}{\param{uses}}
+			{
+				Adds the standard `Legendary Resistance' trait, which may be used \texttt{uses} times per day.
+			}
+
 			\RpgGetExample{dnd-stat-legendary}
 
-		\subsubsection{Names \& Values}
-
-			The following commands give the values of the current statblock, for use within its abilities:
-
-			\RpgFunction{RpgStatMod}[stat]{\param{ability}}
-			{
-				The modifier of the given \texttt{ability} (\texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis} or \texttt{cha}), or the proficiency bonus (\texttt{proficiency}), with its sign, such as $+3$.
-			}
-			\RpgVariable{RpgStatName}[name]
-			{
-				The name of the creature, as used in its abilities: its \texttt{nickname}, if one was given, and otherwise its title.
-			}
-			\RpgFunction{RpgStatSetName}{\param{name}}
-			{
-				Changes the name given by \cmd{RpgStatName}.
-			}
 
 	\subsection{Full-Width Statblocks}
 
