@@ -80,10 +80,13 @@ This~cantrip~improves~with~your~character~level:
 	\ignorespaces
 	\str_compare:eNeTF{\__rpg_dndSpellLevel}{=}{0}
 	{
-		\str_if_empty:nF{\__rpg_dndSpellSchool}{\__rpg_dndSpellSchool\ }Cantrip
+		\__rpg_join:NVnn{\l_tmpa_tl}{\__rpg_dndSpellSchool}{Cantrip}{\ }
+		\tl_use:N\l_tmpa_tl
 	}
 	{
-		\RpgOrdinal{\__rpg_dndSpellLevel}~level\str_if_empty:nF{\__rpg_dndSpellSchool}{~\__rpg_dndSpellSchool}
+		\__rpg_join:NnVn{\l_tmpa_tl}{\RpgOrdinal{\__rpg_dndSpellLevel}\ level}{\__rpg_dndSpellSchool}{\ }
+		\tl_use:N\l_tmpa_tl
+		% \RpgOrdinal{\__rpg_dndSpellLevel}~level\str_if_empty:nF{\__rpg_dndSpellSchool}{~\__rpg_dndSpellSchool}
 	}
 }
 

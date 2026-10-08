@@ -122,7 +122,6 @@ def locatePackageDirectory():
 		if result.returncode == 0 and full_path:
 
 			# 3. Extract the directory path
-			# BUG: the leading space makes the injected code start with a space when -p is not used; xelatex then quotes the argument and reads `" "' as a file name ("I can't find file"). Strip it, e.g. return additional_code.strip() in code_injection.
 			return f" \\def\\RpgPackagePath{{{os.path.dirname(full_path)}}}"
 		else:
 			print(f"   Error: Package '{package_name}' not found by kpsewhich")
@@ -149,7 +148,8 @@ def code_injection(args):
 
     #then insert the desired code
     additional_code += f" \\input"
-    return additional_code
+    # The code must not begin with a space: xelatex would then read the start of the argument as a file name
+    return additional_code.strip()
 	
 
 def build_latex(args):
@@ -235,7 +235,6 @@ def finalize(args):
 	if args.show == 1:
 		# We prioritize viewer-specific commands for context switching (Okular, Evince)
 		# over generic commands (open, xdg-open)
-		# BUG: none of these viewers exist on Windows, so --show has no effect there. Add a Windows fallback, e.g. os.startfile(destination_pdf) when sys.platform == "win32".
 		viewer_commands = [
 			["xdg-open", destination_pdf],                   # Generic Linux fallback
 			["okular", destination_pdf],         # Linux/KDE (Okular: reloads and focuses)
@@ -244,6 +243,14 @@ def finalize(args):
 		]
 
 		argprint(args,"-> Opening/focusing PDF viewer...")
+
+		# None of the viewers below exist on Windows: open the PDF in the default application instead
+		if sys.platform == "win32":
+			try:
+				os.startfile(destination_pdf)
+			except OSError as e:
+				print(f"Warning: Failed to open the PDF viewer: {e}", file=sys.stderr)
+			return
 
 		for command in viewer_commands:
 			try:

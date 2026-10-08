@@ -72,13 +72,8 @@
 	\vspace{3pt}
 	\ignorespaces\noindent	{\RpgFontStatBlockTitle #1}
 
-	% BUG: when type is empty this leaves a space before the comma ('Medium , Neutral'). Only add the space and type when type is non-empty.
-	\tl_set:Nn\__dnd_statSubtitle{\__dnd_statSize\ \__dnd_statType}
-
-	\tl_if_empty:eF{\__dnd_statAlignment}
-	{
-		\tl_put_right:Ne{\__dnd_statSubtitle}{,\ \__dnd_statAlignment}
-	}
+	\__rpg_join:NVVn{\__dnd_statSubtitle}{\__dnd_statSize}{\__dnd_statType}{\ }
+	\__rpg_join:NVVn{\__dnd_statSubtitle}{\__dnd_statSubtitle}{\__dnd_statAlignment}{,\ }
 
 	\tl_if_empty:eF{\__dnd_statSubtitle}
 	{

@@ -62,7 +62,7 @@ ln -sf ~/path/to/rpgtex "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
 				\item Run the git commands using Git Bash for Windows
 				\item Use the direct installation. Symbolic links and \texttt{TEXINPUTS} behave differently on Windows, and are best avoided.
 				\item If you use MiKTeX, it does not automatically detect new files in its directories. After installing, register the folder containing \rpgtex{} as a root directory in MiKTeX Console (if it is not already one), and then refresh the file name database (\textit{Tasks} $\rightarrow$ \textit{Refresh file name database}). TeX Live requires no extra steps.
-				\item Run the provided Python scripts through Python explicitly, for example \texttt{python rpglatex document.tex}. The \texttt{rpglatex} compiler does not yet open the finished PDF automatically on Windows. %TODO: Add a wincheck on the compiler 
+				\item Run the provided Python scripts through Python explicitly, for example \texttt{python rpglatex document.tex}.
 			\end{itemize}
 
 		\subsection{Overleaf (Not Recommended)} % HACK: We need to set up an overleaf specific package

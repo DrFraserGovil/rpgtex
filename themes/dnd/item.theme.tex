@@ -16,13 +16,13 @@
 % \begin{noindent}
 \RpgThemeItemFormat{
 	\subsubsection{#1}
-	\tl_if_blank:eF{\RpgItemRarity}
-	{
-		\tl_concat:NNN{\RpgItemRarity}{\RpgItemRarity}{~}
-	}
 
-	% BUG: this overwrites any description given by the user, so the description property is silently dropped in text mode (the card format shows it in preference to the rarity and type). Only build the line from rarity and type when no description was given, as the card format does.
-	\tl_concat:NNN\RpgItemDescription{\RpgItemRarity}{\RpgItemType}
+	
+
+	\tl_if_blank:eT{\RpgItemDescription}
+	{
+		\__rpg_join:NVVn{\RpgItemDescription}{\RpgItemRarity}{\RpgItemType}{\ }
+	}
 
 	\str_compare:eNeF{\RpgAttunement}{=}{none}
 	{
@@ -48,14 +48,7 @@
 	 
 	\tl_if_blank:eT{\RpgItemDescription}
 	{
-
-		%% Add a space after 
-		\tl_if_blank:eF{\RpgItemRarity}
-		{
-			\tl_set:Ne\RpgItemDescription{\RpgItemRarity\ }
-		}
-
-		\tl_concat:NNN\RpgItemDescription{\RpgItemDescription}{\RpgItemType}
+		\__rpg_join:NVVn{\RpgItemDescription}{\RpgItemRarity}{\RpgItemType}{\ }
 	}
 
 	%% check if its still blank....

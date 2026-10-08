@@ -206,12 +206,7 @@
 	%% If no senses provided, just uses passive, otherwise put other senses first
 	\cs_set_protected_nopar:Npn \__dnd_construct_perception:
 	{
-		\tl_if_blank:eF{\__dnd_statSenses}
-		{
-			% BUG: \__dnd_statSenses_tl is the pre-revamp name; the property is stored in \__dnd_statSenses, so the senses are never shown (only ', passive Perception N').
-			\__dnd_statSenses_tl,~
-		}
-		passive~Perception~ \__dnd_statPP
+		\__rpg_join:NVnn{\__dnd_statSenses}{passive~Perception~\__dnd_statPP}{,\ }
 	}
 
 	%% Checks if a manual initiative value was passed
