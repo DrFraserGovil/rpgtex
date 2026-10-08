@@ -35,9 +35,8 @@
 	\keys_set:nn { rpg / stat / attack } {#2}
 
 	%%format the reach/range strings into the desired form
-% BUG: the second line should act on \__dnd_attackRange, which never gets its 'ft'.
 	\__dnd_append_if_missing:nn{\__dnd_attackReach}{ft}
-	\__dnd_append_if_missing:nn{\__dnd_attackReach}{ft}
+	\__dnd_append_if_missing:nn{\__dnd_attackRange}{ft}
 
 	% %Compute the to-hit modifier
 	\__dnd_make_modifier:nnn{\__dnd_attackToHit}{\__dnd_attackStat}{\__dnd_attackBonus}
@@ -47,8 +46,7 @@
 	\str_case_e:nn {\__dnd_attackDistance}
 	{
 		{ melee }   {\textit{Melee\__dnd_attackType{}~(\__dnd_attackReach):}~}
-% BUG: \l__range_tl does not exist, so ranged attacks show 'Ranged ():'. Use \__dnd_attackRange.
-			{ ranged }  {\textit{Ranged\__dnd_attackType{}~(\l__range_tl):}~}
+			{ ranged }  {\textit{Ranged\__dnd_attackType{}~(\__dnd_attackRange):}~}
 			{ both }    {\textit{Melee~(\__dnd_attackReach)\ or\ Ranged~(\__dnd_attackRange)\__dnd_attackType :}~}
 	}
 	{\__dnd_attackToHit}~to~hit.~
@@ -104,8 +102,7 @@
 	{
 		, ~ or\ \exp_args:Ne\RpgDice{\__dnd_attackOrDmg}\ \__dnd_attackOrType\ damage\ \__dnd_attackOrWhen
 
-% BUG: this tests \__dnd_attackOrDmg (always non-empty here), so the sentence ends ',.'. It presumably meant to add the comma only before a following plus-dmg clause.
-		\tl_if_empty:NF {\__dnd_attackOrDmg}
+		\tl_if_empty:NF {\__dnd_attackPlusDmg}
 		{,}
 	}
 }

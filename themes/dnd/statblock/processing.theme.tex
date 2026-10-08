@@ -91,18 +91,22 @@
 %%define the hooks for stats and save-bools
 %% do so by looping over the names and constructing them fancily 
 \seq_map_inline:Nn{\__dnd_Stats}{
-	\exp_args:Nnc\RpgStatAddProperty{#1}{__dnd_#1Score}{10}
-	\exp_args:Nnc\RpgStatAddBoolean{#1-save}{__dnd_Is#1SaveProficient}
+      \use:e
+      {
+              \exp_not:N \RpgStatAddProperty {#1} [\text_uppercase:n{#1}] {\exp_not:c{__dnd_#1Score}} {10}
+              \exp_not:N \RpgStatAddBoolean {#1-save} [\text_uppercase:n{#1}-save] {\exp_not:c{__dnd_Is#1SaveProficient}}
+      }
 }
+ 
 %% Bottom block
-\RpgStatAddProperty	{skills}				{\__dnd_statRawSkills}		{}
-\RpgStatAddProperty	{skills-expertise}		{\__dnd_statRawExpertise}	{}
+\RpgStatAddProperty	{skills}[proficient,skill]				{\__dnd_statRawSkills}		{}
+\RpgStatAddProperty	{skills-expertise}[expert,expertise]	{\__dnd_statRawExpertise}	{}
 \RpgStatAddProperty {languages}[language]	{\__dnd_statLanguages}		{}
 \RpgStatAddProperty {senses}				{\__dnd_statSenses}			{}
 \RpgStatAddProperty {passive-perception}	{\__dnd_statPP}				{}
 \RpgStatAddProperty {proficiency-bonus}[proficiency,pb]{\__dnd_statPB}	{}
 \RpgStatAddProperty {challenge}[cr,CR]		{\__dnd_statCR}				{}
-\RpgStatAddProperty {xp}					{\__dnd_statXP}				{}
+\RpgStatAddProperty {xp}[XP,experience]		{\__dnd_statXP}				{}
 \RpgStatAddProperty {damage-vulnerabilities}{\__dnd_statDamageWeak}		{}
 \RpgStatAddProperty {damage-resistances}	{\__dnd_statDamageResist}	{}
 \RpgStatAddProperty {damage-immunities}		{\__dnd_statDamageImmune}	{}
@@ -147,16 +151,14 @@
 	\ProvideDocumentCommand		{\trait}	{O{} m}		{\RpgStatAction[##1]{##2}}
 	\ProvideDocumentCommand		{\reaction}{m m}		{\RpgStatReaction{##1}{##2}}
 	\ProvideDocumentCommand		{\name}{}			{\RpgStatName{}}
-% BUG: \RpgStatGet does not exist, so \stat raises 'Undefined control sequence'. It should presumably call \RpgStatMod.
-	\ProvideDocumentCommand		{\stat}{m}			{\RpgStatGet{##1}}
+	\ProvideDocumentCommand		{\stat}{m}			{\RpgStatMod{##1}}
 	\ProvideDocumentCommand		{\save}{m O{}}		{\RpgStatSaveEffect{##1}[##2]}
 	%attacks
 	\ProvideDocumentCommand		{\attack}{m O{}}	{\RpgStatAttack{##1}[##2]}
 	\ProvideDocumentCommand		{\melee}{m O{}}		{\RpgStatAttack{##1}[##2,distance=melee]}
 	\ProvideDocumentCommand		{\ranged}{m O{}}	{\RpgStatAttack{##1}[##2,distance=ranged]}
 	%spellss
-% BUG: RpgStatSpellcasting does not exist (the environment is RpgStatSpells), so \begin{spells} raises an error.
-	\ProvideDocumentEnvironment	{spells}{O{}}		{\begin{RpgStatSpellcasting}[##1]}{\end{RpgStatSpellcasting}}
+	\ProvideDocumentEnvironment	{spells}{O{}}		{\begin{RpgStatSpells}[##1]}{\end{RpgStatSpells}}
 	% \ProvideDocumentCommand		{\slot}{o o m}		{\RpgStatSpellSlots[##1][##2]{##3}}
 	% \ProvideDocumentCommand		{\innate}{O{} m}	{\RpgStatSpellList[##1]{##2}}
 
@@ -203,10 +205,12 @@
 		}
 	}
 
+	\tl_clear_new:N \__dnd_statSensesVariable
 	%% If no senses provided, just uses passive, otherwise put other senses first
 	\cs_set_protected_nopar:Npn \__dnd_construct_perception:
 	{
-		\__rpg_join:NVnn{\__dnd_statSenses}{passive~Perception~\__dnd_statPP}{,\ }
+		\__rpg_join:NVnn{\__dnd_statSensesVariable}{\__dnd_statSenses}{passive~Perception~\__dnd_statPP}{,\ }
+		\tl_use:N \__dnd_statSensesVariable
 	}
 
 	%% Checks if a manual initiative value was passed

@@ -1,12 +1,12 @@
 % title = Attacks
-% highlight = RpgStat, melee, ranged, attack
-\begin{ExampleBlock}[RpgStat, melee, ranged, attack][listing side text]{Attacks}
-\begin{RpgStat}{Bandit Captain}[str=15, dex=16, cr=2]
+% highlight = RpgStat, melee, ranged, attack, RpgStatMod
+\begin{ExampleBlock}[RpgStat, melee, ranged, attack, RpgStatMod][listing side text]{Attacks}
+\begin{RpgStat}{Bandit Captain}[str=15, DEX=16, cr=2]
     \section{Actions}
-        \melee{Scimitar}[modifier=dex, dmg=1d6+3, dmg-type=slashing]
-        \ranged{Dagger}[modifier=dex, range=20/60, dmg=1d4+3, dmg-type=piercing]
-        \attack{Spear}[distance=both, reach=5, range=20/60, dmg=1d6+2, dmg-type=piercing,
-            or-dmg=1d8+2, or-type=piercing, or-when={when used with two hands}]
+        \melee{Scimitar}[modifier=dex, dmg=1d6+\RpgStatMod{dex}, dmg-type=slashing]
+        \ranged{Dagger}[modifier=dex, range=20/60, dmg=1d4+2*\RpgStatMod{dex}, dmg-type=piercing]
+        \attack{Spear}[distance=both, reach=5, range=20/60, dmg=1d6+\RpgStatMod{str}, dmg-type=piercing,
+            or-dmg=1d6+2*\RpgStatMod{str}, or-type=piercing, or-when={when used with two hands}]
         \melee{Flame Blade}[type=spell, modifier=cha, dmg=3d6, dmg-type=fire]
 \end{RpgStat}
 

@@ -1,85 +1,84 @@
+% !TEX root = ../documentation.tex
 
-\section{RpgStats}\label{S:DndStat}
+%% A row of the statistics tables: \statRow{<property>, <aliases>}{<effect>}{<default>}[<notes>]
+%% The first name is the property itself, and any others are shown beneath it as aliases; a group of properties may be braced as one name
+\ExplSyntaxOn
+\cs_set_protected:Npn \__docs_statKeys:n #1
+{
+	\seq_set_from_clist:Nn \l_tmpa_seq {#1}
+	\seq_pop_left:NN \l_tmpa_seq \l_tmpa_tl
+	%% allow long names to break after their hyphens
+	\tl_replace_all:Nnn \l_tmpa_tl {-} {-\allowbreak}
+	\texttt{\tl_use:N \l_tmpa_tl}
+	\seq_if_empty:NF \l_tmpa_seq
+	{
+		\seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n { \texttt{##1} } }
+		\par {\footnotesize \textit{also}~\seq_use:Nn \l_tmpb_seq {,~}}
+	}
+}
+\DeclareDocumentCommand\statRow{m m m o}
+{
+	\\ \parbox[t]{3cm}{\raggedright \__docs_statKeys:n {#1}} & #2 \IfValueT{#4}{\newline \textbf{Notes:}~#4} & #3
+}
+\ExplSyntaxOff
 
-	The \texttt{dnd} theme turns \texttt{RpgStat} \RpgPage[p]{S:RuleEnvs} into a D\&D monster statblock. A statblock has two halves, which are given in different ways:
+\newpage \section{RpgStats}\label{S:DndStat}
+
+	The \texttt{dnd} theme turns the \env{RpgStat} rules environment \RpgPage[p]{S:RuleEnvs} into a D\&D monster statblock matching those found in the Monster Manuals. A statblock has two halves, which are given in different ways:
 	\begin{itemize}
-		\item The \textit{statistics} (hit points, armor class, ability scores, skills and so on) are highly structured, and are given as properties \RpgPage[p]{S:DndStatProperties}. The theme computes the modifiers, saves and skill bonuses from them.
+		\item The \textit{statistics} (hit points, armor class, ability scores, skills and so on) are highly structured, and are given as key-value arguments to the environment itself \RpgPage[p]{S:DndStatProperties}. The theme computes the modifiers, saves and skill bonuses from them.
 		\item The \textit{abilities} (traits, actions, reactions and so on) are freeform text, and are written in the body of the environment, with the help of the commands described on \RpgPage{S:DndStatAbilities}.
 	\end{itemize}
 
 	\RpgGetExample{dnd-stat-full}
 
+	\begin{RpgSidebar}{Design Philosophy}
+		The design philosophy of the \texttt{dnd} theme RpgStat environment is that -- wherever possible -- the environment should do the computational work for the author. If they declare that the monster has a strength of 15, then this should be reflected in their save scores, associated skills and any strength-based attacks. This way, when they update the score to 18, everything else should follow suit.
+
+		This intrinsically links the dnd theme to the rules of D\&D \RpgSuperOrdinal{5} edition.
+	\end{RpgSidebar}
+
 	\subsection{Statistics}\label{S:DndStatProperties}
 
-		Several statistics are computed from the others, unless they are given:
-		\begin{itemize}
-			\item The modifier of each ability score is computed in the usual way. If the creature is proficient in any saving throw, a row of save bonuses is shown beneath the modifiers.
-			\item If neither the challenge rating nor the proficiency bonus is given, the creature is challenge 0, with a proficiency bonus of $+2$. If only one is given, the other is computed from it: the proficiency bonus is $2 + \max\left(0, \lfloor (\text{CR} - 1)/4 \rfloor\right)$. If both are given, they are used as they are, without checking that they agree.
-			\item The experience points are computed from the challenge rating, by a formula which is accurate to within 100xp up to challenge 16.
-			\item The initiative is the Dexterity modifier.
-			\item Each skill which is one of the eighteen D\&D skills is given its bonus: the modifier of its usual ability, plus the proficiency bonus (twice the proficiency bonus for expertise). Skills with expertise are listed first. Any other entry, such as \texttt{Acrobatics (+9)}, is shown as it is written, so a skill which uses an unusual ability, or has a special bonus, can be given by hand.
-			\item The passive Perception is $10$ plus the Wisdom (Perception) bonus.
-		\end{itemize}
+		The following values may be provided to the RpgStat environment to define the key statistics. These are often not used as-is, and are instead used to derive and compute values which are typeset, see \RpgPage[t]{S:StatDerived}.
 
-		The properties are listed below. Where a property has several names, they may be used interchangeably.
+		Where a property has several names, they may be used interchangeably. If multiple values are given to the same key (or aliases thereof), the most-recently declared is used.
 
 		\subsubsection{Description}
 			\begin{RpgTable}[breakable]{lXl}
 				Property & Effect & Default
-				\\
-				\texttt{alignment} & The alignment of the creature, shown after its size and type. & \texttt{Neutral}
-				\\
-				\texttt{armor-class} & The armor class, which may include an explanation, such as \texttt{15 (natural armor)}. Also \texttt{ac} and \texttt{AC}. & \texttt{10}
-				\\
-				\texttt{hit-points} & The hit points, usually given with \cmdref{RpgDice}. Also \texttt{hp} and \texttt{HP}. & \texttt{\textbackslash RpgDice\{1d8\}}
-				\\
-				\texttt{initiative} & The initiative bonus, used as it is written. & \textit{(computed)}
-				\\
-				\texttt{nickname} & A shorter name for the creature, used in its abilities and given by \cmd{RpgStatName}, such as `Gorgenhar' for `Gorgenhar, the Devourer'. Also \texttt{name}. & \textit{(the title)}
-				\\
-				\texttt{size} & The size of the creature, shown beneath its name. & \texttt{Medium}
-				\\
-				\texttt{speed} & The speed of the creature, used as it is written. & \texttt{30ft}
-				\\
-				\texttt{type} & The type of the creature, shown after its size. & \textit{(none)}
+				\statRow{alignment}{The alignment of the creature, shown after its size and type.}{\texttt{Neutral}}
+				\statRow{armor-class, ac, AC}{The armor class, which may include an explanation, such as \texttt{15 (natural armor)}.}{\texttt{10}}
+				\statRow{hit-points, hp, HP}{The hit points, usually expressed as a dice expression.}{\texttt{1d8}}[Valid dice expressions are resolved automatically with \cmd{RpgDice}, otherwise printed as-is.]
+				\statRow{initiative}{The initiative bonus, used as it is written.}{\textit{(computed)}}[If it is not given, the Dexterity modifier is used.]
+				\statRow{nickname, name}{A shorter name for the creature, such as `Gorgenhar' for `Gorgenhar, the Devourer'.}{\textit{(the title)}}[Use \cmd{RpgStatName} (or \cmd*{name}) in the abilities to refer to the creature by this name.]
+				\statRow{size}{The size of the creature, shown beneath its name.}{\texttt{Medium}}
+				\statRow{speed}{The speed of the creature, used as it is written.}{\texttt{30ft}}[Include the units and any other movement, such as \texttt{30ft, fly 60ft}.]
+				\statRow{type}{The type of the creature, shown after its size.}{\textit{(none)}}
 			\end{RpgTable}
 
 		\subsubsection{Abilities \& Saves}
 			\begin{RpgTable}[breakable]{lXl}
 				Property & Effect & Default
-				\\
-				\texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis}, \texttt{cha} & The ability scores, as whole numbers. & \texttt{10}
-				\\
-				\texttt{str-save}, \texttt{dex-save}, \ldots & Flags, which make the creature proficient in the corresponding saving throw. & \textit{(off)}
-				\\
-				\texttt{proficiency-bonus} & The proficiency bonus, as a whole number. Also \texttt{proficiency} and \texttt{pb}. & \textit{(computed)}
+				\statRow{{str, dex, con, int, wis, cha},{STR, DEX, CON, INT, WIS, CHA}}{The ability scores, as whole numbers.}{\texttt{10}}
+				\statRow{{<ability>-save}}{Flags, such as \texttt{dex-save} (or \texttt{DEX-save}), which make the creature proficient in the corresponding saving throw.}{\textit{(off)}}[The proficient saves are shown in a row beneath the modifiers.]
+				\statRow{proficiency-bonus, proficiency, pb}{The proficiency bonus, as a whole number.}{\textit{(computed)}}[If it is not given, it is computed from the challenge rating \RpgPage[p]{S:StatDerived}.]
 			\end{RpgTable}
 
 		\subsubsection{Skills \& Details}
 			\begin{RpgTable}[breakable]{lXl}
 				Property & Effect & Default
-				\\
-				\texttt{challenge} & The challenge rating, which may be a fraction, such as \texttt{1/4}. Also \texttt{cr} and \texttt{CR}. & \textit{(computed)}
-				\\
-				\texttt{condition-immunities} & The conditions to which the creature is immune. & \textit{(none)}
-				\\
-				\texttt{damage-immunities} & The damage types to which the creature is immune. & \textit{(none)}
-				\\
-				\texttt{damage-resistances} & The damage types to which the creature is resistant. & \textit{(none)}
-				\\
-				\texttt{damage-vulnerabilities} & The damage types to which the creature is vulnerable. & \textit{(none)}
-				\\
-				\texttt{languages} & The languages the creature speaks or understands. Also \texttt{language}. & \textit{(none)}
-				\\
-				\texttt{passive-perception} & The passive Perception, used as it is written. & \textit{(computed)}
-				\\
-				\texttt{senses} & Any special senses, shown before the passive Perception. & \textit{(none)}
-				\\
-				\texttt{skills} & A comma-separated list of the skills in which the creature is proficient. & \textit{(none)}
-				\\
-				\texttt{skills-expertise} & A comma-separated list of the skills in which the creature has expertise. & \textit{(none)}
-				\\
-				\texttt{xp} & The experience points for defeating the creature. & \textit{(computed)}
+				\statRow{challenge, cr, CR}{The challenge rating, which may be a fraction, such as \texttt{1/4}.}{\textit{(computed)}}[If it is not given, it is computed from the proficiency bonus, or is 0 if neither is given \RpgPage[p]{S:StatDerived}.]
+				\statRow{condition-immunities}{The conditions to which the creature is immune.}{\textit{(none)}}
+				\statRow{damage-immunities}{The damage types to which the creature is immune.}{\textit{(none)}}
+				\statRow{damage-resistances}{The damage types to which the creature is resistant.}{\textit{(none)}}
+				\statRow{damage-vulnerabilities}{The damage types to which the creature is vulnerable.}{\textit{(none)}}
+				\statRow{languages, language}{The languages the creature speaks or understands.}{\textit{(none)}}
+				\statRow{passive-perception}{The passive Perception, used as it is written.}{\textit{(computed)}}[If it is not given, it is 10 plus the Wisdom (Perception) bonus.]
+				\statRow{senses}{Any special senses, shown before the passive Perception.}{\textit{(none)}}
+				\statRow{skills, skill, proficient}{A comma-separated list of the skills in which the creature is proficient.}{\textit{(none)}}[Each of the eighteen D\&D skills is given its bonus automatically; anything else, such as \texttt{Acrobatics (+9)}, is shown as it is written.]
+				\statRow{skills-expertise, expert, expertise}{A comma-separated list of the skills in which the creature has expertise.}{\textit{(none)}}[These skills are listed before the others, with twice the proficiency bonus.]
+				\statRow{experience, xp, XP}{The experience points for defeating the creature.}{\textit{(computed)}}[If it is not given, it is computed from the challenge rating.]
 			\end{RpgTable}
 
 		\subsubsection{Appearance \& Placement}
@@ -102,6 +101,27 @@
 			\end{RpgTable}
 			The appearance and placement properties have no effect in card mode.
 
+		\subsubsection{Derived Values}\label{S:StatDerived}
+
+			From these, several other values are automatically computed:
+			\begin{itemize}
+				\item The modifier of each ability score is computed in the usual way $(\lfloor \frac{\text{score} - 10}{2} \rfloor)$.
+				\item The challenge rating (CR) and the proficiency bonus (PB) are coupled together:
+				      \begin{enumerate}[leftmargin=1cm]
+					      \item If neither is given, the CR is set to 0, and the PB is set to +2
+					      \item If only one is given, the other value is computed using $\text{PB} = 2 + \max\left(0, \lfloor (\text{CR} - 1)/4 \rfloor\right)$
+					      \item If both are given, they are both displayed (even if they would contradict the established formula), and the provided PB is used in all calculations going forward.
+				      \end{enumerate}
+				\item If the creature is declared proficient in a saving throw, a row of save bonuses (computed from the modifier + the proficiency bonus) is shown beneath the modifiers. Only the proficient scores are shown.
+				\item The experience points are computed from the challenge rating, \forcelink{https://rpg.stackexchange.com/questions/192412/is-there-any-generalised-formula-for-converting-monster-cr-into-xp-in-dd-5e}{by an approximate relation which is accurate to the values in the Monster Manual to within 100xp up to challenge 16}.
+				\item If no value is provided to the `initiative' field, the Dexterity modifier is used
+				\item Skills (and expertises) can be declared as comma-separated lists:
+				      \begin{enumerate}[leftmargin=1cm]
+					      \item If the name matches (case-insensitive) one of the 18 D\&D skills, the value is typeset with a bonus computed from the associated ability modifier plus the PB (or twice the PB for expertise). The associated ability is hardcoded (so Intimidation always uses the Charisma bonus).
+					      \item If the name does not match, it is typeset exactly. Custom bonuses can be given this way, as ``Athletics (+18)'' would not match ``Athletics''.
+				      \end{enumerate}
+				\item The passive Perception is $10$ plus the Wisdom (Perception) bonus, taking into account the assigned proficiency.
+			\end{itemize}
 	\subsection{Abilities}\label{S:DndStatAbilities}
 
 		The abilities of the creature are written in the body of the environment, using the commands below.
@@ -145,7 +165,7 @@
 					\\
 					\texttt{extra} & Any further effect of a hit, added after the damage. & \textit{(none)}
 					\\
-					\texttt{modifier} & The ability used by the attack: \texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis} or \texttt{cha}. & \texttt{str}
+					\texttt{modifier} & The ability used by the attack: \texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis} or \texttt{cha} (or capitals, i.e. \texttt{STR}). & \texttt{str}
 					\\
 					\texttt{or-dmg} & Alternative damage, such as for a weapon used with two hands. & \textit{(none)}
 					\\
@@ -163,8 +183,23 @@
 					\\
 					\texttt{type} & \texttt{weapon} or \texttt{spell}. & \texttt{weapon}
 				\end{RpgTable}
-				The short names \cmd*{melee} and \cmd*{ranged} are the same as \cmd*{attack}, with \texttt{distance} set to \texttt{melee} or \texttt{ranged}.
+				The short names \cmd{melee} and \cmd{ranged} are the same as \cmd*{attack}, with \texttt{distance} set to \texttt{melee} or \texttt{ranged}.
+
+				The displayed to-hit modifier is computed automatically from:
+				\begin{equation*}
+					\text{to-hit} = \text{modifier} + \text{PB} + \text{bonus}
+				\end{equation*}
+				Damage does not automatically include bonuses from (for example) strength, but it possible to include them by using the \cmd{RpgStatMod}, and even use these in numerical expressions.
 			}
+			\RpgFunction{melee}{\param{name}[<options>]}
+			{
+				An alias for \cmd{attack}\texttt{[distance=melee, <options>]\param{name}}.
+			}
+			\RpgFunction{ranged}{\param{name}[<options>]}
+			{
+				An alias for \cmd{attack}\texttt{[distance=ranged, <options>]\param{name}}.
+			}
+
 
 			\RpgGetExample{dnd-stat-attacks}
 
