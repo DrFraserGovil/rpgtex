@@ -26,11 +26,12 @@
 \definecolor {DmgPatina}	{HTML} {d1e0d1} % DMG appendix
 
 % Statblock
-\definecolor {RuleColor}	{HTML}	{9C2B1B} % triangular rule in statblock
-\definecolor {StatblockRibbon}{HTML}{E69A28} % stat block top/bottom borders (gold)
-\definecolor {StatblockBg}  {HTML}	{FDF1DC} % stat block background (tan)
-\definecolor {StatblockOutline}  {RGB}	{0,0,0} % stat block background (tan)
-\colorlet	 {StatblockColor}		{RuleColor!40!black}
+%% the defaults for every statblock; the color and frame-color properties override them in a single statblock
+\definecolor	{StatblockRule}		{HTML}	{9C2B1B}				% tapered rules
+\colorlet		{StatblockHeading}			{StatblockRule!50!black}	% title, section headings and header block
+\colorlet		{StatblockFrame}			{StatblockRule!80!white}	% frame
+\definecolor	{StatblockBackground}{HTML}	{FDF1DC}				% background (tan)
+\definecolor	{StatblockRibbon}	{HTML}	{E69A28}				% top/bottom borders in legacy mode (gold)
 
 % aliases (for grey/gray typos)
 \colorlet {ContourGrey} {ContourGray}
@@ -44,7 +45,7 @@
 \colorlet	{NarrationColor}	{BrTan}
 \colorlet	{ContourInnerColor}	{TitleRed}
 \colorlet	{ContourOuterColor}	{ContourGrey}
-\colorlet	{SecretColor}		{RuleColor}
+\colorlet	{SecretColor}		{StatblockRule}
 %% theme color set below...
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

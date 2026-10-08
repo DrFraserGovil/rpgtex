@@ -1,4 +1,5 @@
 % !TEX root = ../documentation.tex
+
 \clearpage
 \RpgSetTheme{dnd}
 \chapter{\texttt{dnd} Theme}\label{Theme:dnd}
@@ -51,10 +52,11 @@
 			\Swatch[title rules]{TitleGold}
 			\Swatch[contour outer]{ContourGray}
 			\Swatch[narration]{BrTan}
-			\Swatch[statblock rules]{RuleColor}
-			\Swatch[statblock text]{StatblockColor}
-			\Swatch[statblock ribbon]{StatblockRibbon}
-			\Swatch[statblock background]{StatblockBg}
+			\Swatch[statblock rules]{StatblockRule}
+			\Swatch[statblock headings]{StatblockHeading}
+			\Swatch[statblock frame]{StatblockFrame}
+			\Swatch[statblock background]{StatblockBackground}
+			\Swatch[legacy statblock borders]{StatblockRibbon}
 			\Swatch[Basic Rules]{BrGreen}
 			\Swatch[PHB Part 1]{PhbLightGreen}
 			\Swatch[PHB Part 2]{PhbLightCyan}
@@ -252,3 +254,83 @@
 		% \clearpage
 
 		\input{parts/themes_dnd_stat.tex}
+
+
+		\newpage
+	\section{Customising the \texttt{dnd} Theme}\label{S:DndDesigners}
+
+		\begin{RpgSidebar}{You can ignore this section}
+			This section is for those who wish to adjust the appearance or wording of the \texttt{dnd} theme, rather than to use it.
+		\end{RpgSidebar}
+
+		General changes can be made by using the exposed \cmd{RpgTheme} commands documented in Part III; for example modifying the font uses \cmdref{RpgThemeFont}.
+
+		In addition to these general actions, the \texttt{dnd} theme exposes the following for \texttt{dnd}-specific modifications. Since loading the theme defines each of the following, any changes must be made after the theme is loaded, and are undone if it is loaded again with \cmdref{RpgSetTheme}.
+
+		\subsection{Statblocks}
+
+			\subsubsection{Colors}
+
+				Every statblock is drawn in the following colors \RpgPage[p]{S:DndColor}, which may be redefined to change the appearance of all statblocks:
+				\begin{RpgTable}{lX}
+					Color & Used for
+					\\ \texttt{StatblockRule} & The tapered rules. A pale shade of it is also used as the \texttt{ThemeColor} within the statblock, and so for its tables.
+					\\ \texttt{StatblockHeading} & The title, the section headings, and the text of the header block (from the armor class to the challenge rating).
+					\\ \texttt{StatblockFrame} & The frame, and the filigree of \texttt{filigree-match}.
+					\\ \texttt{StatblockBackground} & The background, unless the \texttt{background} option is off, when it is white.
+					\\ \texttt{StatblockRibbon} & The borders at the top and bottom, in the legacy appearance \RpgPage[p]{S:DndStatLegacy}.
+				\end{RpgTable}
+				Since \cmd{colorlet} copies a color at the moment it is used, a color defined in terms of another (such as \texttt{StatblockHeading}, which is a dark shade of \texttt{StatblockRule}) does not change when the other is redefined: each must be redefined separately. The \texttt{color} and \texttt{frame-color} properties \RpgPage[p]{S:DndStatAppearance} override these colors within a single statblock.
+
+			\subsubsection{The Frame}
+
+				Each statblock (outside of card mode) is framed by a \texttt{tcolorbox}, whose appearance is held in the \texttt{rpgstatbox} style. It may be adjusted in the same way as the styles of the other boxes \RpgPage[p]{S:ElementStyles}; for example,
+				\begin{center}
+					\cmd*{tcbset}\{rpgstatbox/.append style=\{sharp corners\}\}
+				\end{center}
+				removes the rounded corners of every statblock which follows. \cmdref{RpgStatLegacyMode} replaces the style with the legacy appearance, so any changes should be made after it is called.
+
+			\subsubsection{Rules}
+
+				The tapered rules which separate the parts of a statblock are drawn by:
+
+				\RpgFunction{RpgStatLine}{\param{}}
+				{
+					Draws a tapered rule across the width of the line, in \texttt{StatblockRule}. It may also be used outside of a statblock.
+				}
+
+		\subsection{Part Pages}
+
+			\RpgFunction{RpgThemePartPageTikz}{\param{}}
+			{
+				Draws the badge at the top of each part page \RpgPage[p]{S:DndTitles}, which is placed with its top at the top edge of the page, and centred. It may be redefined (for example, with \cmd{RenewDocumentCommand}) to draw a different badge. \cmdref{RpgThemeSetDMGParts} and \cmdref{RpgThemeSetPHBParts} work by redefining it, and so replace any custom badge.
+			}
+
+		\subsection{Wording}
+
+			The fixed text of the legendary and mythic sections \RpgPage[p]{S:Legendary} is held in the following commands, which may be redefined with \cmd{renewcommand} (for example, to translate them). Within them, \cmdref{RpgStatName} gives the name of the creature.
+
+			\RpgVariable{rpgstringlegendaryDefiance}
+			{
+				The description of the homebrew `Legendary Defiance' action.
+			}
+			\RpgVariable{rpgstringlegendaryResistance}
+			{
+				The description of the `Legendary Resistance' trait.
+			}
+			\RpgVariable{rpgstringlegendarySpiel}
+			{
+				The explanation of legendary actions, which begins the `Legendary Actions' section.
+			}
+			\RpgVariable{rpgstringmythicDefaultBody}
+			{
+				The default description of the mythic trait, used if no \texttt{trait} is given to \cmdref{RpgStatMythicSection}.
+			}
+			\RpgVariable{rpgstringmythicGains}
+			{
+				The sentence which introduces the traits a creature gains when its mythic trait activates.
+			}
+			\RpgVariable{rpgstringmythicNarrationLeadIn}
+			{
+				The sentence which introduces the \texttt{narration} of \cmdref{RpgStatMythicSection}.
+			}

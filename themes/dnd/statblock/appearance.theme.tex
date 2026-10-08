@@ -3,33 +3,32 @@
 % Tcolorbox wrapper & modification
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%define the default tcolorbox which wraps the environemnt
-% \tcbset{
+%% The appearance of the box which wraps each statblock 
+%% \RpgStatLegacyMode replaces it with the legacy appearance
+\tcbset{rpgstatbox/.style={
+			enhanced jigsaw,
+			opacityback= 0.8,
+			before skip      = 6pt plus 3pt minus 3pt,
+			boxrule          = 2pt,
+			parbox           = false,
+			boxsep           = 2pt,
+			toptitle         = 8pt,
+			top              = 0pt,
+			left             = 2pt,
+			right            = 2pt,
+			bottom           = 7pt,
+			rounded corners,
+			arc=2mm,
+			oversize         = 0pt,
+			colback          = StatblockBackground,
+			colbacktitle     = StatblockBackground,
+			colframe         = StatblockFrame,
+			fontupper        = \RpgFontStatBlockBody,
+			fontlower        = \RpgFontStatBlockBody,
+		}}
 
-% }
-\DeclareTColorBox {RpgStatBox} { O{}}
-{
-	enhanced jigsaw,
-	opacityback= 0.8,
-	before skip      = 6pt plus 3pt minus 3pt,
-	boxrule          = 2pt,
-	parbox           = false,
-	boxsep           = 2pt,
-	toptitle         = 8pt,
-	top              = 0pt,
-	left             = 2pt,
-	right            = 2pt,
-	bottom           = 7pt,
-	rounded corners,
-	arc=2mm,
-	oversize         = 0pt,
-	colback          = StatblockBg,
-	colbacktitle     = StatblockBg,
-	colframe         = StatblockOutline,
-	fontupper        = \RpgFontStatBlockBody,
-	fontlower        = \RpgFontStatBlockBody,
-	#1,
-}
+%% The optional argument is used by the statblock to add the filigree frame
+\DeclareTColorBox {RpgStatBox} { O{}} {rpgstatbox, #1}
 
 
 \ExplSyntaxOn
@@ -39,20 +38,27 @@
 {
 	\bool_if:NF{\__rpg_ShowBackground}
 	{
-		\colorlet{StatblockBg}{white}
+		\colorlet{StatblockBackground}{white}
 	}
 
-	%%set theme colors
-	\colorlet{RuleColor}{\tl_use:N \__dnd_statColor}
-	\colorlet{StatblockColor}{\tl_use:N \__dnd_statColor!50!black}
-	\colorlet{StatblockOutline}{\tl_use:N \__dnd_statOutlineColor }
-	\RpgSetThemeColor{\__dnd_statColor!25!white}
+	%% the theme's Statblock... colors are the defaults; these changes are local to this statblock
+	\tl_if_blank:VF \__dnd_statColor
+	{
+		\colorlet{StatblockRule}{\tl_use:N \__dnd_statColor}
+		\colorlet{StatblockHeading}{StatblockRule!50!black}
+		\colorlet{StatblockFrame}{StatblockRule!80!white}
+	}
+	\tl_if_blank:VF \__dnd_statFrameColor
+	{
+		\colorlet{StatblockFrame}{\tl_use:N \__dnd_statFrameColor}
+	}
+	\RpgSetThemeColor{StatblockRule!25!white}
 
 	% change filigree color to
 	\tl_clear:N\__dnd_statBoxOptions
 	\bool_if:NTF{\__dnd_statFiligreeOutline}
 	{
-		\colorlet{FiligreeColor}{\tl_use:N \__dnd_statOutlineColor}
+		\colorlet{FiligreeColor}{StatblockFrame}
 		\tl_set:Ne\__dnd_statBoxOptions{rpgfiligree}
 	}
 	{
@@ -100,7 +106,7 @@
 \cs_set_protected_nopar:Npn \__dnd_stat_basics:
 {
 	{
-			\color{StatblockColor}
+			\color{StatblockHeading}
 			\noindent
 			\begin{tabularx}{\linewidth}{lXlX}
 				\textbf{AC}         & \RaggedRight\noindent \__dnd_statAC
@@ -128,7 +134,7 @@
 \cs_set_protected_nopar:Npn \__dnd_stat_ability_scores:
 {
 	%%define colours and spacings
-	\color {StatblockColor}
+	\color {StatblockHeading}
 	\setlength\topsep{0pt}
 	\setlength\tabcolsep{3pt}
 
@@ -169,8 +175,8 @@
 	%% Each item is wrapped in command that ensures it only appears 
 	%% if the value is non-empty
 	\begin {description}[
-		before   = \color {StatblockColor},
-		font     = \RpgFontStatBlockBody\color {StatblockColor},
+		before   = \color {StatblockHeading},
+		font     = \RpgFontStatBlockBody\color {StatblockHeading},
 		labelsep = \__rpg_SpaceDim,
 		nosep]
 
@@ -190,7 +196,7 @@
 {
 	\par \vspace{-2pt} \noindent
 	\begin {tikzpicture}
-	\fill [RuleColor ] ( 0, 0 ) -- ( 0, 0.1 ) -- ( \linewidth, 0.05 );
+	\fill [StatblockRule] ( 0, 0 ) -- ( 0, 0.1 ) -- ( \linewidth, 0.05 );
 	\end {tikzpicture}
 	\par
 }

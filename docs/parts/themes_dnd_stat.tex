@@ -81,23 +81,16 @@
 				\statRow{experience, xp, XP}{The experience points for defeating the creature.}{\textit{(computed)}}[If it is not given, it is computed from the challenge rating.]
 			\end{RpgTable}
 
-		\subsubsection{Appearance \& Placement}
+		\subsubsection{Appearance \& Placement}\label{S:DndStatAppearance}
 			\begin{RpgTable}[breakable]{lXl}
 				Property & Effect & Default
-				\\
-				\texttt{color} & The color of the statblock's rules and headings. The headings use a darker shade of it, the frame a lighter shade, and the \texttt{ThemeColor} (and so the tables) a pale shade. & \texttt{RuleColor}
-				\\
-				\texttt{filigree} & A flag, which decorates the statblock with the filigree frame \RpgPage[p]{S:DndFiligree}. & \textit{(off)}
-				\\
-				\texttt{filigree-match} & A flag, which decorates the statblock with the filigree frame, in the color of its frame. & \textit{(off)}
-				\\
-				\texttt{float} & If given, places the statblock in a float, with this placement (such as \texttt{t} or \texttt{h}). & \textit{(none)}
-				\\
-				\texttt{float-type} & The kind of float used, such as \texttt{figure*} for a statblock spanning both columns of a two-column document. & \texttt{figure}
-				\\
-				\texttt{outline-color} & The color of the frame. & \textit{(from \texttt{color})}
-				\\
-				\texttt{twocolumn} & A flag, which sets the contents of the statblock in two columns, for statblocks which span the width of the page. & \textit{(off)}
+				\statRow{color}{The color of the statblock's rules.}{\textit{(theme)}}[The headings are set in a darker shade of it, the frame in a lighter shade, and the tables in a pale shade. If it is not given, the theme's colors are used \RpgPage[p]{S:DndDesigners}.]
+				\statRow{filigree}{A flag, which decorates the statblock with the filigree frame \RpgPage[p]{S:DndFiligree}.}{\textit{(off)}}
+				\statRow{filigree-match}{A flag, which decorates the statblock with the filigree frame, in the color of its frame.}{\textit{(off)}}
+				\statRow{float}{If given, places the statblock in a float, with this placement (such as \texttt{t} or \texttt{h}).}{\textit{(none)}}
+				\statRow{float-type}{The kind of float used, such as \texttt{figure*} for a statblock spanning both columns of a two-column document.}{\texttt{figure}}
+				\statRow{frame-color, outline-color}{The color of the frame, and of the filigree of \texttt{filigree-match}.}{\textit{(from \texttt{color})}}
+				\statRow{twocolumn}{A flag, which sets the contents of the statblock in two columns, for statblocks which span the width of the page.}{\textit{(off)}}
 			\end{RpgTable}
 			The appearance and placement properties have no effect in card mode.
 
@@ -173,7 +166,7 @@
 			\RpgFunction{RpgStatAttack}[attack]{\param{name}[<options>]}
 			{
 				Typesets an attack called \texttt{name} in the standard form, `\textit{Melee (5ft):} +5 to hit. \textit{On Hit:} \ldots'. The \texttt{options} are:
-				\begin{RpgTable}[breakable]{lXl}
+				\begin{RpgTable}[breakable,width=0.8\linewidth]{lXl}
 					Option & Effect & Default
 					\statRow{bonus}{An extra bonus to hit.}{\texttt{0}}
 					\statRow{distance}{\texttt{melee}, \texttt{ranged} or \texttt{both}.}{\texttt{melee}}[\cmd{melee} and \cmd{ranged} set this for you.]
@@ -296,10 +289,8 @@
 				Begins the `Legendary Actions' section, with the standard explanation of legendary actions. The actions follow, each begun with \cmd*{action} (with its cost in legendary actions, if more than one). The \texttt{options} are:
 				\begin{RpgTable}{lXl}
 					Option & Effect & Default
-					\\
-					\texttt{defiance} & A flag, which adds the homebrew `Legendary Defiance' action. & \textit{(off)}
-					\\
-					\texttt{uses} & The number of legendary actions the creature may take. & \texttt{3}
+					\statRow{defiance}{A flag, which adds the homebrew `Legendary Defiance' action.}{\textit{(off)}}
+					\statRow{uses}{The number of legendary actions the creature may take.}{\texttt{3}}
 				\end{RpgTable}
 			}
 			\RpgFunction{RpgStatMythicSection}{[<options>]}
@@ -307,16 +298,11 @@
 				Begins the `Mythic Monster' section: the mythic trait, followed by the traits and legendary actions the creature gains when it is activated. The \texttt{options} are:
 				\begin{RpgTable}{lXl}
 					Option & Effect & Default
-					\\
-					\texttt{narration} & Text to be read aloud when the mythic trait activates, shown in an \envref{RpgNarration}. & \textit{(none)}
-					\\
-					\texttt{passive} & A flag, for a creature which gains only traits, and no legendary actions. & \textit{(off)}
-					\\
-					\texttt{trait} & The description of the mythic trait. & \textit{(see below)}
-					\\
-					\texttt{trait-name} & The name of the mythic trait. & \texttt{Second Phase}
+					\statRow{narration}{Text to be read aloud when the mythic trait activates, shown in an \envref{RpgNarration}.}{\textit{(none)}}
+					\statRow{passive}{A flag, for a creature which gains only traits, and no legendary actions.}{\textit{(off)}}
+					\statRow{trait}{The description of the mythic trait.}{\textit{(see notes)}}[By default, the trait restores the creature to full hit points, and removes any negative effects, when it is reduced to 0 hit points.]
+					\statRow{trait-name}{The name of the mythic trait.}{\texttt{Second Phase}}
 				\end{RpgTable}
-				By default, the mythic trait restores the creature to full hit points, and removes any negative effects, when it is reduced to 0 hit points.
 			}
 
 			\RpgFunction{RpgStatLegendaryDefiance}{\param{}}
@@ -345,11 +331,13 @@
 			The same as \texttt{RpgStat}, but sets the \texttt{twocolumn} property, and places the statblock in a \texttt{figure*} float. In a two-column document, this gives a statblock spanning the width of the page, which is useful for large creatures. If no \texttt{float} placement is given, the statblock is placed where it appears in the text, using the \texttt{strip} environment of the \texttt{cuted} package; this is fragile, and may fail near other floats, or with too little text around it.
 		}
 
+		The example of legendary and mythic actions \RpgPage[p]{S:Legendary} uses \texttt{RpgStat*}: since this manual is in one column, the statblock is placed where it appears, with its contents in two columns.
+
 	\subsection{Card Mode}
 
 		In card mode, which is turned on with \cmd{RpgSwitch}\param{UseStatCard}\param{on} \RpgPage[p]{Cmd:RpgSwitch}, the statblock is typeset on a card, without its frame and background. The abilities, and the commands which create them, are the same.
 
-	\subsection{Legacy Appearance}
+	\subsection{Legacy Appearance}\label{S:DndStatLegacy}
 
 		The appearance of the statblock follows the 2024 rules. The appearance of the 2014 rules is also available:
 

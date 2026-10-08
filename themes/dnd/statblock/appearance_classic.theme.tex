@@ -9,8 +9,7 @@
 \cs_set:Nn{\__dnd_stat_ability_scores:}{\LEGACY__dnd_stat_ability_scores:}
 \cs_set:Nn{\__dnd_stat_details:}{\LEGACY__dnd_stat_details:}
 
-\RenewTColorBox{RpgStatBox} { O{}}
-{
+\tcbset{rpgstatbox/.style={
 sharp~corners,
 enhanced~jigsaw,
 before~skip      = 6pt~plus~3pt~minus~3pt,
@@ -23,8 +22,8 @@ left             = 2pt,
 right            = 2pt,
 bottom           = 7pt,
 oversize         = 0pt,
-colback          = StatblockBg,
-colbacktitle     = StatblockBg,
+colback          = StatblockBackground,
+colbacktitle     = StatblockBackground,
 borderline~north = {3pt} {0pt}   {TitleRed},
 borderline~north = {2pt} {0.5pt} {StatblockRibbon},
 borderline~south = {3pt} {0pt}   {TitleRed},
@@ -33,8 +32,7 @@ borderline~south = {2pt} {0.5pt} {StatblockRibbon},
 frame~hidden,
 fontupper        = \RpgFontStatBlockBody,
 fontlower        = \RpgFontStatBlockBody,
-##1,
-}
+}}
 }
 
 
@@ -42,7 +40,7 @@ fontlower        = \RpgFontStatBlockBody,
 \cs_set_protected_nopar:Npn \LEGACY__dnd_stat_basics:
 {
 	{
-			\color{StatblockColor}
+			\color{StatblockHeading}
 			\noindent
 			\begin{tabularx}{\linewidth}{lX}
 				\textbf{AC}    & \__dnd_statAC
@@ -61,7 +59,7 @@ fontlower        = \RpgFontStatBlockBody,
 \cs_set_protected_nopar:Npn \LEGACY__dnd_stat_ability_scores:
 {
 	%%define colours and spacings
-	\color {StatblockColor}
+	\color {StatblockHeading}
 	\setlength\topsep{0pt}
 	\setlength\tabcolsep{1pt}
 
@@ -104,8 +102,8 @@ fontlower        = \RpgFontStatBlockBody,
 	%% Each item is wrapped in command that ensures it only appears 
 	%% if the value is non-empty
 	\begin {description}[
-		before   = \color {StatblockColor},
-		font     = \RpgFontStatBlockBody\color {StatblockColor},
+		before   = \color {StatblockHeading},
+		font     = \RpgFontStatBlockBody\color {StatblockHeading},
 		labelsep = \__rpg_SpaceDim,
 		nosep]
 

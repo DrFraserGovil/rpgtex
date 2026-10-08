@@ -7,6 +7,27 @@
 \newlength\reducer
 \setlength\reducer{0.65in}
 % \setlength\fboxsep{0cm}
+%% Places the alias of a block in the left-hand column, beside the first line of its body
+%% The box has no height, so the body is laid out (and broken across pages) exactly as if it were absent
+%%	#1	The colour of the alias
+%%	#2	The alias
+\cs_new_protected:Npn \__docs_marginAlias:nn #1#2
+{
+	\dim_set:Nn \l_tmpa_dim { \prevdepth }
+	\nointerlineskip
+	\vbox_to_zero:n
+	{
+		\hbox:n
+		{
+			\skip_horizontal:n { \dim_use:c { @totalleftmargin } - \macrosep - \macrowidth }
+			\parbox[t]{\macrowidth}{ \mbox{} \raggedleft \color{#1} \maxsizebox{\macrowidth}{!}{\tt #2} }
+		}
+		\vss
+	}
+	\prevdepth = \l_tmpa_dim
+	\nobreak
+}
+
 \NewDocumentCommand\MarginBlock{+m O{black} O{} +m O{white} +m}
 {
 	\par \vspace{0.3cm}
@@ -25,26 +46,14 @@
 	}
 
 	\par
-	\tl_set:Ne\l_tmpa_tl{#3}
-	\tl_if_blank:oTF{\l_tmpa_tl}
-	{
-		\begin{adjustwidth}{2.3cm}{0pt}
-			#6
-		\end{adjustwidth}
-
-	}
-	{
-		\hspace{-\dimexpr\reducer\relax}
-		\hspace{\fboxsep}\begin{minipage}[t]{\macrowidth}
-			\mbox{} \raggedleft \color{#2} \maxsizebox{\macrowidth}{!}{\tt #3 }
-		\end{minipage}%
-		\hspace{\macrosep}%
-		\begin{minipage}[t]{\dimexpr\linewidth-\macrowidth+0.5\reducer\relax}
-
-			#6
-		\end{minipage}
-	}
-
+	\begin{adjustwidth}{2.3cm}{0pt}
+		\tl_set:Ne \l_tmpa_tl {#3}
+		\tl_if_blank:oF { \l_tmpa_tl }
+		{
+			\__docs_marginAlias:nn {#2} {#3}
+		}
+		#6
+	\end{adjustwidth}
 }
 
 \setlength\marginparwidth{3.6cm}
