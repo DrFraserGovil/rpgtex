@@ -25,25 +25,26 @@
 		\__rpg_OriginalPart{#3}
 	}
 	{
-		\stepcounter{part}
+		%% the counter and contents entry come after the \clearpage, so that labels and links point to the part page itself
+		\clearpage
+		\thispagestyle{empty}
+		\refstepcounter{part}
 		\addcontentsline{toc}{part}{\protect\numberline{\thepart}#3}
 		\str_if_empty:nTF{#2}
 		{
-			\tl_if_empty:NTF{\__rpg_AllPartImage}	
+			\tl_if_empty:NTF{\__rpg_AllPartImage}
 			{
-				\clearpage
-				\thispagestyle{empty}
 				\AddToShipoutPictureFG*{\__rpg_PartPage:n{#3}}
-				\mbox{}
-				\clearpage	
 			}
 			{
-				\RpgWholePageImage[\__rpg_PartPage:n{#3}]{\__rpg_AllPartImage}[\__rpg_partTransparency]
+				\__rpg_PageImageOverlay:nnn{\__rpg_PartPage:n{#3}}{\__rpg_AllPartImage}{\__rpg_partTransparency}
 			}
 		}
 		{
-			\RpgWholePageImage[\__rpg_PartPage:n{#3}]{#2}[\__rpg_partTransparency]
+			\__rpg_PageImageOverlay:nnn{\__rpg_PartPage:n{#3}}{#2}{\__rpg_partTransparency}
 		}
+		\mbox{}
+		\clearpage
 	}
 	\__rpg_OnPartChange:
 }

@@ -110,6 +110,8 @@
 	% Section formatting
 	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 	% Part
+	%% set explicitly, so that switching back from a theme which changes it (such as scifi) restores Roman numerals
+	\renewcommand{\thepart}{\Roman{part}}
 
 	% Remove Numbering (If you want Numbering set secnumdepth to the appropriate depth)
 	\setcounter{secnumdepth}{0}

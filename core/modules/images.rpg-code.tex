@@ -2,30 +2,42 @@
 % Code for assigning whole-page images
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%% Adds an image covering the whole of the current page, without breaking the page
+%% Arguments:	#1 Any eso-pic put commands to go on top of the image
+%%				#2 The path to the image
+%%				#3 The opacity of a white layer laid over the image, to fade it (no layer if blank)
+\cs_new_protected:Npn \__rpg_PageImageOverlay:nnn #1#2#3
+{
+	\AddToShipoutPictureFG*{%
+		\AtPageLowerLeft{%
+			\put(0,0){\makebox(0,0)[bl]{\includegraphics[width=\paperwidth,height=\paperheight]{#2}}}
+			\tl_if_blank:nF{#3}
+			{
+				\put(0,0){%
+					\begin{pgfpicture}
+						\pgfsetfillopacity{#3}
+						\pgfsetfillcolor{white}
+						\pgfpathrectangle{\pgfpointorigin}{\pgfqpoint{\paperwidth}{\paperheight}}
+						\pgfusepath{fill}
+					\end{pgfpicture}%
+				}
+			}
+			#1
+		}%
+	}
+}
+
 %% Places an image occupying the entirety of the next page, calling \clearpage on either side
 %% Arguments:	#1 Any eso-pic put commands to go on top of the image
 %%				#2 The path to the image
+%%				#3 The opacity of a white layer laid over the image, to fade it
 \NewDocumentCommand\RpgWholePageImage{ +O{}  +m o}
 {
 \clearpage
 \thispagestyle{empty}
-\AddToShipoutPictureFG*{%
-	\AtPageLowerLeft{%
-		\put(0,0){\makebox(0,0)[bl]{\includegraphics[width=\paperwidth,height=\paperheight]{#2}}}
-		\IfValueT{#3}
-		{
-			\put(0,0){%
-				\begin{pgfpicture}
-					\pgfsetfillopacity{#3}
-					\pgfsetfillcolor{white}
-					\pgfpathrectangle{\pgfpointorigin}{\pgfqpoint{\paperwidth}{\paperheight}}
-					\pgfusepath{fill}
-				\end{pgfpicture}%
-			}
-		}
-		#1
-	}%
-}
+\IfValueTF{#3}
+	{\__rpg_PageImageOverlay:nnn{#1}{#2}{#3}}
+	{\__rpg_PageImageOverlay:nnn{#1}{#2}{}}
 \mbox{}
 \clearpage
 }
