@@ -1,0 +1,41 @@
+%% Declare the syntax used here, rather than relying on the file loaded before (themes may be loaded mid-document)
+\ExplSyntaxOn
+
+\RpgItemAddProperty{description}{\RpgItemDescription}{}
+\RpgItemAddProperty{image}{\RpgItemImage}{}
+
+\RpgThemeItemCardFormat{
+	\begin{center}
+		{\RpgFontCardTitle #1}\par\noindent
+
+		\tl_if_blank:eF{\RpgItemDescription}
+		{
+			\vspace{-0.6em}
+			{\RpgFontCardHeader \RpgItemDescription} \par
+		}
+	\end{center}
+	\tl_if_blank:eF{\RpgItemImage}
+	{
+		\begin{center}
+			\includegraphics[width=\linewidth,height=3cm,keepaspectratio=true]{\RpgItemImage}
+		\end{center}\noindent
+	}
+
+	\noindent\RpgFontCardBody #2
+}
+
+\RpgThemeItemFormat{
+\subsection{#1}
+	\tl_if_blank:eF{\RpgItemDescription}
+	{
+		\vspace{-0.6em}
+		\textit{\RpgItemDescription} \par\vspace{0.5em} \noindent
+	}
+
+	\tl_if_blank:eF{\RpgItemImage}
+	{
+		{\hfil \includegraphics[width=\linewidth,height=3cm,keepaspectratio=true]{\RpgItemImage}\hfil }\par\noindent
+	}
+	#2
+	}
+

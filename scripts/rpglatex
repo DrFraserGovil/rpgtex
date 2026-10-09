@@ -137,20 +137,19 @@ def locatePackageDirectory():
 
 def code_injection(args):
 	
-	if args.print:
-		val = "print"
-	else:
-		val = "full"
-	additional_code = f"\\def\\RpgCMD{{bg={val}}}"
+    additional_code = ""
+    if args.print:
+        additional_code = f"\\def\\RpgCMD{{bg=print}}"
 	#other code
 
-	packageDir =  locatePackageDirectory()
-	if packageDir is not None:
-		additional_code += packageDir
+    packageDir =  locatePackageDirectory()
+    if packageDir is not None:
+        additional_code += packageDir
 
-	#then insert the desired code
-	additional_code += f" \\input"
-	return additional_code
+    #then insert the desired code
+    additional_code += f" \\input"
+    # The code must not begin with a space: xelatex would then read the start of the argument as a file name
+    return additional_code.strip()
 	
 
 def build_latex(args):
@@ -182,7 +181,7 @@ def build_latex(args):
 		f"-output-directory={build_dir_abs}",
 		f"-jobname={base_name}", 
 		"-halt-on-error",
-		"-max-print-line=10000"
+		"-max-print-line=10000",
 		"-file-line-error",
 		injected,
 		tex_filename 
@@ -244,6 +243,14 @@ def finalize(args):
 		]
 
 		argprint(args,"-> Opening/focusing PDF viewer...")
+
+		# None of the viewers below exist on Windows: open the PDF in the default application instead
+		if sys.platform == "win32":
+			try:
+				os.startfile(destination_pdf)
+			except OSError as e:
+				print(f"Warning: Failed to open the PDF viewer: {e}", file=sys.stderr)
+			return
 
 		for command in viewer_commands:
 			try:

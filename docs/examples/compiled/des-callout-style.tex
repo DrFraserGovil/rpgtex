@@ -1,0 +1,16 @@
+% title = Restyling a Callout
+% highlight = tcbset, RpgTip
+\begin{ExampleBlock}[tcbset, RpgTip][listing side text]{Restyling a Callout}
+\tcbset{
+    rpgtip/.append style={
+        sharp corners,
+        borderline west={3pt}{0pt}{black},
+    }
+}
+
+\begin{RpgTip}{A Restyled Tip}
+    This tip has square corners, and a rule down its left-hand side.
+\end{RpgTip}
+
+
+\end{ExampleBlock}

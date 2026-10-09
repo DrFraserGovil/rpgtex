@@ -1,0 +1,65 @@
+%%%%%%%%%%%%%%%%%%%%%%
+% Switches
+%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+
+\prop_new:N \__rpg_SwitchList
+\msg_new:nnn {rpg} {bad-switch} {Cannot~load~Switch~with~key~'#1':~key~not~in~registry}
+\msg_new:nnn {rpg} {bad-new-switch} {Switch~'#1'~already~exists,~cannot~call~RpgNewSwitch.}
+\msg_new:nnn {rpg} {bad-bool}	{Cannot~parse~'#1'~as~a~boolean}
+
+
+\NewDocumentCommand{\RpgNewSwitch}{m O{false}}
+{
+	\prop_if_in:NnT \__rpg_SwitchList{#1}
+	{
+		\msg_error:nnn{rpg}{bad-new-switch}{#1}
+	}
+	\prop_gput:Nnn \__rpg_SwitchList{#1}{}
+	\RpgSwitch{#1}{#2}
+}
+\NewDocumentCommand{\RpgSwitch}{m m}
+{
+	\__rpg_checkSwitch:n{#1}
+	\str_case:nnF{#2}
+	{
+		{true}{ \prop_gput:Nnn \__rpg_SwitchList {#1} {\c_true_bool} }
+			{True}{ \prop_gput:Nnn \__rpg_SwitchList {#1} {\c_true_bool} }
+			{on}{ \prop_gput:Nnn \__rpg_SwitchList {#1} {\c_true_bool} }
+			{On}{ \prop_gput:Nnn \__rpg_SwitchList {#1} {\c_true_bool} }
+			{1}{ \prop_gput:Nnn \__rpg_SwitchList {#1} {\c_true_bool} }
+			{false}{ \prop_gput:Nnn \__rpg_SwitchList {#1} {\c_false_bool} }
+			{False}{ \prop_gput:Nnn \__rpg_SwitchList {#1} {\c_false_bool} }
+			{off}{ \prop_gput:Nnn \__rpg_SwitchList {#1} {\c_false_bool} }
+			{Off}{ \prop_gput:Nnn \__rpg_SwitchList {#1} {\c_false_bool} }
+			{0}{ \prop_gput:Nnn \__rpg_SwitchList {#1} {\c_false_bool} }
+	}
+	{
+		\msg_error:nnn{rpg}{bad-bool}{#2}
+	}
+}
+\NewDocumentCommand{\RpgIfSwitch}{m +m +m}
+{
+	\__rpg_checkSwitch:n{#1}
+
+	\bool_if:nTF{\prop_item:Nn \__rpg_SwitchList {#1}}{#2}{#3}
+}
+\NewDocumentCommand{\RpgToggle}{m}
+{
+	\RpgIfSwitch{#1}
+	{
+		\prop_gput:Nnn \__rpg_SwitchList {#1} {\c_false_bool}
+	}
+	{
+		\prop_gput:Nnn \__rpg_SwitchList {#1} {\c_true_bool}
+	}
+}
+
+
+\cs_new_protected:Npn \__rpg_checkSwitch:n#1
+{
+	\prop_if_in:NnF \__rpg_SwitchList{#1}
+	{
+		\msg_error:nnn{rpg}{bad-switch}{#1}
+	}
+}

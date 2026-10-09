@@ -1,0 +1,36 @@
+\ExplSyntaxOn
+\RpgThemeDiceFormat
+{
+	% #1: Dice Number, #2: Dice Sides, #3: Modifier
+	\tl_if_blank:VTF {#1}
+	{
+		% CASE: called without a dice count (i.e. d8), equal to 1d8
+		\tl_set:Nn\l__temp_dice{1}
+	}
+	{
+		\tl_set:Nn \l__temp_dice{#1}
+	}
+	\tl_set:Nn \l_tmp_mean_tl { \fp_eval:n {
+			floor (\tl_use:N{\l__temp_dice} * ( #2 + 1 ) / 2 ) + (#3)
+		}}
+	\l_tmp_mean_tl{}~(\l__temp_dice d#2
+	\fp_compare:nNnTF { #3 } { = } { 0 }{}{#3})
+}
+\ExplSyntaxOff
+
+
+%%% Redefine toc formatting
+%% Contents formatting is only set in the preamble: after \begin{document}, titletoc writes \titlecontents into the .toc file,
+%% where it would refer to this theme's colours and fonts before the theme has been loaded on the next run
+\RpgIfPreamble{
+	\titlecontents{part}
+	[0pt] % left
+	{ \addvspace{.06in} \RpgFontTocPart } % above-code
+	{Part\ \thecontentslabel :~ } % numbered-entry-format
+	{\RpgFontTocPart} % numberless-entry-format
+	{} % filler-page-format
+	[ \addvspace{-.03in} \titleline{ \color{TitleGold} \titlerule[1pt] } \addvspace{.05in } ] % below-code
+}
+
+
+

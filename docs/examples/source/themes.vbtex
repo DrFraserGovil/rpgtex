@@ -1,0 +1,43 @@
+% Examples shared between the theme chapters: each chapter activates its theme, so the same example shows each theme's formatting
+
+% example = theme-dice
+% title = Dice
+% highlight = RpgDice
+	\RpgDice{3d8 -5 +2}
+
+	\RpgDice{d8 + 0}
+
+% example = theme-section-headers
+% title = Section Headers
+	\section*{Example} %starred so not added to toc; otherwise the same
+		\subsection{Another Example}
+			\subsubsection{More Examples!}
+				\paragraph{A Paragraph} Its text runs on from the heading.
+
+				\subparagraph{A Subparagraph} As does this one.
+
+% example = theme-title-header
+% title = A Compact Title
+% highlight = RpgThemeTitleMode, RpgMakeTitle, title, subtitle, author
+	\RpgThemeTitleMode{header}
+	\title{The Sunken Temple}
+	\subtitle{An adventure for four players}
+	\author{A. Writer}
+	\RpgMakeTitle
+
+% example = theme-filigree
+% title = Filigree
+% highlight = RpgFiligree, filigree
+	\begin{RpgFiligree}
+        Some decorative text
+    \end{RpgFiligree}
+
+    \vspace{1cm}
+
+    \begin{RpgTable}[filigree]{lX}
+        Header 1 & Header 2
+        \\
+        Body 1 & Body 2
+        \\
+        Body 3 & Body 4
+    \end{RpgTable}

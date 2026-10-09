@@ -1,0 +1,13 @@
+
+\newcommand\widthLines[1]{
+	%width and hmargin
+	\draw[#1,<->] (0,2.4)-- node[below]{width}++(6.75,0);
+	\draw[#1,<->] (0,2)-- node[below, rotate=90, anchor=east]{hmargin}++(0.5,0);
+	\draw[#1,<->] (6.25,2)-- node[below, rotate=90, anchor=east]{hmargin}++(0.5,0);
+}
+\newcommand\heightLines[1]{
+	%height and vmargin
+	\draw[#1,<->] (0.7,0)-- node [right, rotate=90, anchor=north]{height}++(0,9.7cm);
+	\draw[#1,<->] (1.4,0)-- node [right]{vmargin}++(0,0.5cm);
+	\draw[#1,<->] (1.4,9.2)-- node [right]{vmargin}++(0,0.5cm);
+}

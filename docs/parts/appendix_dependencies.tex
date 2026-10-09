@@ -1,0 +1,74 @@
+% !TEX root = ../documentation.tex
+\chapter{Dependencies}\label{C:Dependencies}
+
+	\rpgtex{} loads the packages listed below. All of them are included in a full TeX Live installation, and MiKTeX installs missing packages automatically the first time they are needed. On a minimal installation, missing packages may be added with \texttt{tlmgr}:
+	\begin{BashBlock}
+		tlmgr install <package>
+	\end{BashBlock}
+	Some files are distributed as part of a larger package, whose name must be given to \texttt{tlmgr} instead; this name is shown in brackets. Packages marked with an asterisk are only loaded in some circumstances, which are described beneath the list.
+
+		{\footnotesize
+			\begin{multicols}{3}
+				\begin{itemize}[nosep, label={}, leftmargin=0pt]
+					\item \texttt{adjustbox}
+					\item \texttt{array} (\texttt{tools})
+					\item \texttt{contour}
+					\item \texttt{cuted} (\texttt{sttools})
+					\item \texttt{enumitem}
+					\item \texttt{eso-pic}
+					\item \texttt{extarticle}* (\texttt{extsizes})
+					\item \texttt{extbook}* (\texttt{extsizes})
+					\item \texttt{fancyhdr}
+					\item \texttt{float}
+					\item \texttt{fontenc}* (\texttt{latex})
+					\item \texttt{fontspec}*
+					\item \texttt{geometry}*
+					\item \texttt{graphicx} (\texttt{graphics})
+					\item \texttt{hang}
+					\item \texttt{l3keys2e} (\texttt{l3packages})
+					\item \texttt{lettrine}
+					\item \texttt{luacolor}*
+					\item \texttt{magaz}
+					\item \texttt{microtype}
+					\item \texttt{multitoc}* (\texttt{ms})
+					\item \texttt{nameref} (\texttt{hyperref})
+					\item \texttt{ragged2e}
+					\item \texttt{relsize}
+					\item \texttt{Royal} (\texttt{cfr-initials})
+					\item \texttt{standalone}*
+					\item \texttt{stfloats} (\texttt{sttools})
+					\item \texttt{supertabular}
+					\item \texttt{tabularx} (\texttt{tools})
+					\item \texttt{tcolorbox}
+					\item \texttt{tikz} (\texttt{pgf})
+					\item \texttt{titlesec}
+					\item \texttt{titletoc} (\texttt{titlesec})
+					\item \texttt{tocloft}
+					\item \texttt{transparent}
+					\item \texttt{xcolor}
+					\item \texttt{xltabular}
+					\item \texttt{xparse} (\texttt{l3packages})
+				\end{itemize}
+			\end{multicols}
+		}
+
+	The packages marked with an asterisk are loaded as follows:
+	\begin{itemize}
+		\item \texttt{extarticle} and \texttt{extbook}: as the base classes of \texttt{rpghandout} and \texttt{rpgbook} respectively.
+		\item \texttt{fontenc} and \texttt{fontspec}: when the \texttt{font} option is active \RpgPage[p]{S:PackageOptions}.
+		\item \texttt{geometry}: by the \rpgtex{} classes.
+		\item \texttt{luacolor}: when compiling with \texttt{lualatex}.
+		\item \texttt{multitoc}: by the \rpgtex{} classes, unless the \texttt{nomultitoc} option is used.
+		\item \texttt{standalone}: by the \texttt{rpgcard} and \texttt{rpgdeck} classes.
+	\end{itemize}
+	The \texttt{rpgcard} and \texttt{rpgdeck} classes are built on the standard \texttt{article} class, which is part of every \LaTeX{} installation, as is \texttt{expl3}.
+
+	\section{Fonts}
+
+		The \texttt{default} and \texttt{dnd} themes use fonts from the \TeX{} distribution, while the fonts of the \texttt{scifi} theme are distributed with \rpgtex{} itself, in \texttt{themes/scifi/fonts}. Fonts are only loaded when the \texttt{font} option is active. The \texttt{default} theme uses Latin Modern, which is part of every \TeX{} distribution; the \texttt{dnd} theme uses:
+		\begin{itemize}
+			\item \texttt{texgyrebonum-*.otf} (\texttt{tex-gyre}): TeX Gyre Bonum, the main body font.
+			\item \texttt{EBGaramond-Regular.otf} (\texttt{ebgaramond}): EB Garamond, used for small capitals.
+			\item \texttt{KpSans-*.otf} and \texttt{KpRoman-*.otf} (\texttt{kpfonts-otf}): Kp-Fonts, used for titles and table headings.
+			\item \texttt{GilliusADFNo2-*.otf} (\texttt{gillius}): Gillius ADF No2, used for subtitles and table text.
+		\end{itemize}

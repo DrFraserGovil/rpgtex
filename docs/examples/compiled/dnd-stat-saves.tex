@@ -1,0 +1,13 @@
+% title = Saving Throws
+% highlight = RpgStat, save
+\begin{ExampleBlock}[RpgStat, save][listing side text]{Saving Throws}
+\begin{RpgStat}{Basilisk}[con=15, cr=3]
+    \section{Actions}
+        \save{Petrifying Gaze}[modifier=con, dc=12,
+            failure={The target begins to turn to stone.}, success={The target is unaffected.}]
+        \save{Venom Spray}[modifier=dex, dc=12, shape=cone, size=15,
+            failure={\RpgDice{3d6} poison damage}, success={Half damage}]
+\end{RpgStat}
+
+
+\end{ExampleBlock}

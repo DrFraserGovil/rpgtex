@@ -6,37 +6,37 @@ This is a 'to do list' of features which are incomplete, in the works, or otherw
 
 Features which *must* be added before the next major release
 
-* Full documentation 
-    * ~~RpgCard object~~
-    * rpgcard class
-    * Theme documentation
-        * Including 'how to write a theme' 
-    * Some fonts are missing
-* Revamp the example documents
-* Create the `features' section on the README
+* Revamp the example documents (leave this until the end)
+
+## Before Release
+
+Smaller jobs left over from the documentation rewrite.
+
+### Testing
+
+* Overleaf: does a clean upload compile without the configuration step? Do classes in `classes/` need a `latexmkrc` (`ensure_path('TEXINPUTS', './classes//');`)? Is the repository within Overleaf's size limits?
+* MiKTeX: does restricted mode allow kpsewhich? Update the Windows notes either way
+* rpgdeck: the subpreamble behaviour (shared definitions; whether a second compilation is needed)
+* rpgcard: whether screen mode passes `size` through to `standalone`
 
 ## Desired Features
 
 Features which would improve the package
 
 * RpgClocks
-* RpgStat card-mode for d&d.
 * Character sheet interface/class
 * Encounter tables / random tables / dice tables
-* Full page images / landscape support
-* `Fancy box' (i.e. the D&D class table wrapper environment)
 * Circle/dot producers & fill-ins (i.e. for FitD skills)
-* A rpgdeck-maker, which automatically assembles card files into a deck meeting some criteria
+* A rpgdeck-maker, which automatically assembles card files into a deck meeting some criteria (`rpgdeck` can already gather `rpgcard` documents; the automatic selection is still to do)
 
 ### Low Priority
 
 These are some desired features which are on the radar, but probably won't be high up my to-do list
 
-* Inline text localisation (or `theme localisation').
+* Inline text localisation (or `theme localisation'). A start: the dnd legendary and mythic text is held in `\rpgstring...` commands, which can be redefined; the rest of the statblock text is still hard-coded.
 
 ## Internal Mechanics
 
 Features which would improve the developer experience, but would not affect the user interface
 
-* Complete the transition to the __rpg_add_key interface to simplify the vast number of keys
-* ~~Generate a more robust font-generation interface so that new fonts can be created in a single line~~
+* Optional, deferred: remove the old commercial fonts from the git history with `git filter-repo`

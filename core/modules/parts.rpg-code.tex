@@ -1,0 +1,93 @@
+%%%%%%%%%%%%%%%%%%%
+% Parts
+%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+
+%%% Parts
+
+% my editor gets confused and tries to indent on each mention of 'part', so disable latexindent. This is purely visual 
+% \begin{noindent}
+
+
+%% Override the part command
+\let\__rpg_OriginalPart\part
+
+
+\RpgIfSections{
+%% A new part command
+%%		#1: If starred, uses the original \part
+%%		#2:	An image path to use (overrides DefaultPartImage)
+%%		#3: The name of the part
+\RenewDocumentCommand{\part}{s O{} m}{
+	\def\RpgPartName{#3}
+	\bool_if:NTF{#1}
+	{
+		\__rpg_OriginalPart{#3}
+	}
+	{
+		%% the counter and contents entry come after the \clearpage, so that labels and links point to the part page itself
+		\clearpage
+		\thispagestyle{empty}
+		\refstepcounter{part}
+		\addcontentsline{toc}{part}{\protect\numberline{\thepart}#3}
+		\str_if_empty:nTF{#2}
+		{
+			\tl_if_empty:NTF{\__rpg_AllPartImage}
+			{
+				\AddToShipoutPictureFG*{\__rpg_PartPage:n{#3}}
+			}
+			{
+				\__rpg_PageImageOverlay:nnn{\__rpg_PartPage:n{#3}}{\__rpg_AllPartImage}{\__rpg_partTransparency}
+			}
+		}
+		{
+			\__rpg_PageImageOverlay:nnn{\__rpg_PartPage:n{#3}}{#2}{\__rpg_partTransparency}
+		}
+		\mbox{}
+		\clearpage
+	}
+	\__rpg_OnPartChange:
+}
+}
+	\cs_new_protected:Nn\__rpg_PartPage:n{}
+
+ 
+\NewDocumentCommand\RpgPartTransparency{m}
+{
+	\tl_set:Nn{\__rpg_partTransparency}{\fp_eval:n {#1}}
+}
+\RpgPartTransparency{0}
+
+\tl_new:N\__rpg_AllPartImage
+%% Sets a default part image which is used whenever a part image is not supplied
+\NewDocumentCommand{\RpgDefaultPartImage}{ m }
+{
+	\tl_set:Nn{\__rpg_AllPartImage}{#1}
+}
+ 
+\NewDocumentCommand\RpgThemePartPage{ +m }
+{
+	\cs_set:Nn\__rpg_PartPage:n{#1}
+}
+\RpgThemePartPage{
+	\RpgPut{0.5\paperwidth}{0.5\paperheight}{\RpgFontPart Part~\thepart \\#1} 
+}
+
+\NewDocumentCommand\RpgThemeOnPartChange{+m}
+{
+	\cs_set:Nn \__rpg_OnPartChange:{#1}
+}
+
+\cs_new_protected:Npn \__rpg_OnPartChange:{}
+% \end{noindent}
+
+
+
+
+
+
+
+
+
+
+

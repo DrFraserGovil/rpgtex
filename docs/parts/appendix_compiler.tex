@@ -1,0 +1,46 @@
+% !TEX root = ../documentation.tex
+\chapter{The \texttt{rpglatex} Compiler}\label{S:rpglatex}
+
+	\texttt{rpglatex} is a Python 3 script (\texttt{scripts/rpglatex}) which wraps \texttt{xelatex} or \texttt{lualatex}, adding several conveniences for compiling \rpgtex{} documents. To use it from any directory, place it on your \texttt{PATH}, for example with a symbolic link:
+	\begin{BashBlock}
+		ln -s ~/path/to/rpgtex/scripts/rpglatex ~/.local/bin/rpglatex
+	\end{BashBlock}
+
+	\RpgScript{rpglatex}{[options] <file>}{
+		Compiles \texttt{<file>}, performing the following steps automatically:
+		\begin{itemize}
+			\item Defines \cmd{RpgPackagePath}, so that \rpgtex{} does not need to locate itself.
+			\item Runs the compiler twice, so that references and \texttt{tikz} \texttt{remember picture} commands resolve correctly (three times with \texttt{--full}).
+			\item Runs \texttt{bibtex} between the passes, if requested with \texttt{--ref}, and \texttt{makeindex} whenever the document produces an index.
+			\item Keeps the auxiliary files (\texttt{.aux}, \texttt{.log} and so on) in a separate build directory, and moves only the finished PDF to the output location.
+			\item Hides the compiler's lengthy output, printing a short summary instead. If compilation fails, the compiler's output is printed so that the error can be found.
+		\end{itemize}
+		The following options are available:
+		\begin{RpgTable}[breakable]{lXl}
+			Option & Effect & Default
+			\\
+			\texttt{-b}, \texttt{--build <dir>} & The directory in which auxiliary files are stored. & \texttt{.build}
+			\\
+			\texttt{-f}, \texttt{--full} & Runs the compiler three times, rather than twice, for very complex or reference-heavy documents. & off
+			\\
+			\texttt{-l}, \texttt{--lualatex} & Compiles with \texttt{lualatex}. & off
+			\\
+			\texttt{-o}, \texttt{--output <name>} & The name of the finished PDF. & \texttt{<file>.pdf}
+			\\
+			\texttt{-p}, \texttt{--print} & Compiles in print mode, by setting \texttt{bg=print} through the command line interface \RpgPage[p]{S:CMD}. & off
+			\\
+			\texttt{-q}, \texttt{--quiet} & Suppresses the script's own progress messages. & off
+			\\
+			\texttt{-r}, \texttt{--ref} & Runs \texttt{bibtex} after the first pass. & off
+			\\
+			\texttt{--show <0/1>} & Whether to open the finished PDF (or switch to it, if already open) in a viewer. & \texttt{1}
+			\\
+			\texttt{-v}, \texttt{--verbose} & Shows the compiler's full output. & off
+			\\
+			\texttt{-x}, \texttt{--xelatex} & Compiles with \texttt{xelatex}. & on
+		\end{RpgTable}
+		For example, the following compiles a print version of \texttt{adventure.tex} with \texttt{lualatex}, without opening it:
+		\begin{Code}
+			rpglatex adventure.tex -l -p --show 0
+		\end{Code}
+	}

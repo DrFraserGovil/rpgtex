@@ -16,7 +16,7 @@ def verifyFiles(path):
     # print(files)
     
     print("\tVerifying package files")
-    [findFile(target,files) for target in ["rpgtex.sty","rpgbook.cls","rpghandout.cls","map.tex","featureforge.sty"]]
+    [findFile(target,files) for target in ["rpgtex.sty","rpgbook.cls","rpghandout.cls"]]
     print("\tPackage integrity verified")
 
 

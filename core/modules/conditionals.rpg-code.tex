@@ -1,0 +1,78 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Conditionals
+%% Runs code depending on the active package options, or on the current position in the document
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+
+%% Runs #1 if the font option is active, and #2 otherwise
+\NewDocumentCommand\RpgIfFontTF{+m +m}
+{
+	\bool_if:NTF \__rpg_UseFontOption {#1} {#2}
+}
+\NewDocumentCommand\RpgIfFont{+m}
+{
+	\RpgIfFontTF {#1} {}
+}
+
+%% Runs #1 if the background option is active, and #2 otherwise
+\NewDocumentCommand\RpgIfPaperTF{+m +m}
+{
+	\bool_if:NTF \__rpg_UsePaperOption {#1} {#2}
+}
+\NewDocumentCommand\RpgIfPaper{+m}
+{
+	\RpgIfPaperTF {#1} {}
+}
+
+%% Runs #1 if the sections option is active, and #2 otherwise
+\NewDocumentCommand\RpgIfSectionsTF{+m +m}
+{
+	\bool_if:NTF \__rpg_UseSectionsOption {#1} {#2}
+}
+\NewDocumentCommand\RpgIfSections{+m}
+{
+	\RpgIfSectionsTF {#1} {}
+}
+
+%% Runs #1 if the title option is active, and #2 otherwise
+\NewDocumentCommand\RpgIfTitleTF{+m +m}
+{
+	\bool_if:NTF \__rpg_UseTitlesOption {#1} {#2}
+}
+\NewDocumentCommand\RpgIfTitle{+m}
+{
+	\RpgIfTitleTF {#1} {}
+}
+
+
+%% Runs #1 in the preamble, and #2 in the document body
+%% \@nodocument is \relax only after \begin{document}. It is called by name, so this works even when @ is not a letter
+\NewDocumentCommand\RpgIfPreambleTF{+m +m}
+{
+	\cs_if_eq:cNTF {@nodocument} \scan_stop: {#2} {#1}
+}
+\NewDocumentCommand\RpgIfPreamble{+m}
+{
+	\RpgIfPreambleTF {#1} {}
+}
+
+%% Runs code only if the colours are equal
+\NewDocumentCommand\RpgIfColoursEqualTF{m m +m +m}
+{
+	% Extract and convert Color 1 to RGB
+	\extractcolorspecs {#1} \l_tmpa_tl \l_tmpb_tl
+	\convertcolorspec \l_tmpa_tl \l_tmpb_tl { rgb } \l_tmpa_tl
+
+	% Extract and convert Color 2 to RGB
+	\extractcolorspecs {#2} \l_tmpc_tl \l_tmpd_tl
+	\convertcolorspec \l_tmpc_tl \l_tmpd_tl { rgb } \l_tmpb_tl
+
+	% Compare normalized RGB component strings
+	\str_if_eq:NNTF \l_tmpa_tl \l_tmpb_tl
+	{#3}
+	{#4}
+}
+\NewDocumentCommand\RpgIfColoursEqual{m m +m}
+{
+	\RpgIfColoursEqualTF{#1}{#2}{#3}{}
+}

@@ -1,0 +1,188 @@
+\ExplSyntaxOn
+
+\def\rpgtex{\texttt{RPGTeX}}
+
+%% Typesets the input as monospace latex commands, prepending a '\'
+%% Works on lists ( \cmd{a,b,c} -> \a, \b, \c)
+%% If unstarred, each cmd is added to the index. The optional o can be used to add a parent
+\NewDocumentCommand\cmd{s o m}
+{
+	\IfBooleanTF{#1}
+	{
+		\processControlSeq*[#2]{#3}{\texttt{\textbackslash ##1}}(,\ )
+	}
+	{
+		\processControlSeq[#2]{#3}{\texttt{\textbackslash ##1}}(,\ )
+	}
+}
+
+%% As with cmd, but autolabels each cmd
+\NewDocumentCommand\declareCmd{s o m}
+{
+	\IfBooleanTF{#1}
+	{
+		\processControlSeq*[#2]{#3}{\texttt{\textbackslash ##1 }\label{Cmd:##1}}(,\ )
+	}
+	{
+		\processControlSeq[#2]{#3}{\texttt{\textbackslash ##1 }\label{Cmd:##1}}(,\ )
+	}
+}
+%% Typesets the input as monospace latex environments
+%% If unstarred, each env is added to the index. The optional o can be used to add a parent
+\NewDocumentCommand\env{s o m}
+{
+	\IfBooleanTF{#1}
+	{
+		\processControlSeq*[#2]{#3}{ \texttt{##1}}
+	}
+	{
+		\processControlSeq[#2]{#3}{ \texttt{##1}}
+	}
+}
+
+%% As with env, but autolabels each env 
+\NewDocumentCommand\declareEnv{s o m}
+{
+	\IfBooleanTF{#1}
+	{
+		\processControlSeq*[#2]{#3}{\texttt{##1} \label{Env:##1}}
+	}
+	{
+		\processControlSeq[#2]{#3}{\texttt{##1} \label{Env:##1}}
+	}
+}
+
+
+%% Try to autoreference 
+\NewDocumentCommand{\cmdref}{o m}
+{
+	\cmd[#1]{#2}~\RpgPage[p]{Cmd:#2}
+}
+\NewDocumentCommand{\envref}{o m}
+{
+	\env[#1]{#2}~\RpgPage[p]{Env:#2}
+}
+
+
+\NewDocumentCommand{\param}{m}
+{
+	\tl_if_empty:eTF{#1}
+	{
+		\{\}
+	}
+	{
+		\{~ #1~ \}
+	}
+}
+
+
+%%% Helper functions
+%% some catcode hackery do auto replace underscores
+\tl_new:N \__doc_underscoreEscaped
+\tl_new:N \l__rpg_underscore_tl
+\tl_set:Nx \l__rpg_underscore_tl { \char_generate:nn { 95 } { 8 } }
+
+\cs_generate_variant:Nn \tl_replace_all:Nnn { NVn }
+
+\NewDocumentCommand\rpgEscapeUnderscores{m}
+{
+	\tl_set:Nn \__doc_underscoreEscaped { #1 }
+	\tl_replace_all:NVn \__doc_underscoreEscaped \l__rpg_underscore_tl { \_ }
+}
+
+%%% Index entries
+%% Names beginning with a registered heading are grouped beneath it automatically,
+%% e.g. with \IndexGroup{RpgFont}, RpgFontSection is indexed as RpgFont!Section.
+%% Headings may nest (registering RpgTheme and RpgThemeTitle gives RpgTheme!Title!Cover),
+%% up to the three levels supported by makeindex.
+\seq_new:N \g__doc_indexGroups_seq
+\seq_new:N \l__doc_idxMatches_seq
+\str_new:N \l__doc_idxName_str
+\str_new:N \l__doc_idxPath_str
+\str_new:N \l__doc_idxSeg_str
+\int_new:N \l__doc_idxPos_int
+
+%% Registers one or more (comma-separated) index headings
+\NewDocumentCommand\IndexGroup{m}
+{
+	\clist_map_inline:nn {#1} { \seq_gput_right:Nn \g__doc_indexGroups_seq {##1} }
+}
+
+%% Appends one level to the index path; adds a display form (key@display) if the level contains underscores
+\cs_new_protected:Npn \__doc_indexAddLevel:n #1
+{
+	\str_set:Nn \l__doc_idxSeg_str {#1}
+	\str_put_right:NV \l__doc_idxPath_str \l__doc_idxSeg_str
+	\str_if_in:NnT \l__doc_idxSeg_str { _ }
+	{
+		\str_replace_all:Nnn \l__doc_idxSeg_str { _ } { \textunderscore }
+		\str_put_right:Nn \l__doc_idxPath_str { @ }
+		\str_put_right:NV \l__doc_idxPath_str \l__doc_idxSeg_str
+	}
+}
+\cs_generate_variant:Nn \__doc_indexAddLevel:n { e }
+
+%% Indexes a name, grouped under every registered heading which it begins with
+\cs_new_protected:Npn \__doc_indexEntry:n #1
+{
+	\str_set:Ne \l__doc_idxName_str {#1}
+
+	%% find the headings which are a (strict) prefix of the name, shortest first
+	\seq_clear:N \l__doc_idxMatches_seq
+	\seq_map_inline:Nn \g__doc_indexGroups_seq
+	{
+		\bool_lazy_and:nnT
+		{ \int_compare_p:nNn { \str_count:N \l__doc_idxName_str } > { \str_count:n {##1} } }
+		{ \str_if_eq_p:ee { \str_range:Nnn \l__doc_idxName_str {1} { \str_count:n {##1} } } {##1} }
+		{ \seq_put_right:Nn \l__doc_idxMatches_seq {##1} }
+	}
+	\seq_sort:Nn \l__doc_idxMatches_seq
+	{
+		\int_compare:nNnTF { \str_count:n {##1} } > { \str_count:n {##2} }
+			{ \sort_return_swapped: } { \sort_return_same: }
+	}
+
+	%% build the path: each heading contributes the part of the name it adds
+	\str_clear:N \l__doc_idxPath_str
+	\int_zero:N \l__doc_idxPos_int
+	\seq_map_inline:Nn \l__doc_idxMatches_seq
+	{
+		\__doc_indexAddLevel:e { \str_range:Nnn \l__doc_idxName_str { \l__doc_idxPos_int + 1 } { \str_count:n {##1} } }
+		\str_put_right:Nn \l__doc_idxPath_str { ! }
+		\int_set:Nn \l__doc_idxPos_int { \str_count:n {##1} }
+	}
+	\__doc_indexAddLevel:e { \str_range:Nnn \l__doc_idxName_str { \l__doc_idxPos_int + 1 } { -1 } }
+
+	\exp_args:NV \index \l__doc_idxPath_str
+}
+
+\NewDocumentCommand\processControlSeq{s o  m m d()}
+{
+	\cs_set:Nn \__doc_tmp:n{#4}
+	\bool_set_true:N\__docs_isFirst
+	\foreach \m in {#3}
+		{
+			\exp_args:No \rpgEscapeUnderscores{\m}
+			\IfBooleanF{#1}
+			{
+				\IfNoValueTF{#2}
+				{
+					\__doc_indexEntry:n{\m}
+				}
+				{
+					\exp_args:No\index{#2}
+
+				}
+			}
+			\bool_if:NF{\__docs_isFirst}
+			{
+				#5
+			}
+			\bool_gset_false:N\__docs_isFirst
+			\exp_args:No \__doc_tmp:n{\tl_use:N \__doc_underscoreEscaped}
+		}
+}
+
+%% The index headings used throughout the documentation
+\IndexGroup{RpgFont, RpgStat, RpgTheme, RpgCard, RpgMap, RpgPart, RpgIf, Rpg[X], rpgstring}
+\ExplSyntaxOff

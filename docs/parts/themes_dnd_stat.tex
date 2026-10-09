@@ -1,0 +1,349 @@
+% !TEX root = ../documentation.tex
+
+%% A row of the statistics tables: \statRow{<property>, <aliases>}{<effect>}{<default>}[<notes>]
+%% The first name is the property itself, and any others are shown beneath it as aliases; a group of properties may be braced as one name
+\ExplSyntaxOn
+\cs_set_protected:Npn \__docs_statKeys:n #1
+{
+	\seq_set_from_clist:Nn \l_tmpa_seq {#1}
+	\seq_pop_left:NN \l_tmpa_seq \l_tmpa_tl
+	%% allow long names to break after their hyphens
+	\tl_replace_all:Nnn \l_tmpa_tl {-} {-\allowbreak}
+	\texttt{\tl_use:N \l_tmpa_tl}
+	\seq_if_empty:NF \l_tmpa_seq
+	{
+		\seq_set_map:NNn \l_tmpb_seq \l_tmpa_seq { \exp_not:n { \texttt{##1} } }
+		\par {\footnotesize \textit{also}~\seq_use:Nn \l_tmpb_seq {,~}}
+	}
+}
+\DeclareDocumentCommand\statRow{m m m o}
+{
+	\\ \parbox[t]{3cm}{\raggedright \__docs_statKeys:n {#1}} & #2 \IfValueT{#4}{\newline \textbf{Notes:}~#4} & #3
+}
+\ExplSyntaxOff
+
+\newpage \section{RpgStats}\label{S:DndStat}
+
+	The \texttt{dnd} theme turns the \env{RpgStat} rules environment \RpgPage[p]{S:RuleEnvs} into a D\&D monster statblock matching those found in the Monster Manuals. A statblock has two halves, which are given in different ways:
+	\begin{itemize}
+		\item The \textit{statistics} (hit points, armor class, ability scores, skills and so on) are highly structured, and are given as key-value arguments to the environment itself \RpgPage[p]{S:DndStatProperties}. The theme computes the modifiers, saves and skill bonuses from them.
+		\item The \textit{abilities} (traits, actions, reactions and so on) are freeform text, and are written in the body of the environment, with the help of the commands described on \RpgPage{S:DndStatAbilities}.
+	\end{itemize}
+
+	\RpgGetExample{dnd-stat-full}
+
+	\begin{RpgSidebar}{Design Philosophy}
+		The design philosophy of the \texttt{dnd} theme RpgStat environment is that -- wherever possible -- the environment should do the computational work for the author. If they declare that the monster has a strength of 15, then this should be reflected in their save scores, associated skills and any strength-based attacks. This way, when they update the score to 18, everything else should follow suit.
+
+		This intrinsically links the dnd theme to the rules of D\&D \RpgSuperOrdinal{5} edition.
+	\end{RpgSidebar}
+
+	\subsection{Statistics}\label{S:DndStatProperties}
+
+		The following values may be provided to the RpgStat environment to define the key statistics. These are often not used as-is, and are instead used to derive and compute values which are typeset, see \RpgPage[t]{S:StatDerived}.
+
+		Where a property has several names, they may be used interchangeably. If multiple values are given to the same key (or aliases thereof), the most-recently declared is used.
+
+		\subsubsection{Description}
+			\begin{RpgTable}[breakable]{lXl}
+				Property & Effect & Default
+				\statRow{alignment}{The alignment of the creature, shown after its size and type.}{\texttt{Neutral}}
+				\statRow{armor-class, ac, AC}{The armor class, which may include an explanation, such as \texttt{15 (natural armor)}.}{\texttt{10}}
+				\statRow{hit-points, hp, HP}{The hit points, usually expressed as a dice expression.}{\texttt{1d8}}[Valid dice expressions are resolved automatically with \cmd{RpgDice}, otherwise printed as-is.]
+				\statRow{initiative}{The initiative bonus, used as it is written.}{\textit{(computed)}}[If it is not given, the Dexterity modifier is used.]
+				\statRow{nickname, name}{A shorter name for the creature, such as `Gorgenhar' for `Gorgenhar, the Devourer'.}{\textit{(the title)}}[Use \cmd{RpgStatName} (or \cmd*{name}) in the abilities to refer to the creature by this name.]
+				\statRow{size}{The size of the creature, shown beneath its name.}{\texttt{Medium}}
+				\statRow{speed}{The speed of the creature, used as it is written.}{\texttt{30ft}}[Include the units and any other movement, such as \texttt{30ft, fly 60ft}.]
+				\statRow{type}{The type of the creature, shown after its size.}{\texttt{Creature}}
+			\end{RpgTable}
+
+		\subsubsection{Abilities \& Saves}
+			\begin{RpgTable}[breakable]{lXl}
+				Property & Effect & Default
+				\statRow{{str, dex, con, int, wis, cha},{STR, DEX, CON, INT, WIS, CHA}}{The ability scores, as whole numbers.}{\texttt{10}}
+				\statRow{{<ability>-save}}{Flags, such as \texttt{dex-save} (or \texttt{DEX-save}), which make the creature proficient in the corresponding saving throw.}{\textit{(off)}}[The proficient saves are shown in a row beneath the modifiers.]
+				\statRow{proficiency-bonus, proficiency, pb}{The proficiency bonus, as a whole number.}{\textit{(computed)}}[If it is not given, it is computed from the challenge rating \RpgPage[p]{S:StatDerived}.]
+			\end{RpgTable}
+
+		\subsubsection{Skills \& Details}
+			\begin{RpgTable}[breakable]{lXl}
+				Property & Effect & Default
+				\statRow{challenge, cr, CR}{The challenge rating, which may be a fraction, such as \texttt{1/4}.}{\textit{(computed)}}[If it is not given, it is computed from the proficiency bonus, or is 0 if neither is given \RpgPage[p]{S:StatDerived}.]
+				\statRow{condition-immunities}{The conditions to which the creature is immune.}{\textit{(none)}}
+				\statRow{damage-immunities}{The damage types to which the creature is immune.}{\textit{(none)}}
+				\statRow{damage-resistances}{The damage types to which the creature is resistant.}{\textit{(none)}}
+				\statRow{damage-vulnerabilities}{The damage types to which the creature is vulnerable.}{\textit{(none)}}
+				\statRow{languages, language}{The languages the creature speaks or understands.}{\textit{(none)}}
+				\statRow{passive-perception}{The passive Perception, used as it is written.}{\textit{(computed)}}[If it is not given, it is 10 plus the Wisdom (Perception) bonus.]
+				\statRow{senses}{Any special senses, shown before the passive Perception.}{\textit{(none)}}
+				\statRow{skills, skill, proficient}{A comma-separated list of the skills in which the creature is proficient.}{\textit{(none)}}[Each of the eighteen D\&D skills is given its bonus automatically; anything else, such as \texttt{Acrobatics (+9)}, is shown as it is written.]
+				\statRow{skills-expertise, expert, expertise}{A comma-separated list of the skills in which the creature has expertise.}{\textit{(none)}}[These skills are listed before the others, with twice the proficiency bonus.]
+				\statRow{experience, xp, XP}{The experience points for defeating the creature.}{\textit{(computed)}}[If it is not given, it is computed from the challenge rating.]
+			\end{RpgTable}
+
+		\subsubsection{Appearance \& Placement}\label{S:DndStatAppearance}
+			\begin{RpgTable}[breakable]{lXl}
+				Property & Effect & Default
+				\statRow{color}{The color of the statblock's rules.}{\textit{(theme)}}[The headings are set in a darker shade of it, the frame in a lighter shade, and the tables in a pale shade. If it is not given, the theme's colors are used \RpgPage[p]{S:DndDesigners}.]
+				\statRow{filigree}{A flag, which decorates the statblock with the filigree frame \RpgPage[p]{S:DndFiligree}.}{\textit{(off)}}
+				\statRow{filigree-match}{A flag, which decorates the statblock with the filigree frame, in the color of its frame.}{\textit{(off)}}
+				\statRow{float}{If given, places the statblock in a float, with this placement (such as \texttt{t} or \texttt{h}).}{\textit{(none)}}
+				\statRow{float-type}{The kind of float used, such as \texttt{figure*} for a statblock spanning both columns of a two-column document.}{\texttt{figure}}
+				\statRow{frame-color, outline-color}{The color of the frame, and of the filigree of \texttt{filigree-match}.}{\textit{(from \texttt{color})}}
+				\statRow{twocolumn}{A flag, which sets the contents of the statblock in two columns, for statblocks which span the width of the page.}{\textit{(off)}}
+			\end{RpgTable}
+			The appearance and placement properties have no effect in card mode.
+
+		\subsubsection{Derived Values}\label{S:StatDerived}
+
+			From these, several other values are automatically computed:
+			\begin{itemize}
+				\item The modifier of each ability score is computed in the usual way $(\lfloor \frac{\text{score} - 10}{2} \rfloor)$.
+				\item The challenge rating (CR) and the proficiency bonus (PB) are coupled together:
+				      \begin{enumerate}[leftmargin=1cm]
+					      \item If neither is given, the CR is set to 0, and the PB is set to +2
+					      \item If only one is given, the other value is computed using $\text{PB} = 2 + \max\left(0, \lfloor (\text{CR} - 1)/4 \rfloor\right)$
+					      \item If both are given, they are both displayed (even if they would contradict the established formula), and the provided PB is used in all calculations going forward.
+				      \end{enumerate}
+				\item If the creature is declared proficient in a saving throw, a row of save bonuses (computed from the modifier + the proficiency bonus) is shown beneath the modifiers. Only the proficient scores are shown.
+				\item The experience points are computed from the challenge rating, \forcelink{https://rpg.stackexchange.com/questions/192412/is-there-any-generalised-formula-for-converting-monster-cr-into-xp-in-dd-5e}{by an approximate relation which is accurate to the values in the Monster Manual to within 100xp up to challenge 16}.
+				\item If no value is provided to the `initiative' field, the Dexterity modifier is used
+				\item Skills (and expertises) can be declared as comma-separated lists:
+				      \begin{enumerate}[leftmargin=1cm]
+					      \item If the name matches (case-insensitive) one of the 18 D\&D skills, the value is typeset with a bonus computed from the associated ability modifier plus the PB (or twice the PB for expertise). The associated ability is hardcoded (so Intimidation always uses the Charisma bonus).
+					      \item If the name does not match, it is typeset exactly. Custom bonuses can be given this way, as ``Athletics (+18)'' would not match ``Athletics''.
+				      \end{enumerate}
+				\item The passive Perception is $10$ plus the Wisdom (Perception) bonus, taking into account the assigned proficiency.
+			\end{itemize}
+		\subsubsection{Names \& Values}
+
+			The following commands give the values of the current statblock, for use within its abilities:
+
+			\RpgFunction{RpgStatMod}[stat]{\param{ability}}
+			{
+				The modifier of the given \texttt{ability} (\texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis} or \texttt{cha}), or the proficiency bonus (\texttt{proficiency}), with its sign, such as $+3$.
+			}
+			\RpgVariable{RpgStatName}[name]
+			{
+				The name of the creature, as used in its abilities: its \texttt{nickname}, if one was given, and otherwise its title.
+			}
+			\RpgFunction{RpgStatSetName}{\param{name}}
+			{
+				Changes the name given by \cmd{RpgStatName}.
+			}
+
+	\subsection{Abilities}\label{S:DndStatAbilities}
+
+		The abilities of the creature are written in the body of the environment, using the commands below.
+
+		\begin{RpgSidebar}{Short Names}
+			Within an \texttt{RpgStat}, each of the following commands has a short name, given as its alias below: \cmd*{action} for \cmd*{RpgStatAction}, for example. The short names are only created if no command of that name already exists, so they never replace a command of the document's own. The one exception is \cmd*{section}, which is always replaced by \cmd*{RpgStatSection} within a statblock.
+		\end{RpgSidebar}
+
+		\subsubsection{Sections \& Actions}
+
+
+
+			\RpgFunction{RpgStatAction}[action]{[<cost>]\param{name}}
+			{
+				Begins a trait or action called \texttt{name}, followed by its description. The \texttt{cost} is the number of legendary actions it uses, and is shown as `(2 actions)'. It is also available as \cmd*{trait}.
+			}
+			\RpgFunction{RpgStatReaction}[reaction]{\param{name}\param{trigger}}
+			{
+				Begins a reaction called \texttt{name}, followed by its \texttt{trigger} in italics, and its description. If the \texttt{trigger} is empty, it is left out.
+			}
+			\RpgFunction{RpgStatSection}[section]{\param{title}}
+			{
+				Begins a section of the statblock, such as `Traits' or `Actions', with its \texttt{title} in \FontRef{StatBlockSection} above a rule.
+			}
+
+			In addition to the standard sectioning command, we provide special commands which initiate a Legendary Actions or Mythic Monster section, including the introductory preamble text. These are found on \RpgPage[t]{S:Legendary}.
+
+			\RpgGetExample{dnd-stat-actions}
+
+		\subsubsection{Attacks}
+
+			\RpgFunction{RpgStatAttack}[attack]{\param{name}[<options>]}
+			{
+				Typesets an attack called \texttt{name} in the standard form, `\textit{Melee (5ft):} +5 to hit. \textit{On Hit:} \ldots'. The \texttt{options} are:
+				\begin{RpgTable}[breakable,width=0.8\linewidth]{lXl}
+					Option & Effect & Default
+					\statRow{bonus}{An extra bonus to hit.}{\texttt{0}}
+					\statRow{distance}{\texttt{melee}, \texttt{ranged} or \texttt{both}.}{\texttt{melee}}[\cmd{melee} and \cmd{ranged} set this for you.]
+					\statRow{dmg}{The damage of the attack, as dice, such as \texttt{1d6+3}.}{\texttt{1d4}}[
+						Unlike to-hit, the modifier is not added here, but may be included in the calculation using \cmd{RpgStatMod}, which allows numerical expressions.
+					]
+					\statRow{dmg-type}{The type of the damage.}{\texttt{bludgeoning}}
+					\statRow{extra}{Any further effect of a hit, added after the damage.}{\textit{(none)}}[Do not end it with a full stop, which is added for you.]
+					\statRow{modifier}{The ability used by the attack: \texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis} or \texttt{cha}, or the same in capitals.}{\texttt{str}}
+					\statRow{or-dmg}{Alternative damage, such as for a weapon used with two hands.}{\textit{(none)}}
+					\statRow{or-type}{The type of the alternative damage.}{\textit{(none)}}
+					\statRow{or-when}{When the alternative damage applies, such as \texttt{when used with two hands}.}{\textit{(none)}}
+					\statRow{plus-dmg}{Additional damage, added to the main damage.}{\textit{(none)}}
+					\statRow{plus-type}{The type of the additional damage.}{\texttt{slashing}}
+					\statRow{range}{The range of a ranged attack, in feet.}{\texttt{20/60}}[Used when \texttt{distance} is \texttt{ranged} or \texttt{both}. The units are added if missing.]
+					\statRow{reach}{The reach of a melee attack, in feet.}{\texttt{5}}[Used when \texttt{distance} is \texttt{melee} or \texttt{both}. The units are added if missing.]
+					\statRow{type}{\texttt{weapon} or \texttt{spell}.}{\texttt{weapon}}[A spell attack is shown as `Melee Spell' or `Ranged Spell'.]
+				\end{RpgTable}
+
+				The displayed to-hit modifier is computed automatically from:
+				\begin{equation*}
+					\text{to-hit} = \text{modifier} + \text{PB} + \text{bonus}
+				\end{equation*}
+			}
+			\RpgFunction{melee}{\param{name}[<options>]}
+			{
+				An alias for \cmd{attack}\texttt{[distance=melee, <options>]\param{name}}.
+			}
+			\RpgFunction{ranged}{\param{name}[<options>]}
+			{
+				An alias for \cmd{attack}\texttt{[distance=ranged, <options>]\param{name}}.
+			}
+
+
+			\RpgGetExample{dnd-stat-attacks}
+
+		\subsubsection{Saving Throws}
+
+			A `saving throw' in the context of the main body of an \env{RpgStat} is \textit{an action which forces creatures to perform a saving throw}, such as a dragon's breath weapon.
+			\RpgFunction{RpgStatSaveEffect}[save]{\param{name}[<options>]}
+			{
+				Typesets an effect called \texttt{name} which forces a saving throw, such as a breath weapon, followed by its effects on a failed and a successful save. The \texttt{options} are:
+				\begin{RpgTable}{lXl}
+					Option & Effect & Default
+					\statRow{dc}{The difficulty class of the save.}{\texttt{10}}
+					\statRow{failure, fail}{The effect on a failed save.}{\textit{(none)}}
+					\statRow{modifier}{The ability used for the save: \texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis} or \texttt{cha}, or the same in capitals.}{\texttt{dex}}
+					\statRow{origin}{Where an area effect is centred.}{\textit{(none)}}[Shown as `Choose a point \ldots' before the area.]
+					\statRow{shape}{\texttt{single}, \texttt{cone}, \texttt{sphere}, \texttt{line} or \texttt{cube}.}{\texttt{single}}[\texttt{single} affects one target within the \texttt{size}; the others affect every target in an area of that shape and \texttt{size}.]
+					\statRow{size}{The range, or the size of the area, in feet.}{\texttt{60}}[The units are added if missing.]
+					\statRow{success, succeed}{The effect on a successful save.}{\textit{(none)}}[Left out if it is empty.]
+					\statRow{target}{\texttt{creature} or \texttt{enemy}.}{\texttt{creature}}
+					\statRow{text}{Text placed before the description of the save.}{\textit{(none)}}
+				\end{RpgTable}
+			}
+
+			\RpgGetExample{dnd-stat-saves}
+
+		\subsubsection{Spellcasting}
+
+			\RpgEnvironment{RpgStatSpells}[spells]{[<options>]}
+			{
+				Lists the spells the creature can cast, after a sentence giving its bonus to hit and its spell save DC (the proficiency bonus, plus the modifier of its spellcasting ability, plus any extra \texttt{bonus}; and 8 more than this, respectively). The \texttt{options} are:
+				\begin{RpgTable}{lXl}
+					Option & Effect & Default
+					\statRow{bonus}{An extra bonus to hit, and to the save DC.}{\texttt{0}}
+					\statRow{innate}{A flag, which says the spells are cast `without requiring components'.}{\textit{(off)}}
+					\statRow{modifier}{The spellcasting ability: \texttt{str}, \texttt{dex}, \texttt{con}, \texttt{int}, \texttt{wis} or \texttt{cha}, or the same in capitals.}{\texttt{int}}
+					\statRow{no-intro}{A flag, which leaves out the introductory sentence.}{\textit{(off)}}
+					\statRow{title}{The name of the trait.}{\texttt{Spellcasting}}
+				\end{RpgTable}
+			}
+
+			Each line of spells is typeset with one of the following commands, where the spells are given as a comma-separated list, and are set in italics.
+
+			The following commands function anywhere (even outside an \env{RpgStat}), so long as it is inside a list environment, such as \texttt{itemize}.
+			\RpgFunction{RpgStatSpellList}{[<uses>]\param{spells}}
+			{
+				Used for the modern `innate' style of spellcasting which does not track spell slots. The spells are typeset as either:
+				\begin{enumerate}
+					\item `At will' (if no <uses> argument given)
+					\item `<x>/day' (if only one spell given)
+					\item `<x>/day each' (if more than one spell given)
+				\end{enumerate}
+			}
+			\RpgFunction{RpgStatSpellSlots}{[<level>][<slots>]\param{spells}}
+			{
+				Used for the traditional slot-based spellcasting. The spells are typeset as either:
+				\begin{enumerate}
+					\item `Cantrip' (if no <level> argument given)
+
+					\item `\cmd{RpgOrdinal}\param{ <level> } level Spell (at will)' if a <level> is given, but no <slots>
+					\item `\cmd{RpgOrdinal}\param{ <level> } level Spell (<slots> slots)' if both a <level> and <slots> are given.
+				\end{enumerate}
+			}
+
+			Within \env{RpgStatSpells}, the following short names are also available. Like the other short names \RpgPage[p]{S:DndStatAbilities}, each is only created if no command of that name already exists, and they cannot be used outside the environment:
+
+			\RpgFunction{atWill}{\param{spells}}
+			{
+				Lists spells which can be cast at will. It is the same as \cmd{RpgStatSpellList}\param{spells}.
+			}
+			\RpgFunction{level}{[<level>][<slots>]\param{spells}}
+			{
+				Lists spells which are cast using spell slots. It is the same as \cmd{RpgStatSpellSlots}[<level>][<slots>]\param{spells}.
+			}
+			\RpgFunction{perDay}{\param{uses}\param{spells}}
+			{
+				Lists spells which can be cast \texttt{uses} times per day. It is the same as \cmd{RpgStatSpellList}[<uses>]\param{spells}, except that the number of \texttt{uses} is required.
+			}
+
+			\RpgGetExample{dnd-stat-spells}
+
+		\subsubsection{Legendary \& Mythic Actions}\label{S:Legendary}
+
+
+			The following commands are used to initiate the Legendary or Mythic actions section of a statblock -- in addition to the usual \cmd*{section} command, these insert the explanatory preambles.
+			\RpgFunction{RpgStatLegendarySection}{[<options>]}
+			{
+				Begins the `Legendary Actions' section, with the standard explanation of legendary actions. The actions follow, each begun with \cmd*{action} (with its cost in legendary actions, if more than one). The \texttt{options} are:
+				\begin{RpgTable}{lXl}
+					Option & Effect & Default
+					\statRow{defiance}{A flag, which adds the homebrew `Legendary Defiance' action.}{\textit{(off)}}
+					\statRow{uses}{The number of legendary actions the creature may take.}{\texttt{3}}
+				\end{RpgTable}
+			}
+			\RpgFunction{RpgStatMythicSection}{[<options>]}
+			{
+				Begins the `Mythic Monster' section: the mythic trait, followed by the traits and legendary actions the creature gains when it is activated. The \texttt{options} are:
+				\begin{RpgTable}{lXl}
+					Option & Effect & Default
+					\statRow{narration}{Text to be read aloud when the mythic trait activates, shown in an \envref{RpgNarration}.}{\textit{(none)}}
+					\statRow{passive}{A flag, for a creature which gains only traits, and no legendary actions.}{\textit{(off)}}
+					\statRow{trait}{The description of the mythic trait.}{\textit{(see notes)}}[By default, the trait restores the creature to full hit points, and removes any negative effects, when it is reduced to 0 hit points.]
+					\statRow{trait-name}{The name of the mythic trait.}{\texttt{Second Phase}}
+				\end{RpgTable}
+			}
+
+			\RpgFunction{RpgStatLegendaryDefiance}{\param{}}
+			{
+				\begin{RpgSidebar}{Legendary Defiance is Homebrew}
+					Legendary Defiance is \textit{not} part of the official D\&D rules: it is a homebrew action, written for \rpgtex{} as an improved version of Legendary Resistance.
+
+					As a legendary action, the creature repeats a saving throw which it failed in the past hour, against an effect which is still ongoing. Any penalties from that effect are ignored for the new save, and the effect ends on a success.
+
+					It is never added to a statblock unless it is asked for, with \cmd{RpgStatLegendaryDefiance} or the \texttt{defiance} option of \cmd{RpgStatLegendarySection}. Check that it suits your table before using it.
+				\end{RpgSidebar}
+				Adds the homebrew `Legendary Defiance' action (see the sidebar above). It is usually added with the \texttt{defiance} option of \cmd{RpgStatLegendarySection}.
+			}
+			\RpgFunction{RpgStatLegendaryResistance}{\param{uses}}
+			{
+				Adds the standard `Legendary Resistance' trait, which may be used \texttt{uses} times per day.
+			}
+
+			\RpgGetExample{dnd-stat-legendary}
+
+
+	\subsection{Full-Width Statblocks}
+
+		\RpgEnvironment{RpgStat*}{[<card-options>]\param{name}[<properties>]}
+		{
+			The same as \texttt{RpgStat}, but sets the \texttt{twocolumn} property, and places the statblock in a \texttt{figure*} float. In a two-column document, this gives a statblock spanning the width of the page, which is useful for large creatures. If no \texttt{float} placement is given, the statblock is placed where it appears in the text, using the \texttt{strip} environment of the \texttt{cuted} package; this is fragile, and may fail near other floats, or with too little text around it.
+		}
+
+		The example of legendary and mythic actions \RpgPage[p]{S:Legendary} uses \texttt{RpgStat*}: since this manual is in one column, the statblock is placed where it appears, with its contents in two columns.
+
+	\subsection{Card Mode}
+
+		In card mode, which is turned on with \cmd{RpgSwitch}\param{UseStatCard}\param{on} \RpgPage[p]{Cmd:RpgSwitch}, the statblock is typeset on a card, without its frame and background. The abilities, and the commands which create them, are the same.
+
+	\subsection{Legacy Appearance}\label{S:DndStatLegacy}
+
+		The appearance of the statblock follows the 2024 rules. The appearance of the 2014 rules is also available:
+
+		\RpgFunction{RpgStatLegacyMode}{\param{}}
+		{
+			Gives subsequent statblocks the 2014 appearance, until the end of the current group. Only the appearance changes: the statistics are computed in the same way.
+		}
+
+		\RpgGetExample{dnd-stat-legacy}

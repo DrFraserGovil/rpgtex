@@ -1,0 +1,155 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Simple Interface for Complex Environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Creating an environment which already exists redefines it (resetting its formats), so that
+%% themes may be reloaded, and environments may be created within groups.
+\ExplSyntaxOn
+
+\NewDocumentCommand\RpgThemeNewRuleEnv{O{Rpg} m}
+{
+	\__RpgBuildEnv{}{#1}{#2}{#1#2}
+	\__RpgMakeKeys{#1}{#2}
+}
+
+\NewDocumentCommand\RpgThemeNewCardableRuleEnv{O{Rpg} m m O{} O{}}
+{
+	\__RpgBuildEnv{__}{#1}{#2}{#1#2}
+	\__RpgBuildEnv{__}{#1}{#2Card}{#1#2}
+	\__RpgMakeKeys{#1}{#2}
+
+	\seq_if_in:NnF \__rpg_CardSwitches {#3}
+	{
+		\seq_put_right:Nn \__rpg_CardSwitches {#3}
+	}
+
+
+	\RenewDocumentEnvironment{__#1#2Card}{O{} m O{} +b}
+	{
+		\RenewExpandableDocumentCommand\RpgGetKey{m}{  { \prop_item:cn{__rpg_#1#2_properties}{####1}}}
+		\keys_set:nn{rpg/rule/#1#2}{##3}
+		\begin{RpgCard}[##1]
+			\use:c{__#1#2Card_format:nn}{##2}{##4}
+		\end{RpgCard}
+	}{}
+
+	%% Keep an existing switch (and its value) if the environment is being created again
+	\prop_if_in:NnF \__rpg_SwitchList {#3}
+	{
+		\RpgNewSwitch{#3}
+	}
+
+	\DeclareDocumentEnvironment{#1#2}{O{#4} m O{#5} +b}
+	{
+		\begin{RpgIfEnv}{#3}[##1]{__#1#2Card}{__#1#2}{##2}[##3]
+			##4
+		\end{RpgIfEnv}
+	}{}
+}
+
+\NewExpandableDocumentCommand\RpgGetKey{m}
+{
+	\msg_error:nnn{rpg}{bad-getkey}{#1}
+}
+%%%%%%%%%%%%%%
+%% Helpers
+%%%%%%%%%%%%%%
+
+
+\seq_new:N \__rpg_CardSwitches
+
+\msg_new:nnn{rpg}{bad-getkey}{Cannot~get~key~(#1)~when~not~in~environment}
+\NewDocumentCommand\__RpgBuildEnv{m m m m}
+{
+
+	\cs_set:cpn{__#2#3_format:nn}{}
+
+	\DeclareDocumentEnvironment{#1#2#3}{m O{} +b}
+	{
+		\RenewExpandableDocumentCommand\RpgGetKey{m}{  { \prop_item:cn{__rpg_#4_properties}{####1}}}
+		\keys_set:nn{rpg/rule/#4}{##2}
+		\use:c{__#2#3_format:nn}{##1}{##3}
+	}{}
+
+
+	\cs_set:cpn{#2Theme#3Format} ##1
+	{
+		\cs_set:cn{__#2#3_format:nn}{##1}
+	}
+
+	% \begin{noindent}
+		\use:c{#2Theme#3Format}{\subsection{##1} ##2 }
+	% \end{noindent}
+}
+
+\NewDocumentCommand\__RpgMakeKeys{m m}
+{
+	\prop_if_exist:cF{__rpg_#1#2_properties}
+	{
+		\prop_new:c{__rpg_#1#2_properties}
+	}
+
+	\exp_args:Nc\DeclareDocumentCommand{#1#2AddProperty}{m o m m}
+	{
+		\RpgThemeNewTLKey{rpg/rule/#1#2}{##1}{##3}{##4}
+		\prop_put:cnn{__rpg_#1#2_properties}{##1}{##3}
+
+		\tl_if_novalue:nF{##2}
+		{
+			\__RpgMakeAlias{rpg/rule/#1#2}{##1}{##2}
+		}
+	}
+	\exp_args:Nc\DeclareDocumentCommand{#1#2AddBoolean}{s m o m}
+	{
+		\IfBooleanTF{##1}
+		{
+			\RpgThemeNewBoolKey*{rpg/rule/#1#2}{##2}{##4}
+		}
+		{
+			\RpgThemeNewBoolKey{rpg/rule/#1#2}{##2}{##4}
+		}
+		\prop_put:cnn{__rpg_#1#2_properties}{##2}{##4}
+		\IfValueT{##3}
+		{
+			\__RpgMakeFlagAlias{rpg/rule/#1#2}{##2}{##3}
+		}
+	}
+}
+
+
+\NewDocumentCommand\__RpgMakeAlias{m m m}
+{
+	\clist_map_inline:nn{#3}
+	{
+		\keys_define:nn{#1}
+		{
+			##1 .meta:n ={#2 = {####1}}
+		}
+	}
+}
+
+%% As above, but for flags (which take no value, so the alias passes on only the key name)
+\NewDocumentCommand\__RpgMakeFlagAlias{m m m}
+{
+	\clist_map_inline:nn{#3}
+	{
+		\keys_define:nn{#1}
+		{
+			##1 .meta:n = {#2},
+			##1 .value_forbidden:n = true
+		}
+	}
+}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Declare the Common RuleEnvs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RpgThemeNewCardableRuleEnv{Item}{UseItemCard}
+\RpgThemeNewCardableRuleEnv{Spell}{UseSpellCard}
+\RpgThemeNewCardableRuleEnv{Feat}{UseFeatCard}
+\RpgThemeNewCardableRuleEnv{Stat}{UseStatCard}
+
+
+

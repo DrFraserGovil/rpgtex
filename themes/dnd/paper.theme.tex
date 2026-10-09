@@ -1,0 +1,33 @@
+%% Set the textured paper (off by default)
+\DeclareDocumentCommand\RpgSetDndPaper{}
+{
+	\RpgThemePaperImage{\RpgPackagePath/themes/dnd/img/paper}
+}
+
+%% only load this if the paper option was set, since we're altering primitives here
+\RpgIfPaper{
+
+	\renewcommand*{\headrulewidth}{0pt} % no rule for header
+	\renewcommand*{\footrulewidth}{0pt} % no rule for footer
+	\fancyhf {} % clear all headers and footers
+	\fancypagestyle {plain} {  }
+	\fancypagestyle{empty} {\fancyhf {}}
+	\fancyhfoffset[LE,RO,RE,LO]{0pt}
+
+	\fancypagestyle{fancy}{
+		% Left-even page footer
+		\fancyfoot[LE]{%
+			\RpgFontFooter \leftmark
+
+			\RpgThemeFooterDecoration*{!}{\RpgPackagePath/themes/dnd/img/footerscroll}{\RpgThemePageNumberAt{0.28in}{0.29in}}
+
+		}
+		% % Right-odd page footer
+		\fancyfoot[RO]{%
+			\RpgFontFooter \leftmark
+			\RpgThemeFooterDecoration{!}{\RpgPackagePath/themes/dnd/img/footerscroll}{\RpgThemePageNumberAt{\paperwidth-0.28in}{0.29in}}
+		}
+	}
+
+	\pagestyle{fancy}
+}

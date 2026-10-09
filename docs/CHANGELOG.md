@@ -5,29 +5,45 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.6.0] 2026-09-10
+
+A ground-up revamp of the package and its documentation. Almost every file has been rewritten or reorganised, so rather than list every change, this is a summary of what is different. Existing documents will need updating: many commands have been renamed or have new signatures.
+
+### Non-FOSS Issue Rectified
+
+* We discovered that we had accidentally included some non-FOSS resources (namely the Eurostile and Bookman fonts). These have been replaced with available open source equivalents, and we apologise for this lapse in rigour.
+
+### Restructured core
+
+* The core has been reorganised into self-contained modules and environments, and the remaining commands renamed to follow the consistent `Rpg...` naming scheme.
+* Theme files are now `.theme.tex` files rather than packages. Every theme builds on the `default` theme, and themes can now be switched (and reloaded) part-way through a document.
+* Designers have a new set of tools: key-value helpers for theme options, `\RpgIf...` conditionals (including guards for the font, paper and section modules), and fewer places where `\ExplSyntaxOn` is needed.
+* Most of the environments have been rewritten: the callouts and filigree frames, tables, maps, secrets, switches, the title and part pages (part pages can now carry a faded image, and be labelled and referenced), the paper and background engine (no longer built on TikZ), sectioning and dice.
+
+### Rule environments
+
+* The FeatureForge has been rewritten as a smoother system (`\RpgThemeNewRuleEnv`), from which `RpgItem`, `RpgFeat`, `RpgSpell` and `RpgStat` are still built. Designers can create their own rule environments in the same way.
+* The `default` theme gives each of them a simple format; the `dnd` theme gives each a full D&D treatment.
+
+### Classes
+
+* All four classes have been rewritten. `rpgcard` and `rpgdeck` are now fully working: a deck gathers individual card documents together, and both classes display every rule environment as a card. `rpgbook` and `rpghandout` now default to A4 paper.
+
+### Themes
+
+* **dnd**: the statblock has been overhauled to be more modular, whilst retaining the computational powers it had before. Items, feats and spells have also been updated, and a section on customising the theme has been added to the documentation.
+* **scifi**: modernised, with new colors and fonts, a footer to match the `dnd` theme, and a filigree frame of its own.
 
 
-### Added
+### Compiler & configuration
 
-* The `rpgdeck` and `rpgcard` classes have been realised (finally). RpgCard is a neat standalone environment, whilst deck is similar to the `rpghandout`, but automatically enters cardmode, and has the aility to use `standalone` package to aggregate `rpgcard` documents - hence `deck`.
-* Theme documentation (including tweaking some of the parameters as they were explicitly used for the first time.) 
-	* Provided a convenient interface for fully documenting the fonts dynamically: the font-tables will always display the values assigned to each element at the time of compiling.
-	* Color-swatches added for full visualisation
-	* default fully documented
-	* dnd almost completed
-* Provided the default values for RpgItem, RpgFeat, RpgSpell and RpgStat
-* dnd RpgFeat and RpgItem finalised
-* The dnd version of RpgSpell now has some helper functions which print the upcasting and cantrip scaling 
+* `rpgtex` now finds its own installation (using `kpsewhich`) when a document is compiled, so in most cases no configuration is needed.
+* A number of bugs in the `rpglatex` compiler have been fixed, including support for opening the output on Windows.
+* A GitHub Actions workflow (run by hand, for now) compiles a short test document with each theme, on TeX Live and MiKTeX.
 
+### Documentation
 
-## Changed
-
-* RpgPlural modified to have a starred version which omits the counter number.
-* RpgTable has an argument added (vskip) which enables modifying the vertical space above and below
-* Rpg[X]AddProperty and Rpg[X]AddBoolean now have the ability to include aliases for the same toggle
-
-<!-- ## Removed -->
+* The documentation has been rewritten almost entirely from scratch, in four parts: for users, for each theme, for designers, and appendices covering the compiler, the dependencies and the image credits. Every command has a description and, where useful, a live example; each theme chapter shows its fonts, colors, page designs and rule environments as they actually appear. The index groups related commands, and the README has been rewritten.
 
 ## 0.5.0 (2025-11-16)
 

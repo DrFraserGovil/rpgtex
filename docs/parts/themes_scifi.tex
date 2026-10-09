@@ -1,5 +1,115 @@
-\RpgSetTheme{scifi}
-\chapter{\texttt{scifi} Theme}
+% !TEX root = ../documentation.tex
 
-	
-	\section{scifi RpgItem}\label{S:ScifiItem}\index{RpgItem!Theme!scifi}
+\clearpage
+\RpgSetTheme{scifi}
+\chapter{\texttt{scifi} Theme}\label{Theme:scifi}
+
+	The \texttt{scifi} theme gives a document a futuristic appearance, with angular fonts, a cool grey page and a starship-style footer. It begins by loading the default theme \RpgPage[p]{Theme:Default}, and so only changes the elements described below.
+
+	\section{Appearance}
+		\subsection{Fonts}
+
+			If the \texttt{font} option is active, the \texttt{scifi} theme defines three font families. Unlike those of the \texttt{dnd} theme, they are not part of TeX Live: they are distributed with the theme, in \texttt{themes/scifi/fonts}, alongside their licences.
+
+			\RpgFunction{galaxy}{\param{}}
+			{
+				{\galaxy Galaxy Edge}, a condensed display font, used for the title, part pages and drop capitals.
+			}
+			\RpgFunction{jura}{\param{}}
+			{
+				{\jura Jura}, a rounded sans-serif font, used for the main body text, and for the text of tables, tips, sidebars, narration and statblocks. Since Jura's own small capitals cover only some letters, its small capitals are borrowed from Fira Sans.
+			}
+			\RpgFunction{scifi}{\param{}}
+			{
+				{\scifi Orbitron}, a geometric display font, used for the subtitle, the headings from chapters to subparagraphs, the titles and headers of tables, tips and sidebars, the parts and chapters of the table of contents, the footer and page numbers, and emphasis.
+			}
+
+			The values assigned to the font elements are as follows (note that \cmd{normalfont} is aliased to the value of \FontRef{Body}):
+
+			\InsertFontTable{}
+
+		\subsection{Colors}\label{S:ScifiColor}
+
+			The \texttt{scifi} theme assigns the following values to the standard colors:
+
+			\noindent\DefaultSwatches{}
+
+			It also defines a number of colors of its own:
+
+			\Swatch[theme color]{SlateBlue}
+			\noindent\Swatch[paper \& footer text]{SlateGray}
+			\Swatch[titles]{TitleBlue}
+			\Swatch[contour]{MidBlue}
+			\Swatch[narration]{MidGray}
+
+		\subsection{Backgrounds \& Footers}
+
+			Each page is given a plain background in \texttt{SlateGray}, the \texttt{PaperColor} of the theme. The footer is a dark blue panel across the bottom of the page, which is mirrored on alternate pages in two-sided documents. The name of the chapter is placed on the panel, in \FontRef{Footer}, and the page number sits in a notch at its outer corner, in \FontRef{PageNumber}; both are set in \texttt{SlateGray}.
+
+		\subsection{Text Boxes}
+
+			The \texttt{scifi} theme gives the sidebar the following appearance; the tip and narration are the same as in the default theme \RpgPage[p]{Theme:Default}, but use the fonts of the \texttt{scifi} theme:
+
+			\begin{multicols}{3}
+
+				\begin{RpgSidebar}{The RpgSidebar}
+					Red `hazard stripes' fade across the top and bottom.
+				\end{RpgSidebar}
+
+				\begin{RpgTip}{The RpgTip}
+					Almost entirely undecorated.
+				\end{RpgTip}
+
+				\begin{RpgNarration}
+					RpgNarration uses the narration color.
+				\end{RpgNarration}
+			\end{multicols}
+
+			\subsubsection{Filigree}\label{S:ScifiFiligree}
+
+				The \texttt{scifi} filigree frame \RpgPage[p]{S:Filigree} resembles a targeting reticle, after the ruled boxes of the \textit{Traveller} rulebooks: a chamfered bracket sits just outside each corner, hairlines run along the top and bottom, and three slanted stripes, echoing those of the sidebar, cross the hairlines beside the top-left and bottom-right corners. It is drawn in \texttt{FiligreeColor}, which the theme sets to \texttt{TitleBlue}, and may be applied to any \texttt{tcolorbox}, including tables:
+
+				\RpgGetExample{theme-filigree}
+
+		\subsection{Title \& Part Pages}\label{S:ScifiTitles}
+
+			The compact title is the same as in the default theme \RpgPage[p]{S:DefaultTitles}, but uses the fonts of the \texttt{scifi} theme:
+
+			\RpgGetExample{theme-title-header}
+
+			On the cover page, the title is set in white, outlined in \texttt{TitleBlue}, at the top of the page, and shrunk if necessary to fit its width. The subtitle and author are placed at the bottom of the page, outlined with \cmdref{RpgContour} in \texttt{ContourInnerColor} and \texttt{ContourOuterColor}. If these two colors are made the same, the subtitle and author are instead set in that color, without an outline (\cmdref{RpgIfColoursEqualTF}).
+
+			On a part page, the word `Part' and the part's number are placed in the centre of the page, in capitals, with the name of the part beneath them; both are set in \texttt{TitleBlue}, outlined in a paler blue. Parts are numbered with Arabic numerals, rather than Roman ones.
+
+			The cover and part pages of a short example document, typeset with the \texttt{scifi} theme, are:
+			\ThemePages{scifi}
+
+		\subsection{Section Headers}
+
+			As in the default theme, only parts and chapters are numbered. Headings are set in \cmd{scifi}:
+
+			\RpgGetExample{theme-section-headers}
+
+		\subsection{Table of Contents}
+
+			The table of contents is laid out as in the default theme \RpgPage[p]{Theme:Default}, except for the entries for parts, which are centred between two rules, with `Part' and the part's number above the name of the part.
+
+		\subsection{RpgDice}\index{RpgDice}
+
+			The format of \cmdref{RpgDice} is the same as in the default theme.
+
+	\section{Rule Environments}\label{S:ScifiRules}
+
+		The \texttt{scifi} theme does not configure any of the rule environments \RpgPage[p]{S:RuleEnvs}. Items \RpgPage[p]{S:DefaultItem}, feats \RpgPage[p]{S:DefaultFeat}, spells and statblocks \RpgPage[p]{S:DefaultSpellStat} have the same properties and layout as in the default theme, but use the fonts and colors of the \texttt{scifi} theme.
+
+		An item, in text mode and in card mode:
+
+		\RpgGetExample{scifi-item-text}
+
+		\RpgGetExample{scifi-item-card}
+
+		A feat, in text mode and in card mode:
+
+		\RpgGetExample{scifi-feat-text}
+
+		\RpgGetExample{scifi-feat-card}

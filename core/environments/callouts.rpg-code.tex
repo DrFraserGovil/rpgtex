@@ -1,0 +1,88 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Callouts
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Callouts are boxed text that highlight information to the reader
+\ExplSyntaxOn
+
+\DeclareTColorBox	{__RpgTip}		{O{}} { rpgtip, #1		}
+\DeclareTColorBox	{__RpgNarration}{O{}} { rpgnarration, #1	}
+\DeclareTColorBox	{__RpgSidebar}	{O{}} { rpgsidebar, #1	}
+\tcbset{rpgtip/.style={}}
+\tcbset{rpgnarration/.style={}}
+\tcbset{rpgsidebar/.style={}}
+
+
+\RpgThemeNewTLKey{ rpg / callouts } {color} { \__rpg_boxColor }{black}
+\RpgThemeNewBoolKey{ rpg / callouts}{filigree}{\__rpg_boxUseFiligree}
+\RpgThemeNewBoolKey{ rpg / callouts}{rpgfiligree}{\__rpg_boxUseFiligree}
+
+\cs_new_protected:Nn\__rpg_ExpandBegin:nn
+{
+	\begin{#1}[#2]
+}
+\cs_generate_variant:Nn\__rpg_ExpandBegin:nn{nx}
+\tl_new:N \__rpg_boxArgs
+
+% \begin{noindent}
+\NewDocumentEnvironment {RpgTip}	{ O{} m }
+{
+	\group_begin:
+	\tl_set:Nn{\__rpg_boxColor}{TipColor}	
+	\keys_set_known:nnN{rpg/callouts}{#1}{\l_tmpa_tl} 
+	\tl_set:Nn\__rpg_boxArgs{
+		colback = \__rpg_boxColor,
+		colbacktitle=\__rpg_boxColor,
+		title=#2,
+		\l_tmpa_tl,
+		\bool_if:NT{\__rpg_boxUseFiligree}{rpgfiligree}	
+	}
+	\__rpg_ExpandBegin:nx{__RpgTip}{\__rpg_boxArgs}
+}
+{
+	\end{__RpgTip}
+	\group_end:
+
+}
+\NewDocumentEnvironment {RpgNarration}	{ O{} }
+{
+	\group_begin:
+	\tl_set:Nn{\__rpg_boxColor}{NarrationColor}	
+	\keys_set_known:nnN{rpg/callouts}{#1}{\l_tmpa_tl} 
+
+	\tl_set:Nn{\__rpg_boxArgs}{
+		colback = \__rpg_boxColor,
+		colbacktitle=\__rpg_boxColor,
+		\l_tmpa_tl,
+		\bool_if:NT{\__rpg_boxUseFiligree}{rpgfiligree}	
+	}
+	\__rpg_ExpandBegin:nx{__RpgNarration}{\__rpg_boxArgs}	
+}
+{
+	\end{__RpgNarration}
+	\group_end:
+
+}
+\NewDocumentEnvironment {RpgSidebar}	{ O{} m }
+{
+	\group_begin:
+	\tl_set:Nn{\__rpg_boxColor}{SidebarColor}	
+	\keys_set_known:nnN{rpg/callouts}{#1}{\l_tmpa_tl} 
+	 
+	\tl_set:Nn\__rpg_boxArgs{
+		colback = \__rpg_boxColor,
+		colbacktitle=\__rpg_boxColor,
+		title=#2,
+		\l_tmpa_tl,
+		\bool_if:NT{\__rpg_boxUseFiligree}{rpgfiligree}	
+	}
+	\__rpg_ExpandBegin:nx{__RpgSidebar}{\__rpg_boxArgs}
+}
+{
+	\end{__RpgSidebar}
+	\group_end:
+
+}
+
+
+% \end{noindent}

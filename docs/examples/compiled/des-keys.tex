@@ -1,0 +1,14 @@
+% options = listing only
+% highlight = RpgThemeKeys, RpgThemeTLKey, RpgThemeBoolKey, RpgThemeTLChoiceKey
+\begin{ExampleBlock}[RpgThemeKeys, RpgThemeTLKey, RpgThemeBoolKey, RpgThemeTLChoiceKey][listing only]{}
+\RpgThemeKeys{rpg/my-env}
+{
+    \RpgThemeTLKey {title} {\l_myenv_title_tl} {Untitled}
+    \RpgThemeBoolKey {hidden} {\l_myenv_hidden_bool}
+    \RpgThemeTLChoiceKey {size} {\l_myenv_size_tl} {small,large} {small}
+}
+
+\keys_set:nn {rpg/my-env} {title=Hello, hidden, size=large}
+
+
+\end{ExampleBlock}

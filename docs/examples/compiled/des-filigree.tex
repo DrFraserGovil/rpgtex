@@ -1,0 +1,21 @@
+% title = A Custom Filigree
+% highlight = RpgThemeSetFiligree, RpgFiligree, RpgFiligreeSize
+\begin{ExampleBlock}[RpgThemeSetFiligree, RpgFiligree, RpgFiligreeSize][listing side text]{A Custom Filigree}
+\RpgThemeSetFiligree{
+    %% a bracket at each corner, scaled by \RpgFiligreeSize
+    \foreach \corner/\dx/\dy in
+        {north west/1/-1, north east/-1/-1, south west/1/1, south east/-1/1}
+    {
+        \draw[thick]
+            ($(frame.\corner)+(0,{2*\dy*\RpgFiligreeSize})$)
+            -- (frame.\corner)
+            -- ($(frame.\corner)+({2*\dx*\RpgFiligreeSize},0)$);
+    }
+}
+
+\begin{RpgFiligree}
+    The frame is drawn over the box, so it can extend beyond its edges.
+\end{RpgFiligree}
+
+
+\end{ExampleBlock}

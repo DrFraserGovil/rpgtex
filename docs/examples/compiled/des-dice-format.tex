@@ -1,0 +1,20 @@
+% title = RpgDice Formatting: The D\&D Format
+% highlight = RpgThemeDiceFormat, RpgDice
+\begin{ExampleBlock}[RpgThemeDiceFormat, RpgDice][listing side text]{RpgDice Formatting: The D\&D Format}
+Before: \RpgDice{2d8 + 3}, \RpgDice{d8}
+
+\ExplSyntaxOn
+\RpgThemeDiceFormat{ % #1: Dice Number, #2: Dice Sides, #3: Modifier
+    %% d8 -> 1d8
+    %% the arguments are variables, so must be expanded before testing
+    \tl_set:Ne \l_tmpa_tl { \tl_if_blank:eTF {#1} {1} {#1} }
+    %% compute the average roll, and print it first
+    \fp_eval:n { floor ( \l_tmpa_tl * ( #2 + 1 ) / 2 ) + ( #3 ) }
+    ~( \l_tmpa_tl d#2 \fp_compare:nNnF { #3 } = { 0 } { #3 } )
+}
+\ExplSyntaxOff
+
+After: \RpgDice{2d8 + 3}, \RpgDice{d8}
+
+
+\end{ExampleBlock}

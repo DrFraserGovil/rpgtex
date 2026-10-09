@@ -1,160 +1,192 @@
-\documentclass[theme=dnd,size=10pt,columns=2]{rpgbook}
+\documentclass[theme=dnd,size=10pt,columns=2,justified]{rpgbook}
 
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{blindtext}
-\title{D\&D Book Test}
-\subtitle{A Typesetting module for \newline the world's greatest roleplaying game!}
+\usepackage{lipsum}
+\RpgPartTransparency{0.5}
+% \RpgThemeSetDMGParts{}
+\title{TYPEMASTER'S GUIDE }
+\subtitle{A Typesetting module \\ for  the world's greatest roleplaying game!}
 \author{Jack Fraser-Govil}
-
 \begin{document}
 
 
 	%%Load the generic book text (so you can see how dnd renders differently from scifi!)
-   \input{book-text}
+	\input{book-text}
+
+	% \part[img/fantasy_title]{Master of Rules}
+
+	\chapter{The D\&D Theme}
+
+		\section{Appearance}
+
+			\subsection{Colors}
+
+				In addition to a host of defined colours, the D\&D theme uses a 'colorcycle' mechanic to change the underlying ThemeColor each time a \cmd{part} begins (or the user calls \cmd{RpgAdvanceColors}). This means tables, sidebars and any other element keyed off the Theme Colour will have a unique appearance in each part.
+
+				\begin{RpgTip}{Before...}
+					This is the 'original' appearance
+				\end{RpgTip}
+				Then call \cmd{RpgAdvanceColors}...\RpgAdvanceColors{}
+				\begin{RpgTip}{After...}
+					This is the next colour in the cycle
+				\end{RpgTip}
+
+				\subsubsection{Customising Color Cycles}
+					The color cycle can be set by calling \cmd{RpgThemeSetColorCycle\{a,b,c,...\}}, and if the items in the list are valid colours, this will replace the current colour cycle.
+
+				\subsubsection{Inbuilt Cycles}
+					We provide two inbuilt cycles\footnote{Actually, they're the same cycle, but starting at different points}, which can be activated with the following commands:
+					\begin{description}
+						\item[\cmd{RpgSetPHBColors}] Initialises colors which mimic the 2014 Player's Handbook parts. This is the default color cycle.
+						\item[\cmd{RpgSetDMGColors}] Colors which mimic the 2014 Dungeon Master's Guide parts.
+					\end{description}
+
+					Calling this commands also has the effect of resetting the cycle back to the beginning.
+
+					\RpgSetPHBColors{}
+			\subsection{Dice Formatting}
+				The \cmd{RpgDice} command is set to format dice expressions in the way used in the Monster Manual; providing the average result of the roll (rounded down). It is also configured to convert `dX' into `1dX:
+				\begin{RpgTable}{lX}
+					Expression & Result
+					\\
+					\cmd{RpgDice\{1d6 + 3\}} & \RpgDice{1d6 + 3}
+					\\
+					\cmd{RpgDice\{2d10 + 3 - 2*7\}} & \RpgDice{2d10 +3 - 2*7}
+					\\
+					\cmd{RpgDice\{d4\}} & \RpgDice{d4}
+				\end{RpgTable}
+
+
+			\subsection{Textured Paper}
+				By default, the DnD theme sets the background colour as 'Papyrus' to give a traditional fantasy feel to the document - this can be seen on the previous page.
+
+				On this page, we demonstrate the full textured paper, which can be activated by calling \cmd{RpgSetDndPaper}, which changes the paper on all subsequent pages.
+				\RpgSetDndPaper{}
 
 
 
-   \part[example/img/fantasy_title]{The D\&D Book Class}
+		\section{Rule Environments}
+
+			The D\&D theme makes heavy use of all of the `Rule Environments' to produce consistently formatting blocks for Items, Spells, Feats and Monsters.
 
 
 
-		\chapter{Differences \& Overrides}
-		\thispagestyle{empty}
-		\chapter{Monsters}
 
-			\section{A Brief Overview}
 
-			\begin{RpgMonster}{The Typesetter}
-				 \RpgMonsterType{Medium aberration, lawful evil}
-
-				  \RpgMonsterBasics[
-						armor-class = {9 (12 with \emph{mage armor})},
-						hit-points  = {\RpgDice{3d8 + 3}},
-						speed       = {30 ft., fly 30 ft.},
-						proficiency=2,
-						str = 12,
-						dex = 8,
-						con = 13,
-						int = 10,
-						wis = 14,
-						cha = 15,
-						str_save,
-						cha_save,
+			\begin{RpgTip}{Some Example Spells}
+				\begin{RpgSpell}{Compile Document}[
+						level=3,
+						school=Conjuration,
+						range=within 60ft,
+						area=30ft cube,
+						components={VS}
 					]
+					Roll 1d4, a number of documents equal to this number within the area are converted to \textit{Powerful Dragon Format}, which has its own initiative and considers you an ally. For each dragon converted in this fashion, you regain 5 hit points.
 
-				\RpgMonsterDetails[
-					%saving-throws = {Str +0, Dex +0, Con +0, Int +0, Wis +0, Cha +0},
-					%skills = {Acrobatics +0, Animal Handling +0, Arcana +0, Athletics +0, Deception +0, History +0, Insight +0, Intimidation +0, Investigation +0, Medicine +0, Nature +0, Perception +0, Performance +0, Persuasion +0, Religion +0, Sleight of Hand +0, Stealth +0, Survival +0},
-					%damage-vulnerabilities = {cold},
-					%damage-resistances = {bludgeoning, piercing, and slashing from nonmagical attacks},
-					%damage-immunities = {poison},
-					%condition-immunities = {poisoned},
-					senses = {darkvision 60 ft., passive Perception 12},
-					languages = {\LaTeX},
-					challenge = 1,
-					% proficiency-bonus, % = +2
+					\RpgSpellUpcast[The hitpoints restored by each dragon increase by]{5}
+				\end{RpgSpell}
+
+				\begin{RpgSpell}{Faulty Preamble}[
+						school=Evocation,
+						range=touch,
+						duration={Until Dispelled},
+					]
+					You corrupt a document that you touch. When this document is affected by \textit{Compile Document}, it does not convert into a Powerful Dragon Format, and instead deals \RpgDice{1d10} psychic damage to the individual attempting the compilation.
+
+					\RpgCantripScaling{1d10}{2d10}{3d10}{4d10}
+
+				\end{RpgSpell}
+			\end{RpgTip}
+
+			\begin{RpgTip}{An Example Monster}
+
+				\begin{RpgStat}{Powerful Dragon Format}[
+						alignment=Lawful Neutral,
+						type=Dragon,
+						AC=13,
+						HP =  2d8+2,
+						speed={10ft, 30ft flying},
+						str=5, dex=16, con = 12,int=16,wis=12,cha=15,
+						CR=1/8,
+						int-save, wis-save,
+						language={draconic, \LaTeX},
+						nickname=PDF,
+					]
+					\trait{Portable} A \name{} is unaffected by its surroundings, ignoring difficult terrain or strong winds.
+
+
+					\section{Actions}
+
+						\attack{Claw}[modifier=dex, dmg-type=slashing,plus-dmg=1d6,plus-type=fire]
+				\end{RpgStat}
+			\end{RpgTip}
+
+
+
+			\RpgStatLegacyMode{}
+			\begin{RpgStat*}{The Typesetter}[str=12,str-save,skills-expertise={athletics},
+					dex=15,
+					int-save,
+					float=b,
+					alignment=Chaotic Evil,
+					type=Beast,
+					challenge=1,
+					wis=14,
+					skills={Perception},
+					cr = 6
 				]
-			\end{RpgMonster}
+
+				\begin{RpgStatSpells}[title={Dread Spellcasting},innate,modifier=wis,bonus=10]
+					\atWill{Faulty Preamble, Thunderclap}
+					\perDay{3}{Fireball}
+					\level[3][3]{Compile Document}
+				\end{RpgStatSpells}
+
+				\section{Actions}
 
 
-			\begin{RpgMonster*}[bh][]{Monster Foo}
-    \RpgMonsterType{Medium aberration (metasyntactic variable), neutral evil}
+					\attack{Dagger}[distance=both,type=spell,bonus=2,reach=10,dmg=1d7-2+\RpgStatMod{str}]
 
-    % If you want to use commas in the key values, enclose the values in braces.
-    \RpgMonsterBasics[
-        armor-class = {9 (12 with \emph{mage armor})},
-        hit-points  = {\RpgDice{3d8 + 3}},
-        speed       = {30 ft., fly 30 ft.},
-		initiative  = {+5},
-        str = 12,
-        dex = 8,
-        con = 13,
-        int = 10,
-        wis = 14,
-        cha = 15,
-		str_save,
-		cha_save,
-		proficiency=3
-      ]
 
-    \RpgMonsterDetails[
-        %saving-throws = {Str +0, Dex +0, Con +0, Int +0, Wis +0, Cha +0},
-        %skills = {Acrobatics +0, Animal Handling +0, Arcana +0, Athletics +0, Deception +0, History +0, Insight +0, Intimidation +0, Investigation +0, Medicine +0, Nature +0, Perception +0, Performance +0, Persuasion +0, Religion +0, Sleight of Hand +0, Stealth +0, Survival +0},
-        %damage-vulnerabilities = {cold},
-        %damage-resistances = {bludgeoning, piercing, and slashing from nonmagical attacks},
-        %damage-immunities = {poison},
-        %condition-immunities = {poisoned},
-        senses = {darkvision 60 ft., passive Perception 10},
-        languages = {Common, Goblin, Undercommon},
-        challenge = 1,
-      ]
-    % Traits
 
-    \begin{RpgMonsterSpells}[modifier=CHA,bonus={0}]
-      \RpgSpellList{misty step}
-      \RpgSpellList[3]{fog cloud, rope trick}
-      \RpgSpellList[1]{identify}
-	\RpgMonsterSpellSlots[1][3]{burning hands,mage armor,shield,}
-    \end{RpgMonsterSpells}
 
-    \RpgMonsterSection{Actions}
-    \RpgMonsterAction{Multiattack}
-    The foo makes two melee attacks.
 
-    %Default values are shown commented out
-    \RpgMonsterAttack[
-      %distance=both, % valid options are in the set {both,melee,ranged},
-      %type=weapon, %valid options are in the set {weapon,spell}
-      modifier=STR,
-      %reach=5,
-      %range=20/60,
-      %targets=one target,
-      dmg=\RpgDice{1d4+1},
-      dmg-type=piercing,
-      %plus-dmg=,
-      %plus-dmg-type=,
-      %or-dmg=,
-      %or-dmg-when=,
-      %extra=,
-    ]{Dagger}
+					\RpgStatLegendarySection
+					\action{Rapid Stab} \name{} makes a Dagger attack, then moves 30ft
 
-    %\RpgMonsterMelee calls \RpgMonsterAttack with the melee option
-    \RpgMonsterMelee[
-      modifier=DEX,
-      %reach=5,
-      %targets=one target,
-      dmg=\RpgDice{1d8+1},
-      dmg-type=slashing,
-      plus-dmg=\RpgDice{2d6},
-      plus-dmg-type=fire,
-      or-dmg=\RpgDice{1d10+1},
-      or-dmg-when=if used with two hands,
-      %extra=,
-    ]{Flame Tongue Longsword}
+					\RpgStatMythicSection[narration={
+								Just when you thought you were safe, a voice rings out \textit{but will it work on Overleaf?}. You realise your work here is far from done...
+							}]
+					\save{Online Woes}[modifier=int,dc=20,shape=sphere,origin={within 10ft of the creature}, success={Half damage and not stunned},fail={\RpgDice{4d10 + 10} psychic damage and be stunned until the end of their next turn}]
+			\end{RpgStat*}
 
-    %\RpgMonsterRanged calls \RpgMonsterAttack with the ranged option
-    \RpgMonsterRanged[
-      modifier=CHA,
-      range=80/320,
-      dmg=\RpgDice{1d8},
-      dmg-type=piercing,
-      %plus-dmg=,
-      %plus-dmg-type=,
-      %or-dmg=,
-      %or-dmg-when=,
-      extra={, and the target must make a DC 15 Constitution saving throw, taking 24 (7d6) poison damage on a failed save, or half as much damage on a successful one}
-    ]{Poisoned Crossbow}
+			\subsubsection{Large Statblocks}
 
-    % Legendary Actions
-    \begin{RpgMonsterLegendaryActions}[3]
-      \RpgMonsterLegendaryAction{Move}{The foo moves up to its speed.}
-      \RpgMonsterLegendaryAction{Dagger Attack}{The foo makes a dagger attack.}
-      \RpgMonsterLegendaryAction[2]{Create Contract}{The foo presents a contract in a language it knows and waves it in the face of a creature within 10 feet. The creature must make a DC 10 Intelligence saving throw. On a failure, the creature is incapacitated until the start of the foo's next turn. A creature who cannot read the language in which the contract is written has advantage on this saving throw.}
-	  \RpgLegendaryDefiance{}
-    \end{RpgMonsterLegendaryActions}
-\end{RpgMonster*}
+				The Powerful Dragon is the standard RpgStat environment - we also provide the RpgStat* which is used for large `boss blocks'. This environment is always full width (even in two column environments), using the \texttt{strip} environment of cuted or a \texttt{figure*} if floating.
 
-		\section{Full documentation}
+				An example is shown below (in Legacy mode -- without legacy mode the appearance is the same as the non-boss block!)
 
-		The negative sign is (-)
+			\subsubsection{Legacy Statblocks}
+
+				The default statblock uses a format similar to the modern 2024 statblock design (with a few streamlining tweaks of our own).
+
+				It is possible to switch back to the original 2014 appearance, by calling  \cmd{RpgStatLegacyMode}. This replaces the outer box and tweaks the way that the stats are presented.
+				\begin{RpgTip}{An Example Feat}
+					\begin{RpgFeat}{Typesetting Master}[prerequisite={A total lack of a life}]
+
+						You are a master of using the ancient \TeX-niques. When you cast \textit{Compile Document}, you roll 2d6 instead of 1d4. In addition, you can sense when a document within 5ft has been corrupted by the spell \textit{Faulty Preamble}.
+					\end{RpgFeat}
+				\end{RpgTip}
+				\begin{RpgTip}{An Example Item}
+					\begin{RpgItem}{Knuth's Quill}[
+							type={Wondrous Item},
+							rarity={Rare},
+							requires-attunement={by a creature with an Intelligence greater than 13}
+						]
+
+						As an action, you may use this quill to write on any surface. The symbols you write are so beautifully typeset that a creature which views them must make a DC 13 Intelligence Saving throw or become \textit{Charmed} by you, as if by the \textit{Charm Person} spell.
+					\end{RpgItem}
+				\end{RpgTip}
+
 \end{document}

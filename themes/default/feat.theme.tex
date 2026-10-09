@@ -1,0 +1,33 @@
+% \begin{noindent}
+\ExplSyntaxOn
+ 
+\RpgFeatAddProperty{requires}{\l__rpgfeat_prereq}{}
+ 
+\RpgThemeFeatFormat{
+	\subsection{#1}
+
+	\tl_if_blank:eF{\l__rpgfeat_prereq}
+	{
+		% \vspace{-0.6em}
+		{\RpgFontCardHeader Requires:~\l__rpgfeat_prereq} \par\vspace{0.5em} \noindent
+	}
+
+	#2
+
+}
+ 
+\RpgThemeFeatCardFormat{
+	\subsection{#1}
+
+	{\RpgFontCardBody #2}
+
+	\tl_if_blank:eF{\l__rpgfeat_prereq}
+	{
+
+		\vfill
+
+		{\RpgFontCardHeader Requires:~\l__rpgfeat_prereq}
+	}
+}
+% \end{noindent}
+\ExplSyntaxOff

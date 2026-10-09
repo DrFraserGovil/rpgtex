@@ -1,24 +1,110 @@
-% example = cmd-cover
-% options = listing only
-    \cover{path-to-covery}
-
-% example = cmd-maketitle
-%highlight = maketitle
-% options = listing only
-    \title{title-name}
-    \subtitle{subtitle-name}    % optional
-    \cover{path/to/cover}       % optional
-    \author{Dr. W. Riter}       % optional
-
-    \begin{document}
-        \maketitle
-        ...
-
 % example = cmd-emph
-    \emph{text}
+% highlight = RpgKey
+\emph{text}
 
-    \key{more-text}
+\RpgKey{more text}
 
 
 % example = cmd-drop-cap
-    \RpgDropCap{T}{he example: this text runs over the first line, and then revert back to the normal font. It almost works! However, because it's wrapped in a text box, it goes slightly over the edges.}
+\RpgDropCap{T}{he example: this text runs over the first line, and then revert back to the normal font. It almost works! However, because it's wrapped in a text box, it goes slightly over the edges.}
+
+
+% example = section-names	
+	We are in Chapter `\RpgGetName{chapter}', section `\RpgGetName{section}'.
+
+	\subsubsection{An example subsubsection}
+
+		Now I am in `\RpgGetName{subsubsection}'.
+
+
+
+
+% example = fake-section
+	\subsubsection{Real Subsection}
+	I believe I am in `\RpgGetName{subsubsection}'.
+
+	\RpgFake{subsubsection}{Fake Subsection}
+	Now I believe I am in `\RpgGetName{subsubsection}'
+
+
+% example = modify-font
+% title = Font Interface
+% highlight = RpgThemeFont
+	\subsection{The Original Font}
+		Here is some text
+
+		\newfontfamily{\courier}{Courier}
+		\RpgThemeFont{main-body-family=\courier,
+			subsection-style=\slshape\Huge}
+
+	\subsection{The New Font}
+		And after the change is introduced
+
+% example = create-font
+% title = Create Font
+% highlight = RpgThemeCreateFont
+	\RpgThemeCreateFont{\MyFont}{myfont}
+	\newfontfamily{\courier}{Courier}
+	\RpgThemeFont{
+		myfont-family = \courier, 
+		myfont-style = \slshape
+	}
+
+
+	This is text
+
+	{\MyFont This is text in my new font}
+
+% example = cmd-contour
+% highlight = RpgContour
+	\RpgContour[inner=red, outer=black]{Contoured text}
+
+	\RpgContour[style=\Large\bfseries]{Styled text \\ over two lines}
+
+% example = cmd-dice
+% highlight = RpgDice
+	\RpgDice{1d6-2}
+
+	\RpgDice{2D6 + 3*2^2}
+
+	\RpgDice{d8}
+
+	\RpgDice{not a dice roll}
+
+% example = cmd-ordinal
+% highlight = RpgOrdinal, RpgSuperOrdinal
+	\RpgOrdinal{1}, \RpgOrdinal{12}, \RpgOrdinal{23}
+
+	\RpgOrdinal[\textbf]{133}
+
+% example = cmd-super-ordinal
+% highlight = RpgOrdinal, RpgSuperOrdinal
+	\RpgSuperOrdinal{42}
+
+% example = cmd-plural
+% highlight = RpgPlural
+	\RpgPlural{1}{hat}, \RpgPlural{2}{hat}
+
+	\RpgPlural[octopodes]{1}{octopus}, \RpgPlural[octopodes]{3}{octopus}
+
+	\RpgPlural*{3}{hat}
+
+% example = cmd-page
+% highlight = RpgPage
+	\RpgPage{S:PackageOptions}
+
+	\RpgPage[p]{S:PackageOptions}
+
+	\RpgPage[b]{S:PackageOptions}
+
+	\RpgPage[c]{S:PackageOptions}
+
+% example = cmd-switch
+% highlight = RpgNewSwitch, RpgIfSwitch, RpgToggle
+	\RpgNewSwitch{HardMode}
+
+	The dragon has \RpgIfSwitch{HardMode}{500}{200} HP.
+
+	\RpgToggle{HardMode}
+
+	The dragon has \RpgIfSwitch{HardMode}{500}{200} HP.

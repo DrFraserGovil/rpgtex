@@ -1,0 +1,59 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Code for assigning whole-page images
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Adds an image covering the whole of the current page, without breaking the page
+%% Arguments:	#1 Any eso-pic put commands to go on top of the image
+%%				#2 The path to the image
+%%				#3 The opacity of a white layer laid over the image, to fade it (no layer if blank)
+\cs_new_protected:Npn \__rpg_PageImageOverlay:nnn #1#2#3
+{
+	\AddToShipoutPictureFG*{%
+		\AtPageLowerLeft{%
+			\put(0,0){\makebox(0,0)[bl]{\includegraphics[width=\paperwidth,height=\paperheight]{#2}}}
+			\tl_if_blank:nF{#3}
+			{
+				\put(0,0){%
+					\begin{pgfpicture}
+						\pgfsetfillopacity{#3}
+						\pgfsetfillcolor{white}
+						\pgfpathrectangle{\pgfpointorigin}{\pgfqpoint{\paperwidth}{\paperheight}}
+						\pgfusepath{fill}
+					\end{pgfpicture}%
+				}
+			}
+			#1
+		}%
+	}
+}
+
+%% Places an image occupying the entirety of the next page, calling \clearpage on either side
+%% Arguments:	#1 Any eso-pic put commands to go on top of the image
+%%				#2 The path to the image
+%%				#3 The opacity of a white layer laid over the image, to fade it
+\NewDocumentCommand\RpgWholePageImage{ +O{}  +m o}
+{
+\clearpage
+\thispagestyle{empty}
+\IfValueTF{#3}
+	{\__rpg_PageImageOverlay:nnn{#1}{#2}{#3}}
+	{\__rpg_PageImageOverlay:nnn{#1}{#2}{}}
+\mbox{}
+\clearpage
+}
+
+
+%% A wrapper for eso-pic put commands. Places a \parbox at the specified coordinates
+%% The coordinates refer to the centre of the element
+%%	[#1]The width of the element (for linewrapping purposes, default: \linewidth)
+%%	[#2]The formatting applied to the element (default: \centering)
+%%  (#3) The anchor point (t for top, b bottom, tl top left etc, default: c, center)
+%%	#4	The x-distance of the centre of the element from the left marging
+%%	#5	The y-distance of the centre of the element from the bottom of the page
+%%	#6	The contents of the box (paragraph)	
+\NewDocumentCommand\RpgPut{O{\linewidth} O{\centering} D(){c} m m +m}
+{
+	\put(\LenToUnit{#4},\LenToUnit{#5}){
+		\makebox(0,0)[#3]{\parbox[t]{#1}{#2 #6}}
+	}
+}

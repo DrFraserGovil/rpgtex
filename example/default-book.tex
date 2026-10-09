@@ -1,0 +1,33 @@
+
+\documentclass[theme=default,size=10pt,columns=2]{rpgbook}
+\usepackage[hidelinks]{hyperref}
+\title{Default Book Test}
+\subtitle{A Typesetting Module With No Particular Theme}
+\author{Jack Fraser-Govil}
+\RpgCoverTransparency{0.5}
+\RpgPartTransparency{0.5}
+\begin{document}
+	\input{book-text.tex}
+
+	\part{The Main Matter}
+		\chapter{The Default Theme}
+
+			The default theme defines very little aside from a basic set of formats: the colors are all various monochromes. The item is as follows:
+			\RpgSwitch{UseItemCard}{off}
+			\begin{RpgItem}{Test Item}[description=A kind of item,image={img/joyeuse}]
+				This is an item
+			\end{RpgItem}
+
+			\RpgSwitch{UseItemCard}{on}
+			\begin{RpgItem}{Test Item}[description=A kind of item,image={img/joyeuse}]
+				This is an item
+			\end{RpgItem}
+
+			\begin{RpgFeat}{Mastery of \TeX}[requires={An unholy obsession}]
+				You are a master of \LaTeX. When you cast \textit{compile}, you flip a coin, instead of rolling a dice, to determine if you succeed or fail.
+			\end{RpgFeat}
+
+			\begin{RpgFiligree}
+				hi
+			\end{RpgFiligree}
+\end{document}

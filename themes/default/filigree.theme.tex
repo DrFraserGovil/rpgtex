@@ -1,0 +1,17 @@
+\RpgThemeSetFiligree{
+	\foreach \m in {0.2,0.6,1,1.4}
+		{
+			\draw[thin] ($(frame.north west)+(0,-{\m*\RpgFiligreeSize})$) to[out=60,in=-150] ($(frame.north west)+({\m*\RpgFiligreeSize},0)$);
+			\draw[thin] ($(frame.south west)+(0,{\m*\RpgFiligreeSize})$)  to[out=60,in=-150]($(frame.south west)+({\m*\RpgFiligreeSize},0)$);
+			\draw[thin] ($(frame.north east)+(0,-{\m*\RpgFiligreeSize})$)  to[out=60,in=-150] ($(frame.north east)+({-\m*\RpgFiligreeSize},0)$);
+			\draw[thin] ($(frame.south east)+(0,{\m*\RpgFiligreeSize})$) to[out=-120,in=30]($(frame.south east)+({-\m*\RpgFiligreeSize},0)$);
+
+		}
+}
+\tcbset{
+	rpgfiligree/.append style={
+			top=2pt,
+			left=2pt,
+			right=2pt,
+		}
+}

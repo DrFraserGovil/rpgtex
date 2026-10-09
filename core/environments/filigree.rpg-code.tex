@@ -1,0 +1,34 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Filigree
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\DeclareTColorBox {__RpgFiligree} {o} { rpgfiligree, #1 }
+
+\cs_new_protected:Npn{\rpg_Filigree:{}}
+\NewDocumentCommand\RpgThemeSetFiligree{+m} { \cs_set:Nn\rpg_Filigree:{#1} }
+
+
+\RpgThemeNewTLKey{rpg/callouts}{filigree-size}{\RpgFiligreeSize}{5pt}
+
+
+\tcbset{
+	rpg filigree/.style={
+			overlay={\begin{scope}[draw=FiligreeColor, line~width=1pt]
+						\rpg_Filigree:
+					\end{scope}} ,
+			enhanced,
+			frame~hidden,
+		}}
+
+\NewDocumentEnvironment {RpgFiligree} { O{} }
+{
+	% \begin{RpgTip}[color=FiligreeBackColor,#1,rpgfiligree]{}
+	\tl_set:Nn\__rpg_filigreeArgs{color=FiligreeBackColor,#1,rpgfiligree}
+	\__rpg_ExpandBegin:nx{RpgTip}{\__rpg_filigreeArgs}{}
+}
+{
+	\end{RpgTip}
+}
+
+

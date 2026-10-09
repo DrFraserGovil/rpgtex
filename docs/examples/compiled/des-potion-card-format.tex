@@ -1,0 +1,47 @@
+% title = A Custom Card Format
+% highlight = RpgThemePotionCardFormat, RpgPotionAddProperty, RpgPotion, RpgSwitch
+\begin{ExampleBlock}[RpgThemePotionCardFormat, RpgPotionAddProperty, RpgPotion, RpgSwitch][listing side text]{A Custom Card Format}
+\RpgPotionAddProperty{colour}{\PotionColour}{gray}
+\RpgPotionAddProperty{rarity}{\PotionRarity}{common}
+
+\RpgThemePotionCardFormat{
+    \begin{center}
+        {\RpgFontCardTitle #1}\par
+        \textcolor{\PotionColour!70!black}{\rule{0.5\linewidth}{1pt}}\par\medskip
+        \vfil
+             
+        \begin{tikzpicture}
+            %% the liquid, filling the lower part of the flask
+            \begin{scope}
+                \clip (0,0) circle (0.7);
+                \fill[\PotionColour!75] (-0.7,-0.7) rectangle (0.7,0.2);
+                \fill[\PotionColour!40] (-0.7,0.15) rectangle (0.7,0.2);
+                \foreach \x/\y/\r in {-0.25/-0.3/0.07, 0.2/-0.1/0.05, 0.05/-0.45/0.04}
+                    { \draw[white, opacity=0.8] (\x,\y) circle (\r); }
+            \end{scope}
+            %% the flask, its neck and the cork
+            \draw[very thick] (-0.17,0.68) -- (-0.17,1.05) (0.17,0.68) -- (0.17,1.05);
+            \draw[very thick] (0,0) circle (0.7);
+            \fill[brown!60!black, rounded corners=1pt] (-0.22,1.0) rectangle (0.22,1.25);
+            \fill[white, opacity=0.6] (-0.38,0.22) circle (0.09);
+        \end{tikzpicture}\par\medskip
+        \textsc{\PotionRarity}\par\medskip
+        \vfil
+
+        \small\itshape #2
+
+        \vfil
+    \end{center}
+}
+
+\RpgSwitch{UsePotionCard}{on}
+\begin{RpgPotion}[width=5cm, height=6cm]{Potion of Healing}[colour=red, rarity=uncommon]
+    Restores \RpgDice{2d4+2} hit points when drunk.
+\end{RpgPotion}
+\begin{RpgPotion}{Flask of Oil}[colour=orange]
+    When thrown or broken, covers all creatures and objects within 5ft in oil. The next time a creature covered in oil takes fire damage, they take \RpgDice{3d8} additional fire damage.
+\end{RpgPotion}
+\RpgSwitch{UsePotionCard}{off}
+
+
+\end{ExampleBlock}

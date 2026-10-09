@@ -1,0 +1,84 @@
+%%%%%%%%%%%%%%%%%%5
+%% Legenedayr & mythic
+%%%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+\RpgThemeKeys{rpg/stat/legendary}
+{
+	\RpgThemeBoolKey	{defiance}	{\__dnd_statLegendaryDefiance}
+	\RpgThemeTLKey		{uses}		{\__dnd_statLegendaryUses}		{3}
+}
+
+
+\DeclareDocumentCommand{\RpgStatLegendarySection}{O{}}
+{
+	\keys_set:nn{rpg/stat/legendary}{#1}
+
+	\RpgStatSection{Legendary~Actions\ (\__dnd_statLegendaryUses\ uses)}
+	{\noindent\RpgFontStatBlockLegendary
+		\rpgstringlegendarySpiel\par}
+	\bool_if:NT{\__dnd_statLegendaryDefiance}
+	{
+		\RpgStatLegendaryDefiance{}
+	}
+}
+
+\DeclareDocumentCommand\RpgStatLegendaryDefiance{}
+{
+\action{Legendary~Defiance}~{\rpgstringlegendaryDefiance}
+}
+\DeclareDocumentCommand\RpgStatLegendaryResistance{m}
+{
+	\action{Legendary~Resistance~(#1/day)}\ \rpgstringlegendaryResistance
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%5
+%% Mythic Section
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\RpgThemeKeys{rpg/stat/mythic}
+{
+	\RpgThemeTLKey{trait}{\__dnd_statMythicTrait}{\rpgstringmythicDefaultBody}
+	\RpgThemeTLKey{trait-name}{\__dnd_statMythicTraitName}{Second\ Phase}
+	\RpgThemeTLKey{narration}{\__dnd_statMythicNarration}{}
+	\RpgThemeBoolKey{passive}{\__dnd_statMythicIsPassive}
+
+}
+
+
+
+\DeclareDocumentCommand{\RpgStatMythicSection}{+O{}}{
+\RpgStatSection{Mythic~Monster}
+
+\keys_set:nn{rpg/stat/mythic}{#1}
+
+\action{\__dnd_statMythicTraitName}\ \__dnd_statMythicTrait \par
+\tl_if_empty:oF{\__dnd_statMythicNarration}
+{
+	{\noindent\RpgFontStatBlockLegendary \rpgstringmythicNarrationLeadIn\par}
+
+	\begin{RpgNarration}[before~skip=3pt,after~skip=3pt]
+		\__dnd_statMythicNarration
+	\end{RpgNarration}
+}
+{\noindent\RpgFontStatBlockLegendary
+	\rpgstringmythicGains\bool_if:nF{\__dnd_statMythicIsPassive}{\ and\ Legendary\ Actions}.  \par
+}
+
+}
+
+
+\ExplSyntaxOff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Strings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Long blocks of text and Expl3 don't play well together; so define the strings in 'standard' mode!
+\ExplSyntaxOff
+\def\rpgstringlegendarySpiel{Immediately after another creature's turn, \RpgStatName{} can expend a Legendary Action to take one of the following actions. Expended actions are regained at the start of each of its turns.}
+\def\rpgstringlegendaryDefiance{\RpgStatName{} repeats a saving throw that they failed in the past hour which imposed an ongoing effect. Any penalties associated with the chosen effect are ignored whilst making this new saving throw. On a success the effect is ended. }
+\def\rpgstringlegendaryResistance{When \RpgStatName{} fails a saving throw, it can choose to succeed instead.}
+\def\rpgstringmythicDefaultBody{When reduced to 0HP, \RpgStatName{} recovers all hit points and removes all negative status effects.}
+\def\rpgstringmythicNarrationLeadIn{When the mythic trait activates, read the following aloud:}
+\def\rpgstringmythicGains{When\ the\ mythic\ trait\ is\ activated,\ \RpgStatName{}\ gains\ the\ following\ traits}
+

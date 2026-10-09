@@ -1,0 +1,14 @@
+paper.jpg, footerscroll.svg, footerscroll.pdf
+=============================================
+
+Taken from the D&D 5e LaTeX Template by Evan Bergeron and the rpgtex project
+(https://github.com/rpgtex/DND-5e-LaTeX-Template), from which rpgtex is
+forked. That project is distributed under the MIT License (see LICENSE in the
+root of this repository), and credits its background image to:
+
+    Lost and Taken (https://lostandtaken.com/)
+
+The Lost and Taken website is no longer fully functional. Its published terms
+allowed the textures to be used royalty-free in personal and commercial
+projects with no attribution required, but asked that the textures not be
+re-hosted or redistributed in their original format.

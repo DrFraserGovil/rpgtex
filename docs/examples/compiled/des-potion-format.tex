@@ -1,0 +1,38 @@
+% title = A Custom Text Format
+% highlight = RpgThemePotionFormat, RpgPotionAddProperty, RpgPotionAddBoolean, RpgPotion
+\begin{ExampleBlock}[RpgThemePotionFormat, RpgPotionAddProperty, RpgPotionAddBoolean, RpgPotion][listing side text]{A Custom Text Format}
+\RpgPotionAddProperty{colour}{\PotionColour}{gray}
+\RpgPotionAddProperty{rarity}{\PotionRarity}{common}
+\RpgPotionAddBoolean{magic}{\PotionMagic}
+
+\ExplSyntaxOn
+\RpgThemePotionFormat{ % #1: title, #2: body
+    \begin{tcolorbox}[
+            enhanced, sharp~corners, boxrule=0pt, leftrule=4pt,
+            colframe=\PotionColour!70!black, colback=\PotionColour!7,
+            colbacktitle=\PotionColour!70!black, coltitle=white,
+            title={
+                \textbf{#1}
+                \bool_if:NT \PotionMagic
+                {
+                    \hspace{0.4em} \tikz[baseline=-0.6ex] \fill[yellow!80!orange]
+                        (0,4pt) -- (1pt,1pt) -- (4pt,0) -- (1pt,-1pt)
+                        -- (0,-4pt) -- (-1pt,-1pt) -- (-4pt,0) -- (-1pt,1pt) -- cycle;
+                }
+                \hfill \textit{\PotionRarity}
+            },
+        ]
+        #2
+    \end{tcolorbox}
+}
+\ExplSyntaxOff
+
+\begin{RpgPotion}{Potion of Healing}[colour=red, rarity=uncommon, magic]
+    Restores \RpgDice{2d4+2} hit points when drunk.
+\end{RpgPotion}
+\begin{RpgPotion}{Flask of Oil}[colour=orange]
+    When thrown or broken, covers all creatures and objects within 5ft in oil. The next time a creature covered in oil takes fire damage, they take \RpgDice{3d8} additional fire damage.
+\end{RpgPotion}
+
+
+\end{ExampleBlock}

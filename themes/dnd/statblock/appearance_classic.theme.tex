@@ -1,0 +1,121 @@
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Classic Appearance
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ExplSyntaxOn
+\DeclareDocumentCommand{\RpgStatLegacyMode}{}
+{
+\cs_set:Nn{\__dnd_stat_basics:}{\LEGACY__dnd_stat_basics:}
+\cs_set:Nn{\__dnd_stat_ability_scores:}{\LEGACY__dnd_stat_ability_scores:}
+\cs_set:Nn{\__dnd_stat_details:}{\LEGACY__dnd_stat_details:}
+
+\tcbset{rpgstatbox/.style={
+sharp~corners,
+enhanced~jigsaw,
+before~skip      = 6pt~plus~3pt~minus~3pt,
+boxrule          = 2pt,
+parbox           = false,
+boxsep           = 2pt,
+toptitle         = 8pt,
+top              = 0pt,
+left             = 2pt,
+right            = 2pt,
+bottom           = 7pt,
+oversize         = 0pt,
+colback          = StatblockBackground,
+colbacktitle     = StatblockBackground,
+borderline~north = {3pt} {0pt}   {TitleRed},
+borderline~north = {2pt} {0.5pt} {StatblockRibbon},
+borderline~south = {3pt} {0pt}   {TitleRed},
+borderline~south = {2pt} {0.5pt} {StatblockRibbon},
+% colframe         = \statOutlineColor,
+frame~hidden,
+fontupper        = \RpgFontStatBlockBody,
+fontlower        = \RpgFontStatBlockBody,
+}}
+}
+
+
+% %% BASIC BLOCK -- HP / AC / etc.
+\cs_set_protected_nopar:Npn \LEGACY__dnd_stat_basics:
+{
+	{
+			\color{StatblockHeading}
+			\noindent
+			\begin{tabularx}{\linewidth}{lX}
+				\textbf{AC}    & \__dnd_statAC
+				\\
+				\textbf{HP}    & \__dnd_statHP
+				\\
+				\textbf{Speed} & \__dnd_statSpeed
+				% &
+				% \textbf{Initiative} &\l__initiative_bonus_tl
+			\end{tabularx}
+		}
+}
+%% ABILITY SCORE BLOCK
+
+
+\cs_set_protected_nopar:Npn \LEGACY__dnd_stat_ability_scores:
+{
+	%%define colours and spacings
+	\color {StatblockHeading}
+	\setlength\topsep{0pt}
+	\setlength\tabcolsep{1pt}
+
+	\begin{center}
+		\maxsizebox{\linewidth}{!}{
+			\begin{tabularx}{\linewidth}{YYYYYYc}
+				\seq_map_inline:Nn\__dnd_Stats
+				{
+				\bf \text_uppercase:n{##1}                                                     &
+				}
+				\\
+				\seq_map_inline:Nn\__dnd_Stats
+				{
+				\use:c{__dnd_##1Score}~( \__dnd_format_signed_integer:N{\use:c{__dnd_##1Mod}}) &
+				}
+			\end{tabularx}
+		}
+	\end{center}
+	\par \vspace{0.1cm}
+}
+% %% DETAILS BLOCK -- languages/skilsl etc
+\cs_set_protected:Npn \LEGACY__dnd_format_saves:n#1
+{
+	\seq_clear:N\l_tmpa_seq
+	\seq_map_inline:Nn{\__dnd_Stats}
+	{
+		\tl_set_eq:Nc\l_tmpa_tl{__##1Save}
+		\tl_if_blank:eF{\l_tmpa_tl}
+		{
+			\seq_put_right:Ne\l_tmpa_seq{ \prop_item:Ne{\__dnd_StatNames}{##1}~\l_tmpa_tl}
+		}
+	}
+	\tl_set:Ne{#1}{\seq_use:Nn{\l_tmpa_seq}{,~}}
+}
+
+\cs_set_protected_nopar:Npn \LEGACY__dnd_stat_details:
+{
+	\tl_clear:N\l_tmpa_saves
+	\LEGACY__dnd_format_saves:n{\l_tmpa_saves}
+	%% Each item is wrapped in command that ensures it only appears 
+	%% if the value is non-empty
+	\begin {description}[
+		before   = \color {StatblockHeading},
+		font     = \RpgFontStatBlockBody\color {StatblockHeading},
+		labelsep = \__rpg_SpaceDim,
+		nosep]
+
+	\__maybe_item:nn {Saving~Throws}			{\l_tmpa_saves}
+	\__maybe_item:ne {Skills}					{\__dnd_statProcessedSkills}
+	\__maybe_item:nn {Damage~Vulnerabilities}	{\__dnd_statDamageWeak}
+	\__maybe_item:nn {Damage~Resistances}		{\__dnd_statDamageResist}
+	\__maybe_item:nn {Damage~Immunities}		{\__dnd_statDamageImmune}
+	\__maybe_item:nn {Condition~Immunities}		{\__dnd_statConditionImmune}
+	\__maybe_item:nn {Senses}					{\__dnd_construct_perception:}
+	\__maybe_item:nn {Languages}				{\__dnd_statLanguages}
+	\__maybe_item:nn {Challenge}				{\__dnd_statCR{}~(\__dnd_statXP{}xp,~ proficiency:~\__dnd_format_signed_integer:N {\__dnd_statPB})}
+	\end {description}
+}
+

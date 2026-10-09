@@ -1,0 +1,18 @@
+%% Mockup document, rendering the cover and part pages of a theme so that they can be shown in the documentation
+%% makepages compiles it once for each theme, as page-<theme>.pdf, setting the theme through the command line:
+%%		xelatex -jobname=page-dnd "\def\RpgCMD{theme=dnd}\input{themepages}"
+%% Compiled on its own, it uses the default theme
+\documentclass[columns=1]{rpgbook}
+
+\title{The Sunken Temple}
+\subtitle{An adventure for four players}
+\author{A. Writer}
+\date{}
+\cover{../../img/enrag_d_monster_1974.53.22.jpg}
+\RpgCoverTransparency{0.6}
+\RpgPartTransparency{0.4}
+
+\begin{document}
+	\maketitle
+	\part[../../img/the_mermaid_2008.115.1238.jpg]{Into the Depths}
+\end{document}

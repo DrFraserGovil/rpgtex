@@ -1,0 +1,39 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Conditional multi-envs
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+
+\NewDocumentEnvironment{RpgIfEnv}{m O{} m O{} m}
+{
+	\group_begin:
+	\RpgIfSwitch{#1}
+	{
+		\tl_set:Ne \__rpg_env{#3}
+		\__rpg_beginEnv:nn{#3}{#2}
+	}
+	{
+		\tl_set:Ne \__rpg_env{#5}
+		\__rpg_beginEnv:nn{#5}{#4}
+	}
+}
+{
+	\exp_args:Ne\end{\__rpg_env}
+	\group_end:
+}
+%A clever little hack: so long as both environments take the same number of arguments, they will automatically be consumed:
+%\RpgSwitchEnvironment[o1]{env1}[o2]{env2}{arg1}{arg2} expands to {env1}[o1}{arg1}{arg2} or {env2}[o2]{arg1}{arg2}
+%This allows arbitrary environment arguments to be passed, so long as both env1 and env2 use the same pattern
+
+%% Protect against optional argument expansion by ensuring opts only passed if present
+%% This means we don't need to worry about O{} vs o downstream
+\cs_new_protected:Npn \__rpg_beginEnv:nn#1#2
+{
+	\tl_if_empty:eTF{#2}
+	{
+		\begin{#1}
+	}
+	{
+		\begin{#1}[#2]
+	}
+}
+

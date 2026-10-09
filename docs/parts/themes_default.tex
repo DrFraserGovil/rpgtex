@@ -1,183 +1,138 @@
+% !TEX root = ../documentation.tex
 \RpgSetTheme{default}
 \chapter{\texttt{default} Theme}\label{Theme:Default}
 
-    As the name suggests, the \texttt{default} theme is the theme which is loaded if no arguments are passed to \texttt{theme} when loading the \rpgtex{} package. As such, it is largely a re-statement of the default \LaTeX{} values. This is important, as most other themes begin by first re-inserting the default theme; thereby resetting everything into a `known state'. This means that they only need to define formatting which differs from the default. 
-    
-    The majority of this document has been typeset in a rpgbook class \RpgPage[p]{S:bookClass} using the default theme.
+	As the name suggests, the \texttt{default} theme is the theme which is loaded if no arguments are passed to \texttt{theme} when loading the \rpgtex{} package. As such, it is largely a re-statement of the default \LaTeX{} values. This is important, as most other themes begin by first re-inserting the default theme; thereby resetting everything into a `known state'. This means that they only need to define formatting which differs from the default.
 
-    \section{Appearance}
-        \subsection{Fonts}
-            The default format defines only a single font: the Latin Modern Roman font, the standard \LaTeX{} font. For consistency with the rest of the library (which uses fontspec-defined fonts), we have used an OTF version of LMR which is bundled with the package.
-            
-            \RpgMacro{lrfont}{}{The name given to the Latin Modern Roman font-family (extended with a small-caps font; Latin Modern Roman Caps) defined by the default theme}{}{}{}
+	The majority of this document has been typeset in the rpgbook class \RpgPage[p]{S:bookClass} using the default theme.
 
-             The values assigned to the font elements areas follows (note that \verb|\normalfont| is aliased to the value of RpgFontBody).
+	\section{Appearance}
+		\subsection{Fonts}
+			If the \texttt{font} option is active, the default theme defines a single font family, \cmd{lrfont}: Latin Modern Roman, the standard \LaTeX{} font. For consistency with the rest of the library (which uses fontspec-defined fonts), we have used an OTF version of Latin Modern Roman, which is available on all systems with a TeX Live installation. It is used for the body text and the headings. The titles and headers of tables, the titles of tips and sidebars, and the section headings of statblocks instead use the standard sans-serif family, Latin Modern Sans.
 
-            \InsertFontTable{}
-            
-        \subsection{Colors}
-
-            The default theme colors are largely monochromatic:
-
-            \DefaultSwatches{}
-
-        \subsection{Backgrounds \& Footers}
-            The default theme defines no background or headers (and clears any existing ones). The footer consists of the chapter name and a page number, using the appropriate fonts (\cmd{RpgFontFooter} and \cmd{RpgFontPageNumber}). 
-
-
-        \subsection{Text Boxes}
-
-            The default text boxes are very simple in design:
-
-            \begin{multicols}{3}
-                
-                \begin{RpgSidebar}{The RpgSidebar}
-                    Has minor decorations at the top and bottom to distinguish it from an RpgTip
-                \end{RpgSidebar}
-                
-                \begin{RpgTip}{The RpgTip}
-                    Almost entirely undecorated
-                \end{RpgTip}
-
-                \begin{RpgNarration}
-                    RpgNarration is also simple; but uses the narration color
-                \end{RpgNarration}
-            \end{multicols}
-
-
-
-        \subsection{Section Headers}
-
-                Only chapters\footnote{If in an rpgbook / other class which support chapters} are numbered; all other section/subsections (etc.) are unnumbered. Otherwise there are no changes made to the titles aside from minor spacing changes, and the assignment of the relevant fonts.
-          
-
-              \begin{ExampleBlock}{Section Headers}
-    \section*{Example} %starred so not added to toc; otherwise the same
-    \subsection{Another Example}
-    \subsubsection{More Examples!}
-            \end{ExampleBlock}
-
-        \subsection{RpgDice}\index{RpgDice}
-            
-            The default RpgDice format is $n\mathrm d x + m$:
-            \begin{ExampleBlock}{Default Dice}
-            \RpgDice{3d8 -5 +2}
-            \end{ExampleBlock}
-
-    \newpage
-    \section{RpgItem}\label{S:DefaultItem}
-
-		\RpgMacro[RpgItem!Theme!default]{RpgItem}{\param{\paramO m \paramO}}{The default configuration of the \envref{RpgItem} environment, used to describe physical objects and equipment.}
-			{
-				\cmd{RpgItemShowCard\param{true/false}} \% set the card mode
-
-				\cmd{begin}\param{RpgItem}[card-opts]\param{Item Name}[key-values]
-
-				~~<body text>
-
-				\cmd{end}\param{RpgItem}
+			\RpgFunction{lrfont}{\param{}}{
+				Applies the Latin Modern Roman font-family (extended with a small-caps font; Latin Modern Roman Caps) defined by the default theme
 			}
-			{
-			As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgItemShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
-			
-			The \texttt{default} theme defines two keys for the RpgItem object:
-			\begin{RpgTable}{llX}
-				Key & Default Value & Effect
-				\\
-				description & \param{} & An italicised byline used to summarise the item
-				\\
-				image & \param{} & If non-empty, define an image path which is used when in card-mode.
-			\end{RpgTable}
-			}
-    \begin{ExampleBlock}{Default RpgItem: Text Mode}
-    \RpgItemShowCard{false}
-    \begin{RpgItem}{Joyeuse}[
-        description={The Sword Jewellous},
-        image={../example/img/joyeuse}
-    ]
-        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
-    \end{RpgItem}
-    \end{ExampleBlock}
-    \begin{ExampleBlock}{Default RpgItem: Card Mode}
-    \RpgItemShowCard{true}
-    \begin{RpgItem}{Joyeuse}[
-        description={The Sword Jewellous},
-        image={../example/img/joyeuse}
-    ]
-        The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
-    \end{RpgItem}
-    \end{ExampleBlock}
 
-\newpage
-\section{RpgFeat}
-	\RpgMacro*[RpgFeat!Theme!default]{RpgFeat}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgFeat} environment, used to describe abilities and character features and choices.}
-		{
-			\cmd{RpgFeatShowCard\param{true/false}} \% set the card mode
+			The values assigned to the font elements are as follows (note that \cmd{normalfont} is aliased to the value of \FontRef{Body}).
 
-			\cmd{begin}\param{RpgFeat}[card-opts]\param{Feat Name}[key-values]
+			\InsertFontTable{}
 
-			~~<body text>
+		\subsection{Colors}
 
-			\cmd{end}\param{RpgFeat}
-		}
-		{As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgFeatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
-				
-			The \texttt{default} theme defines only a single key for the RpgFeat object:
-			\begin{RpgTable}{llX}
-			Key & Default Value & Effect
+			The default theme colors are largely monochromatic:
+
+			\DefaultSwatches{}
+
+		\subsection{Backgrounds \& Footers}
+			The default theme defines no background or headers (and clears any existing ones). The footer consists of the chapter name and a page number, using the appropriate fonts (\FontRef{Footer} and \FontRef{PageNumber}).
+
+
+		\subsection{Text Boxes}
+
+			The default text boxes are very simple in design:
+
+			\begin{multicols}{2}
+
+				\begin{RpgSidebar}{The RpgSidebar}
+					Has minor decorations at the top and bottom to distinguish it from an RpgTip
+				\end{RpgSidebar}
+
+				\begin{RpgTip}{The RpgTip}
+					Almost entirely undecorated
+				\end{RpgTip}
+
+				\begin{RpgNarration}
+					RpgNarration is also simple; but uses the narration color
+				\end{RpgNarration}
+				\vfil
+				\begin{RpgFiligree}
+					The filigree decorates each corner with curved strokes.
+				\end{RpgFiligree}
+			\end{multicols}
+
+			The filigree frame \RpgPage[p]{S:Filigree} draws four nested, curved strokes across each corner of the box, in \texttt{FiligreeColor}. The strokes reach from 0.2 to 1.4 times \cmdref{RpgFiligreeSize} along each edge, so the design grows and shrinks with that size.
+
+
+
+
+		\subsection{Title \& Part Pages}\label{S:DefaultTitles}
+
+			The title of a document is created by \cmdref{maketitle}, in one of two styles: a compact title or a cover page. The class chooses which is used \RpgPage[p]{C:Classes}, and a designer may change it with \cmdref{RpgThemeTitleMode}. The theme decides how each style looks.
+
+			\subsubsection{Compact Title}
+
+				The compact title is used by the \texttt{rpghandout} and \texttt{rpgdeck} classes. The default theme centres the title (in \FontRef{Title}) at the top of the page, followed by the subtitle and the author (both in \FontRef{SubTitle}). In a two-column document, the title spans both columns. Since the compact title is part of the text, it can be shown here:
+
+				\RpgGetExample{theme-title-header}
+
+			\subsubsection{Cover Page}
+
+				The cover page is used by the \texttt{rpgbook} class. The default theme places the title, subtitle, author and date in a column at the centre of a page of their own, in the same fonts as the compact title. If a cover image has been set with \cmdref{cover}, it fills the page behind the text, faded according to \cmdref{RpgCoverTransparency}. The first page of this manual is a default-theme cover page, with a typewriter as its cover image.
+
+			\subsubsection{Part Pages}
+
+				In classes which have parts, such as \texttt{rpgbook}, \cmdref{part} produces a page of its own. The default theme places the word `Part' and the part's number in capitals, with the name of the part below, centred a little above the middle of the page, in \FontRef{Part}. An image may be placed behind the text, either for a single part (with the optional argument of \cmd{part}) or for every part (with \cmdref{RpgDefaultPartImage}), faded according to \cmdref{RpgPartTransparency}. The pages which begin each part of this manual are default-theme part pages.
+
+				The cover and part pages of a short example document, typeset with the default theme, are:
+				\ThemePages{default}
+
+		\subsection{Section Headers}
+
+			Only parts and chapters\footnote{In rpgbook, or another class which supports chapters and parts.} are numbered; all other section/subsections (etc.) are unnumbered. Each level uses its own font element, with some changes to the spacing, and two changes to the standard layout:
+			\begin{itemize}
+				\item A chapter heading is a single line, `Chapter 3: Title', rather than the number and title on separate lines. In the appendices, `Chapter' is replaced by `Appendix'.
+				\item Paragraph and subparagraph headings are run into the start of their text, and followed by a full stop. Subparagraph headings are also indented.
+			\end{itemize}
+
+
+			\RpgGetExample{theme-section-headers}
+
+		\subsection{Table of Contents}
+
+			The table of contents lists only parts, chapters and sections. Each part is listed as `Part I: Title', with a rule beneath it, and each chapter as `3: Title'. Sections are indented beneath their chapter, with a dotted line leading to their page number. Parts and chapters are not given page numbers, except in the appendices, where each chapter is listed as `Appendix A: Title', with its page number. The contents of this manual are typeset in the default theme.
+
+		\subsection{RpgDice}\index{RpgDice}
+
+			The default RpgDice format is $n\mathrm d x + m$, and if the modifier is zero, it is omitted:
+			\RpgGetExample{theme-dice}
+			The usual computing and collating of modifiers into a single value apply.
+	\section{RpgItems}\label{S:DefaultItem}
+
+		The default theme gives \texttt{RpgItem} \RpgPage[p]{S:RuleEnvs} two properties:
+		\begin{RpgTable}{lXl}
+			Property & Effect & Default
 			\\
-			requires & \param{} & If non-empty, an italicised note is added, indicating the prerequisites for acquiring the ability.
-			\end{RpgTable}
-		}
-    \begin{ExampleBlock}{Default RpgFeat: Text Mode}
-    \RpgFeatShowCard{false}
-    \begin{RpgFeat}{Hyperattack}[
-         requires={Mega-attack},
-    ]
+			\texttt{description} & A short summary of the item, shown in italics beneath its name. & \textit{(none)}
+			\\
+			\texttt{image} & The path to an image of the item, shown beneath its name and description, at most 3cm tall. & \textit{(none)}
+		\end{RpgTable}
 
-        You can unleash superhuman speed against your enemies. Once per day, make \RpgDice{3d10} additional attacks.
-    \end{RpgFeat}
-    \end{ExampleBlock}
-    \begin{ExampleBlock}{Default RpgFeat: Card Mode}
-    \RpgFeatShowCard{true}
-    \begin{RpgFeat}{Hyperattack}[
-        requires={Mega-attack},
-    ]
+		In text mode, the name of the item is typeset as a \cmd{subsection}, followed by the description, the image and the body:
 
-        You can unleash superhuman speed against your enemies. Once per day, make \RpgDice{3d10} additional attacks.
-    \end{RpgFeat}
-    \end{ExampleBlock}
-\newpage
-\section{RpgSpell}
+		\RpgGetExample{default-item-text}
 
-	\RpgMacro*[RpgSpell!Theme!default]{RpgSpell}{\param{\paramO m \paramO}}{ The default configuration of the \envref{RpgSpell} environment, used to describe magical spells or spell-like abilities.}
-		{
-			\cmd{RpgSpellShowCard\param{true/false}} \% set the card mode
+		In card mode, which is turned on with \cmd{RpgSwitch}\param{UseItemCard}\param{on} \RpgPage[p]{Cmd:RpgSwitch}, the name, description and image are centred at the top of the card, in \FontRef{CardTitle} and \FontRef{CardHeader}, and the body follows in \FontRef{CardBody}:
 
-			\cmd{begin}\param{RpgSpell}[card-opts]\param{Spell Name}[key-values]
+		\RpgGetExample{default-item-card}
 
-			~~<body text>
+	\section{RpgFeats}\label{S:DefaultFeat}
 
-			\cmd{end}\param{RpgSpell}
-		}
-		{As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgSpellShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
-				
-			The \texttt{default} RpgSpell is a placeholder; it defines no keys, and defines no special formatting for RpgSpell; on the assumption that `spells' are so system dependent as to make an attempt to make a default would be pointless.
-		}
+		The default theme gives \texttt{RpgFeat} \RpgPage[p]{S:RuleEnvs} a single property:
+		\begin{RpgTable}{lXl}
+			Property & Effect & Default
+			\\
+			\texttt{requires} & The prerequisites for gaining the ability, shown as `Requires: \ldots' in \FontRef{CardHeader}. & \textit{(none)}
+		\end{RpgTable}
 
-\section{RpgStat}
+		In text mode, the name of the feat is typeset as a \cmd{subsection}, followed by its prerequisites (if any) and the body:
 
-	\RpgMacro*[RpgStat!Theme!default]{RpgStat}{\param{\paramO m \paramO}}{ The dnd configuration of the \envref{RpgStat} environment, used to describe monsters and enemies via a \textit{statblock}}
-		{
-			\cmd{RpgStatShowCard\param{true/false}} \% set the card mode
+		\RpgGetExample{default-feat-text}
 
-			\cmd{begin}\param{RpgStat}[card-opts]\param{Creature Name}[key-values]
+		In card mode, which is turned on with \cmd{RpgSwitch}\param{UseFeatCard}\param{on} \RpgPage[p]{Cmd:RpgSwitch}, the prerequisites are placed at the bottom of the card instead:
 
-			~~<body text>
+		\RpgGetExample{default-feat-card}
 
-			\cmd{end}\param{RpgStat}
-		}
-		{As with all FeatureForge environments, has the ability to switch between `text mode' and `card mode' depending on the value passed to \cmd{RpgStatShowCard} \RpgPage[p]{Macro:Rpg[X]ShowCard}. 
-				
-			The \texttt{default} RpgStat is a placeholder; it defines no keys, and defines no special formatting; on the assumption that `statblocks' are so system dependent as to make an attempt to make a default would be pointless.
-		}
+	\section{RpgSpells \& RpgStats}\label{S:DefaultSpellStat}
+
+		The default theme does not configure \texttt{RpgSpell} or \texttt{RpgStat} \RpgPage[p]{S:RuleEnvs}, since spells and statblocks depend so heavily on the rules of a particular game. They have no properties, and use the formats built into \rpgtex{}: the name is typeset as a \cmd{subsection}, followed by the body, both in text mode and on a card. Themes for a particular game, such as \texttt{dnd}, define their own.

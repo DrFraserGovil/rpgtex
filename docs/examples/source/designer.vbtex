@@ -1,0 +1,224 @@
+% example = des-callout-style
+% title = Restyling a Callout
+% highlight = tcbset, RpgTip
+	\tcbset{
+		rpgtip/.append style={
+			sharp corners,
+			borderline west={3pt}{0pt}{black},
+		}
+	}
+
+	\begin{RpgTip}{A Restyled Tip}
+		This tip has square corners, and a rule down its left-hand side.
+	\end{RpgTip}
+
+% example = des-dice-format
+% title = RpgDice Formatting: The D\&D Format
+% highlight = RpgThemeDiceFormat, RpgDice
+	Before: \RpgDice{2d8 + 3}, \RpgDice{d8}
+
+	\ExplSyntaxOn
+	\RpgThemeDiceFormat{ % #1: Dice Number, #2: Dice Sides, #3: Modifier
+		%% d8 -> 1d8
+		%% the arguments are variables, so must be expanded before testing
+		\tl_set:Ne \l_tmpa_tl { \tl_if_blank:eTF {#1} {1} {#1} }
+		%% compute the average roll, and print it first
+		\fp_eval:n { floor ( \l_tmpa_tl * ( #2 + 1 ) / 2 ) + ( #3 ) }
+		~( \l_tmpa_tl d#2 \fp_compare:nNnF { #3 } = { 0 } { #3 } )
+	}
+	\ExplSyntaxOff
+
+	After: \RpgDice{2d8 + 3}, \RpgDice{d8}
+
+% example = des-drop-cap-height
+% title = Changing the Drop Cap Height
+% highlight = RpgThemeDropCapHeight, RpgDropCap
+	\RpgThemeDropCapHeight{2}
+
+	\RpgDropCap{T}{he road} winds down from the pass into a valley of grey stone, where the river has long since run dry and the old watchtowers stand empty.
+
+% example = des-filigree
+% title = A Custom Filigree
+% highlight = RpgThemeSetFiligree, RpgFiligree, RpgFiligreeSize
+	\RpgThemeSetFiligree{
+		%% a bracket at each corner, scaled by \RpgFiligreeSize
+		\foreach \corner/\dx/\dy in
+			{north west/1/-1, north east/-1/-1, south west/1/1, south east/-1/1}
+		{
+			\draw[thick]
+				($(frame.\corner)+(0,{2*\dy*\RpgFiligreeSize})$)
+				-- (frame.\corner)
+				-- ($(frame.\corner)+({2*\dx*\RpgFiligreeSize},0)$);
+		}
+	}
+
+	\begin{RpgFiligree}
+		The frame is drawn over the box, so it can extend beyond its edges.
+	\end{RpgFiligree}
+
+% example = des-footer
+% options = listing only
+% highlight = RpgThemeFooterDecoration, RpgPut
+	\fancyfoot[LE]{%
+		\RpgThemeFooterDecoration{1.5cm}{path/to/scroll}{
+			\RpgPut{0.43in}{0.15in}{\RpgFontPageNumber \thepage}
+		}
+	}
+	\fancyfoot[RO]{%
+		\RpgThemeFooterDecoration*{1.5cm}{path/to/scroll}{
+			\RpgPut{\paperwidth-0.43in}{0.15in}{\RpgFontPageNumber \thepage}
+		}
+	}
+
+% example = des-keys
+% options = listing only
+% highlight = RpgThemeKeys, RpgThemeTLKey, RpgThemeBoolKey, RpgThemeTLChoiceKey
+	\RpgThemeKeys{rpg/my-env}
+	{
+		\RpgThemeTLKey {title} {\l_myenv_title_tl} {Untitled}
+		\RpgThemeBoolKey {hidden} {\l_myenv_hidden_bool}
+		\RpgThemeTLChoiceKey {size} {\l_myenv_size_tl} {small,large} {small}
+	}
+
+	\keys_set:nn {rpg/my-env} {title=Hello, hidden, size=large}
+
+% example = des-map-format
+% title = RpgThemeMapFormat: Roman Numerals
+% highlight = RpgThemeMapFormat, RpgMap, RpgArea, area
+	\ExplSyntaxOn
+	\RpgThemeMapFormat{ % #1: depth, #2: position at that depth
+		\int_compare:nNnTF {#1} = {1}
+		{ \int_to_Roman:n {#2} }		%% outermost: I, II, III, ...
+		{ . \int_to_arabic:n {#2} }	%% deeper: .1, .2, .3, ...
+	}
+	\ExplSyntaxOff
+
+	\begin{RpgMap}[header-offset=2]
+		\area{Gatehouse} The only way in.
+
+		\begin{RpgArea}{Keep}
+			\area{Armoury} Racks of old spears.
+
+			\begin{RpgArea}{Cellars}
+				\area{Wine Store} Mostly empty.
+			\end{RpgArea}
+		\end{RpgArea}
+	\end{RpgMap}
+
+% example = des-potion-card-format
+% title = A Custom Card Format
+% highlight = RpgThemePotionCardFormat, RpgPotionAddProperty, RpgPotion, RpgSwitch
+	\RpgPotionAddProperty{colour}{\PotionColour}{gray}
+	\RpgPotionAddProperty{rarity}{\PotionRarity}{common}
+
+	\RpgThemePotionCardFormat{
+		\begin{center}
+			{\RpgFontCardTitle #1}\par
+			\textcolor{\PotionColour!70!black}{\rule{0.5\linewidth}{1pt}}\par\medskip
+			\vfil
+			 
+			\begin{tikzpicture}
+				%% the liquid, filling the lower part of the flask
+				\begin{scope}
+					\clip (0,0) circle (0.7);
+					\fill[\PotionColour!75] (-0.7,-0.7) rectangle (0.7,0.2);
+					\fill[\PotionColour!40] (-0.7,0.15) rectangle (0.7,0.2);
+					\foreach \x/\y/\r in {-0.25/-0.3/0.07, 0.2/-0.1/0.05, 0.05/-0.45/0.04}
+						{ \draw[white, opacity=0.8] (\x,\y) circle (\r); }
+				\end{scope}
+				%% the flask, its neck and the cork
+				\draw[very thick] (-0.17,0.68) -- (-0.17,1.05) (0.17,0.68) -- (0.17,1.05);
+				\draw[very thick] (0,0) circle (0.7);
+				\fill[brown!60!black, rounded corners=1pt] (-0.22,1.0) rectangle (0.22,1.25);
+				\fill[white, opacity=0.6] (-0.38,0.22) circle (0.09);
+			\end{tikzpicture}\par\medskip
+			\textsc{\PotionRarity}\par\medskip
+			\vfil
+
+			\small\itshape #2
+
+			\vfil
+		\end{center}
+	}
+
+	\RpgSwitch{UsePotionCard}{on}
+	\begin{RpgPotion}[width=5cm, height=6cm]{Potion of Healing}[colour=red, rarity=uncommon]
+		Restores \RpgDice{2d4+2} hit points when drunk.
+	\end{RpgPotion}
+	\begin{RpgPotion}{Flask of Oil}[colour=orange]
+		When thrown or broken, covers all creatures and objects within 5ft in oil. The next time a creature covered in oil takes fire damage, they take \RpgDice{3d8} additional fire damage.
+	\end{RpgPotion}
+	\RpgSwitch{UsePotionCard}{off}
+
+% example = des-potion-format
+% title = A Custom Text Format
+% highlight = RpgThemePotionFormat, RpgPotionAddProperty, RpgPotionAddBoolean, RpgPotion
+	\RpgPotionAddProperty{colour}{\PotionColour}{gray}
+	\RpgPotionAddProperty{rarity}{\PotionRarity}{common}
+	\RpgPotionAddBoolean{magic}{\PotionMagic}
+
+	\ExplSyntaxOn
+	\RpgThemePotionFormat{ % #1: title, #2: body
+		\begin{tcolorbox}[
+				enhanced, sharp~corners, boxrule=0pt, leftrule=4pt,
+				colframe=\PotionColour!70!black, colback=\PotionColour!7,
+				colbacktitle=\PotionColour!70!black, coltitle=white,
+				title={
+					\textbf{#1}
+					\bool_if:NT \PotionMagic
+					{
+						\hspace{0.4em} \tikz[baseline=-0.6ex] \fill[yellow!80!orange]
+							(0,4pt) -- (1pt,1pt) -- (4pt,0) -- (1pt,-1pt)
+							-- (0,-4pt) -- (-1pt,-1pt) -- (-4pt,0) -- (-1pt,1pt) -- cycle;
+					}
+					\hfill \textit{\PotionRarity}
+				},
+			]
+			#2
+		\end{tcolorbox}
+	}
+	\ExplSyntaxOff
+
+	\begin{RpgPotion}{Potion of Healing}[colour=red, rarity=uncommon, magic]
+		Restores \RpgDice{2d4+2} hit points when drunk.
+	\end{RpgPotion}
+	\begin{RpgPotion}{Flask of Oil}[colour=orange]
+		When thrown or broken, covers all creatures and objects within 5ft in oil. The next time a creature covered in oil takes fire damage, they take \RpgDice{3d8} additional fire damage.
+	\end{RpgPotion}
+
+% example = des-rule-env
+% title = Creating a Rule Environment
+% highlight = RpgThemeNewCardableRuleEnv, RpgPotionAddProperty, RpgThemePotionFormat, RpgThemePotionCardFormat, RpgPotion, RpgSwitch
+	\RpgThemeNewCardableRuleEnv{Potion}{UsePotionCard}
+	\RpgPotionAddProperty{colour}{\PotionColour}{clear}
+
+	\RpgThemePotionFormat{
+		\paragraph{#1} (\PotionColour) #2
+	}
+	\RpgThemePotionCardFormat{
+		{\RpgFontCardTitle #1}\par
+		\textit{A \PotionColour{} liquid}\par
+		#2
+	}
+
+	\begin{RpgPotion}{Healing Draught}[colour=red]
+		Restores \RpgDice{2d4+2} hit points.
+	\end{RpgPotion}
+
+	\RpgSwitch{UsePotionCard}{on}
+	\begin{RpgPotion}[width=4.5cm, height=3cm]{Healing Draught}[colour=red]
+		Restores \RpgDice{2d4+2} hit points.
+	\end{RpgPotion}
+	\RpgSwitch{UsePotionCard}{off}
+
+% example = des-secrets
+% title = Inline Secrets
+% highlight = RpgThemeSetSecretHidden, RpgThemeSetSecretVisible, RpgSecret, RpgSwitch
+	\RpgThemeSetSecretHidden{#1}
+	\RpgThemeSetSecretVisible{#1 \textcolor{SecretColor!60!black}{[#2]}}
+
+	\RpgSwitch{ShowSecrets}{false}
+	Players: the door \begin{RpgSecret}{is locked}is trapped\end{RpgSecret}.
+
+	\RpgSwitch{ShowSecrets}{true}
+	GM: the door \begin{RpgSecret}{is locked}is trapped\end{RpgSecret}.

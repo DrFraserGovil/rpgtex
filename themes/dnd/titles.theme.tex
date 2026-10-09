@@ -1,0 +1,78 @@
+\ExplSyntaxOff
+
+\DeclareDocumentCommand\RpgThemeSetPHBParts{}
+{
+	\DeclareDocumentCommand\RpgThemePartPageTikz{}
+	{
+		\def\radius{0.18\paperwidth}
+		\def\overset{7}
+		\begin{tikzpicture}
+			\draw[line width=3pt,TitleGold,fill=BrTan] (0,0) ++ ({-\radius*cos(\overset)},{8pt}) arc ({180-\overset}:{360+\overset}:\radius)--cycle;
+		\end{tikzpicture}
+	}
+}
+\DeclareDocumentCommand\RpgThemeSetDMGParts{}
+{
+	\DeclareDocumentCommand\RpgThemePartPageTikz{}
+	{
+		\def\w{0.18\paperwidth}
+		\def\h{0.12\paperwidth}
+		\def\p{0.08\paperwidth}
+		\def\f{0.3}
+		\begin{tikzpicture}
+			\draw[line width=3pt,ContourGray!30!black,fill=BrTan] (-\w,0)--(\w,0)--(\w,-\h)--(0,{-(\h + \p)})--(-\w,-\h)--cycle;
+
+			\node (A) at ({-\w+\f*\w},{-\h - \f*\p}){};
+			\node (B) at ({\w-\f*\w},{-\h - \f*\p}){};
+			\draw[line width=3pt,ContourGray!30!black] (A) to[out=-20,in=-160] (B);
+			\draw[line width=2.1pt,ContourGray] (A) to[out=-20,in=-160] (B);
+
+			\draw[line width=2.1pt,ContourGray] (-\w,0)--(\w,0)--(\w,-\h)--(0,{-(\h + \p)})--(-\w,-\h)--cycle;
+		\end{tikzpicture}
+	}
+}
+
+\RpgThemeSetPHBParts{}
+\RpgThemePartPage
+{
+	\RpgPut[\paperwidth](t){0.5\paperwidth}{\paperheight+0.15cm}{
+		\RpgThemePartPageTikz
+	}
+
+	\RpgPut[0.4\paperwidth](t){0.5 \paperwidth}{\paperheight - 0.3cm}{
+		\RpgFontPart{} \MakeUppercase{Part \arabic{part}}
+	}
+	\RpgPut[0.4\paperwidth](t){0.5 \paperwidth}{\paperheight - 2.2cm}{
+		\RpgFontPartSubtitle{} #1
+	}
+}
+
+
+\usetikzlibrary {shadows}
+\ExplSyntaxOn
+
+\RpgThemeTitleCover
+{
+	\def\w{0.3\paperwidth}
+	\def\h{0.005\paperwidth}
+	\RpgPut[0.9\paperwidth](t){0.5 \paperwidth}{\paperheight-3cm}{ \RpgContour[inner=white,outer=black,style=\RpgFontTitle]{\RpgGetTitle*}
+		% %%fancy red diamond
+		\begin{center}
+			\begin{tikzpicture}
+				\fill[red,circular~ glow={fill=black!80!red}] (0,0)--++(\w,-\h)--++(-\w,-\h)--++(-\w,\h)--cycle;
+			\end{tikzpicture}
+		\end{center}
+	}
+
+	\RpgPut[\paperwidth](b){0.5\paperwidth}{1cm}{
+		\begin{center}
+			\RpgContour[inner=white,outer=black,style={\RpgFontSubTitle}]{\RpgGetSubtitle*}
+		\end{center}
+
+		\vspace{1cm}
+
+		{\RpgContour[inner=white,outer=black,style={\RpgFontSubTitle\huge}]{\RpgGetAuthor*}}
+	}
+}
+
+\ExplSyntaxOff

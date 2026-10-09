@@ -1,0 +1,22 @@
+% title = A Complete Statblock
+% highlight = RpgStat
+\begin{ExampleBlock}[RpgStat][listing side text]{A Complete Statblock}
+\begin{RpgStat}{Gorgenhar, the Devourer}[
+    nickname = Gorgenhar,
+    size = Large, type = Fiend, alignment = Chaotic Evil,
+    ac = 17 (natural armor), hp = \RpgDice{10d10+30}, speed = 40ft,
+    str = 20, dex = 14, con = 16, int = 11, wis = 13, cha = 18,
+    str-save, con-save,
+    skills = {perception, athletics}, skills-expertise = {stealth},
+    senses = darkvision 60ft, languages = Abyssal,
+    damage-resistances = fire, condition-immunities = poisoned,
+    cr = 7,
+]
+    \section{Traits}
+        \trait{Fiery Aura} At the start of each of its turns, each creature within 5ft of \name{} takes \RpgDice{1d6} fire damage.
+    \section{Actions}
+        \melee{Claw}[dmg=2d6+5, dmg-type=slashing, plus-dmg=1d6, plus-type=fire]
+\end{RpgStat}
+
+
+\end{ExampleBlock}

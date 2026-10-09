@@ -1,0 +1,76 @@
+%%%%%%%%%%%%%%%%%%%
+% Dice formatting
+%%%%%%%%%%%%%%%%%%%
+
+\ExplSyntaxOn
+
+
+%% Parses input of the form { #d# | d# | #d# ± # | d# ± #}
+%%Final argument (the ± term) can be arbitrary arithmetic statements
+%% Output format depends on the theme
+\DeclareDocumentCommand { \RpgDice } { m }
+{
+	%% invokes the general parsing function (below), which in turn invokes the theme-defined display format
+	\__rpg_DiceParse:n {#1}
+}
+
+%% Set the function used for formatting RpgDice
+%% Arguments: #1: Dice Number, #2: Dice Sides, #3: Modifier
+\DeclareDocumentCommand{ \RpgThemeDiceFormat} {m}
+{
+	\cs_set:Nn  \__rpg_DiceFormatter:nnn{#1}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Dice parsing Regex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\cs_new:Nn		\__rpg_DiceFormatter:nnn{#1d#2#3}						 % This is where the RpgThemeDiceFormat is stored
+\regex_const:Nn	\__rpg_ValidDiceRegex	{ \A\s*(\d*)[dD](\d+)(.*)\s*\Z } % This regex matches allowed input strings
+
+
+% Define the temporary values we store things in (not technically needed due to their types, but good practice)
+\seq_new:N		\__rpg_diceArgs
+\tl_new:N		\__rpg_diceNumber
+\tl_new:N		\__rpg_diceSides
+\tl_new:N		\__rpg_diceMod
+
+%% Parse an input string of the form (ndx + m) into (n,x,m), and pass these on to the formatter
+%% Allows n to be missing, and evaluates m from floating point expressions
+\cs_new_protected:Npn \__rpg_DiceParse:n #1
+{
+	\group_begin:
+	\regex_extract_once:NnNTF { \__rpg_ValidDiceRegex } { #1 } \__rpg_diceArgs
+	{
+		\seq_pop_left:NN \__rpg_diceArgs \__tmpStr			% First element is the string (discard)
+		\seq_pop_left:NN \__rpg_diceArgs \__rpg_diceNumber	% # of dice
+		\seq_pop_left:NN \__rpg_diceArgs \__rpg_diceSides	% # of sides
+		\seq_pop_left:NN \__rpg_diceArgs \__rpg_diceMod		% modifier
+
+
+		%% Evaluate the dice mod using standard floating point arithmetic parser 
+		\fp_set:Nn \__rpg_evaluatedMod {
+			\tl_if_empty:NTF \__rpg_diceMod
+			{	%(if no diceMod present, set it equal to 0) 
+				0
+			}
+			{
+				\__rpg_diceMod
+			}
+		}
+
+
+		% --- Pass everything to the formatter ---
+		\__rpg_DiceFormatter:nnn
+		{ \__rpg_diceNumber }     % #1: Number/Dice Count 
+		{ \__rpg_diceSides  }      % #2: Size of dice
+		{ \fp_compare:nNnF { \fp_use:N \__rpg_evaluatedMod } { < } { 0 }{+}\fp_use:N \__rpg_evaluatedMod} % #3 final computed modifier (with + if positive)
+	}
+	{
+		%% If a bad string is passed, we do not formatting; just return the input string
+		#1
+	}
+	\group_end:
+}
+
+

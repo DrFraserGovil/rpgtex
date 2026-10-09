@@ -1,0 +1,20 @@
+% title = RpgSpell: Card Mode
+% highlight = RpgSpell, RpgSpellUpcast, RpgSwitch
+\begin{ExampleBlock}[RpgSpell, RpgSpellUpcast, RpgSwitch][listing side text]{RpgSpell: Card Mode}
+\RpgSwitch{UseSpellCard}{on}
+\begin{RpgSpell}[width=6cm, height=9cm]{Cone of Cold}[
+    school = Evocation,
+    level = 5,
+    range = self,
+    area = 60ft cone,
+    components = VSM\footnote{A small crystal or glass cone},
+    source = Free Basic Rules (2014),
+]
+    A blast of cold air erupts from your hands. Each creature in the cone must make a Constitution saving throw, taking \RpgDice{8d8} cold damage on a failed save, or half as much on a successful one.
+
+    \RpgSpellUpcast{1d8}
+\end{RpgSpell}
+\RpgSwitch{UseSpellCard}{off}
+
+
+\end{ExampleBlock}

@@ -1,0 +1,27 @@
+\ExplSyntaxOn
+\NewDocumentEnvironment{fontlist}{+b}{
+	\vspace{1em}
+
+	% \hspace{-1.5cm}
+	% \let\__rpg_colsep:&
+	\noindent\begin{RpgTable}[breakable]{llX}
+		Font~Element & Components & Usage \\
+		#1
+	\end{RpgTable}}{}
+
+\NewDocumentCommand{\FontElement}{O{RpgFont} m +m +m}
+{
+\small\tt \declareCmd{#1#2}
+
+&
+\parbox[t]{4cm}{\tt {#3-family} \\ {#3-style} }
+&
+#4
+\\
+}
+
+\NewDocumentCommand\FontRef{m}
+{
+	\cmdref{RpgFont#1}
+}
+\ExplSyntaxOff

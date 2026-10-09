@@ -1,0 +1,96 @@
+% !TEX root = ../documentation.tex
+\chapter{Fonts} \label{C:Fonts}
+
+
+	\rpgtex{} allows a high degree of customisation of the fonts and typefaces used throughout a document. Rather than setting fonts directly, each part of the document (headings, table text, footers and so on) draws its font from a named \emph{font element}, such as \FontRef{Section}. The theme defines the appearance of each element using \cmd{RpgThemeFont}, and assigns each element to the relevant part of the document. Changing the appearance of an element therefore changes it consistently wherever that element is used.
+
+	\begin{RpgSidebar}{Why didn't my font change?}
+		\cmd{RpgThemeFont} does not change any fonts directly: it updates the stored definition of a \emph{font element}, which a theme designer must then assign to the relevant part of the document. For example, the \FontRef{Section} element does not `hook in' to the \cmd{section} command by itself; it changes the section font only because most themes call \texttt{\textbackslash{}titleformat\{\textbackslash{}section\}\{\textbackslash{}RpgFontSection\}...}. If the \texttt{titleformat} were later changed (for whatever reason), the section font would no longer update.
+
+		If an element does not change font after its definition is updated, first check that the font element is actually being invoked -- and if not, invoke it manually. Once the command is in place, the font will change as expected.
+
+		Note also that \cmd{RpgThemeFont} has no effect unless the \texttt{font} option is active \RpgPage[p]{S:PackageOptions}. This is the default when using one of the \rpgtex{} classes.
+	\end{RpgSidebar}
+
+
+	\section{Font Commands}
+
+
+		\RpgFunction{RpgThemeFont}{\param{key-value-list}}
+		{
+			Updates the font elements specified by a comma-separated list of key-value pairs. Each element has two keys, \texttt{<name>-family} and \texttt{<name>-style}, where \texttt{<name>} is given in the `Components' column of the table below (or was assigned by \cmd{RpgThemeCreateFont}).
+
+			The values may be any \LaTeX{} font or formatting commands (such as \texttt{\textbackslash{}slshape\textbackslash{}scriptsize\textbackslash{}bfseries}), which are applied whenever the element is invoked. To change the typeface itself, a font family must first be defined, for example using \cmd*{newfontfamily} from the \texttt{fontspec} package.
+
+			\RpgGetExample{modify-font}
+		}
+		\RpgFunction{RpgThemeCreateFont}{\param{\cmd*{ElementName}}\param{key-base}}
+		{
+			Creates a new font element, \cmd*{ElementName}, along with the keys \texttt{<key-base>-family} and \texttt{<key-base>-style}. A new element is initially blank (it applies no formatting) until it is assigned a value using \cmd{RpgThemeFont}. Thereafter, it may be used and modified in exactly the same way as the built-in font elements. Creating an element which already exists (for example, when a theme is loaded again) redefines it, and resets it to blank.
+
+			\RpgGetExample{create-font}
+		}
+
+	\section{Font Elements}
+
+		\rpgtex{} provides 35 font elements by default (themes may define more). Since each element is assigned to part of the document by the theme designer, an element intended for one purpose (such as section headings) may be used for a different purpose within another theme. The descriptions below therefore reflect how the elements are used by \rpgtex{} itself and by the provided themes.
+
+		\begin{RpgSidebar}{Family vs Style}
+			Each font element is defined by two components: a \texttt{family} and a \texttt{style}. Formally, the \texttt{family} defines the \textbf{typeface} used by the element, whilst the \texttt{style} determines the options applied to that typeface (weight, shape, size, colour and so on).
+
+			In practice the distinction is largely one of clarity, since the font element simply applies the two in sequence:
+			\begin{Code}
+				\textbackslash{}RpgFontX = <x-family> <x-style>
+			\end{Code}
+			It is therefore generally safe to place commands which belong in the family within the style key, provided that they do not conflict with other styling.
+
+			\vspace{1em}
+			{\RpgFontSidebarTitle{} \noindent{} Font vs Implementation}
+			\vspace{1em}
+
+			We encourage designers to place all text styling within the relevant font element, rather than elsewhere. If all subsections are to be red, then set \texttt{subsection-style=\textbackslash{}color\param{red}}, rather than setting the colour within the \texttt{titlesec} specification.
+
+		\end{RpgSidebar}
+
+
+
+		\begin{fontlist}
+			\FontElement{Body}{main-body}{The main body text of the document. \cmd{RpgThemeFont} sets \cmd{normalfont} equal to this element.
+
+				Changing the font size here (e.g.\ with \cmd*{large}) can give counterintuitive results, since it affects \textit{only} the body text and does not scale the other elements accordingly. The font size of the whole document should instead be set using the \texttt{size} option \RpgPage[p]{S:PackageOptions}.
+			}
+			\FontElement{Emphasis}{emph}{The font used by \cmd{RpgKey}, and therefore by \cmd{emph} unless the \texttt{noemph} option is passed.}
+			\FontElement{Title}{title}{The font used for the document title, as returned by \cmd{RpgGetTitle} and displayed by \cmd{maketitle}.}
+			\FontElement{SubTitle}{subtitle}{The font used for the subtitle and author, as returned by \cmd{RpgGetSubtitle} and \cmd{RpgGetAuthor} and displayed by \cmd{maketitle}.}
+			\FontElement{Part}{part}{The font used for the part name on the part page created by \cmd{part}.}
+			\FontElement{Chapter}{chapter}{The font used for \cmd{chapter} headings.}
+			\FontElement{Section}{section}{The font used for \cmd{section} headings.}
+			\FontElement{Subsection}{subsection}{The font used for \cmd{subsection} headings.}
+			\FontElement{Subsubsection}{subsubsection}{The font used for \cmd{subsubsection} headings.}
+			\FontElement{Paragraph}{paragraph}{The font used for \cmd{paragraph} headings.}
+			\FontElement{Subparagraph}{subparagraph}{The font used for \cmd{subparagraph} headings.}
+			\FontElement{TableTitle}{table-title}{The title of an \envref{RpgTable}, if one is set using the \texttt{title} option.}
+			\FontElement{TableHeader}{table-header}{The first (header) row of an \envref{RpgTable}.}
+			\FontElement{TableBody}{table-body}{The rows of an \envref{RpgTable} after the header row.}
+			\FontElement{TipTitle}{tip-title}{The title of an \envref{RpgTip} environment.}
+			\FontElement{TipBody}{tip-body}{The body of an \envref{RpgTip} environment.}
+			\FontElement{SidebarTitle}{sidebar-title}{The title of an \envref{RpgSidebar} environment.}
+			\FontElement{SidebarBody}{sidebar-body}{The body of an \envref{RpgSidebar} environment.}
+			\FontElement{Narration}{narration}{All text within an \envref{RpgNarration} environment (which has no title).}
+			\FontElement{AbstractTitle}{abstract-title}{The title of an \envref{RpgAbstract} environment.}
+			\FontElement{AbstractBody}{abstract-body}{The body of an \envref{RpgAbstract} environment.}
+			\FontElement{SecretTitle}{secret-title}{The labels which distinguish the hidden and public text of an \envref{RpgSecret} environment when secrets are shown.}
+			\FontElement{CardTitle}{card-title}{The title of a card, such as a rules-environment in card-mode (such as \texttt{RpgItem}).}
+			\FontElement{CardHeader}{card-header}{Subheadings and descriptive headers within a card (such as the type and rarity of an \texttt{RpgItem}).}
+			\FontElement{CardBody}{card-body}{The body text of an \envref{RpgCard}.}
+			\FontElement{TocPart}{toc-part}{Part entries in the table of contents.}
+			\FontElement{TocChapter}{toc-chapter}{Chapter entries in the table of contents.}
+			\FontElement{TocSection}{toc-section}{Section entries in the table of contents.}
+			\FontElement{StatBlockTitle}{stat-block-title}{An optional font which is applied to \env{RpgStat} environments by some themes to render the title.}
+			\FontElement{StatBlockBody}{stat-block-body}{An optional font which is applied to \env{RpgStat} environments by some themes to render the main body text.}
+			\FontElement{StatBlockSection}{stat-block-section}{An optional font which is applied to \env{RpgStat} environments by some themes to render the \cmd*{section} commands.}
+			\FontElement{Footer}{footer}{The footer text.}
+			\FontElement{PageNumber}{page-number}{The page number within the footer.}
+			\FontElement{DropCap}{drop-cap}{The large initial letter created by \cmd{RpgDropCap}.}
+			\FontElement{DropCapAfter}{drop-cap-after}{The text which follows the initial letter of an \cmd{RpgDropCap}, on the first line.}
+		\end{fontlist}

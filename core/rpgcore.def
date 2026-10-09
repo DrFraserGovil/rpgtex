@@ -1,4 +1,4 @@
-% \ExplSyntaxOn
+\ExplSyntaxOff
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Package Dependencies
@@ -7,84 +7,102 @@
 % Helps prevent option clash with other packages that include xcolor
 \PassOptionsToPackage {table} {xcolor}
 
-\RequirePackage {array}
-\RequirePackage {colortbl}
-\RequirePackage {enumitem}
-\RequirePackage {etoolbox}
-\RequirePackage {hang} % hanging paragraphs
-\RequirePackage {tabularx} % variable-width table columns
-\RequirePackage {xltabular} % breakable tables
+\RequirePackage {array}						% Array operations 
+\RequirePackage {enumitem}					% Manipulate lists
+\RequirePackage {hang}						% hanging paragraphs
+\RequirePackage {tabularx}					% variable-width table columns
+\RequirePackage {xltabular}					% breakable tables
+\RequirePackage {supertabular}				% long tables
 \RequirePackage [breakable,skins,xparse]{tcolorbox} % styled text boxes
-\RequirePackage {tikz} % drawing ornaments and lines
-\RequirePackage {xcolor}
-\RequirePackage{float}
-\RequirePackage [titles] {tocloft} % multi-column toc
-\RequirePackage [newparttoc] {titlesec}  % Used to adjust (sub)section, part, and table of contents formatting
-\RequirePackage{titletoc}
-\RequirePackage{fancyhdr}
-\RequirePackage{dblfloatfix}
-\RequirePackage {xparse} % \NewDocumentCommand and expl3
-\RequirePackage[hidelinks] {hyperref}
+\RequirePackage {tikz}						% drawing ornaments and lines
+\RequirePackage {xcolor}					% Nice colo(u)rs
+\RequirePackage [titles] {tocloft}			% multi-column toc
+\RequirePackage [newparttoc] {titlesec}		% Used to adjust (sub)section, part, and table of contents formatting
+\RequirePackage{titletoc}					%% Title manipulation
+\RequirePackage{fancyhdr}					%% For headers and footers
+\RequirePackage{transparent}
+\RequirePackage{float}						%% Better floats
+%\RequirePackage{dblfloatfix}				%% Float fixes for twocolumn environments
+\RequirePackage{stfloats}				%% Float fixes for twocolumn environments
+\RequirePackage{adjustbox}					%% For RpgCard boxes
+\RequirePackage{cuted}						%% For \strip environment
+\RequirePackage{nameref}					%% For \nameref command
+\RequirePackage {xparse}					% expl3 programming layer
+\RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
+\RequirePackage {ragged2e}
 
-\ExplSyntaxOff
+%% Might be needed later, so leave commented
+% \RequirePackage {etoolbox}					% Tools like \At
+% \RequirePackage[hidelinks] {hyperref}
+
 \usetikzlibrary{calc}
 \ExplSyntaxOn
 
 \sys_if_engine_luatex:T
-  {
-    \RequirePackage {luacolor}
-  }
+{
+	\RequirePackage {luacolor}
+}
 
 
-%% force layout changes -- but only if layout option triggered by class
-\bool_if:NT \l__rpg_layout_bool
-  {
-    \RequirePackage {geometry}
-    \RequirePackage {microtype} % Improve ragged2e hyphenation and overfull boxes
-    \RequirePackage {ragged2e}
+%% force layout changes -- but only when loaded through a class
+\bool_if:NT \__rpg_IsClass
+{
+	% \def\raggedright\RaggedRight
 
-    \bool_if:NT \l__rpg_multitoc_bool
-      { \RequirePackage [toc] {multitoc} }
+	\bool_if:NT \__rpg_HasMulticolToc
+	{ \RequirePackage [toc] {multitoc} }
 
-   
-    
 
-    % Restrict hyphenation
-    \tolerance        = 1
-    \emergencystretch = \maxdimen
-    \hyphenpenalty    = 10000
-    \hbadness         = 10000
 
-    % Set left justification if not justified
-    \bool_if:NF \l__rpg_justified_bool
-      { \RaggedRight }
 
-    % Customize itemize environment.
-    \setlist{leftmargin=1em}
-    \setitemize{noitemsep,topsep=0.5ex,label=\footnotesize{\textbullet}}
-  }
+	% Restrict hyphenation
+	\tolerance        = 1
+	\emergencystretch = \maxdimen
+	\hyphenpenalty    = 10000
+	\hbadness         = 10000
+
+	% Set left justification if not justified
+	\bool_if:NF \__rpg_IsJustified
+	{ \raggedright }
+
+	% Customize itemize environment.
+	\setlist{leftmargin=1em}
+	\setitemize{noitemsep,topsep=0.5ex,label=\footnotesize{\textbullet}}
+}
 
 % % % Load other modules of this package after all dependencies to avoid load order
 % % % conflicts (e.g., package options).
 % % % Low-level modules first.
-\input{core/lowlevel/internal_utility} %% provides some general expl3 macros we use in multiple places
 
-\RequirePackage {core/utility}   % utility functions
-\RequirePackage {core/colors}	% color definitions
-\RequirePackage {core/fonts}	    % font definitions
-\RequirePackage {core/environments/switchenv}
+\input {core/modules/	conditionals	.rpg-code.tex}
+\input {core/modules/	themes			.rpg-code.tex}
+\input {core/modules/	colors			.rpg-code.tex}
+\input {core/modules/	dice			.rpg-code.tex}
+\input {core/modules/	lengths			.rpg-code.tex}
+\input {core/modules/	text_utility	.rpg-code.tex}
+\input {core/modules/	fonts/fonts		.rpg-code.tex}
+\input {core/modules/	paper			.rpg-code.tex}
+\input {core/modules/	images			.rpg-code.tex}
+\input {core/modules/	sections		.rpg-code.tex}
+\input {core/modules/	parts			.rpg-code.tex}
+\input {core/modules/	switch			.rpg-code.tex}
+\input {core/modules/	titles			.rpg-code.tex}
 
-% % % Main modules in alphabetical order
-\RequirePackage {core/environments/card}
-\RequirePackage {core/environments/colorboxes}    % inline tip, narration and sidebar boxes
-\RequirePackage {core/environments/featureforge}
-\RequirePackage {core/environments/map}   % section styling and special section headers
-\RequirePackage {core/environments/secret}
-\RequirePackage {core/environments/table}      % tables
+\input {core/environments/	callouts		.rpg-code.tex}
+\input {core/environments/	filigree		.rpg-code.tex}
+\input {core/environments/	table			.rpg-code.tex}
+\input {core/environments/	abstract		.rpg-code.tex}
+\input {core/environments/	map				.rpg-code.tex}
+\input {core/environments/	ifEnv			.rpg-code.tex}
+\input {core/environments/	secret			.rpg-code.tex}
+\input {core/environments/	card			.rpg-code.tex}
+\input {core/environments/	make-env		.rpg-code.tex}
+% \RequirePackage {core/environments/switchenv}
 %
- % %% packages which do nothing but alter geometry/page settings, and so are ignored if the header layout setting is not active
-\RpgLayoutOnly{
-	\RequirePackage {core/titles}
-	\RequirePackage {core/headerdecorations}     % fancy headers and footers
-	\RequirePackage {core/sections}   % section styling and special section headers
-}
+% % % % Main modules in alphabetical order
+% \RequirePackage {core/environments/card}
+% \RequirePackage {core/environments/colorboxes}    % inline tip, narration and sidebar boxes
+% \RequirePackage {core/environments/featureforge}
+% \RequirePackage {core/environments/map}   % section styling and special section headers
+% \RequirePackage {core/environments/secret}
+% \RequirePackage {core/environments/table}      % tables

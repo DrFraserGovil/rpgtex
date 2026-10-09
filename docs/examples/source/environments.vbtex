@@ -1,9 +1,3 @@
-% example=env-card
-% options = listing only
-    \begin{RpgCard}[<key-value-opts>]
-        <contents>
-    \end{RpgCard}
-
 % example=env-card-dimensions
 %highlight = RpgCard
     \begin{tikzpicture}%wrap in tikz so we can draw dimensions
@@ -20,63 +14,32 @@
        
     \end{tikzpicture}
 
-    \vspace{0.5cm}
-
-    %shrink so it fits in display area
+% example = env-card-overflow
+%title = RpgCard example
+% highlight = RpgCard, footnote
     \begin{RpgCard}[vmargin=0.1cm, hmargin=0.1cm, height=5.2cm, width=3.6cm]
-            \raggedright\footnotesize And if we add lots of text\footnote{And maybe a footnote too?}
+		\raggedright\footnotesize  This is an example card with lots of text\footnote{And maybe a footnote too?}.
         \lipsum[2]
     \end{RpgCard}
 
-%% example = env-map-basic
-%% options = listing only
-    \begin{RpgMap}[<options>]
-        <contents>
+% example = env-map-nesting
+% title = Nested Map Areas
+% highlight = RpgMap, RpgArea, area
+    \begin{RpgMap}[header-offset=2]
+        \begin{RpgArea}[map:hall]{Great Hall}
+            A long and draughty hall.
+
+            \area[map:dais]{The Dais} A raised stone platform.
+
+            \area An unremarkable alcove.
+        \end{RpgArea}
+
+        \area[map:cellar]{Cellar} Damp and dark.
     \end{RpgMap}
 
-%% example =env-map-area
-%% options = listing only
-    \area[area-name][manual-label] <body-text>
-    % or
-    \begin{area}[area-name][manual-label]
-        <body-text>
-    \end{area}
-
-%% example = env-map-nesting
-% title=Automated Map Nesting
-    \begin{RpgMap}
-    \begin{area}[Test Zone]
-        A description
-            \begin{area}[Sub Zone]
-                A sub-description
-                \area[Arbitrary nested zone]
-                    (we can keep nesting)
-            \end{area}
-        \end{area}
-        \area[][nameless-ref] A nameless zone
-    \end{RpgMap}
-
-%% example = env-map-refs
-%% title = Visible RpgMap labelling
-%% highlight = RpgMapShowRefs
-    \RpgMapShowRefs{}
-    \begin{RpgMap}
-        \begin{area}[Test Zone]
-        A description
-            \begin{area}[Sub Zone]
-                A sub-description
-                \area[Arbitrary nested zone]
-                    (we can keep nesting)
-            \end{area}
-        \end{area}
-        \area[][nameless-ref] A nameless zone
-    \end{RpgMap}
-
-%% example = env-secret-basic
-%%options = listing only
-    \begin{RpgSecret}[<opts>]{player-text}
-        <GM-text>
-    \end{RpgSecret}
+% example = env-map-refs
+% highlight = RpgMapRef
+    \RpgMapRef{map:dais} is area \RpgMapRef*{map:dais}, on \RpgPage{map:dais}.
 
 % example = env-secret-hide
 % highlight = RpgSecret,RpgSwitch
@@ -115,12 +78,6 @@
     \end{RpgSecret}
     \lorumIpsumThree
 
-%% example = env-table-basic
-% options = listing only
-    \begin{RpgTable}[<options>]{<column-specifier}
-        <table-contents>
-    \end{RpgTable}
-
 %% example = env-table-standard
     \begin{RpgTable}[width=0.85\linewidth, color=green!30!white]{lX}
         Header 1 & Header 2
@@ -141,31 +98,23 @@
         body
     \end{RpgTable}
 
-% example = env-text-boxes
-% title = The Three Text Boxes
-     \begin{RpgNarration}[color=blue!30!white]
+% example = env-narration
+% highlight = RpgNarration
+    \begin{RpgNarration}[color=blue!30!white]
         This is text that you would read out loud to players, describing a scene. It will always be blue, even if the theme says otherwise -- because the optional argument takes priority.
     \end{RpgNarration}
 
+% example = env-sidebar
+% highlight = RpgSidebar
     \begin{RpgSidebar}{A Sidebar}
         This is an important block of text, that you should pay attention to.
     \end{RpgSidebar}
 
+% example = env-tip
+% highlight = RpgTip
     \begin{RpgTip}{A Tip}
         This is some helpful - but not vital - text.
     \end{RpgTip}
-
-% example = env-filigree-cmd
-%options = listing only
-% highlight = rpgfiligree
-    \begin{any-tcbox-env}[rpgfiligree]
-        <body>
-    \end{any-tcbox-env}
-% example = env-filigree-env
-%options = listing only
-    \begin{RpgFiligree}[color=<color>,<tcb-options>]
-        <body>
-    \end{RpgFiligree}
 
 % example = env-filigree-example
     %% As environment
@@ -175,35 +124,15 @@
 
 
     %% As option
-    \begin{RpgSidebar}[rpgfiligree, filigree-size=8pt]{Fancy Sidebar}
+    \begin{RpgSidebar}[filigree]{Fancy Sidebar}
         A very fancy sidebar
     \end{RpgSidebar}
 
 
 % example = env-getkey
-%options = listing only
-%highlight = getkey
-    \begin{Rpg[X]}{Test Object}[key1 = value1, key2 = value2]
-        The value of key1 is \getkey{key1}
-    \end{Rpg[X]}
+% options = listing only
+% highlight = RpgGetKey
+    \begin{RpgItem}{<name>}[<key> = <value>]
+        The value of the key is \RpgGetKey{<key>}.
+    \end{RpgItem}
 
-%% example = env-full-featureforge
-%highlight = TestObject, RpgMakeFeature, TestObjectAddProperty
-    %% Test object does not exist before this moment.
-    %%See FeatureForge for documentation
-    \RpgMakeFeature{TestObject}{TestCard}{test}
-
-    \TestObjectAddProperty{test-key} {\testKeyValue} {default}
-
-    %card mode defaults to false, so get plain text output:
-    \begin{TestObject}{An Example}
-        This is the body text, I can see that my key is `\getkey{test-key}'
-    \end{TestObject}
-
-    \vspace{0.5cm}
-
-    %%Then activate the card mode (and change the test-key value)
-    \TestObjectShowCard{true}
-    \begin{TestObject} {An Example} [test-key=alacrity]
-        This is the body text, I can see that my key is `\getkey{test-key}'
-    \end{TestObject}

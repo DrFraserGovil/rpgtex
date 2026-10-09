@@ -1,0 +1,23 @@
+
+\RpgIfSections{
+
+	% \begin{noindent}
+	 
+	%% Adds the gold underline for subsections 
+	\titleformat {\subsection}
+		{ \RpgFontSubsection } % format
+		{ \thesubsection } % label
+		{ 1em } % sep
+		{ \nopagebreak } % before-code
+		[ \vspace{-.3ex} \titleline{ \color{TitleGold} \titlerule[1pt] } ] % after-code
+
+	%% Adds a contour (of the default ContourColor) around the chapter
+	\titleformat {\chapter}
+		{ \RpgFontChapter } % format
+		{ \RpgContour{\chaptertitlename\ \thechapter :} } % label
+		{ \wordsep } % sep
+		{ \RpgContour} % before-code
+		 
+	% \end{noindent}
+}
+

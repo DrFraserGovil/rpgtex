@@ -1,0 +1,129 @@
+\ExplSyntaxOn
+
+\newlength\macrowidth
+\newlength\macrosep
+\setlength\macrowidth{3.5cm}
+\setlength\macrosep{0.3cm}
+\newlength\reducer
+\setlength\reducer{0.65in}
+% \setlength\fboxsep{0cm}
+%% Places the alias of a block in the left-hand column, beside the first line of its body
+%% The box has no height, so the body is laid out (and broken across pages) exactly as if it were absent
+%%	#1	The colour of the alias
+%%	#2	The alias
+\cs_new_protected:Npn \__docs_marginAlias:nn #1#2
+{
+	\dim_set:Nn \l_tmpa_dim { \prevdepth }
+	\nointerlineskip
+	\vbox_to_zero:n
+	{
+		\hbox:n
+		{
+			\skip_horizontal:n { \dim_use:c { @totalleftmargin } - \macrosep - \macrowidth }
+			\parbox[t]{\macrowidth}{ \mbox{} \raggedleft \color{#1} \maxsizebox{\macrowidth}{!}{\tt #2} }
+		}
+		\vss
+	}
+	\prevdepth = \l_tmpa_dim
+	\nobreak
+}
+
+\NewDocumentCommand\MarginBlock{+m O{black} O{} +m O{white} +m}
+{
+	\par \vspace{0.3cm}
+
+	{
+		\hspace{-\dimexpr\reducer\relax} %
+		\begin{minipage}{0.9\paperwidth}
+			\colorbox{#5}{\makebox[0.99\paperwidth][l]{
+					\parbox[t]{\macrowidth}{
+						\mbox{} \raggedleft \color{#2} \maxsizebox{\macrowidth}{!}{\tt #1} }\hspace{\macrosep}
+					\parbox[t]{\dimexpr0.94\linewidth - \macrowidth-\macrosep\relax}{ \textcolor{#2}{#4}
+					}
+				}
+			}
+		\end{minipage}
+	}
+
+	\par
+	\begin{adjustwidth}{2.3cm}{0pt}
+		\tl_set:Ne \l_tmpa_tl {#3}
+		\tl_if_blank:oF { \l_tmpa_tl }
+		{
+			\__docs_marginAlias:nn {#2} {#3}
+		}
+		#6
+	\end{adjustwidth}
+}
+
+\setlength\marginparwidth{3.6cm}
+\setlength\marginparsep{0.3cm}
+
+\NewDocumentCommand \RpgKeyval{m O{} m +m}
+{
+	\MarginBlock{\declareEnv[#1\ (key)]{#1}}[KeyVal][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
+	{
+		#3
+	}[KeyValBackground]
+	{
+		#4
+	}
+}
+\NewDocumentCommand \RpgFlag{m O{} +m}
+{
+	\MarginBlock{\declareEnv[#1\ (flag)]{#1}}[Flag][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
+	{
+		<flag>
+	}[FlagBackground]
+	{
+		#3
+	}
+}
+
+\NewDocumentCommand\RpgVariable{+m O{} +m}
+{
+	\MarginBlock{\declareCmd{#1}}[Variable][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
+	{
+		\slshape (Variable)
+	}[VariableBackground]
+	{
+		#3
+	}
+}
+\NewDocumentCommand\RpgScript{+m +m +m}
+{
+	\MarginBlock{\declareEnv{#1}}[Script]
+	{
+		\tt #2
+	}[ScriptBackground]
+	{
+		#3
+	}
+}
+\NewDocumentCommand\RpgFunction{+m O{} +m  +m}
+{
+	\MarginBlock{\declareCmd{#1}}[Function][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
+	{
+		\tt #3
+	}[FunctionBackground]
+	{
+		#4
+	}
+}
+\NewDocumentCommand\RpgEnvironment{+m O{} +m  +m}
+{
+	\MarginBlock{\tt
+		{\color{Environment!40!white}\textbackslash{}begin\{~}
+		\declareEnv{#1}
+		{\color{Environment!40!white}\ \}}
+	}[Environment][\tl_if_blank:nF{#2}{\declareEnv{#2}}]
+	{
+		\tt #3
+	}[EnvironmentBackground]
+	{
+		#4
+	}
+}
+
+
+\ExplSyntaxOff

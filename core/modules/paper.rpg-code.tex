@@ -1,0 +1,78 @@
+\ExplSyntaxOn
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Custom papers
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{eso-pic}
+\RequirePackage{graphicx}
+
+\bool_if:NF{\__rpg_UsePaperOption}
+{
+	\bool_set_false:N \__rpg_ShowBackground
+	\bool_set_false:N \__rpg_ShowFooterDecoration
+}
+
+%% Assign a basic background colour to each subsequent page
+\NewDocumentCommand\RpgThemePaperColor{ m }
+{
+	\bool_if:NT\__rpg_ShowBackground
+	{
+		\colorlet{PaperColor}{#1}
+		\pagecolor{#1}
+	}
+}
+
+%% pagecolor does not keep a 'live track' of the PaperColor, so need to call this in case the user simply does a \colorlet
+\AtBeginDocument{
+	\RpgThemePaperColor{PaperColor}
+}
+
+
+%% Sets the specified image as a paper-sized background image on each subsequent page
+\NewDocumentCommand\RpgThemePaperImage{ m }
+{
+	\bool_if:NT\__rpg_ShowBackground
+	{
+		\ClearShipoutPictureBG
+		\tl_if_empty:nF{#1}
+		{
+			\AddToShipoutPictureBG{\includegraphics[width=\paperwidth,height=\paperheight]{#1}}
+		}
+	}
+}
+
+%% Adds the page number to the background shipout at the coordinates (#1,#2) from the bottom left
+\NewDocumentCommand\RpgThemePageNumberAt{m m}
+{
+	\put(\LenToUnit{#1},\LenToUnit{#2}){\makebox[0pt][c]{\RpgFontPageNumber \thepage}}
+}
+
+%% Sets the footer decoration as a shipoutimage overlaid on top of the current paper
+%% Arguments: #1 (starred) mirror-flips the footer decoration (Used for alternating pages)
+%%				#2 The height of th be decoration (use ! to use aspectratio height)
+%%				#3 The path to image to include as the footer
+%%				#4 Any other eso-pic code (such as an \put command or an \RpgThemePageNumberAt)
+\NewDocumentCommand\RpgThemeFooterDecoration{s m m m}
+{
+	\bool_if:NT\__rpg_ShowFooterDecoration
+	{
+		\AddToShipoutPictureFG*{
+			\IfBooleanTF{#1}
+			{
+				\put(\LenToUnit{.5\paperwidth},0) {\makebox[0pt][c]{\reflectbox{\includegraphics[width=\paperwidth,height=#2]{#3}}}}
+			}
+			{
+				\put(\LenToUnit{.5\paperwidth},0){\makebox[0pt][c]{\includegraphics[width=\paperwidth,height=#2]{#3}}}
+			}
+			#4
+
+		}
+
+	}
+}
+
+
+
+
+

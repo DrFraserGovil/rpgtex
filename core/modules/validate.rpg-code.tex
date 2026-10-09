@@ -1,0 +1,60 @@
+\ExplSyntaxOn
+
+% \begin{noindent}
+\cs_if_exist:NTF\RpgPackagePath
+{	%% True branch: RpgPath already defined
+	\wlog{RpgPackagePath~set~by~external~means}
+}
+{	%% False branch: need to find package path
+
+	\wlog{RpgPackagePath~not~set.~Attempting~to~locate~myself}
+
+	\file_if_exist:nTF { core/rpg-config.cfg }
+	{	%% True branch (file exists, load easily)
+		\wlog{rpg-config~file~located.~Extracting~RpgPackagePath.}
+		\file_input:n { core/rpg-config.cfg }
+	}
+	{	%% False branch (no file extant, ask kpsewhich where rpgtex.sty lives)
+
+		\wlog{rpg-config~not~found.~Attempting~to~locate~rpgtex.sty~with~kpsewhich.}
+
+		%% kpsewhich is permitted in restricted shell-escape mode (the TeX Live default), so no flags are needed
+		\sys_get_shell:nnNTF { kpsewhich~rpgtex.sty } { } \l_tmpa_tl
+		{
+			\tl_trim_spaces:N \l_tmpa_tl
+		}
+		{	%% shell escape is fully disabled
+			\tl_clear:N \l_tmpa_tl
+		}
+
+		%% Now check if that worked...
+		\tl_if_empty:NTF \l_tmpa_tl
+		{
+		%% If that didn't work, throw an error
+		\msg_new:nnnn { rpgtex } { missing-font-config }
+		{
+			Configuration~file~was~not~found.
+			\\
+			rpgtex~needs~to~know~its~root~location~to~load~fonts
+			\\
+			You~can~configure~package~in~one~of~these~ways:
+			\\\\
+			1.~Compile~with~rpglatex~compiler~(inserts~kpsewhich~command~automatically)
+			\\\\
+			2.~Run~configuration~script~`scripts/configure-rpgtex'~in~rpgtex~root~directory
+			\\\\
+			3.~Manually~create~file~`[rpgtexroot]/core/rpg-config.cfg'~with~contents:\\
+			\unexpanded{\edef}\unexpanded{\RpgPackagePath}\{absolute / path~/to/rpgtex/root\}
+			\\\\
+			4.~Run~compiler~with~shell~escape~enabled~(the~default~restricted~mode~is~enough;~rpgtex~asks~kpsewhich)
+			}{}
+			\msg_error:nnn { rpgtex } { missing-font-config } {  }
+		}
+		{	%% Strip the file name from the path to rpgtex.sty, leaving the root directory
+			\file_parse_full_name:VNNN \l_tmpa_tl \RpgPackagePath \l_tmpb_tl \l_tmpb_tl
+			\wlog{RpgPackagePath~located~via~kpsewhich:~\RpgPackagePath}
+		}
+	}
+}
+% \end{noindent}
+\ExplSyntaxOff

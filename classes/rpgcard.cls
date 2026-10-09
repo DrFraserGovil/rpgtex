@@ -1,45 +1,46 @@
-%% THe RPG-card is used for short, tactile printouts in a playing-card format
-
+%% The RPG-card class is used for short, tactile printouts in a playing-card format
+%% With a background (bg=full) each card is cropped to its own page, for digital use;
+%% otherwise the cards are laid out on A4 pages, for printing (though rpgdeck is better for that!)
 
 \RequirePackage {expl3}
-\ProvidesExplPackage{rpgcard}{2025/10/09} {0.0.0} { Template for RPG material }
+\ProvidesExplClass{rpgcard}{2026/10/07} {0.0.0} { Card Template for RPG material }
 
+\bool_new:N \__rpg_IsClass
+\bool_set_true:N \__rpg_IsClass
+\tl_new:N \__rpg_BaseClass
+\tl_set:Nn \__rpg_BaseClass { standalone }
 
-\bool_new:N \c__rpg_isclass_bool
-\bool_set_true:N \c__rpg_isclass_bool
-\tl_new:N \g__rpg_base_class_tl
-\tl_set:Nn \g__rpg_base_class_tl { standalone }
+%% Cards have no title page, and are always laid out in a single column
+\tl_new:N \__rpg_ClassDefaults
+\tl_set:Nn \__rpg_ClassDefaults {font,background,sections,columns=1}
 
 \input {core/rpgoptions.clo}
 
-
-%%toggle between standalone mode and article mode, allowing for a nice 'print' interface (though rpgdeck should probably be used to save paper!)
-\bool_if:NTF \l__rpg_show_background_bool
+%% The base class depends on the bg option, which is only known once the options have been read.
+%% rpgoptions.clo has passed its options to standalone, so pass the font size on to article when it is used instead.
+\bool_if:NTF \__rpg_ShowBackground
 {
-	\RequirePackage[pass,left=0pt,right=0pt,top=0pt,bottom=0pt]{geometry}
-	\LoadClass[] { standalone}
+	\RequirePackage[pass]{geometry}
+	\LoadClass { standalone }
 }
 {
-	\LoadClass[a4paper] { article}
+	\tl_set:Nn \__rpg_BaseClass { article }
+	\PassOptionsToClass { \__rpg_FontSize } { article }
+	\LoadClass[a4paper] { article }
 	\RequirePackage[left=5pt,right=5pt,top=5pt,bottom=5pt]{geometry}
-	
 }
 
 \RequirePackage{rpgtex}
 
-%%Set all flags to true, (assuming most are cards!)
-\prop_map_inline:Nn \g__rpg_switch_prop
+%% Display every cardable rule environment as a card (by convention, their switches are named Use[X]Card)
+\seq_map_inline:Nn \__rpg_CardSwitches
 {
-	\prop_gput:Nnx \g__rpg_switch_prop { #1 } {\c_true_bool}
+	\RpgSwitch{#1}{on}
 }
 
 \msg_new:nnn{rpg}{rpg-card-title}{Cannot~set~title~in~rpgcard}
-\renewcommand{\maketitle}{
+\RenewDocumentCommand{\maketitle}{}
+{
 	\msg_error:nn{rpg}{rpg-card-title}
 }
-\RpgSetTitleMode{header}
 \pagestyle{empty}
-
-
-
-
