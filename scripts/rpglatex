@@ -106,6 +106,15 @@ def argprint(args,message):
 	if not args.quiet: print(message)
 	
 
+###MiKTeX only reads files back (such as the .aux file) from its -aux-directory, not from its -output-directory,
+###so it needs both; TeX Live does not recognise -aux-directory
+def isMiKTeX(engine):
+	try:
+		result = subprocess.run([engine, "--version"], capture_output=True, text=True, check=False)
+		return "MiKTeX" in result.stdout
+	except FileNotFoundError:
+		return False
+
 ###Replaces the need for the manual configuration step by auto-injecting the package directory into document
 def locatePackageDirectory():
 	package_name = "rpgtex.sty"
@@ -117,8 +126,10 @@ def locatePackageDirectory():
             text=True,
             check=False  # Do not raise an exception if kpsewhich returns non-zero (i.e., not found)
         )
-		# The path is in stdout, but includes a newline
-		full_path = result.stdout.strip()
+		# The path is the last line of stdout which ends with the package name: some tools print warnings first
+		# (MiKTeX does when run with elevated privileges)
+		lines = [line.strip() for line in result.stdout.splitlines() if line.strip().endswith(package_name)]
+		full_path = lines[-1].replace("\\", "/") if lines else ""
 		if result.returncode == 0 and full_path:
 
 			# 3. Extract the directory path
@@ -179,6 +190,10 @@ def build_latex(args):
 		args.engine,
 		"--interaction=nonstopmode",
 		f"-output-directory={build_dir_abs}",
+	]
+	if isMiKTeX(args.engine):
+		latex_command.append(f"-aux-directory={build_dir_abs}")
+	latex_command += [
 		f"-jobname={base_name}", 
 		"-halt-on-error",
 		"-max-print-line=10000",
