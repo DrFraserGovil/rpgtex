@@ -1,0 +1,24 @@
+\ExplSyntaxOff
+
+%% A 'targeting reticle' frame, after the ruled boxes of the Traveller rulebooks:
+%% chamfered brackets at each corner, hairlines along the top and bottom, and slanted stripes (echoing the sidebar)
+%% beside the top-left and bottom-right corners. Everything is drawn in FiligreeColor, and scales with \RpgFiligreeSize
+\RpgThemeSetFiligree{
+	\def\s{\RpgFiligreeSize}
+	%% chamfered brackets, set 0.5s outside each corner so that they clear the (square) background of the box
+	\foreach \corner/\sx/\sy in {north west/-1/1, north east/1/1, south west/-1/-1, south east/1/-1}
+	{
+		\coordinate (C) at ($(frame.\corner)+({\sx*0.5*\s},{\sy*0.5*\s})$);
+		\draw[line width=1.2pt, line join=miter]
+			($(C)+(0,{-\sy*3*\s})$) -- ++(0,{\sy*2*\s}) -- ++({-\sx*\s},{\sy*\s}) -- ++({-\sx*2*\s},0);
+	}
+	%% hairlines along the top and bottom, continuing the brackets
+	\draw[line width=0.4pt] ($(frame.north west)+({2.5*\s},{0.5*\s})$) -- ($(frame.north east)+({-2.5*\s},{0.5*\s})$);
+	\draw[line width=0.4pt] ($(frame.south west)+({2.5*\s},{-0.5*\s})$) -- ($(frame.south east)+({-2.5*\s},{-0.5*\s})$);
+	%% slanted stripes across the hairlines, beside the top-left and bottom-right brackets
+	\foreach \i in {0,1,2}
+	{
+		\fill[FiligreeColor] ($(frame.north west)+({(3+1.6*\i)*\s},0)$) -- ++(\s,0) -- ++({0.6*\s},\s) -- ++(-\s,0) -- cycle;
+		\fill[FiligreeColor] ($(frame.south east)+({-(3+1.6*\i)*\s},0)$) -- ++(-\s,0) -- ++({-0.6*\s},{-\s}) -- ++(\s,0) -- cycle;
+	}
+}

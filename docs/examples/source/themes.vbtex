@@ -24,3 +24,20 @@
 	\subtitle{An adventure for four players}
 	\author{A. Writer}
 	\RpgMakeTitle
+
+% example = theme-filigree
+% title = Filigree
+% highlight = RpgFiligree, filigree
+	\begin{RpgFiligree}
+        Some decorative text
+    \end{RpgFiligree}
+
+    \vspace{1cm}
+
+    \begin{RpgTable}[filigree]{lX}
+        Header 1 & Header 2
+        \\
+        Body 1 & Body 2
+        \\
+        Body 3 & Body 4
+    \end{RpgTable}
