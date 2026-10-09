@@ -59,17 +59,23 @@ Fonts
 Images
 
   themes/dnd/img/paper.jpg, footerscroll.*
-  example/img/paper.jpg, paper-low-res.jpg
       Included in good faith from the original work (Evan Bergeron's D&D 5e
       LaTeX Template, https://github.com/rpgtex/DND-5e-LaTeX-Template), which
       credits the background to Lost and Taken (https://lostandtaken.com/).
       See themes/dnd/img/ATTRIBUTION.txt.
 
-  example/img/typewriter.jpg, engine_part.jpg, fantasy_title.jpg
-      Pixabay Content License -- see example/img/ATTRIBUTION.txt
+  docs/img/typewriter.jpg
+      "Keyboard, Typewriter, Antiquity" by bjoern-hiekel, Pixabay Content License
+      (https://pixabay.com/photos/keyboard-typewriter-antiquity-old-7598900/) --
+      credited in the "Image Credits" appendix of the documentation
 
-  example/img/joyeuse.jpg
-      Public domain -- see example/img/ATTRIBUTION.txt
+  docs/img/joyeuse.jpg
+      Blaise Alexandre Desgoffe, "The Crown Jewels", public domain -- credited in
+      the "Image Credits" appendix of the documentation
+
+  example/dnd-example/img/enraged-monster.jpg
+      National Gallery of Art, Washington, Open Access (CC0), reduced in size
+      -- see example/dnd-example/img/ATTRIBUTION.txt
 
   docs/img/the_writing_desk_2015.19.1530.jpg, costume_1943.8.9509.jpg,
   desk_1943.8.5338.jpg, enrag_d_monster_1974.53.22.jpg,

@@ -1,0 +1,9 @@
+%% A deck: the cards above, gathered onto A4 pages for printing.
+%% rpgdeck can \input complete rpgcard documents, and typesets them with the deck's own theme and options
+%% (here, bg=print leaves out the paper background). Compile it twice if the cards have their own preambles.
+\documentclass[theme=dnd, bg=print]{rpgdeck}
+
+\begin{document}
+	\input{quill}
+	\input{spell}
+\end{document}

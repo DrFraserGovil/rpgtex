@@ -1,0 +1,16 @@
+%% A single card: a spell from the dnd example.
+\documentclass[theme=dnd]{rpgcard}
+
+\begin{document}
+	\begin{RpgSpell}{Compile Document}[
+			level=3,
+			school=Conjuration,
+			range={60 feet},
+			area={30-foot cube},
+			components=VS,
+		]
+		Roll \RpgDice{1d4}. That many documents within the area are converted into a \textit{Powerful Dragon Format}, which acts on its own initiative and regards you as an ally. For each dragon created in this way, you regain 5 hit points.
+
+		\RpgSpellUpcast[The hit points restored by each dragon increase by]{5}
+	\end{RpgSpell}
+\end{document}

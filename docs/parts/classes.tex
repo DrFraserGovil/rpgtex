@@ -149,6 +149,6 @@
 				\cmd*{end}\{document\}
 			\end{Code}
 
-			The preambles of the included cards are collected and added to the preamble of the deck, so any definitions they make are shared between all of the cards. Two cards which define the same command therefore conflict, and every card uses the last definition. To avoid this, definitions which differ between cards should be made within their \texttt{document} environments.
+			The preambles of the included cards are collected and added to the preamble of the deck, so any definitions they make are shared between all of the cards. Two cards which define the same command therefore conflict, and every card uses the last definition. To avoid this, definitions which differ between cards should be made within their \texttt{document} environments. The preambles are collected into an auxiliary file (\texttt{.sta}) during compilation, and are only read in on the next run, so a deck whose cards have preambles must be compiled twice. On the first run, anything which depends on them, such as an image found through \cmd*{graphicspath}, is silently missing.
 
 			The \cmd*{documentclass} line of an included card is ignored, along with its options. The cards are therefore typeset with the deck's theme and options, which may differ from the ones used when the card was compiled on its own; \cmdref{RpgSetTheme} may be used within the deck to change the theme.

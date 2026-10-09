@@ -1,0 +1,57 @@
+%%%% This document is shared by both the dnd-book and the dnd-handout example
+
+
+
+\RpgDropCap{S}{altmere} is a fishing village of forty-odd families, built on stilts above the mudflats where the river meets the sea. Its people are friendly enough to strangers who pay in coin, and wary of anyone who asks about the old temple.
+
+
+
+\begin{RpgMap}[prefix={}]
+	\area[pub]{The Drowned Bell}
+
+	The village's only tavern stands at the end of the longest jetty. Its keeper, Morwen Tull, serves fish stew and weak ale, and knows everyone's business.
+
+	\begin{RpgSecret}{Morwen is happy to talk about the temple, if the party buys a round.}
+		Morwen's brother vanished into the temple last spring. She will offer the party 50 gold pieces to find out what happened to him. His body is found inside the temple, killed by the Typesetter.
+	\end{RpgSecret}
+	\area{The Dock} A grandiose name for the portion of the jetty facing out to sea, it is here that the old sea dogs gather before heading off to the pub for the evening, and trade the latest catch amongst themselves.
+
+	\begin{RpgSecret*}
+		Determine what the fishermen have caught using the following table:
+		\begin{RpgTable}{llX}
+			d4	& Fish & Result
+			\\
+			1 &		Nothing & The fishermen are angry. If the players enter the inn, \RpgDice{1d6+2} commoners will attempt to pick a fight with them.
+			\\
+			2 &		Minnows &  The mood in the inn is more sombre than usual.
+			\\
+			3 &		Cod & The fishermen are pleased. They buy all the players a round.
+			\\
+			4 &		Tuna & A raucous night is had by all. Any players who partake in the celebrations must succeed on a DC 13 Constitution saving throw or become \textit{poisoned} for one hour, but are immune to fear until the end of their next long rest.
+		\end{RpgTable}
+
+	\end{RpgSecret*}
+
+	\begin{RpgArea}{The Chapel}
+		A small chapel dedicated to the god Knonald Duth, run by the local priest, who is found within the \RpgMapRef{pub} (\RpgMapRef*{pub}) whenever not giving sermons.
+		\begin{RpgSecret*}{}
+			%% DM version
+			\area{The Hidden Vestry} Behind a large portrait of Knonald is a door which leads to a dusty old room, where the priests would once have changed into ceremonial robes.
+			\area{The Basement} In the centre of this cramped space is a book which has been bound to a pedestal and chained shut (DC 15 to unlock or force open). An individual who reads the book becomes \textit{incapacitated} until shaken awake by another creature.
+
+			The book was written with Knonald's Quill.
+		\end{RpgSecret*}
+
+	\end{RpgArea}
+	\area{The Sunken Temple} A forbidden temple which has fallen into disrepair and slipped beneath the waves. The townsfolk avoid it.
+
+	\begin{RpgSecret*}
+		\begin{RpgNarration}
+			As the doors to the temple crack open, your eyes become fixed on the waves of beautiful writing which cover every surface of the temple's walls.
+
+			It takes you a minute before you spot the emaciated bodies lining the walls, those unlucky enough to have become entranced by the writing, and stayed there until they starved to death, or worse, were killed by the hulking monster that now approaches you from the bowels of the temple...
+		\end{RpgNarration}
+
+		The Typesetter approaches! Roll initiative!
+	\end{RpgSecret*}
+\end{RpgMap}

@@ -11,3 +11,4 @@
 *.build*
 *jvim*
 core/rpg-config.cfg
+*.sta

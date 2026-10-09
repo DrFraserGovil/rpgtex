@@ -1,0 +1,8 @@
+Image credits for the D&D example
+=================================
+
+enraged-monster.jpg (the cover of dnd-book.tex)
+    John Hamilton Mortimer, "Enrag'd Monster" (1778), etching.
+    National Gallery of Art, Washington, Ailsa Mellon Bruce Fund, accession no. 1974.53.22.
+    https://www.nga.gov/artworks/54438-enragd-monster
+    Open Access, CC0. Reduced in size.
