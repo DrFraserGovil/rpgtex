@@ -87,7 +87,7 @@
 
 		\RpgFunction{RpgIfColoursEqualTF}[RpgIfColoursEqual]{\param{color 1}\param{color 2}\param{true code}\param{false code}}
 		{
-			Runs \texttt{true code} if the two named colors have the same value, and \texttt{false code} otherwise. The colors are compared by their RGB values, so colors which are defined in different ways (for example, one with \cmd{definecolor} and the other with \cmd{colorlet}) are equal if they produce the same color. The alias \cmd{RpgIfColoursEqual}\param{color 1}\param{color 2}\param{code} takes a single code argument, and is equivalent to \cmd{RpgIfColoursEqualTF}\param{color 1}\param{color 2}\param{code}\{\}.
+			Runs \texttt{true code} if the two named colors have the same value, and \texttt{false code} otherwise. The colors are compared by their RGB values, so colors which are defined in different ways (for example, one with \cmd*{definecolor} and the other with \cmd*{colorlet}) are equal if they produce the same color. The alias \cmd{RpgIfColoursEqual}\param{color 1}\param{color 2}\param{code} takes a single code argument, and is equivalent to \cmd{RpgIfColoursEqualTF}\param{color 1}\param{color 2}\param{code}\{\}.
 
 			For example, the \texttt{scifi} theme outlines the subtitle on its cover page with \cmdref{RpgContour}, unless \texttt{ContourInnerColor} and \texttt{ContourOuterColor} are the same, when an outline would be invisible.
 		}

@@ -280,7 +280,7 @@
 					\\ \texttt{StatblockBackground} & The background, unless the \texttt{background} option is off, when it is white.
 					\\ \texttt{StatblockRibbon} & The borders at the top and bottom, in the legacy appearance \RpgPage[p]{S:DndStatLegacy}.
 				\end{RpgTable}
-				Since \cmd{colorlet} copies a color at the moment it is used, a color defined in terms of another (such as \texttt{StatblockHeading}, which is a dark shade of \texttt{StatblockRule}) does not change when the other is redefined: each must be redefined separately. The \texttt{color} and \texttt{frame-color} properties \RpgPage[p]{S:DndStatAppearance} override these colors within a single statblock.
+				Since \cmd*{colorlet} copies a color at the moment it is used, a color defined in terms of another (such as \texttt{StatblockHeading}, which is a dark shade of \texttt{StatblockRule}) does not change when the other is redefined: each must be redefined separately. The \texttt{color} and \texttt{frame-color} properties \RpgPage[p]{S:DndStatAppearance} override these colors within a single statblock.
 
 			\subsubsection{The Frame}
 
@@ -303,12 +303,12 @@
 
 			\RpgFunction{RpgThemePartPageTikz}{\param{}}
 			{
-				Draws the badge at the top of each part page \RpgPage[p]{S:DndTitles}, which is placed with its top at the top edge of the page, and centred. It may be redefined (for example, with \cmd{RenewDocumentCommand}) to draw a different badge. \cmdref{RpgThemeSetDMGParts} and \cmdref{RpgThemeSetPHBParts} work by redefining it, and so replace any custom badge.
+				Draws the badge at the top of each part page \RpgPage[p]{S:DndTitles}, which is placed with its top at the top edge of the page, and centred. It may be redefined (for example, with \cmd*{RenewDocumentCommand}) to draw a different badge. \cmdref{RpgThemeSetDMGParts} and \cmdref{RpgThemeSetPHBParts} work by redefining it, and so replace any custom badge.
 			}
 
 		\subsection{Wording}
 
-			The fixed text of the legendary and mythic sections \RpgPage[p]{S:Legendary} is held in the following commands, which may be redefined with \cmd{renewcommand} (for example, to translate them). Within them, \cmdref{RpgStatName} gives the name of the creature.
+			The fixed text of the legendary and mythic sections \RpgPage[p]{S:Legendary} is held in the following commands, which may be redefined with \cmd*{renewcommand} (for example, to translate them). Within them, \cmdref{RpgStatName} gives the name of the creature.
 
 			\RpgVariable{rpgstringlegendaryDefiance}
 			{

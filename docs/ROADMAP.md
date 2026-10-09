@@ -12,13 +12,9 @@ Features which *must* be added before the next major release
 
 Smaller jobs left over from the documentation rewrite.
 
-### Documentation
-
-* Index: check the 'see' entries
-
 ### README & Changelog
 
-* Ensure the changelog is valid,  but not too indepth, it's a bvig revision we're pushing
+* Ensure the changelog is valid,  but not too indepth, it's a big revision we're pushing
 
 ### Testing
 
@@ -26,19 +22,14 @@ Smaller jobs left over from the documentation rewrite.
 * MiKTeX: does restricted mode allow kpsewhich? Update the Windows notes either way
 * rpgdeck: the subpreamble behaviour (shared definitions; whether a second compilation is needed)
 * rpgcard: whether screen mode passes `size` through to `standalone`
-* Check the two nga.gov links in the Image Credits appendix, and that the images are CC0
-* Confirm the uncertain `tlmgr` package names in the Dependencies appendix (`nameref` → `hyperref`, `fontenc` → `latex`)
 
 ## Desired Features
 
 Features which would improve the package
 
 * RpgClocks
-* ~~RpgStat card-mode for d&d.~~
 * Character sheet interface/class
 * Encounter tables / random tables / dice tables
-* ~~Full page images~~ (`\RpgWholePageImage`) / landscape support
-* ~~`Fancy box' (i.e. the D&D class table wrapper environment)~~ (the dnd filigree frame)
 * Circle/dot producers & fill-ins (i.e. for FitD skills)
 * A rpgdeck-maker, which automatically assembles card files into a deck meeting some criteria (`rpgdeck` can already gather `rpgcard` documents; the automatic selection is still to do)
 

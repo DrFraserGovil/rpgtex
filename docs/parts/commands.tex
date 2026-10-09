@@ -152,7 +152,7 @@
 				\\
 				\texttt{outer} & The colour of the outline. & \texttt{ContourOuterColor}
 				\\
-				\texttt{style} & Formatting commands (such as \cmd{bfseries} or \cmd{Huge}) applied to the text. & (empty)
+				\texttt{style} & Formatting commands (such as \cmd*{bfseries} or \cmd*{Huge}) applied to the text. & (empty)
 			\end{RpgTable}
 			Contours cannot automatically linebreak, instead the text is split into lines at each \texttt{\textbackslash\textbackslash}, and each word is contoured individually so that spacing is preserved. As a consequence, formatting commands placed within \texttt{text} may only affect the first word: all formatting should therefore be passed through the \texttt{style} key.
 
@@ -190,7 +190,7 @@
 
 		\RpgFunction{RpgOrdinal}{[<format>]\param{number}}
 		{
-			Typesets an integer followed by its English ordinal suffix (\texttt{st}, \texttt{nd}, \texttt{rd} or \texttt{th}), correctly handling \texttt{11th}, \texttt{12th} and \texttt{13th}. The optional \texttt{format} is a command applied to the suffix only, such as \cmd{textbf}.
+			Typesets an integer followed by its English ordinal suffix (\texttt{st}, \texttt{nd}, \texttt{rd} or \texttt{th}), correctly handling \texttt{11th}, \texttt{12th} and \texttt{13th}. The optional \texttt{format} is a command applied to the suffix only, such as \cmd*{textbf}.
 
 			\RpgGetExample{cmd-ordinal}
 		}
@@ -220,7 +220,7 @@
 		{
 			Places \texttt{content} at a fixed position on the page, measured from the bottom-left corner. It may only be used within a page overlay, such as the first argument of \cmd{RpgWholePageImage}.
 
-			The content is set in a paragraph of the given \texttt{width} (default: \cmd{linewidth}), with \texttt{format} applied at the start (default: \cmd{centering}).
+			The content is set in a paragraph of the given \texttt{width} (default: \cmd*{linewidth}), with \texttt{format} applied at the start (default: \cmd*{centering}).
 
 			The \texttt{anchor} determines which point of the content is placed at (\texttt{x}, \texttt{y}): \texttt{c} (centre; the default), \texttt{t}, \texttt{b}, \texttt{l}, \texttt{r}, or a combination such as \texttt{tl}.
 		}

@@ -2,7 +2,7 @@
 \chapter{Styling Elements}\label{S:ElementStyles}
 
 	\section{Box Formatters}
-		The appearance of most environments is controlled through \texttt{tcolorbox} styles, which a theme may redefine with \cmd{tcbset}:
+		The appearance of most environments is controlled through \texttt{tcolorbox} styles, which a theme may redefine with \cmd*{tcbset}:
 		\begin{Code}
 			\cmd*{tcbset}\{rpgsidebar/.style=\{colframe=black, \ldots\}\}
 		\end{Code}
@@ -42,7 +42,7 @@
 			\end{RpgTable}
 			By default, the expression is typeset as \texttt{\#1d\#2\#3}.
 
-			The arguments are passed as variables which contain these values, rather than as the values themselves. They typeset correctly as they are, but must be expanded before being tested or compared: for example, with \cmd{tl_if_blank:eTF} rather than \cmd{tl_if_blank:nTF}.
+			The arguments are passed as variables which contain these values, rather than as the values themselves. They typeset correctly as they are, but must be expanded before being tested or compared: for example, with \cmd*{tl_if_blank:eTF} rather than \cmd*{tl_if_blank:nTF}.
 
 			\RpgGetExample{des-dice-format}
 		}

@@ -102,7 +102,7 @@
 				\\
 				\texttt{vskip} & The vertical space above and below the table. & \texttt{9pt plus 3pt minus 3pt}
 				\\
-				\texttt{width} & The width of the table. & \cmd{linewidth}
+				\texttt{width} & The width of the table. & \cmd*{linewidth}
 			\end{RpgTable}
 
 			\RpgGetExample{env-table-standard}
@@ -191,7 +191,7 @@
 		\RpgFunction{RpgMapRef}[RpgMapRef*]{\param{label}}
 		{
 			Typesets the name of the labelled area. The starred form typesets its number instead.
-			This is a wrapper around \cmd{ref} and \cmd{nameref}.
+			This is a wrapper around \cmd*{ref} and \cmd*{nameref}.
 			\RpgGetExample{env-map-refs}
 		}
 
@@ -202,7 +202,7 @@
 
 			\RpgFunction{area}{[<label>]\{<name>\}}
 			{
-				Adds an area to the current map, much as \cmd{item} adds an item to a list. Its heading is `\texttt{<prefix><number>: <name>}', or `\texttt{<empty-prefix><number>}' if no \texttt{name} is given. Any text which follows forms the description of the area.
+				Adds an area to the current map, much as \cmd*{item} adds an item to a list. Its heading is `\texttt{<prefix><number>: <name>}', or `\texttt{<empty-prefix><number>}' if no \texttt{name} is given. Any text which follows forms the description of the area.
 
 				If a \texttt{label} is given, the area may be referred to with \cmd{RpgMapRef} or \cmd{RpgPage}.
 			}
@@ -223,7 +223,7 @@
 
 		\RpgFunction{cardbreak}{\param{}}
 		{
-			Within an \texttt{RpgCard}, ends the current card and continues the text on the next, in the same way as \cmd{pagebreak}. Outside of a card it has no effect, so it may safely be used in text which is only sometimes displayed as a card.
+			Within an \texttt{RpgCard}, ends the current card and continues the text on the next, in the same way as \cmd*{pagebreak}. Outside of a card it has no effect, so it may safely be used in text which is only sometimes displayed as a card.
 		}
 		\RpgFunction{footnote}{\param{text}}
 		{

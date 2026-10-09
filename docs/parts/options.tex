@@ -166,9 +166,9 @@
 
 			Any of these colors, including the co-varying colors, may be modified individually using the standard \texttt{xcolor} interface:
 			\begin{Code}
-				\cmd{definecolor}\{NarrationColor\}\{HTML\}\{FFFFFF\}
+				\cmd*{definecolor}\{NarrationColor\}\{HTML\}\{FFFFFF\}
 
-				\cmd{colorlet}\{SidebarColor\}\{red!10!white\}
+				\cmd*{colorlet}\{SidebarColor\}\{red!10!white\}
 			\end{Code}
 			Modifying a co-varying color in this way changes only that color, leaving the others unaffected.
 
@@ -176,15 +176,15 @@
 
 		A small number of lengths used by \rpgtex{} may be changed directly, without any special interface. As with the colors, the active theme may override their default values.
 
-		\RpgVariable{RpgDropCapSeparation}{The horizontal space between the enlarged letter created by \cmdref{RpgDropCap} and the text which follows it. It is a standard \LaTeX{} length, and is changed with \cmd{setlength}:
+		\RpgVariable{RpgDropCapSeparation}{The horizontal space between the enlarged letter created by \cmdref{RpgDropCap} and the text which follows it. It is a standard \LaTeX{} length, and is changed with \cmd*{setlength}:
 			\begin{Code}
-				\cmd{setlength}\{\cmd*{RpgDropCapSeparation}\}\{0.5em\}
+				\cmd*{setlength}\{\cmd*{RpgDropCapSeparation}\}\{0.5em\}
 			\end{Code}
 			The default value is the width of a single space.
 		}
-		\RpgVariable{RpgFiligreeSize}{The size of the decorative elements of the filigree frame \RpgPage[p]{S:Filigree}, which the theme uses to scale its design. Unlike a standard length, it is stored as a macro, and so is changed with \cmd{renewcommand}:
+		\RpgVariable{RpgFiligreeSize}{The size of the decorative elements of the filigree frame \RpgPage[p]{S:Filigree}, which the theme uses to scale its design. Unlike a standard length, it is stored as a macro, and so is changed with \cmd*{renewcommand}:
 			\begin{Code}
-				\cmd{renewcommand}\{\cmd*{RpgFiligreeSize}\}\{8pt\}
+				\cmd*{renewcommand}\{\cmd*{RpgFiligreeSize}\}\{8pt\}
 			\end{Code}
 			The default value is \texttt{5pt}.
 		}
@@ -199,7 +199,7 @@
 			If defined, holds a comma-separated list of package options \RpgPage[p]{S:PackageOptions}, which are applied after all other options have been processed. The options are applied in the following order, with later values overriding earlier ones:
 			\begin{enumerate}
 				\item The defaults set by the class (if one is being used).
-				\item The options passed in the document, via \cmd{documentclass} or \cmd{usepackage}.
+				\item The options passed in the document, via \cmd*{documentclass} or \cmd*{usepackage}.
 				\item The contents of \cmd{RpgCMD}.
 			\end{enumerate}
 			Since the options are processed before they are passed to the parent class, options which affect the class (such as \texttt{columns} or \texttt{size}) may also be set in this way.

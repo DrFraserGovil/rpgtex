@@ -61,7 +61,7 @@
 
 \NewDocumentCommand \RpgKeyval{m O{} m +m}
 {
-	\MarginBlock{\env{#1}}[KeyVal][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
+	\MarginBlock{\declareEnv[#1\ (key)]{#1}}[KeyVal][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
 	{
 		#3
 	}[KeyValBackground]
@@ -71,7 +71,7 @@
 }
 \NewDocumentCommand \RpgFlag{m O{} +m}
 {
-	\MarginBlock{\env{#1}}[Flag][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
+	\MarginBlock{\declareEnv[#1\ (flag)]{#1}}[Flag][\tl_if_blank:nF{#2}{\declareCmd{#2}}]
 	{
 		<flag>
 	}[FlagBackground]

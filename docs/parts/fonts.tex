@@ -20,7 +20,7 @@
 		{
 			Updates the font elements specified by a comma-separated list of key-value pairs. Each element has two keys, \texttt{<name>-family} and \texttt{<name>-style}, where \texttt{<name>} is given in the `Components' column of the table below (or was assigned by \cmd{RpgThemeCreateFont}).
 
-			The values may be any \LaTeX{} font or formatting commands (such as \texttt{\textbackslash{}slshape\textbackslash{}scriptsize\textbackslash{}bfseries}), which are applied whenever the element is invoked. To change the typeface itself, a font family must first be defined, for example using \cmd{newfontfamily} from the \texttt{fontspec} package.
+			The values may be any \LaTeX{} font or formatting commands (such as \texttt{\textbackslash{}slshape\textbackslash{}scriptsize\textbackslash{}bfseries}), which are applied whenever the element is invoked. To change the typeface itself, a font family must first be defined, for example using \cmd*{newfontfamily} from the \texttt{fontspec} package.
 
 			\RpgGetExample{modify-font}
 		}
@@ -57,7 +57,7 @@
 		\begin{fontlist}
 			\FontElement{Body}{main-body}{The main body text of the document. \cmd{RpgThemeFont} sets \cmd{normalfont} equal to this element.
 
-				Changing the font size here (e.g.\ with \cmd{large}) can give counterintuitive results, since it affects \textit{only} the body text and does not scale the other elements accordingly. The font size of the whole document should instead be set using the \texttt{size} option \RpgPage[p]{S:PackageOptions}.
+				Changing the font size here (e.g.\ with \cmd*{large}) can give counterintuitive results, since it affects \textit{only} the body text and does not scale the other elements accordingly. The font size of the whole document should instead be set using the \texttt{size} option \RpgPage[p]{S:PackageOptions}.
 			}
 			\FontElement{Emphasis}{emph}{The font used by \cmd{RpgKey}, and therefore by \cmd{emph} unless the \texttt{noemph} option is passed.}
 			\FontElement{Title}{title}{The font used for the document title, as returned by \cmd{RpgGetTitle} and displayed by \cmd{maketitle}.}
