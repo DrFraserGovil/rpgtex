@@ -96,3 +96,26 @@
 
 			\RpgGetExample{des-secrets}
 		}
+
+	\section{Table of Contents}\label{S:ThemeToc}
+
+		Themes lay out the table of contents with the \cmd*{titlecontents} command of the \texttt{titletoc} package. Chapters in the appendices are usually listed differently from the others: in the default theme, as `Appendix A: Title', followed by a page number. To allow this, \rpgtex{} provides two values which change when \cmd{appendix} is called, for use in the \texttt{chapter} entry. Since they are changed through the \texttt{.toc} file, they only change within the table of contents itself.
+
+		\RpgVariable{RpgTocChapterName}
+		{
+			The word placed before the number of a chapter: empty before \cmd{appendix}, and \texttt{Appendix} after it.
+		}
+		\RpgVariable{RpgTocChapterPage}
+		{
+			The filler and page number of a chapter: empty before \cmd{appendix}, and a dotted leader followed by the page number after it.
+		}
+
+		For example, the default theme lists chapters with:
+		\begin{Code}
+			\cmd*{titlecontents}\{chapter\}[0pt]\{\cmd*{RpgFontTocChapter}\}
+
+			\{ \cmd*{RpgTocChapterName}\textbackslash{}~\cmd*{thecontentslabel}:\textasciitilde{}\}\{\}
+
+			\{\cmd*{RpgTocChapterPage} \}
+		\end{Code}
+		Like any change to the formatting of the contents, this should be wrapped in \cmdref{RpgIfPreamble} \RpgPage[p]{S:ThemeCode}.

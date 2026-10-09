@@ -14,10 +14,6 @@ Smaller jobs left over from the documentation rewrite.
 
 ### Documentation
 
-* Decide on names for `\tocchapapp` and `\tocchappage` (the appendix contents hooks in `core/modules/titles.rpg-code.tex`), then document them in 'Styling Elements'
-* Customising the dnd theme: `\cmd{RpgTheme}` renders as `\RpgTheme`, which does not exist; refer to the `RpgTheme...` commands as a family instead
-* Customising the dnd theme: say that only the legendary and mythic text can be reworded, and point to the statblock font elements
-* ~~The `rpglatex` options table (`appendix_compiler.tex`) is `[breakable]` inside a block, so longtable centres it across the page; drop `[breakable]` to align it~~ (it needs to break, the formatting is minor compared to it not breaking)
 * Index: check the 'see' entries
 * Delete dead files:
     * the unused examples: `env-full-featureforge`, `cmd-cover`, `env-map-basic`, `env-secret-basic`, `env-table-basic`, `env-filigree-cmd` and `env-filigree-env`
