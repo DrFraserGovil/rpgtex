@@ -49,7 +49,8 @@
 
 
 
-			\RpgIfColoursEqual{ContourInnerColor}{ContourOuterColor}{
+			\RpgIfColoursEqualTF{ContourInnerColor}{ContourOuterColor}{
+				% BUG: SubtitleInner no longer exists; this should be ContourInnerColor (the color being compared)
 				\RpgFontSubTitle \color{SubtitleInner} \RpgGetSubtitle* \par
 				\vspace{1cm}
 				\RpgGetAuthor*
@@ -65,23 +66,3 @@
 }
 
 
-%%%%%%%%%
-%% Color helpers
-%%%%%%%
-\ExplSyntaxOn
-\DeclareDocumentCommand\RpgIfColoursEqual{m m +m +m}
-{
-	% Extract and convert Color 1 to RGB
-	\extractcolorspecs {#1} \l_tmpa_tl \l_tmpb_tl
-	\convertcolorspec \l_tmpa_tl \l_tmpb_tl { rgb } \l_tmpa_tl
-
-	% Extract and convert Color 2 to RGB
-	\extractcolorspecs {#2} \l_tmpc_tl \l_tmpd_tl
-	\convertcolorspec \l_tmpc_tl \l_tmpd_tl { rgb } \l_tmpb_tl
-
-	% Compare normalized RGB component strings
-	\str_if_eq:NNTF \l_tmpa_tl \l_tmpb_tl
-	{#3}
-	{#4}
-}
-\ExplSyntaxOff

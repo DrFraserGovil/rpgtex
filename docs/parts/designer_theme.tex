@@ -83,8 +83,14 @@
 
 	\section{Conditional Code}\label{S:ThemeConditional}
 
-		Many parts of a theme are only meaningful when the corresponding package option is active, and some commands may only be used in the preamble, although a theme may be loaded in the document body. The following commands allow a theme to include code conditionally:
+		Many parts of a theme are only meaningful when the corresponding package option is active, and some commands may only be used in the preamble, although a theme may be loaded in the document body. A design may also depend on the theme's colors. The following commands allow a theme to include code conditionally:
 
+		\RpgFunction{RpgIfColoursEqualTF}[RpgIfColoursEqual]{\param{color 1}\param{color 2}\param{true code}\param{false code}}
+		{
+			Runs \texttt{true code} if the two named colors have the same value, and \texttt{false code} otherwise. The colors are compared by their RGB values, so colors which are defined in different ways (for example, one with \cmd{definecolor} and the other with \cmd{colorlet}) are equal if they produce the same color. The alias \cmd{RpgIfColoursEqual}\param{color 1}\param{color 2}\param{code} takes a single code argument, and is equivalent to \cmd{RpgIfColoursEqualTF}\param{color 1}\param{color 2}\param{code}\{\}.
+
+			For example, the \texttt{scifi} theme outlines the subtitle on its cover page with \cmdref{RpgContour}, unless \texttt{ContourInnerColor} and \texttt{ContourOuterColor} are the same, when an outline would be invisible.
+		}
 		\RpgFunction{RpgIfFontTF}[RpgIfFont]{\param{true code}\param{false code}}
 		{
 			Runs \texttt{true code} if the \texttt{font} option is active \RpgPage[p]{S:PackageOptions}, and \texttt{false code} otherwise. The alias \cmd{RpgIfFont}\param{code} takes a single argument, and is equivalent to \cmd{RpgIfFontTF}\param{code}\{\}.
