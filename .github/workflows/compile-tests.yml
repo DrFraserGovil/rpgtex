@@ -1,0 +1,117 @@
+## Compiles tests/smoke.tex with each theme on a fresh TeX installation, to check that rpgtex installs
+## and configures itself as the documentation describes. Each run uploads the logs and PDFs as an artifact.
+##
+## Run by hand from the Actions tab. To run it on every push to main as well, add:
+##   push:
+##     branches: [main]
+name: Compile tests
+
+on:
+  workflow_dispatch:
+
+jobs:
+  texlive:
+    name: TeX Live (Linux) - ${{ matrix.theme }}
+    runs-on: ubuntu-latest
+    container: texlive/texlive:latest
+    strategy:
+      fail-fast: false
+      matrix:
+        theme: [default, dnd, scifi]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: rpgtex
+
+      ## The 'symbolic link' installation from the documentation
+      - name: Install rpgtex into TEXMFHOME
+        run: |
+          mkdir -p "$(kpsewhich -var-value TEXMFHOME)/tex/latex"
+          ln -s "$GITHUB_WORKSPACE/rpgtex" "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
+          kpsewhich rpgtex.sty
+
+      - name: Compile the smoke test
+        working-directory: rpgtex/tests
+        run: |
+          for pass in 1 2; do
+            xelatex -interaction=nonstopmode -halt-on-error -jobname="smoke-${{ matrix.theme }}" "\def\RpgCMD{theme=${{ matrix.theme }}}\input{smoke}"
+          done
+
+      ## No rpg-config.cfg exists in a fresh checkout, so the path must have been found automatically
+      - name: Check that rpgtex configured itself with kpsewhich
+        working-directory: rpgtex/tests
+        run: grep "RpgPackagePath located via kpsewhich" "smoke-${{ matrix.theme }}.log"
+
+      - name: Upload the logs and PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: texlive-${{ matrix.theme }}
+          path: |
+            rpgtex/tests/*.log
+            rpgtex/tests/*.pdf
+
+  miktex:
+    name: MiKTeX (Windows) - ${{ matrix.theme }}
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        theme: [default, dnd, scifi]
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      ## Check out into a TDS-style tree, which is registered with MiKTeX as a root directory below
+      - uses: actions/checkout@v4
+        with:
+          path: texmf/tex/latex/rpgtex
+
+      ## NOTE: the MiKTeX commands below are untested, and may need adjusting on the first run
+      - name: Install MiKTeX
+        run: |
+          choco install miktex --no-progress -y
+          "C:\Program Files\MiKTeX\miktex\bin\x64" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      ## Install missing packages without asking, then follow the Windows instructions in the documentation:
+      ## register the folder containing rpgtex as a root directory, and refresh the file name database
+      - name: Configure MiKTeX
+        run: |
+          initexmf --admin --set-config-value=[MPM]AutoInstall=1
+          initexmf --set-config-value=[MPM]AutoInstall=1
+          miktex --admin packages update-package-database
+          initexmf --admin --register-root="$env:GITHUB_WORKSPACE\texmf"
+          initexmf --admin --update-fndb
+          kpsewhich rpgtex.sty
+
+      - name: Compile the smoke test
+        working-directory: texmf/tex/latex/rpgtex/tests
+        run: |
+          foreach ($pass in 1, 2) {
+            xelatex -interaction=nonstopmode -halt-on-error -jobname="smoke-${{ matrix.theme }}" "\def\RpgCMD{theme=${{ matrix.theme }}}\input{smoke}"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+
+      ## The main question for MiKTeX: does its restricted shell escape allow the kpsewhich lookup?
+      - name: Check that rpgtex configured itself with kpsewhich
+        working-directory: texmf/tex/latex/rpgtex/tests
+        run: |
+          $found = Select-String -Path "smoke-${{ matrix.theme }}.log" -Pattern "RpgPackagePath located via kpsewhich"
+          if (-not $found) { Write-Error "rpgtex did not configure itself with kpsewhich"; exit 1 }
+          $found.Line
+
+      ## The rpglatex compiler, on Windows, with the PDF viewer turned off
+      - name: Compile with rpglatex
+        if: matrix.theme == 'default'
+        working-directory: texmf/tex/latex/rpgtex/tests
+        run: python ..\scripts\rpglatex --show 0 smoke.tex
+
+      - name: Upload the logs and PDF
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: miktex-${{ matrix.theme }}
+          path: |
+            texmf/tex/latex/rpgtex/tests/*.log
+            texmf/tex/latex/rpgtex/tests/*.pdf
+            texmf/tex/latex/rpgtex/tests/.build/*.log

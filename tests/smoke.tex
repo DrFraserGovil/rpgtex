@@ -1,0 +1,61 @@
+%% A short document using the main features of rpgtex, for checking that a fresh installation works.
+%% The theme is set from the command line, for example:
+%%		xelatex -jobname=smoke-dnd "\def\RpgCMD{theme=dnd}\input{smoke}"
+\documentclass{rpgbook}
+
+\title{Smoke Test}
+\subtitle{Checking a fresh installation}
+\author{rpgtex}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\part{A Part}
+\chapter{A Chapter}
+
+\section{Boxes \& Tables}
+
+\begin{RpgSidebar}{A Sidebar}
+	Sidebar text.
+\end{RpgSidebar}
+
+\begin{RpgTip}{A Tip}
+	Tip text.
+\end{RpgTip}
+
+\begin{RpgNarration}
+	Narration text.
+\end{RpgNarration}
+
+\begin{RpgFiligree}
+	Filigree text.
+\end{RpgFiligree}
+
+\begin{RpgTable}[title={A Table}]{lX}
+	Roll & Result
+	\\
+	\RpgDice{1d6} & A table row, with a dice roll.
+	\\
+	\RpgDice{2d6+3} & Another row.
+\end{RpgTable}
+
+\section{Rule Environments}
+
+\begin{RpgItem}{An Item}[description={A test item}]
+	The body of the item.
+\end{RpgItem}
+
+\begin{RpgFeat}{A Feat}
+	The body of the feat.
+\end{RpgFeat}
+
+\begin{RpgStat}{A Creature}
+	The body of the statblock.
+\end{RpgStat}
+
+\appendix
+\chapter{An Appendix}
+
+Appendix text.
+\end{document}

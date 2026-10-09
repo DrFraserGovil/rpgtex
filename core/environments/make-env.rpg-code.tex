@@ -16,7 +16,11 @@
 	\__RpgBuildEnv{__}{#1}{#2}{#1#2}
 	\__RpgBuildEnv{__}{#1}{#2Card}{#1#2}
 	\__RpgMakeKeys{#1}{#2}
-	\seq_put_right:Nn \__rpg_CardSwitches {#3}
+
+	\seq_if_in:NnF \__rpg_CardSwitches {#3}
+	{
+		\seq_put_right:Nn \__rpg_CardSwitches {#3}
+	}
 
 
 	\RenewDocumentEnvironment{__#1#2Card}{O{} m O{} +b}

@@ -16,27 +16,9 @@ Smaller jobs left over from the documentation rewrite.
 
 * Index: check the 'see' entries
 
-### Code
-
-* scifi: `MidGray` is defined but never used; keep it or delete it
-* scifi: `\RpgIfColoursEqual` is a general-purpose public command, but it only exists while the scifi theme is loaded; move it to core, or make it internal
-* dnd: in legacy mode, the `filigree` option draws a black filigree over the gold ribbons
-* Creating a rule environment a second time adds a duplicate entry to `\__rpg_CardSwitches` (`make-env.rpg-code.tex`)
-* Class defaults (such as `font` in rpgbook) cannot be switched off: document that this is deliberate, or add 'off' forms
-
 ### README & Changelog
 
-* README: replace the old configuration text and the link to the `configure` script, and update the options list to match the Options chapter
-* README: make the Dependencies and Credits sections match the Dependencies appendix and `LICENSE`
-* CHANGELOG entries for:
-    * the kpsewhich auto-configuration, the new appendices and the bug fixes
-    * a short mea culpa about the removed commercial fonts
-    * the renamed statblock colours (`StatblockRule`, `StatblockHeading`, `StatblockFrame`, `StatblockBackground`), and `outline-color` → `frame-color` (with the old name kept as an alias)
-    * `\rpgstringlegendarySpeil` → `\rpgstringlegendarySpiel`, and the scifi font `\starTrek` → `\galaxy`
-    * the new `rpgstatbox` style for the dnd statblock frame
-    * parts can now be labelled, and their contents entries link to the part page
-    * the default theme now resets part numbering to Roman numerals
-    * the documentation is now complete (the current entry says "dnd almost completed")
+* Ensure the changelog is valid,  but not too indepth, it's a bvig revision we're pushing
 
 ### Testing
 
@@ -46,7 +28,6 @@ Smaller jobs left over from the documentation rewrite.
 * rpgcard: whether screen mode passes `size` through to `standalone`
 * Check the two nga.gov links in the Image Credits appendix, and that the images are CC0
 * Confirm the uncertain `tlmgr` package names in the Dependencies appendix (`nameref` → `hyperref`, `fontenc` → `latex`)
-* Check the CC0 badge on the FontStruct page for Galaxy Edge
 
 ## Desired Features
 
