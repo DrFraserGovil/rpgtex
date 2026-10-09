@@ -19,9 +19,8 @@
 
 		\wlog{rpg-config~not~found.~Attempting~to~locate~rpgtex.sty~with~kpsewhich.}
 
-		%% kpsewhich is permitted in restricted shell-escape mode (the TeX Live and MiKTeX default), so no flags are needed.
-		%% The output is read with spaces kept (the path may contain them), and with each line end as a newline character,
-		%% since some tools print warnings before the path (MiKTeX does when run with elevated privileges)
+		%% kpsewhich is permitted in restricted shell-escape mode (the TeX Live and MiKTeX default)
+		%% Need to do some processing because messages can be injected (i.e. elevation warnings, such as in the github actions)
 		\sys_get_shell:nnNTF { kpsewhich~rpgtex.sty }
 			{
 				\char_set_catcode_space:n { 32 }

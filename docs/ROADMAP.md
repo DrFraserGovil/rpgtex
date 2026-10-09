@@ -15,7 +15,6 @@ Smaller jobs left over from the documentation rewrite.
 ### Testing
 
 * Overleaf: does a clean upload compile without the configuration step? Do classes in `classes/` need a `latexmkrc` (`ensure_path('TEXINPUTS', './classes//');`)? Is the repository within Overleaf's size limits?
-* MiKTeX: does restricted mode allow kpsewhich? Update the Windows notes either way
 * rpgdeck: the subpreamble behaviour (shared definitions; whether a second compilation is needed)
 * rpgcard: whether screen mode passes `size` through to `standalone`
 

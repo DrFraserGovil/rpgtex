@@ -112,12 +112,6 @@ jobs:
           "Expected:       $expected"
           if ($found -ne $expected) { Write-Error "RpgPackagePath is not the installation directory"; exit 1 }
 
-      ## The rpglatex compiler, on Windows, with the PDF viewer turned off
-      - name: Compile with rpglatex
-        if: matrix.theme == 'default'
-        working-directory: texmf/tex/latex/rpgtex/tests
-        run: python ..\scripts\rpglatex --show 0 smoke.tex
-
       - name: Upload the logs and PDF
         if: always()
         uses: actions/upload-artifact@v4
@@ -126,4 +120,3 @@ jobs:
           path: |
             texmf/tex/latex/rpgtex/tests/*.log
             texmf/tex/latex/rpgtex/tests/*.pdf
-            texmf/tex/latex/rpgtex/tests/.build/*.log

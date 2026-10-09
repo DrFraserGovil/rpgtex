@@ -38,7 +38,7 @@ A ground-up revamp of the package and its documentation. Almost every file has b
 ### Compiler & configuration
 
 * `rpgtex` now finds its own installation (using `kpsewhich`) when a document is compiled, so in most cases no configuration is needed.
-* A number of bugs in the `rpglatex` compiler have been fixed, including support for opening the output on Windows.
+* A number of bugs in the `rpglatex` compiler have been fixed. It is supported on Linux and macOS; Windows users should compile with `xelatex` directly.
 * A GitHub Actions workflow (run by hand, for now) compiles a short test document with each theme, on TeX Live and MiKTeX.
 
 ### Documentation

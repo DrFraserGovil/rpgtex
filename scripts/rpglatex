@@ -106,15 +106,6 @@ def argprint(args,message):
 	if not args.quiet: print(message)
 	
 
-###MiKTeX only reads files back (such as the .aux file) from its -aux-directory, not from its -output-directory,
-###so it needs both; TeX Live does not recognise -aux-directory
-def isMiKTeX(engine):
-	try:
-		result = subprocess.run([engine, "--version"], capture_output=True, text=True, check=False)
-		return "MiKTeX" in result.stdout
-	except FileNotFoundError:
-		return False
-
 ###Replaces the need for the manual configuration step by auto-injecting the package directory into document
 def locatePackageDirectory():
 	package_name = "rpgtex.sty"
@@ -190,10 +181,6 @@ def build_latex(args):
 		args.engine,
 		"--interaction=nonstopmode",
 		f"-output-directory={build_dir_abs}",
-	]
-	if isMiKTeX(args.engine):
-		latex_command.append(f"-aux-directory={build_dir_abs}")
-	latex_command += [
 		f"-jobname={base_name}", 
 		"-halt-on-error",
 		"-max-print-line=10000",
@@ -259,14 +246,6 @@ def finalize(args):
 
 		argprint(args,"-> Opening/focusing PDF viewer...")
 
-		# None of the viewers below exist on Windows: open the PDF in the default application instead
-		if sys.platform == "win32":
-			try:
-				os.startfile(destination_pdf)
-			except OSError as e:
-				print(f"Warning: Failed to open the PDF viewer: {e}", file=sys.stderr)
-			return
-
 		for command in viewer_commands:
 			try:
 				# Use subprocess.Popen to launch and immediately detach/continue (non-blocking)
@@ -293,7 +272,12 @@ def finalize(args):
 # --- MAIN EXECUTION BLOCK ---
 if __name__ == "__main__":
 	args = parse_arguments()
-	
+
+	# rpglatex is only supported on POSIX systems (Linux and macOS)
+	if os.name != "posix":
+		print("Warning: rpglatex is only supported on Linux and macOS, and may fail on this system.", file=sys.stderr)
+		print("         Compile the document with xelatex or lualatex directly instead.", file=sys.stderr)
+
 	# Set the verbosity for the script's own messages
 	if not args.quiet:
 		print("---------------------")
