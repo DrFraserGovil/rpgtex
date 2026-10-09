@@ -50,8 +50,7 @@
 
 
 			\RpgIfColoursEqualTF{ContourInnerColor}{ContourOuterColor}{
-				% BUG: SubtitleInner no longer exists; this should be ContourInnerColor (the color being compared)
-				\RpgFontSubTitle \color{SubtitleInner} \RpgGetSubtitle* \par
+				\RpgFontSubTitle \color{ContourInnerColor} \RpgGetSubtitle* \par
 				\vspace{1cm}
 				\RpgGetAuthor*
 			}{
