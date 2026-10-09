@@ -5,7 +5,7 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.6.0] 2026-09-10
 
 A ground-up revamp of the package and its documentation. Almost every file has been rewritten or reorganised, so rather than list every change, this is a summary of what is different. Existing documents will need updating: many commands have been renamed or have new signatures.
 
@@ -22,7 +22,7 @@ A ground-up revamp of the package and its documentation. Almost every file has b
 
 ### Rule environments
 
-* The FeatureForge has been rewritten to use a smoother system (`RpgThemeNewRuleEnv`) - `RpgItem`, `RpgFeat`, `RpgSpell` and `RpgStat` are still build from it as before. 
+* The FeatureForge has been rewritten as a smoother system (`\RpgThemeNewRuleEnv`), from which `RpgItem`, `RpgFeat`, `RpgSpell` and `RpgStat` are still built. Designers can create their own rule environments in the same way.
 * The `default` theme gives each of them a simple format; the `dnd` theme gives each a full D&D treatment.
 
 ### Classes
@@ -32,16 +32,18 @@ A ground-up revamp of the package and its documentation. Almost every file has b
 ### Themes
 
 * **dnd**: the statblock has been overhauled to be more modular, whilst retaining the computational powers it had before. Items, feats and spells have also been updated, and a section on customising the theme has been added to the documentation.
-* **scifi**: modernised, with new colours, a footer to match the `dnd` theme, and new fonts.
+* **scifi**: modernised, with new colors and fonts, a footer to match the `dnd` theme, and a filigree frame of its own.
 
 
 ### Compiler & configuration
 
-* `rpglatex` now finds the package itself, using `kpsewhich`, and a number of bugs in the compiler have been fixed (including support for opening the output on Windows).
+* `rpgtex` now finds its own installation (using `kpsewhich`) when a document is compiled, so in most cases no configuration is needed.
+* A number of bugs in the `rpglatex` compiler have been fixed, including support for opening the output on Windows.
+* A GitHub Actions workflow (run by hand, for now) compiles a short test document with each theme, on TeX Live and MiKTeX.
 
 ### Documentation
 
-* The documentation has been rewritten almost entirely from scratch, in four parts: for users, for each theme, for designers, and appendices covering the compiler, the dependencies and the image credits. Every command has a description and, where useful, a live example; each theme chapter shows its fonts, colors, page designs and rule environments as they actually appear.
+* The documentation has been rewritten almost entirely from scratch, in four parts: for users, for each theme, for designers, and appendices covering the compiler, the dependencies and the image credits. Every command has a description and, where useful, a live example; each theme chapter shows its fonts, colors, page designs and rule environments as they actually appear. The index groups related commands, and the README has been rewritten.
 
 ## 0.5.0 (2025-11-16)
 

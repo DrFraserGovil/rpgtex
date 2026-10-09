@@ -12,10 +12,6 @@ Features which *must* be added before the next major release
 
 Smaller jobs left over from the documentation rewrite.
 
-### README & Changelog
-
-* Ensure the changelog is valid,  but not too indepth, it's a big revision we're pushing
-
 ### Testing
 
 * Overleaf: does a clean upload compile without the configuration step? Do classes in `classes/` need a `latexmkrc` (`ensure_path('TEXINPUTS', './classes//');`)? Is the repository within Overleaf's size limits?
