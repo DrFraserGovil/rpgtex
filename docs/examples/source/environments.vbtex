@@ -1,9 +1,3 @@
-% example=env-card
-% options = listing only
-    \begin{RpgCard}[<key-value-opts>]
-        <contents>
-    \end{RpgCard}
-
 % example=env-card-dimensions
 %highlight = RpgCard
     \begin{tikzpicture}%wrap in tikz so we can draw dimensions
@@ -28,16 +22,6 @@
         \lipsum[2]
     \end{RpgCard}
 
-% example = env-map-basic
-% options = listing only
-    \begin{RpgMap}[<options>]
-        \area[<label>]{<name>} <description>
-
-        \begin{RpgArea}[<label>]{<name>}
-            <nested areas>
-        \end{RpgArea}
-    \end{RpgMap}
-
 % example = env-map-nesting
 % title = Nested Map Areas
 % highlight = RpgMap, RpgArea, area
@@ -56,12 +40,6 @@
 % example = env-map-refs
 % highlight = RpgMapRef
     \RpgMapRef{map:dais} is area \RpgMapRef*{map:dais}, on \RpgPage{map:dais}.
-
-%% example = env-secret-basic
-%%options = listing only
-    \begin{RpgSecret}[<opts>]{player-text}
-        <GM-text>
-    \end{RpgSecret}
 
 % example = env-secret-hide
 % highlight = RpgSecret,RpgSwitch
@@ -99,12 +77,6 @@
         This bit of text is noteworthy - it's been added in after the fact
     \end{RpgSecret}
     \lorumIpsumThree
-
-%% example = env-table-basic
-% options = listing only
-    \begin{RpgTable}[<options>]{<column-specifier}
-        <table-contents>
-    \end{RpgTable}
 
 %% example = env-table-standard
     \begin{RpgTable}[width=0.85\linewidth, color=green!30!white]{lX}
@@ -144,18 +116,6 @@
         This is some helpful - but not vital - text.
     \end{RpgTip}
 
-% example = env-filigree-cmd
-%options = listing only
-% highlight = rpgfiligree
-    \begin{any-tcbox-env}[rpgfiligree]
-        <body>
-    \end{any-tcbox-env}
-% example = env-filigree-env
-%options = listing only
-    \begin{RpgFiligree}[color=<color>,<tcb-options>]
-        <body>
-    \end{RpgFiligree}
-
 % example = env-filigree-example
     %% As environment
     \begin{RpgFiligree}
@@ -176,24 +136,3 @@
         The value of the key is \RpgGetKey{<key>}.
     \end{RpgItem}
 
-
-%% example = env-full-featureforge
-%highlight = TestObject, RpgMakeFeature, TestObjectAddProperty
-    %% Test object does not exist before this moment.
-    %%See FeatureForge for documentation
-    \RpgMakeFeature{TestObject}{TestCard}{test}
-
-    \TestObjectAddProperty{test-key} {\testKeyValue} {default}
-
-    %card mode defaults to false, so get plain text output:
-    \begin{TestObject}{An Example}
-        This is the body text, I can see that my key is `\getkey{test-key}'
-    \end{TestObject}
-
-    \vspace{0.5cm}
-
-    %%Then activate the card mode (and change the test-key value)
-    \TestObjectShowCard{true}
-    \begin{TestObject} {An Example} [test-key=alacrity]
-        This is the body text, I can see that my key is `\getkey{test-key}'
-    \end{TestObject}

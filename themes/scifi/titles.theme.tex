@@ -22,7 +22,7 @@
 \RpgThemePartPage
 {
 	\RpgPut{0.5\paperwidth}{0.5\paperheight}{
-		\RpgContour[outer=white!50!TitleBlue,inner=TitleBlue,style=\RpgFontPart{}]
+		\RpgContour[style=\RpgFontPart{}]
 		{
 			\MakeUppercase{Part    \thepart}
 		}
@@ -30,7 +30,7 @@
 		\vspace{1cm}
 
 
-		\RpgContour[outer=white!50!TitleBlue,inner=TitleBlue,style=\RpgFontPart\Huge]{{#1}}
+		\RpgContour[style=\RpgFontPart\Huge]{{#1}}
 	}
 
 }
@@ -49,15 +49,15 @@
 
 
 
-			\RpgIfColoursEqual{SubtitleInner}{SubtitleOuter}{
+			\RpgIfColoursEqual{ContourInnerColor}{ContourOuterColor}{
 				\RpgFontSubTitle \color{SubtitleInner} \RpgGetSubtitle* \par
 				\vspace{1cm}
 				\RpgGetAuthor*
 			}{
-				{\RpgContour[inner=SubtitleInner,outer=SubtitleOuter,style=\RpgFontSubTitle]{\RpgGetSubtitle*}}
+				{\RpgContour[style=\RpgFontSubTitle]{\RpgGetSubtitle*}}
 
 				\vspace{1cm}
-				{\RpgContour[inner=SubtitleInner,outer=SubtitleOuter,style=\RpgFontSubTitle]{\RpgGetAuthor*}}
+				{\RpgContour[style=\RpgFontSubTitle]{\RpgGetAuthor*}}
 			}
 		\end{center}
 

@@ -15,8 +15,6 @@ Smaller jobs left over from the documentation rewrite.
 ### Documentation
 
 * Index: check the 'see' entries
-* Delete dead files:
-    * the unused examples: `env-full-featureforge`, `cmd-cover`, `env-map-basic`, `env-secret-basic`, `env-table-basic`, `env-filigree-cmd` and `env-filigree-env`
 
 ### Code
 
