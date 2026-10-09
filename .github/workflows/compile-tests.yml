@@ -37,10 +37,16 @@ jobs:
             xelatex -interaction=nonstopmode -halt-on-error -jobname="smoke-${{ matrix.theme }}" "\def\RpgCMD{theme=${{ matrix.theme }}}\input{smoke}"
           done
 
-      ## No rpg-config.cfg exists in a fresh checkout, so the path must have been found automatically
+      ## No rpg-config.cfg exists in a fresh checkout, so the path must have been found automatically,
+      ## and must be exactly the installation directory. TeX wraps long log lines, so they are joined first
       - name: Check that rpgtex configured itself with kpsewhich
         working-directory: rpgtex/tests
-        run: grep "RpgPackagePath located via kpsewhich" "smoke-${{ matrix.theme }}.log"
+        run: |
+          found=$(tr -d '\r\n' < "smoke-${{ matrix.theme }}.log" | grep -o 'located via kpsewhich: [^()]*' | sed 's/^located via kpsewhich: //; s/[[:space:]]*$//')
+          expected="$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
+          echo "RpgPackagePath: $found"
+          echo "Expected:       $expected"
+          [ "$found" = "$expected" ]
 
       - name: Upload the logs and PDF
         if: always()
@@ -92,13 +98,19 @@ jobs:
             if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           }
 
-      ## The main question for MiKTeX: does its restricted shell escape allow the kpsewhich lookup?
+      ## The path must have been found automatically, and must be exactly the installation directory
+      ## (MiKTeX's kpsewhich prints a warning before the path when run with elevated privileges, as it is here).
+      ## TeX wraps long log lines, so they are joined first
       - name: Check that rpgtex configured itself with kpsewhich
         working-directory: texmf/tex/latex/rpgtex/tests
         run: |
-          $found = Select-String -Path "smoke-${{ matrix.theme }}.log" -Pattern "RpgPackagePath located via kpsewhich"
-          if (-not $found) { Write-Error "rpgtex did not configure itself with kpsewhich"; exit 1 }
-          $found.Line
+          $log = (Get-Content -Raw "smoke-${{ matrix.theme }}.log") -replace "`r?`n", ""
+          if ($log -notmatch 'located via kpsewhich: ([^()]*)') { Write-Error "rpgtex did not configure itself with kpsewhich"; exit 1 }
+          $found = $Matches[1].Trim()
+          $expected = "$env:GITHUB_WORKSPACE/texmf/tex/latex/rpgtex" -replace '\\', '/'
+          "RpgPackagePath: $found"
+          "Expected:       $expected"
+          if ($found -ne $expected) { Write-Error "RpgPackagePath is not the installation directory"; exit 1 }
 
       ## The rpglatex compiler, on Windows, with the PDF viewer turned off
       - name: Compile with rpglatex
