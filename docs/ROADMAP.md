@@ -6,6 +6,7 @@ This is a 'to do list' of features which are incomplete, in the works, or otherw
 
 Features which *must* be added before the next major release
 
+* Revamp the example documents (leave this until the end)
 
 ## Before Release
 
@@ -13,11 +14,6 @@ Smaller jobs left over from the documentation rewrite.
 
 ### Documentation
 
-* Revamp the example documents
-* Intro tidy-ups:
-    * "Failed Configuration" (`intro.tex`) calls the compiler `\texttt{rpgtex}`; it should be `rpglatex`
-    * review `welcome.tex`
-* Review `fonts.tex` and `designer_page.tex` (not yet given a review pass)
 * Decide on names for `\tocchapapp` and `\tocchappage` (the appendix contents hooks in `core/modules/titles.rpg-code.tex`), then document them in 'Styling Elements'
 * Customising the dnd theme: `\cmd{RpgTheme}` renders as `\RpgTheme`, which does not exist; refer to the `RpgTheme...` commands as a family instead
 * Customising the dnd theme: say that only the legendary and mythic text can be reworded, and point to the statblock font elements

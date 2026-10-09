@@ -11,7 +11,7 @@
 
 		\RpgFunction{RpgThemeFooterDecoration}{(*)\param{height}\param{path/to/image}\param{overlay}}
 		{
-			Draws an image across the full width of the bottom of the current page, with the given \texttt{height}, and then draws the \texttt{overlay} (such as \cmd{RpgPut} or \cmd{RpgThemePageNumberAt} commands) on top of it.
+			Draws an image across the full width of the bottom of the current page, with the given \texttt{height} (which may be ``!" to use the aspect-ratio height), and then draws the \texttt{overlay} (such as \cmd{RpgPut} or \cmd{RpgThemePageNumberAt} commands) on top of it.
 
 			The decoration is only drawn on the page on which the command is called, and so it is normally placed within the definition of a page footer. The starred form mirrors the image horizontally, and the unstarred form draws it as it is, allowing a single image to be used on both left- and right-hand pages:
 
@@ -19,7 +19,7 @@
 		}
 		\RpgFunction{RpgThemePageNumberAt}{\param{x}\param{y}}
 		{
-			Typesets the page number, in the \FontRef{PageNumber} font element, centred at the position (\texttt{x}, \texttt{y}). It may only be used within a page overlay, such as the final argument of \cmd{RpgThemeFooterDecoration}.
+			Typesets the page number, in the \FontRef{PageNumber} font element, at the position (\texttt{x}, \texttt{y}), with the alignment set to \texttt{b} (centred, with the baseline at height \texttt{y}). It may only be used within a page overlay, such as the final argument of \cmd{RpgThemeFooterDecoration}.
 		}
 		\RpgFunction{RpgThemePaperColor}{\param{colour}}
 		{
