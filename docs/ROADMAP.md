@@ -6,15 +6,6 @@ This is a 'to do list' of features which are incomplete, in the works, or otherw
 
 Features which *must* be added before the next major release
 
-* Full documentation 
-    * ~~RpgCard object~~
-    * ~~rpgcard class~~ (the Classes chapter now has a section for each class)
-    * ~~Theme documentation~~ (default, dnd and scifi chapters complete)
-        * ~~Including 'how to write a theme'~~ (the 'For Designers' part)
-    * ~~Some fonts are missing~~ (replaced with free fonts: TeX Live for dnd, bundled with licences for scifi)
-    * Remaining documentation tasks: see *Documentation* under [Before Release](#before-release)
-* Revamp the example documents
-* Create the 'features' section on the README (currently a placeholder)
 
 ## Before Release
 
@@ -22,20 +13,17 @@ Smaller jobs left over from the documentation rewrite.
 
 ### Documentation
 
-* Add a short 'Reading this manual' section, explaining the signature notation: `\param{}`, `[<x>]`, `(*)`, `(<x>)` and `\{<x>\}`
+* Revamp the example documents
 * Intro tidy-ups:
-    * the "Path Configuration" section (`S:Configuration`) refers to itself; give "Failed Configuration" its own label
-    * the 'safe mode' wording, the name of the `font` option and the Git Bash notes
-    * the chapter title, and the speed benefit of `rpg-config.cfg`
+    * "Failed Configuration" (`intro.tex`) calls the compiler `\texttt{rpgtex}`; it should be `rpglatex`
     * review `welcome.tex`
 * Review `fonts.tex` and `designer_page.tex` (not yet given a review pass)
 * Decide on names for `\tocchapapp` and `\tocchappage` (the appendix contents hooks in `core/modules/titles.rpg-code.tex`), then document them in 'Styling Elements'
 * Customising the dnd theme: `\cmd{RpgTheme}` renders as `\RpgTheme`, which does not exist; refer to the `RpgTheme...` commands as a family instead
 * Customising the dnd theme: say that only the legendary and mythic text can be reworded, and point to the statblock font elements
-* The `rpglatex` options table (`appendix_compiler.tex`) is `[breakable]` inside a block, so longtable centres it across the page; drop `[breakable]` to align it
+* ~~The `rpglatex` options table (`appendix_compiler.tex`) is `[breakable]` inside a block, so longtable centres it across the page; drop `[breakable]` to align it~~ (it needs to break, the formatting is minor compared to it not breaking)
 * Index: check the 'see' entries
 * Delete dead files:
-    * `docs/parts/featureforge.tex` (no longer included)
     * the unused examples: `env-full-featureforge`, `cmd-cover`, `env-map-basic`, `env-secret-basic`, `env-table-basic`, `env-filigree-cmd` and `env-filigree-env`
 
 ### Code
@@ -93,6 +81,4 @@ These are some desired features which are on the radar, but probably won't be hi
 
 Features which would improve the developer experience, but would not affect the user interface
 
-* ~~Complete the transition to the __rpg_add_key interface to simplify the vast number of keys~~ (done, via the `\RpgTheme...Key` helpers and the rule environments' `Add...Property`)
-* ~~Generate a more robust font-generation interface so that new fonts can be created in a single line~~
 * Optional, deferred: remove the old commercial fonts from the git history with `git filter-repo`

@@ -3,7 +3,7 @@
 
 	\section{Getting \rpgtex}
 
-		\rpgtex{} may be installed in several ways, described below. The package dependencies can be found in Appendix \ref{C:Dependencies} \RpgPage[p]{C:Dependencies}. Once installed, \rpgtex{} attempts to locate its internal resources (fonts and images) automatically. If this fails, manual configuration may be required, see \RpgPage[t]{S:Configuration}.
+		\rpgtex{} may be installed in several ways, described below. The package dependencies can be found in Appendix \ref{C:Dependencies} \RpgPage[p]{C:Dependencies}. Once installed, \rpgtex{} attempts to locate its internal resources (fonts and images) automatically. If this fails, manual configuration may be required (see \RpgPage[t]{S:Configuration}).
 
 
 		\begin{RpgSidebar}{Operating Systems}
@@ -59,7 +59,7 @@ ln -sf ~/path/to/rpgtex "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
 			\rpgtex{} works on Windows, with a few differences from the instructions above:
 			% HACK: we also don't know if MiKTeX actually works yet
 			\begin{itemize}
-				\item Run the git commands using Git Bash for Windows
+				\item Run the git commands using Git Bash for Windows.
 				\item Use the direct installation. Symbolic links and \texttt{TEXINPUTS} behave differently on Windows, and are best avoided.
 				\item If you use MiKTeX, it does not automatically detect new files in its directories. After installing, register the folder containing \rpgtex{} as a root directory in MiKTeX Console (if it is not already one), and then refresh the file name database (\textit{Tasks} $\rightarrow$ \textit{Refresh file name database}). TeX Live requires no extra steps.
 				\item Run the provided Python scripts through Python explicitly, for example \texttt{python rpglatex document.tex}.
@@ -73,42 +73,12 @@ ln -sf ~/path/to/rpgtex "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
 			\begin{enumerate}
 				\item Download the \rpgtex{} repository from GitHub as a ZIP archive.
 				\item On Overleaf, create a new project using \textit{Upload Project}, and upload the ZIP archive.
-				      % \item Create the file \texttt{core/rpg-config.cfg}, containing the single line \cmd*{edef}\cmd*{RpgPackagePath}\texttt{\{\}}. This tells \rpgtex{} where it is installed \RpgPage[p]{S:Configuration}.
 
 			\end{enumerate}
 
 
-			% \section{Package \& Class Usage}
-			%
-			% 	\rpgtex{} can be used either as a standalone package, or through one of its classes.
-			%
-			% 	\subsection{Standalone Package}
-			%
-			% 		The package may be loaded into a document of any class:
-			% 		\begin{Code}
-			% 			\textbackslash{}documentclass\{<any-class>\}
-			%
-			% 			\textbackslash{}usepackage[<options>]\{rpgtex\}
-			% 		\end{Code}
-			%
-			% 		This loads the core commands and environments, and the theme (the \texttt{default} theme, unless the \texttt{theme} option is used). However, the modules which change the fonts, page backgrounds, section headings and title page are inactive unless they are enabled with the \texttt{font}, \texttt{background}, \texttt{sections} and \texttt{title} options \RpgPage[p]{S:PackageOptions}. This allows \rpgtex{} to be added to an existing document without changing its overall appearance.
-			%
-			% 	\subsection{Classes}
-			%
-			% 		\rpgtex{} may instead be loaded through one of its classes, which enable all of these modules and set up the page layout, backgrounds and headers:
-			% 		\begin{RpgTable}{lX}
-			% 			Class & Purpose
-			% 			\\
-			% 			\texttt{rpgbook} \RpgPage[p]{S:bookClass} & Larger RPG documents, such as rulebooks and adventures. Based on the standard \texttt{book} class.
-			% 			\\
-			% 			\texttt{rpgcard} \RpgPage[p]{S:cardClass} & Individual cards, such as items, spells or abilities, for digital use.
-			% 			\\
-			% 			\texttt{rpgdeck} \RpgPage[p]{S:deckClass} & Collections of cards, arranged for printing.
-			% 			\\
-			% 			\texttt{rpghandout} \RpgPage[p]{S:handoutClass} & Shorter documents, such as player handouts. Based on the standard \texttt{article} class.
-			% 		\end{RpgTable}
 
-	\section{Compiling \rpgtex{} Documents}\label{C:Compiler}
+	\section{Compiling \rpgtex{} Documents}
 
 		\rpgtex{} uses the \texttt{fontspec} package to load its fonts, and so must be compiled with \texttt{xelatex} or \texttt{lualatex} in almost all cases. An exception is if \rpgtex{} is loaded as a package without the font option \RpgPage[p]{flag:font}:
 		\begin{Code}
@@ -127,19 +97,22 @@ ln -sf ~/path/to/rpgtex "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
 			\RpgVariable{RpgPackagePath}{The path to the root directory of the \rpgtex{} installation. \rpgtex{} uses it to load resources, such as fonts, which \TeX{} cannot find relative to the package itself. It is set by the first of the following which is available:
 				\begin{enumerate}
 					\item \textbf{The \texttt{rpglatex} compiler} \RpgPage[p]{S:rpglatex}, which defines it before the document is read.
-					\item \textbf{A configuration file}, \texttt{core/rpg-config.cfg}, within the installation
+					\item \textbf{A configuration file}, \texttt{core/rpg-config.cfg}, within the installation.
 					\item \textbf{Automatically.} \rpgtex{} asks \texttt{kpsewhich} where \texttt{rpgtex.sty} is installed. This uses the compiler's restricted shell escape, which TeX Live enables by default, so no extra flags are needed.
 				\end{enumerate}
 				If none of these succeeds, compilation stops with an error describing these options.
 			}
 
 			\subsubsection{Failed Configuration}
-				Most users will rely on the third option, the automatic configuration. However, this may fail if \LaTeX{} is (for example) running in safe mode. In such cases the user must either use the \texttt{rpgtex} compiler, run the python script located at \texttt{scripts/configure-rpgtex}, or manually create the configuration file:
+				Most users will rely on the third option, the automatic configuration. However, this may fail if \LaTeX{} is (for example) running in a safe mode in which restricted writes and calls are not permitted. In such cases the user must either use the \texttt{rpglatex} compiler, run the Python script located at \texttt{scripts/configure-rpgtex}, or manually create the configuration file:
 
 				\begin{Code}
 					cd <rpgtex root directory>
 
 					echo '\cmd*{edef}\cmd*{RpgPackagePath}\{'"\$(pwd)"'\}' > core/rpg-config.cfg
 				\end{Code}
+				On some systems there can be a minor improvement in compilation speed by providing this file even in cases where the auto-config is valid. These will tend to be heavily sandboxed environments where external function calls come with a large penalty.
+
 				If \rpgtex{} is later moved, the file must be deleted or recreated.
+
 
