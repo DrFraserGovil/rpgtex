@@ -2,7 +2,7 @@
 %%It activates the rpg geometry, and overloads title pages and part pages to the theme-determined options
 
 \RequirePackage {expl3}
-\ProvidesExplClass{rpgbook}{2025/10/09} {0.0.0} { Book Template for RPG material }
+\ProvidesExplClass{rpgbook}{2025/10/10} {1.0.0} { Book Template for RPG material }
 
 \ExplSyntaxOn
 \bool_new:N \__rpg_IsClass
