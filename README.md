@@ -13,7 +13,7 @@
   <a href="example/dnd-example"><img src="docs/img/readme/village-default.png" width="30%" alt="A page of an adventure in the default theme"></a>
   <a href="example/dnd-example"><img src="docs/img/readme/village-dnd.jpg" width="30%" alt="The same page in the dnd theme"></a>
   <a href="example/scifi-example"><img src="docs/img/readme/scifi.png" width="30%" alt="A mission briefing in the scifi theme"></a>
-  <br><em>The same page in the <code>default</code> and <code>dnd</code> themes, and a briefing in the <code>scifi</code> theme.</em>
+  <br><em>The same page of a book the <code>default</code> and <code>dnd</code> themes, and a handout in the <code>scifi</code> theme.</em>
 </p>
  
 ### Document classes
@@ -48,7 +48,7 @@
 
 <p align="center">
   <a href="example/dnd-example"><img src="docs/img/readme/dnd-creatures.jpg" width="45%" alt="A page of statblocks in the dnd theme, including a full-width legendary creature"></a>
-  <a href="example/card-example"><img src="docs/img/readme/cards.png" width="45%" alt="An item card and a spell card in the dnd theme"></a>
+  <a href="example/card-example"><img src="docs/img/readme/cards.png" width="45%" alt="An item card and a spell card in the dnd theme"></a><em>The <code>dnd</code> theme demonstrating an <code>RpgStat</code> environment in text mode, and <code>RpgItem</code> and <code>RpgSpell</code> in card-mode.</em>
 </p>
 
 ### Tooling
