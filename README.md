@@ -27,10 +27,10 @@
 * Themes can be switched part-way through a document, and the documentation includes a full guide to building your own: fonts, colors, page designs, boxes and more.
 
 <p align="center">
-  <a href="https://raw.githubusercontent.com/DrFraserGovil/rpgtex/main/docs/documentation.pdf"><img src="docs/img/readme/cover-default.jpg" width="30%" alt="A cover page in the default theme"></a>
-  <a href="https://raw.githubusercontent.com/DrFraserGovil/rpgtex/main/docs/documentation.pdf"><img src="docs/img/readme/cover-dnd.jpg" width="30%" alt="A cover page in the dnd theme"></a>
-  <a href="https://raw.githubusercontent.com/DrFraserGovil/rpgtex/main/docs/documentation.pdf"><img src="docs/img/readme/cover-scifi.jpg" width="30%" alt="A cover page in the scifi theme"></a>
-  <br><em>The same cover page in the <code>default</code>, <code>dnd</code> and <code>scifi</code> themes.</em>
+  <a href="example/dnd-example"><img src="docs/img/readme/village-default.png" width="30%" alt="A page of an adventure in the default theme"></a>
+  <a href="example/dnd-example"><img src="docs/img/readme/village-dnd.jpg" width="30%" alt="The same page in the dnd theme"></a>
+  <a href="example/scifi-example"><img src="docs/img/readme/scifi.png" width="30%" alt="A mission briefing in the scifi theme"></a>
+  <br><em>The same page in the <code>default</code> and <code>dnd</code> themes, and a briefing in the <code>scifi</code> theme.</em>
 </p>
 
 ### Text and layout
@@ -41,11 +41,6 @@
 * **Maps**: number the areas of a location automatically (including nested areas, such as `1B-iii`), and refer to them by name.
 * **Secrets**: write a GM's version and a players' version of the same text, and choose which to print.
 * **Drop capitals**, outlined text, whole-page images and other finishing touches.
-
-<p align="center">
-  <a href="example/dnd-example"><img src="docs/img/readme/dnd-village.jpg" width="45%" alt="A page of an adventure in the dnd theme, with narration, a numbered map and notes for the GM"></a>
-  <a href="example/scifi-example"><img src="docs/img/readme/scifi.png" width="45%" alt="A mission briefing in the scifi theme"></a>
-</p>
 
 ### Rules content
 

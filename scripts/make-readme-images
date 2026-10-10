@@ -1,9 +1,10 @@
 #!/usr/bin/python3
-## Generates the images shown in the Features section of README.md, from the example documents and the
-## theme mockup pages, and saves them in docs/img/readme/.
+## Generates the images shown in the Features section of README.md from the example documents,
+## and saves them in docs/img/readme/.
 ##
-## The examples are compiled in a temporary directory, so the repository is left untouched. The theme
-## covers are taken from docs/examples/pages/page-<theme>.pdf, which docs/examples/pages/makepages builds.
+## The examples are compiled in a temporary directory, so the repository is left untouched.
+## To compare the themes, the village chapter of the dnd example (example/dnd-example/village.tex) is also
+## typeset on its own, in each of the themes listed in VILLAGE_THEMES, so that the pages differ only in their theme.
 ##
 ## Requires: xelatex, pdftoppm (from poppler) and the Pillow python library.
 ## Usage:    scripts/make-readme-images
@@ -20,17 +21,21 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUTPUT = os.path.join(ROOT, "docs", "img", "readme")
 DPI = 150
 
-## Pages with photographs or textured paper are saved as jpg, which is far smaller for them;
+## Pages with textured paper or images are saved as jpg, which is far smaller for them;
 ## pages of flat color are saved as png, which keeps their text sharp.
-## (output name, source pdf, page, width in pixels, format)
-COVERS = [
-	("cover-default", "docs/examples/pages/page-default.pdf", 1, 400, "jpg"),
-	("cover-dnd", "docs/examples/pages/page-dnd.pdf", 1, 400, "jpg"),
-	("cover-scifi", "docs/examples/pages/page-scifi.pdf", 1, 400, "jpg"),
-]
+## (theme, format): each is saved as village-<theme>
+VILLAGE_THEMES = [("default", "png"), ("dnd", "jpg")]
+VILLAGE_WIDTH = 600
+## The document which typesets the village chapter on its own, in the given theme
+VILLAGE_DOCUMENT = r"""\documentclass[theme=%s]{rpgbook}
+\RpgSwitch{ShowSecrets}{on}
+\begin{document}
+\chapter{The Village of Saltmere}
+\input{village}
+\end{document}
+"""
 ## (output name, example folder, document, page, width in pixels, format, crop to the content?)
 EXAMPLES = [
-	("dnd-village", "dnd-example", "dnd-book", 2, 600, "jpg", False),
 	("dnd-creatures", "dnd-example", "dnd-book", 3, 600, "jpg", False),
 	("cards", "card-example", "deck", 1, 600, "png", True),
 	("scifi", "scifi-example", "scifi", 1, 600, "png", False),
@@ -38,11 +43,14 @@ EXAMPLES = [
 
 
 def compile_example(build_dir, folder, document):
-	"""Compiles an example (twice, for references and the deck's preambles) in a copy of its folder"""
+	"""Compiles an example (twice, for references and the deck's preambles) in a copy of its folder.
+	With no document, only copies the folder"""
 	source = os.path.join(ROOT, "example", folder)
 	target = os.path.join(build_dir, folder)
 	if not os.path.exists(target):
 		shutil.copytree(source, target)
+	if document is None:
+		return None
 	for _ in range(2):
 		result = subprocess.run(
 			["xelatex", "-interaction=nonstopmode", "-halt-on-error", f"{document}.tex"],
@@ -89,12 +97,14 @@ def save(image, name, width, fmt):
 def main():
 	os.makedirs(OUTPUT, exist_ok=True)
 	with tempfile.TemporaryDirectory() as build_dir:
-		print("Theme covers:")
-		for name, pdf, page, width, fmt in COVERS:
-			pdf = os.path.join(ROOT, pdf)
-			if not os.path.exists(pdf):
-				sys.exit(f"Error: {os.path.relpath(pdf, ROOT)} not found; run docs/examples/pages/makepages first")
-			save(render_page(pdf, page, build_dir), name, width, fmt)
+		print("The village chapter in each theme:")
+		for theme, fmt in VILLAGE_THEMES:
+			document = f"village-{theme}"
+			compile_example(build_dir, "dnd-example", None)
+			with open(os.path.join(build_dir, "dnd-example", f"{document}.tex"), "w") as file:
+				file.write(VILLAGE_DOCUMENT % theme)
+			pdf = compile_example(build_dir, "dnd-example", document)
+			save(render_page(pdf, 1, build_dir), document, VILLAGE_WIDTH, fmt)
 
 		print("Example pages:")
 		for name, folder, document, page, width, fmt, crop in EXAMPLES:
