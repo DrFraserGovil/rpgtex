@@ -48,7 +48,8 @@
 
 <p align="center">
   <a href="example/dnd-example"><img src="docs/img/readme/dnd-creatures.jpg" width="45%" alt="A page of statblocks in the dnd theme, including a full-width legendary creature"></a>
-  <a href="example/card-example"><img src="docs/img/readme/cards.png" width="45%" alt="An item card and a spell card in the dnd theme"></a><em>The <code>dnd</code> theme demonstrating an <code>RpgStat</code> environment in text mode, and <code>RpgItem</code> and <code>RpgSpell</code> in card-mode.</em>
+  <a href="example/card-example"><img src="docs/img/readme/cards.png" width="45%" alt="An item card and a spell card in the dnd theme"></a>
+  <em>The <code>dnd</code> theme demonstrating an <code>RpgStat</code> environment in text mode, and <code>RpgItem</code> and <code>RpgSpell</code> in card-mode.</em>
 </p>
 
 ### Tooling
