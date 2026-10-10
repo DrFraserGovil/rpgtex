@@ -1,0 +1,108 @@
+#!/usr/bin/python3
+## Generates the images shown in the Features section of README.md, from the example documents and the
+## theme mockup pages, and saves them in docs/img/readme/.
+##
+## The examples are compiled in a temporary directory, so the repository is left untouched. The theme
+## covers are taken from docs/examples/pages/page-<theme>.pdf, which docs/examples/pages/makepages builds.
+##
+## Requires: xelatex, pdftoppm (from poppler) and the Pillow python library.
+## Usage:    scripts/make-readme-images
+
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+
+from PIL import Image, ImageChops
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUTPUT = os.path.join(ROOT, "docs", "img", "readme")
+DPI = 150
+
+## Pages with photographs or textured paper are saved as jpg, which is far smaller for them;
+## pages of flat color are saved as png, which keeps their text sharp.
+## (output name, source pdf, page, width in pixels, format)
+COVERS = [
+	("cover-default", "docs/examples/pages/page-default.pdf", 1, 400, "jpg"),
+	("cover-dnd", "docs/examples/pages/page-dnd.pdf", 1, 400, "jpg"),
+	("cover-scifi", "docs/examples/pages/page-scifi.pdf", 1, 400, "jpg"),
+]
+## (output name, example folder, document, page, width in pixels, format, crop to the content?)
+EXAMPLES = [
+	("dnd-village", "dnd-example", "dnd-book", 2, 600, "jpg", False),
+	("dnd-creatures", "dnd-example", "dnd-book", 3, 600, "jpg", False),
+	("cards", "card-example", "deck", 1, 600, "png", True),
+	("scifi", "scifi-example", "scifi", 1, 600, "png", False),
+]
+
+
+def compile_example(build_dir, folder, document):
+	"""Compiles an example (twice, for references and the deck's preambles) in a copy of its folder"""
+	source = os.path.join(ROOT, "example", folder)
+	target = os.path.join(build_dir, folder)
+	if not os.path.exists(target):
+		shutil.copytree(source, target)
+	for _ in range(2):
+		result = subprocess.run(
+			["xelatex", "-interaction=nonstopmode", "-halt-on-error", f"{document}.tex"],
+			cwd=target, capture_output=True, text=True,
+		)
+		if result.returncode != 0:
+			sys.exit(f"Error: failed to compile example/{folder}/{document}.tex; see {target}/{document}.log")
+	return os.path.join(target, f"{document}.pdf")
+
+
+def render_page(pdf, page, build_dir):
+	"""Renders one page of a pdf as an image"""
+	stem = os.path.join(build_dir, "render")
+	subprocess.run(
+		["pdftoppm", "-r", str(DPI), "-f", str(page), "-l", str(page), "-png", "-singlefile", pdf, stem],
+		check=True,
+	)
+	return Image.open(stem + ".png").convert("RGB")
+
+
+def crop_to_content(image, margin=20):
+	"""Removes the plain background around the content of a page (such as a sheet of cards)"""
+	background = Image.new("RGB", image.size, image.getpixel((0, 0)))
+	box = ImageChops.difference(image, background).getbbox()
+	if box is None:
+		return image
+	left, top, right, bottom = box
+	return image.crop((max(left - margin, 0), max(top - margin, 0),
+		min(right + margin, image.width), min(bottom + margin, image.height)))
+
+
+def save(image, name, width, fmt):
+	"""Scales an image to the given width and saves it as a png or jpg"""
+	height = round(image.height * width / image.width)
+	image = image.resize((width, height), Image.LANCZOS)
+	path = os.path.join(OUTPUT, f"{name}.{fmt}")
+	if fmt == "jpg":
+		image.save(path, quality=88, optimize=True)
+	else:
+		image.save(path, optimize=True)
+	print(f"  {os.path.relpath(path, ROOT)}  ({width}x{height}, {os.path.getsize(path) // 1024} KB)")
+
+
+def main():
+	os.makedirs(OUTPUT, exist_ok=True)
+	with tempfile.TemporaryDirectory() as build_dir:
+		print("Theme covers:")
+		for name, pdf, page, width, fmt in COVERS:
+			pdf = os.path.join(ROOT, pdf)
+			if not os.path.exists(pdf):
+				sys.exit(f"Error: {os.path.relpath(pdf, ROOT)} not found; run docs/examples/pages/makepages first")
+			save(render_page(pdf, page, build_dir), name, width, fmt)
+
+		print("Example pages:")
+		for name, folder, document, page, width, fmt, crop in EXAMPLES:
+			image = render_page(compile_example(build_dir, folder, document), page, build_dir)
+			if crop:
+				image = crop_to_content(image)
+			save(image, name, width, fmt)
+
+
+if __name__ == "__main__":
+	main()
