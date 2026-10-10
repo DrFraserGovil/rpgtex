@@ -1,5 +1,13 @@
 \ExplSyntaxOff
 
+\RpgIfSections{
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Section formatting
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Part
+	%% set explicitly, so that switching back from a theme which changes it (such as scifi) restores Roman numerals
+	\renewcommand{\thepart}{\Roman{part}}
+}
 \DeclareDocumentCommand\RpgThemeSetPHBParts{}
 {
 	\DeclareDocumentCommand\RpgThemePartPageTikz{}
@@ -40,7 +48,7 @@
 	}
 
 	\RpgPut[0.4\paperwidth](t){0.5 \paperwidth}{\paperheight - 0.3cm}{
-		\RpgFontPart{} \MakeUppercase{Part \arabic{part}}
+		\RpgFontPart{} \MakeUppercase{Part \Roman{part}}
 	}
 	\RpgPut[0.4\paperwidth](t){0.5 \paperwidth}{\paperheight - 2.2cm}{
 		\RpgFontPartSubtitle{} #1

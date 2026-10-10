@@ -1,0 +1,34 @@
+\chapter{AI Usage} \label{A:AI}
+
+	This project began as a human-led passion project. For the longest time the authors refused to utilise automated coding tools, but eventually it was decided that this was a bit of a Luddite opinion. An AI assistant (Claude Code) was only permitted to alter the code near the very end, and only at the explicit direction of the authors.
+
+	We believe it is important to disclose not only where AI was used, but where \textit{AI did things differently than the human authors would have}.
+	\section*{Package Code}
+
+		The following changes encompass all of the changes made by the Claude Code tool. Of these, we consider the vast majority to have been time-saving changes that the human authors would have done identically:
+
+		\begin{enumerate}
+			\item Some minor bugfixes
+			      \begin{itemize}
+				      \item Split the logic of the \cmd*{RpgWholePageImage} into a container function to allow a \cmd*{label} to attach properly to a \cmd*{part} and reference the correct page
+				      \item Reset the styling of \cmd*{thepart} when a theme is reset, to prevent changes persisting between themes
+				      \item Fixed a bug with the colour assignments in the dnd-theme \env{RpgStat} block.
+				      \item Fixed some platform-specific bugs in the \texttt{rpglatex} compiler tool
+			      \end{itemize}
+			\item Some renaming of variables to fit the established style guide and fix typos
+			\item Replace theme \cmd*{NewDocument[X]} with \cmd*{DeclareDocument[X]} to allow themes to be repeatedly set, and equivalent changes for expl3 declarations.
+			\item Removed dead code left over from previous drafts
+		\end{enumerate}
+
+		There are only two places in this package where the tool made changes that differ from what the human authors would have written:
+
+		\begin{enumerate}
+			\item The updated auto-configuration used to populate \cmd{RpgPackagePath} replaced the human-written version which relied on a fragile call to \cmd*{write18}. The AI suggested relying on \cmd*{sys_get_shell}, which we did not know permitted limited calls to \texttt{kspewhich}. This provided a vastly simpler interface for the majority of users.
+			\item The filigree applied in the SciFi theme was generated entirely by the AI without human description. This was mainly done out of an interest to see what the tool would generate. We like the result, so kept it in.
+		\end{enumerate}
+	\section*{Documentation}
+
+		We allowed the AI to be significantly more involved in the writing of the documentation. Even then, in most cases this involved updating a previous version of the documentation to incorporate the new names and syntax after a rewrite of the core engine.
+
+		The \texttt{scifi} theme chapter, and the \texttt{dnd} statblock section are exceptions: here we allowed the tool to generate a first draft, and then revised it by hand.
+
