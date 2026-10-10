@@ -28,7 +28,7 @@
 		rarity = Rare,
 		type = weapon (sword),
 		requires-attunement = {by a paladin},
-		image = {../example/img/joyeuse},
+		image = {img/joyeuse},
 	]
 		The sword of Charlemagne; this jewelled sword gives you +3 to heroism checks.
 	\end{RpgItem}

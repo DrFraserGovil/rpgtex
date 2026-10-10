@@ -1,7 +1,7 @@
 %% The RPG-deck class collects many cards onto A4 pages, ready for printing
 
 \RequirePackage {expl3}
-\ProvidesExplClass{rpgdeck}{2026/10/07} {0.0.0} { Deck Template for RPG material }
+\ProvidesExplClass{rpgdeck}{2026/10/10} {1.0.0} { Deck Template for RPG material }
 
 \bool_new:N \__rpg_IsClass
 \bool_set_true:N \__rpg_IsClass

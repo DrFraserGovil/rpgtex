@@ -117,8 +117,10 @@ def locatePackageDirectory():
             text=True,
             check=False  # Do not raise an exception if kpsewhich returns non-zero (i.e., not found)
         )
-		# The path is in stdout, but includes a newline
-		full_path = result.stdout.strip()
+		# The path is the last line of stdout which ends with the package name: some tools print warnings first
+		# (MiKTeX does when run with elevated privileges)
+		lines = [line.strip() for line in result.stdout.splitlines() if line.strip().endswith(package_name)]
+		full_path = lines[-1].replace("\\", "/") if lines else ""
 		if result.returncode == 0 and full_path:
 
 			# 3. Extract the directory path
@@ -244,14 +246,6 @@ def finalize(args):
 
 		argprint(args,"-> Opening/focusing PDF viewer...")
 
-		# None of the viewers below exist on Windows: open the PDF in the default application instead
-		if sys.platform == "win32":
-			try:
-				os.startfile(destination_pdf)
-			except OSError as e:
-				print(f"Warning: Failed to open the PDF viewer: {e}", file=sys.stderr)
-			return
-
 		for command in viewer_commands:
 			try:
 				# Use subprocess.Popen to launch and immediately detach/continue (non-blocking)
@@ -278,7 +272,12 @@ def finalize(args):
 # --- MAIN EXECUTION BLOCK ---
 if __name__ == "__main__":
 	args = parse_arguments()
-	
+
+	# rpglatex is only supported on POSIX systems (Linux and macOS)
+	if os.name != "posix":
+		print("Warning: rpglatex is only supported on Linux and macOS, and may fail on this system.", file=sys.stderr)
+		print("         Compile the document with xelatex or lualatex directly instead.", file=sys.stderr)
+
 	# Set the verbosity for the script's own messages
 	if not args.quiet:
 		print("---------------------")

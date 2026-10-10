@@ -1,7 +1,7 @@
 % !TEX root = ../documentation.tex
 \chapter{The \texttt{rpglatex} Compiler}\label{S:rpglatex}
 
-	\texttt{rpglatex} is a Python 3 script (\texttt{scripts/rpglatex}) which wraps \texttt{xelatex} or \texttt{lualatex}, adding several conveniences for compiling \rpgtex{} documents. To use it from any directory, place it on your \texttt{PATH}, for example with a symbolic link:
+	\texttt{rpglatex} is a Python 3 script (\texttt{scripts/rpglatex}) which wraps \texttt{xelatex} or \texttt{lualatex}, adding several conveniences for compiling \rpgtex{} documents. It is supported on Linux and macOS only; on Windows, documents should be compiled with \texttt{xelatex} or \texttt{lualatex} directly \RpgPage[p]{S:Windows}. To use it from any directory, place it on your \texttt{PATH}, for example with a symbolic link:
 	\begin{BashBlock}
 		ln -s ~/path/to/rpgtex/scripts/rpglatex ~/.local/bin/rpglatex
 	\end{BashBlock}

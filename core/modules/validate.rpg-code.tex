@@ -1,4 +1,5 @@
 \ExplSyntaxOn
+\cs_generate_variant:Nn \seq_set_split:Nnn { NVV }
 
 % \begin{noindent}
 \cs_if_exist:NTF\RpgPackagePath
@@ -18,10 +19,24 @@
 
 		\wlog{rpg-config~not~found.~Attempting~to~locate~rpgtex.sty~with~kpsewhich.}
 
-		%% kpsewhich is permitted in restricted shell-escape mode (the TeX Live default), so no flags are needed
-		\sys_get_shell:nnNTF { kpsewhich~rpgtex.sty } { } \l_tmpa_tl
-		{
-			\tl_trim_spaces:N \l_tmpa_tl
+		%% kpsewhich is permitted in restricted shell-escape mode (the TeX Live and MiKTeX default)
+		%% Need to do some processing because messages can be injected (i.e. elevation warnings, such as in the github actions)
+		\sys_get_shell:nnNTF { kpsewhich~rpgtex.sty }
+			{
+				\char_set_catcode_space:n { 32 }
+				\char_set_catcode_other:n { 10 }
+				\int_set:Nn \tex_endlinechar:D { 10 }
+			}
+			\l_tmpa_tl
+		{	%% keep the last line which ends with rpgtex.sty
+			\tl_set:Ne \l_tmpb_tl { \char_generate:nn { 10 } { 12 } }
+			\seq_set_split:NVV \l_tmpa_seq \l_tmpb_tl \l_tmpa_tl
+			\tl_clear:N \l_tmpa_tl
+			\seq_map_inline:Nn \l_tmpa_seq
+			{
+				\str_if_eq:eeT { \str_range:nnn {#1} { -10 } { -1 } } { rpgtex.sty }
+				{ \tl_set:Nn \l_tmpa_tl {#1} }
+			}
 		}
 		{	%% shell escape is fully disabled
 			\tl_clear:N \l_tmpa_tl

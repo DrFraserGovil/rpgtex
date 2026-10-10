@@ -5,7 +5,7 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.6.0] 2026-09-10
+## [1.0.0] 2026-10-10
 
 A ground-up revamp of the package and its documentation. Almost every file has been rewritten or reorganised, so rather than list every change, this is a summary of what is different. Existing documents will need updating: many commands have been renamed or have new signatures.
 
@@ -38,7 +38,7 @@ A ground-up revamp of the package and its documentation. Almost every file has b
 ### Compiler & configuration
 
 * `rpgtex` now finds its own installation (using `kpsewhich`) when a document is compiled, so in most cases no configuration is needed.
-* A number of bugs in the `rpglatex` compiler have been fixed, including support for opening the output on Windows.
+* A number of bugs in the `rpglatex` compiler have been fixed. It is supported on Linux and macOS; Windows users should compile with `xelatex` directly.
 * A GitHub Actions workflow (run by hand, for now) compiles a short test document with each theme, on TeX Live and MiKTeX.
 
 ### Documentation

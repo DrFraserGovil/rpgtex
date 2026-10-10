@@ -1,0 +1,14 @@
+%% A single card: a magic item from the dnd example.
+%% In the rpgcard class, items, spells and other rule environments are drawn as cards automatically.
+%% On its own, this compiles to a PDF of just the card, for viewing on screen or sending to a player.
+\documentclass[theme=dnd]{rpgcard}
+
+\begin{document}
+	\begin{RpgItem}{Knonald's Quill}[
+			type={Wondrous item},
+			rarity=Rare,
+			requires-attunement={by a creature with an Intelligence of 13 or higher},
+		]
+		As an action, you may use this quill to write on any surface. The symbols you write are so beautifully typeset that a creature which reads them must succeed on a DC 13 Intelligence saving throw or be charmed by you, as if by the \textit{charm person} spell.
+	\end{RpgItem}
+\end{document}

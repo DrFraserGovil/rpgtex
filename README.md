@@ -102,7 +102,7 @@ To use `rpgtex` with another class instead, load it as a package: `\usepackage[t
 xelatex main.tex
 ```
 
-Alternatively, the `rpglatex` compiler runs the passes for you, and opens the finished PDF. It is a Python 3 script, `scripts/rpglatex`, which can be linked onto your `PATH`:
+On Linux and macOS, the `rpglatex` compiler can run the passes for you, and open the finished PDF. It is a Python 3 script, `scripts/rpglatex`, which can be linked onto your `PATH`:
 
 ```bash
 ln -s ~/path/to/rpgtex/scripts/rpglatex ~/.local/bin/rpglatex

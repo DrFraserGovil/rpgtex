@@ -3,7 +3,7 @@
 %% otherwise the cards are laid out on A4 pages, for printing (though rpgdeck is better for that!)
 
 \RequirePackage {expl3}
-\ProvidesExplClass{rpgcard}{2026/10/07} {0.0.0} { Card Template for RPG material }
+\ProvidesExplClass{rpgcard}{2026/10/10} {1.0.0} { Card Template for RPG material }
 
 \bool_new:N \__rpg_IsClass
 \bool_set_true:N \__rpg_IsClass
