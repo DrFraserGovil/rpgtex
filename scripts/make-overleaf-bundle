@@ -1,0 +1,80 @@
+#!/usr/bin/python3
+## Builds a zip of rpgtex laid out for Overleaf, which can be uploaded as a new project
+## (New Project -> Upload Project).
+##
+## Overleaf compiles documents in the top folder of a project, and does not search subfolders for classes, so:
+##   - the classes are moved from classes/ up to the top folder, beside rpgtex.sty;
+##   - core/rpg-config.cfg is added, telling rpgtex that it is installed in the project's own folder;
+##   - the dnd example is included as a starting point, with its book as main.tex.
+## The documentation, the other examples, the scripts and the tests are left out, to keep the project small.
+##
+## Only files tracked by git are included, so build files and local clutter never end up in the zip.
+##
+## Usage:    scripts/make-overleaf-bundle [output.zip]      (default: dist/rpgtex-overleaf.zip)
+
+import os
+import subprocess
+import sys
+import zipfile
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+## (path in the repository, path in the bundle); a trailing / copies a whole folder
+CONTENTS = [
+	("rpgtex.sty", "rpgtex.sty"),
+	("LICENSE", "LICENSE"),
+	("classes/", ""),
+	("core/", "core/"),
+	("themes/", "themes/"),
+	("example/dnd-example/dnd-book.tex", "main.tex"),
+	("example/dnd-example/dnd-handout.tex", "handout.tex"),
+	("example/dnd-example/village.tex", "village.tex"),
+	("example/dnd-example/img/", "img/"),
+]
+
+## Files written into the bundle directly
+CONFIG = "%% Tells rpgtex that it is installed in the project's own folder (the folder Overleaf compiles in)\n\\edef\\RpgPackagePath{.}\n"
+README = """rpgtex for Overleaf
+===================
+
+This project contains rpgtex (https://github.com/DrFraserGovil/rpgtex), ready to use on Overleaf.
+
+  - main.tex is an example adventure, using the rpgbook class and the dnd theme. Edit it, or replace it with
+    your own document, which must be in this top folder.
+  - handout.tex is the players' handout for the same adventure: set it as the main document (Menu -> Main
+    document) to compile it.
+  - rpgtex loads its fonts with fontspec, so set the compiler to XeLaTeX or LuaLaTeX (Menu -> Compiler).
+
+The full documentation is at https://raw.githubusercontent.com/DrFraserGovil/rpgtex/main/docs/documentation.pdf
+"""
+
+
+def tracked_files(path):
+	"""The files tracked by git at (or below) the given path"""
+	result = subprocess.run(["git", "ls-files", "--", path], cwd=ROOT, capture_output=True, text=True, check=True)
+	return [line for line in result.stdout.splitlines() if line]
+
+
+def main():
+	output = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "dist", "rpgtex-overleaf.zip"))
+	os.makedirs(os.path.dirname(output), exist_ok=True)
+
+	added = 0
+	with zipfile.ZipFile(output, "w", zipfile.ZIP_DEFLATED) as bundle:
+		for source, target in CONTENTS:
+			files = tracked_files(source)
+			if not files:
+				sys.exit(f"Error: nothing tracked by git at '{source}'")
+			for file in files:
+				## files within a folder keep their path below it; a single file takes the target name
+				name = target + file[len(source):] if source.endswith("/") else target
+				bundle.write(os.path.join(ROOT, file), name)
+				added += 1
+		bundle.writestr("core/rpg-config.cfg", CONFIG)
+		bundle.writestr("README.txt", README)
+
+	print(f"Wrote {os.path.relpath(output)} ({added + 2} files, {os.path.getsize(output) // 1024} KB)")
+
+
+if __name__ == "__main__":
+	main()
