@@ -12,15 +12,17 @@
 	\fancyhf {} % clear all headers and footers
 	\fancypagestyle {plain} {  }
 	\fancypagestyle{empty} {\fancyhf {}}
-	\fancyhfoffset[LE,RO,RE,LO]{0pt}
+	\fancyhfoffset{0pt}
 
 	\fancypagestyle{fancy}{
-		% Left-even page footer
-		\fancyfoot[LE]{%
-			\RpgFontFooter \leftmark
+		% Left-even page footer (even pages only exist in two-sided documents)
+		\RpgIfTwoSide{
+			\fancyfoot[LE]{%
+				\RpgFontFooter \leftmark
 
-			\RpgThemeFooterDecoration*{!}{\RpgPackagePath/themes/dnd/img/footerscroll}{\RpgThemePageNumberAt{0.28in}{0.29in}}
+				\RpgThemeFooterDecoration*{!}{\RpgPackagePath/themes/dnd/img/footerscroll}{\RpgThemePageNumberAt{0.28in}{0.29in}}
 
+			}
 		}
 		% % Right-odd page footer
 		\fancyfoot[RO]{%

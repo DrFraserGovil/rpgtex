@@ -44,6 +44,16 @@
 	\RpgIfTitleTF {#1} {}
 }
 
+%% Runs #1 if the document is two-sided (so that even and odd pages differ), and #2 otherwise
+\NewDocumentCommand\RpgIfTwoSideTF{+m +m}
+{
+	\legacy_if:nTF { @twoside } {#1} {#2}
+}
+\NewDocumentCommand\RpgIfTwoSide{+m}
+{
+	\RpgIfTwoSideTF {#1} {}
+}
+
 
 %% Runs #1 in the preamble, and #2 in the document body
 %% \@nodocument is \relax only after \begin{document}. It is called by name, so this works even when @ is not a letter

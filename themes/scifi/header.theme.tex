@@ -9,16 +9,17 @@
 	\fancyhf {} % clear all headers and footers
 	\fancypagestyle {plain} {  }
 	\fancypagestyle{empty} {\fancyhf {}}
-	\fancyhfoffset[LE,RO,RE,LO]{0pt}
+	\fancyhfoffset{0pt}
 
 	\fancypagestyle{fancy}{
-		% Left-even page footer
-		\fancyfoot[LE]{%
-			\RpgThemeFooterDecoration{1.5cm}{\RpgPackagePath/themes/scifi/img/scifi_scroll}{
-				\RpgPut[\linewidth][\flushleft](l){0.1\paperwidth}{0.45in}{\RpgFontFooter \leftmark}
-				\RpgPut{0.43in}{0.15in}{\RpgFontPageNumber {\thepage}}
+		% Left-even page footer (even pages only exist in two-sided documents)
+		\RpgIfTwoSide{
+			\fancyfoot[LE]{%
+				\RpgThemeFooterDecoration{1.5cm}{\RpgPackagePath/themes/scifi/img/scifi_scroll}{
+					\RpgPut[\linewidth][\flushleft](l){0.1\paperwidth}{0.45in}{\RpgFontFooter \leftmark}
+					\RpgPut{0.43in}{0.15in}{\RpgFontPageNumber {\thepage}}
+				}
 			}
-
 		}
 		% % Right-odd page footer
 		\fancyfoot[RO]{%

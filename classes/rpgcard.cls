@@ -44,3 +44,9 @@
 	\msg_error:nn{rpg}{rpg-card-title}
 }
 \pagestyle{empty}
+%% In screen mode, each page is cropped to its card, so the footer is never shown; but fancyhdr (which the
+%% themes use for their page styles) warns if there is no room for one, so give it a line's height
+\bool_if:NT \__rpg_ShowBackground
+{
+	\setlength{\footskip}{\baselineskip}
+}

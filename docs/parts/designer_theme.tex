@@ -117,6 +117,12 @@
 		{
 			Runs \texttt{true code} if the \texttt{title} option is active, and \texttt{false code} otherwise. The alias \cmd{RpgIfTitle}\param{code} takes a single argument, and is equivalent to \cmd{RpgIfTitleTF}\param{code}\{\}.
 		}
+		\RpgFunction{RpgIfTwoSideTF}[RpgIfTwoSide]{\param{true code}\param{false code}}
+		{
+			Runs \texttt{true code} if the document is two-sided, so that even and odd pages differ, and \texttt{false code} otherwise. The alias \cmd{RpgIfTwoSide}\param{code} takes a single argument, and is equivalent to \cmd{RpgIfTwoSideTF}\param{code}\{\}.
+
+			The provided themes use it to set the footer of even pages only in two-sided documents, since \texttt{fancyhdr} warns about even-page settings in one-sided ones.
+		}
 
 	\section{Key-Value Options}\label{S:ThemeKeys}
 
