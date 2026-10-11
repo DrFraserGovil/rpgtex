@@ -5,6 +5,10 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] 2026-10-11
+
+These  changes (along with the draft 1.0.1) are designed to provide an auto-bundler to generate an Overlead-specific zip file at release time. The documents have been updated as well.
+
 ## [1.0.0] 2026-10-10
 
 A ground-up revamp of the package and its documentation. Almost every file has been rewritten or reorganised, so rather than list every change, this is a summary of what is different. Existing documents will need updating: many commands have been renamed or have new signatures.
