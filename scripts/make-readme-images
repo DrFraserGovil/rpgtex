@@ -1,0 +1,118 @@
+#!/usr/bin/python3
+## Generates the images shown in the Features section of README.md from the example documents,
+## and saves them in docs/img/readme/.
+##
+## The examples are compiled in a temporary directory, so the repository is left untouched.
+## To compare the themes, the village chapter of the dnd example (example/dnd-example/village.tex) is also
+## typeset on its own, in each of the themes listed in VILLAGE_THEMES, so that the pages differ only in their theme.
+##
+## Requires: xelatex, pdftoppm (from poppler) and the Pillow python library.
+## Usage:    scripts/make-readme-images
+
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+
+from PIL import Image, ImageChops
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OUTPUT = os.path.join(ROOT, "docs", "img", "readme")
+DPI = 150
+
+## Pages with textured paper or images are saved as jpg, which is far smaller for them;
+## pages of flat color are saved as png, which keeps their text sharp.
+## (theme, format): each is saved as village-<theme>
+VILLAGE_THEMES = [("default", "png"), ("dnd", "jpg")]
+VILLAGE_WIDTH = 600
+## The document which typesets the village chapter on its own, in the given theme
+VILLAGE_DOCUMENT = r"""\documentclass[theme=%s]{rpgbook}
+\RpgSwitch{ShowSecrets}{on}
+\begin{document}
+\chapter{The Village of Saltmere}
+\input{village}
+\end{document}
+"""
+## (output name, example folder, document, page, width in pixels, format, crop to the content?)
+EXAMPLES = [
+	("dnd-creatures", "dnd-example", "dnd-book", 3, 600, "jpg", False),
+	("cards", "card-example", "deck", 1, 600, "png", True),
+	("scifi", "scifi-example", "scifi", 1, 600, "png", False),
+]
+
+
+def compile_example(build_dir, folder, document):
+	"""Compiles an example (twice, for references and the deck's preambles) in a copy of its folder.
+	With no document, only copies the folder"""
+	source = os.path.join(ROOT, "example", folder)
+	target = os.path.join(build_dir, folder)
+	if not os.path.exists(target):
+		shutil.copytree(source, target)
+	if document is None:
+		return None
+	for _ in range(2):
+		result = subprocess.run(
+			["xelatex", "-interaction=nonstopmode", "-halt-on-error", f"{document}.tex"],
+			cwd=target, capture_output=True, text=True,
+		)
+		if result.returncode != 0:
+			sys.exit(f"Error: failed to compile example/{folder}/{document}.tex; see {target}/{document}.log")
+	return os.path.join(target, f"{document}.pdf")
+
+
+def render_page(pdf, page, build_dir):
+	"""Renders one page of a pdf as an image"""
+	stem = os.path.join(build_dir, "render")
+	subprocess.run(
+		["pdftoppm", "-r", str(DPI), "-f", str(page), "-l", str(page), "-png", "-singlefile", pdf, stem],
+		check=True,
+	)
+	return Image.open(stem + ".png").convert("RGB")
+
+
+def crop_to_content(image, margin=20):
+	"""Removes the plain background around the content of a page (such as a sheet of cards)"""
+	background = Image.new("RGB", image.size, image.getpixel((0, 0)))
+	box = ImageChops.difference(image, background).getbbox()
+	if box is None:
+		return image
+	left, top, right, bottom = box
+	return image.crop((max(left - margin, 0), max(top - margin, 0),
+		min(right + margin, image.width), min(bottom + margin, image.height)))
+
+
+def save(image, name, width, fmt):
+	"""Scales an image to the given width and saves it as a png or jpg"""
+	height = round(image.height * width / image.width)
+	image = image.resize((width, height), Image.LANCZOS)
+	path = os.path.join(OUTPUT, f"{name}.{fmt}")
+	if fmt == "jpg":
+		image.save(path, quality=88, optimize=True)
+	else:
+		image.save(path, optimize=True)
+	print(f"  {os.path.relpath(path, ROOT)}  ({width}x{height}, {os.path.getsize(path) // 1024} KB)")
+
+
+def main():
+	os.makedirs(OUTPUT, exist_ok=True)
+	with tempfile.TemporaryDirectory() as build_dir:
+		print("The village chapter in each theme:")
+		for theme, fmt in VILLAGE_THEMES:
+			document = f"village-{theme}"
+			compile_example(build_dir, "dnd-example", None)
+			with open(os.path.join(build_dir, "dnd-example", f"{document}.tex"), "w") as file:
+				file.write(VILLAGE_DOCUMENT % theme)
+			pdf = compile_example(build_dir, "dnd-example", document)
+			save(render_page(pdf, 1, build_dir), document, VILLAGE_WIDTH, fmt)
+
+		print("Example pages:")
+		for name, folder, document, page, width, fmt, crop in EXAMPLES:
+			image = render_page(compile_example(build_dir, folder, document), page, build_dir)
+			if crop:
+				image = crop_to_content(image)
+			save(image, name, width, fmt)
+
+
+if __name__ == "__main__":
+	main()

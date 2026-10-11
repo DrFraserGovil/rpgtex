@@ -9,8 +9,13 @@
 
 ## Features
 
-<!-- TODO: add example images -->
-
+<p align="center">
+  <a href="example/dnd-example"><img src="docs/img/readme/village-default.png" width="30%" alt="A page of an adventure in the default theme"></a>
+  <a href="example/dnd-example"><img src="docs/img/readme/village-dnd.jpg" width="30%" alt="The same page in the dnd theme"></a>
+  <a href="example/scifi-example"><img src="docs/img/readme/scifi.png" width="30%" alt="A mission briefing in the scifi theme"></a>
+  <br><em>The same page of a book the <code>default</code> and <code>dnd</code> themes, and a handout in the <code>scifi</code> theme.</em>
+</p>
+ 
 ### Document classes
 
 * **`rpgbook`** for adventures and rulebooks, with cover and part pages, two-column layout and decorated footers.
@@ -40,6 +45,12 @@
 * **Items, feats, spells and statblocks** (`RpgItem`, `RpgFeat`, `RpgSpell`, `RpgStat`), each of which can be printed as text in the flow of a document, or as a card.
 * **D&D statblocks that do the maths**: give a creature's ability scores and challenge rating, and the `dnd` theme works out its modifiers, saving throws, skills, proficiency bonus, experience, attack bonuses and spell save DC. Spellcasting, legendary and mythic actions, full-width statblocks and the classic 5e layout are all supported.
 * **Your own rule environments**, with their own properties, text format and card format, in a single command.
+
+<p align="center">
+  <a href="example/dnd-example"><img src="docs/img/readme/dnd-creatures.jpg" width="45%" alt="A page of statblocks in the dnd theme, including a full-width legendary creature"></a>
+  <a href="example/card-example"><img src="docs/img/readme/cards.png" width="45%" alt="An item card and a spell card in the dnd theme"></a><br>
+  <em>The <code>dnd</code> theme demonstrating an <code>RpgStat</code> environment in text mode, and <code>RpgItem</code> and <code>RpgSpell</code> in card-mode.</em>
+</p>
 
 ### Tooling
 

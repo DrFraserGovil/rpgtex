@@ -1,0 +1,64 @@
+## Builds the Overleaf bundle (scripts/make-overleaf-bundle), checks that it compiles on its own, and attaches
+## it to the release as rpgtex-overleaf.zip. It can also be run by hand from the Actions tab, which builds and
+## tests the bundle and makes it available to download as an artifact, without touching any release.
+name: Overleaf bundle
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and test the bundle
+    runs-on: ubuntu-latest
+    container: texlive/texlive:latest
+    steps:
+      ## The bundle script needs git (to list the tracked files) and python3; install them first if the
+      ## TeX Live image lacks them, so that the checkout below is a real git repository
+      - name: Install git and python3
+        run: |
+          if ! command -v git >/dev/null || ! command -v python3 >/dev/null; then
+            apt-get update && apt-get install -y git python3
+          fi
+
+      - uses: actions/checkout@v4
+
+      - name: Build the bundle
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          python3 scripts/make-overleaf-bundle dist/rpgtex-overleaf.zip
+
+      ## Unpack into an empty folder and compile there, as Overleaf would: rpgtex is installed nowhere else
+      - name: Compile the bundle on its own
+        run: |
+          mkdir /tmp/project
+          cd /tmp/project
+          python3 -c "import zipfile; zipfile.ZipFile('$GITHUB_WORKSPACE/dist/rpgtex-overleaf.zip').extractall('.')"
+          for doc in main handout; do
+            for pass in 1 2; do
+              xelatex -interaction=nonstopmode -halt-on-error "$doc.tex"
+            done
+          done
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rpgtex-overleaf
+          path: dist/rpgtex-overleaf.zip
+
+  publish:
+    name: Attach the bundle to the release
+    if: github.event_name == 'release'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: rpgtex-overleaf
+
+      - name: Upload to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "${{ github.event.release.tag_name }}" rpgtex-overleaf.zip --clobber --repo "${{ github.repository }}"
