@@ -5,9 +5,19 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+* Code cleanup to remove compiler warnings:
+    * Removed an unused package
+    * Added a RpgIfTwoSide function to only apply alternating footers in a document which uses them 
+    * Corrected a reference to 'luatex' in an error message (we meant 'lualatex')
+* Updated the docs for the new functions introduced by these fixes
+* Tweaked the MidGray /NarrationColor on the scifi theme for better visual contrast
+* Added a centralised version & date register so all classes & packages have the same version info
+
 ## [1.0.2] 2026-10-11
 
-These  changes (along with the draft 1.0.1) are designed to provide an auto-bundler to generate an Overlead-specific zip file at release time. The documents have been updated as well.
+These  changes (along with the draft 1.0.1) are designed to provide an auto-bundler to generate an Overleaf-specific zip file at release time. The documents have been updated as well.
 
 ## [1.0.0] 2026-10-10
 

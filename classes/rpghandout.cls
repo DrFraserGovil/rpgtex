@@ -2,7 +2,8 @@
 %% It activates the rpg geometry, but unlike rpgbook, does not activate elaborate title or part pages
 
 \RequirePackage {expl3}
-\ProvidesExplClass{rpghandout}{2026/10/10} {1.0.0} { Handout Template for RPG material }
+\input{core/rpgversion.def} %% sets \RpgVersion and \RpgDate
+\ProvidesExplClass{rpghandout}{\RpgDate} {\RpgVersion} { Handout Template for RPG material }
 
 \bool_new:N \__rpg_IsClass
 \bool_set_true:N \__rpg_IsClass
