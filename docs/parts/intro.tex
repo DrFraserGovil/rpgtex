@@ -64,17 +64,21 @@ ln -sf ~/path/to/rpgtex "$(kpsewhich -var-value TEXMFHOME)/tex/latex/rpgtex"
 				\item The \texttt{rpglatex} compiler \RpgPage[p]{S:rpglatex} is only supported on Linux and macOS. On Windows, compile documents with \texttt{xelatex} or \texttt{lualatex} directly.
 			\end{itemize}
 
-		\subsection{Overleaf (Not Recommended)} % HACK: We need to set up an overleaf specific package
+		\subsection{Overleaf}
 
-			% HACK: behaviour isn't fully understood yet -- leave it like this for now, come back to it when we do online testing
-			We do not recommend Overleaf: the compilation time allowed by its free tier is too short for documents which use complex packages such as this one. Nevertheless, \rpgtex{} can be used there as follows:
-
-			\begin{enumerate}
-				\item Download the \rpgtex{} repository from GitHub as a ZIP archive.
-				\item On Overleaf, create a new project using \textit{Upload Project}, and upload the ZIP archive.
-
+			We provide a release bundle specifically configured to work out-of-the-box with Overleaf. To get this to work on Overleaf:
+			\begin{enumerate}[leftmargin=1cm]
+				\item Navigate to the `Releases' panel on GitHub, and \forcelink{https://github.com/DrFraserGovil/rpgtex/releases/latest}{select the most recent release}.
+				\item Select the Overleaf bundle, \texttt{rpgtex-overleaf.zip} and download it.
+				\item Go to \forcelink{https://overleaf.com}{Overleaf}.
+				\item Within the `New Project' menu, select `Existing project (.zip)', and upload the \texttt{rpgtex-overleaf.zip} file.
 			\end{enumerate}
 
+			This bundle includes the \texttt{dnd}-theme example documents, to help get you started.
+
+			\begin{RpgTip}{Watch your compile times}
+				\rpgtex{} is a large package and as documents grow in size, compile times can the limits of the free tier of Overleaf. We generally recommend using local installs for large documents.
+			\end{RpgTip}
 
 
 	\section{Compiling \rpgtex{} Documents}

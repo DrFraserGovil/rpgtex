@@ -29,16 +29,17 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           python3 scripts/make-overleaf-bundle dist/rpgtex-overleaf.zip
 
-      ## Unpack into an empty folder and compile there, as Overleaf would: rpgtex is installed nowhere else
+      ## Unpack into an empty folder and compile there, as Overleaf would: rpgtex is installed nowhere else.
+      ## Overleaf builds with latexmk, and a new project defaults to pdfLaTeX (latexmk -pdf); the bundle's
+      ## latexmkrc must turn that into xelatex for the compilation to succeed
       - name: Compile the bundle on its own
         run: |
           mkdir /tmp/project
           cd /tmp/project
           python3 -c "import zipfile; zipfile.ZipFile('$GITHUB_WORKSPACE/dist/rpgtex-overleaf.zip').extractall('.')"
           for doc in main handout; do
-            for pass in 1 2; do
-              xelatex -interaction=nonstopmode -halt-on-error "$doc.tex"
-            done
+            latexmk -pdf -interaction=nonstopmode -halt-on-error "$doc.tex"
+            grep -q "^This is XeTeX" "$doc.log"
           done
 
       - uses: actions/upload-artifact@v4

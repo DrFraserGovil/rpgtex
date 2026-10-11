@@ -5,6 +5,8 @@
 ## Overleaf compiles documents in the top folder of a project, and does not search subfolders for classes, so:
 ##   - the classes are moved from classes/ up to the top folder, beside rpgtex.sty;
 ##   - core/rpg-config.cfg is added, telling rpgtex that it is installed in the project's own folder;
+##   - a latexmkrc is added, so that the project compiles with XeLaTeX even though new Overleaf projects
+##     default to pdfLaTeX (Overleaf builds with latexmk, which reads this file);
 ##   - the dnd example is included as a starting point, with its book as main.tex.
 ## The documentation, the other examples, the scripts and the tests are left out, to keep the project small.
 ##
@@ -33,6 +35,8 @@ CONTENTS = [
 ]
 
 ## Files written into the bundle directly
+## latexmk runs $pdflatex when Overleaf's compiler is set to pdfLaTeX (its default), so point that at xelatex
+LATEXMKRC = "# rpgtex needs XeLaTeX (or LuaLaTeX). Overleaf builds with latexmk, so compile with xelatex\n# even when the project's compiler is set to pdfLaTeX, the default for new projects\n$pdflatex = 'xelatex %O %S';\n"
 CONFIG = "%% Tells rpgtex that it is installed in the project's own folder (the folder Overleaf compiles in)\n\\edef\\RpgPackagePath{.}\n"
 README = """rpgtex for Overleaf
 ===================
@@ -43,7 +47,9 @@ This project contains rpgtex (https://github.com/DrFraserGovil/rpgtex), ready to
     your own document, which must be in this top folder.
   - handout.tex is the players' handout for the same adventure: set it as the main document (Menu -> Main
     document) to compile it.
-  - rpgtex loads its fonts with fontspec, so set the compiler to XeLaTeX or LuaLaTeX (Menu -> Compiler).
+  - rpgtex loads its fonts with fontspec, so it must be compiled with XeLaTeX or LuaLaTeX. The latexmkrc file
+    in this project makes Overleaf use XeLaTeX even while the compiler is set to pdfLaTeX (the default), so
+    nothing needs changing. To use LuaLaTeX instead, set Menu -> Compiler to LuaLaTeX and delete latexmkrc.
 
 The full documentation is at https://raw.githubusercontent.com/DrFraserGovil/rpgtex/main/docs/documentation.pdf
 """
@@ -71,9 +77,10 @@ def main():
 				bundle.write(os.path.join(ROOT, file), name)
 				added += 1
 		bundle.writestr("core/rpg-config.cfg", CONFIG)
+		bundle.writestr("latexmkrc", LATEXMKRC)
 		bundle.writestr("README.txt", README)
 
-	print(f"Wrote {os.path.relpath(output)} ({added + 2} files, {os.path.getsize(output) // 1024} KB)")
+	print(f"Wrote {os.path.relpath(output)} ({added + 3} files, {os.path.getsize(output) // 1024} KB)")
 
 
 if __name__ == "__main__":
