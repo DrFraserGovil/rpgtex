@@ -70,12 +70,16 @@
 	\PassOptionsToClass{\__rpg_FontSize}{\__rpg_BaseClass}
 	\PassOptionsToClass{\__rpg_PageColumns}{\__rpg_BaseClass}
 
-	\bool_if:NTF \__rpg_OpenRight
+	%% only book classes have chapters, which these options control
+	\tl_if_in:NnT \__rpg_BaseClass { book }
 	{
-		\PassOptionsToClass{ openright }{\__rpg_BaseClass }
-	}
-	{
-		\PassOptionsToClass{ openany }{\__rpg_BaseClass }
+		\bool_if:NTF \__rpg_OpenRight
+		{
+			\PassOptionsToClass{ openright }{\__rpg_BaseClass }
+		}
+		{
+			\PassOptionsToClass{ openany }{\__rpg_BaseClass }
+		}
 	}
 
 	\bool_if:NT \__rpg_OneSide

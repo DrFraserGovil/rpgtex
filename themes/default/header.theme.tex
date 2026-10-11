@@ -13,13 +13,16 @@
 	\fancyhf {} % clear all headers and footers
 	\fancypagestyle {plain} {  }
 	\fancypagestyle{empty} {\fancyhf {}}
-	\fancyhfoffset[LE,RO,RE,LO]{0pt}
+	\fancyhfoffset{0pt}
 
 	% Left-even page footer
 	\fancypagestyle{fancy}{
-		\fancyfoot[LE]{%
-			\raggedright \RpgFontFooter \leftmark \par
-			{\RpgFontPageNumber~\thepage}
+		%% even pages only exist in two-sided documents
+		\RpgIfTwoSide{
+			\fancyfoot[LE]{%
+				\raggedright \RpgFontFooter \leftmark \par
+				{\RpgFontPageNumber~\thepage}
+			}
 		}
 
 		% Right-odd page footer

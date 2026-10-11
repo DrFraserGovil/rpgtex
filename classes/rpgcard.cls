@@ -3,7 +3,8 @@
 %% otherwise the cards are laid out on A4 pages, for printing (though rpgdeck is better for that!)
 
 \RequirePackage {expl3}
-\ProvidesExplClass{rpgcard}{2026/10/10} {1.0.0} { Card Template for RPG material }
+\input{core/rpgversion.def} %% sets \RpgVersion and \RpgDate
+\ProvidesExplClass{rpgcard}{\RpgDate} {\RpgVersion} { Card Template for RPG material }
 
 \bool_new:N \__rpg_IsClass
 \bool_set_true:N \__rpg_IsClass
@@ -44,3 +45,9 @@
 	\msg_error:nn{rpg}{rpg-card-title}
 }
 \pagestyle{empty}
+%% In screen mode, each page is cropped to its card, so the footer is never shown; but fancyhdr (which the
+%% themes use for their page styles) warns if there is no room for one, so give it a line's height
+\bool_if:NT \__rpg_ShowBackground
+{
+	\setlength{\footskip}{\baselineskip}
+}
