@@ -46,6 +46,7 @@
 				skills-expertise=History,
 				cr=6,
 				languages={Common, Draconic, \LaTeX},
+				filigree,
 			]
 			\RpgStatLegendaryResistance{2}
 
@@ -83,6 +84,21 @@
 			\section{Actions}
 				\attack{Claw}[modifier=dex, dmg-type=slashing, plus-dmg=1d6, plus-type=fire]
 		\end{RpgStat}
+
+		Characters who search the scriptorium after the Typesetter's defeat may roll once on the table below.
+
+		%% A filigree frame can be put around anything: here, a loot table
+		\begin{RpgFiligree}
+			\begin{RpgTable}[title={The Typesetter's Hoard}]{lX}
+				d6 & Loot
+				\\ 1 & A case of lead type, worth \RpgDice{3d6} gold pieces to any printer.
+				\\ 2 & A bottle of ink that never dries, and never fades.
+				\\ 3 & A ream of vellum, each sheet watermarked with a sea serpent.
+				\\ 4 & A brass composing stick, engraved with the name \textit{Knonald}.
+				\\ 5 & A sealed letter from Morwen's brother, addressed to his sister.
+				\\ 6 & \textit{Knonald's Quill}, if the Typesetter did not use it in the fight.
+			\end{RpgTable}
+		\end{RpgFiligree}
 
 	\chapter{Treasure \& Magic}
 
