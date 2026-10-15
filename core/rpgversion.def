@@ -1,4 +1,4 @@
 %% The version and release date of rpgtex, shared by rpgtex.sty and every class.
 %% To release a new version, change these two lines (and add a heading to docs/CHANGELOG.md).
-\def\RpgVersion{1.0.3}
-\def\RpgDate{2026/10/11}
+\def\RpgVersion{1.0.4}
+\def\RpgDate{2026/10/15}
