@@ -63,7 +63,7 @@
 {
 	\def\w{0.3\paperwidth}
 	\def\h{0.005\paperwidth}
-	\RpgPut[0.9\paperwidth](t){0.5 \paperwidth}{\paperheight-3cm}{ \RpgContour[inner=white,outer=black,style=\RpgFontTitle]{\RpgGetTitle*}
+	\RpgPut[0.9\paperwidth](t){0.5 \paperwidth}{\paperheight-3cm}{ \RpgContourIfDifferent[inner=TitleInner,outer=TitleOuter,style=\RpgFontTitle]{\RpgGetTitle*}
 		% %%fancy red diamond
 		\begin{center}
 			\begin{tikzpicture}
@@ -74,12 +74,12 @@
 
 	\RpgPut[\paperwidth](b){0.5\paperwidth}{1cm}{
 		\begin{center}
-			\RpgContour[inner=white,outer=black,style={\RpgFontSubTitle}]{\RpgGetSubtitle*}
+			\RpgContourIfDifferent[inner=SubtitleInner,outer=SubtitleOuter,style={\RpgFontSubTitle}]{\RpgGetSubtitle*}
 		\end{center}
 
 		\vspace{1cm}
 
-		{\RpgContour[inner=white,outer=black,style={\RpgFontSubTitle\huge}]{\RpgGetAuthor*}}
+		{\RpgContourIfDifferent[inner=SubtitleInner,outer=SubtitleOuter,style={\RpgFontSubTitle\huge}]{\RpgGetAuthor*}}
 	}
 }
 

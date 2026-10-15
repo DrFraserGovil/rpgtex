@@ -47,18 +47,12 @@
 
 		\begin{center}
 
+			{\RpgContourIfDifferent[style=\RpgFontSubTitle]{\RpgGetSubtitle*}}
 
+			\vspace{1cm}
 
-			\RpgIfColoursEqualTF{ContourInnerColor}{ContourOuterColor}{
-				\RpgFontSubTitle \color{ContourInnerColor} \RpgGetSubtitle* \par
-				\vspace{1cm}
-				\RpgGetAuthor*
-			}{
-				{\RpgContour[style=\RpgFontSubTitle]{\RpgGetSubtitle*}}
+			{\RpgContourIfDifferent[style=\RpgFontSubTitle]{\RpgGetAuthor*}}
 
-				\vspace{1cm}
-				{\RpgContour[style=\RpgFontSubTitle]{\RpgGetAuthor*}}
-			}
 		\end{center}
 
 	}
