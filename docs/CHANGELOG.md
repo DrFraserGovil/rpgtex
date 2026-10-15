@@ -5,6 +5,12 @@
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] 2026-10-15
+
+* Added a new contouring option: `RpgContourIfDifferent', which only applies the contouring if the inner and outer colours are different, to prevent blocky-looking text.
+* Applied this to the dnd & scifi cover pages
+* Added hooks for the D&D cover contouring colours which were previously hardcoded; TitleInner/Outer and SubtitleInner/Outer now let these be customised
+
 ## [1.0.3] 2026-10-11
 
 * Code cleanup to remove compiler warnings:
