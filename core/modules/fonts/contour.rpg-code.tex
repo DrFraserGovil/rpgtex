@@ -12,6 +12,22 @@
 	\group_end:
 }
 
+\NewDocumentCommand{\RpgGuardedContour}{ O{} m}
+{
+	\group_begin:
+	\keys_set:nn {rpg/contour}{#1}
+
+	\RpgIfColoursEqualTF{\__rpg_contourInnerColor}{\__rpg_contourOuterColor}
+	{
+		\__rpg_contourStyle \color{\__rpg_contourInnerColor} #2
+	}
+	{
+		\exp_args:Nf \__rpg_contour_split_lines:n {#2}
+	}
+
+	\group_end:
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Internal functions for contour
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
