@@ -158,6 +158,15 @@
 
 			\RpgGetExample{cmd-contour}
 		}
+		\RpgFunction{RpgContourIfDifferent}{[<options>]\param{text}}
+		{
+			Functions similarly to \cmd{RpgContour}, but first checks the \texttt{inner} and \texttt{outer} colours:
+			\begin{description}
+				\item[If Different] The function is identical to \cmd{RpgContour}
+				\item[If the Same] The function renders the text without a contour (but with the relevant styling and colour)
+			\end{description}
+			This prevents excess contouring which can make text look blocky. However, since contoured text has strict non-linebreaking behavour, this means that changing the colours can have a structural difference on the text.
+		}
 		\RpgFunction{RpgDice}{\param{expression}}
 		{
 			Parses a dice expression of the form \texttt{<count>d<sides><modifier>} and typesets it in the format defined by the theme. The expression must satisfy the following rules:

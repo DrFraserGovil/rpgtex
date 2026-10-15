@@ -48,7 +48,11 @@
 
 			\noindent\Swatch[paper]{Papyrus}
 			\Swatch[footer \& page numbers]{FooterGold}
-			\Swatch[titles \& contour inner]{TitleRed}
+			\Swatch[sections \& contour inner]{TitleRed}
+			\Swatch[cover contour (title outer)]{TitleOuter}
+			\Swatch[cover contour (title inner)]{TitleInner}
+			\Swatch[cover contour (subtitle \& author outer)]{SubtitleOuter}
+			\Swatch[cover contour (subtitle \& author inner)]{SubtitleInner}
 			\Swatch[title rules]{TitleGold}
 			\Swatch[contour outer]{ContourGray}
 			\Swatch[narration]{BrTan}
@@ -129,7 +133,12 @@
 
 			\RpgGetExample{theme-title-header}
 
-			On the cover page, the title is outlined in white at the top of the page, above a glowing red diamond, and the subtitle and author are outlined at the bottom of the page.
+			On the cover page, the following formatting is applied:
+			\begin{itemize}
+				\item The title is styled using \cmdref{RpgContour} with the colours set by \texttt{TitleInner} and \texttt{TitleOuter} (default: white and black)
+				\item A red diamond is displayed beneath the title
+				\item The subtitle and author are styled using \cmd{RpgContour} with the colours set by \texttt{SubtitleInner} and \texttt{SubtitleOuter} (default: black and white).
+			\end{itemize}
 
 			On a part page, the word `Part' and the part's number are placed in a badge at the top of the page, with the name of the part beneath it in \cmd*{RpgFontPartSubtitle}. The badge has two styles:
 
